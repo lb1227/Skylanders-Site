@@ -12,6 +12,7 @@
       background-color: #f4f4f4;
     }
     .container {
+      display: none;
       max-width: 600px;
       margin: auto;
       background: white;
@@ -71,9 +72,10 @@
 </head>
 <body>
   <div class="container">
-    <div style="display: flex; justify-content: flex-end; gap: 10px;">
-      <button onclick="window.location.href='login.html'">Login</button>
-      <button onclick="window.location.href='signup.html'">Sign Up</button>
+    <div id="authControls" style="display: flex; justify-content: flex-end; gap: 10px;">
+      <button id="loginBtn" onclick="window.location.href='login.html'">Login</button>
+      <button id="signupBtn" onclick="window.location.href='signup.html'">Sign Up</button>
+      <button id="logoutBtn" onclick="logout()" style="display: none;">Logout</button>
     </div>
     <h2>My Collectibles</h2>
     <div id="collectibleContainer">
@@ -86,49 +88,45 @@
       <button id="nextButton">Next</button>
       <button id="undoButton">Undo</button>
     </div>
-    
-</div>
-    </div>
     <h3>Collected Items</h3>
     <ul id="collectiblesList"></ul>
   </div>
 
   <script>
     const collectibles = [
-      { name: "Bash", image: "https://skylanderscharacterlist.com/wp-content/uploads/2014/03/Bash.png" },
-      { name: "Boomer", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Boomer1.png" },
-      { name: "Camo", image: "https://skylanderscharacterlist.com/wp-content/uploads/2014/02/Camo.png" },
-      { name: "Chop Chop", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/ChopChop1.png" },
-      { name: "Cynder", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Cynder1.png" },
-      { name: "Dino-Rang", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/DinoRang.png" },
-      { name: "Double Trouble", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/DoubleTrouble1.png" },
-      { name: "Drill Sergeant", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/DrillSergeant1.png" },
-      { name: "Drobot", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Drobot1.png" },
-      { name: "Eruptor", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Eruptor1.png" },
-      { name: "Flameslinger", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Flameslinger1.png" },
-      { name: "Ghost Roaster", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/GhostRoaster.png" },
-      { name: "Gill Grunt", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/GillGrunt1.png" },
-      { name: "Hex", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Hex1.png" },
-      { name: "Ignitor", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Ignitor1.png" },
-      { name: "Lightning Rod", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/LightningRod1.png" },
-      { name: "Prism Break", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/PrismBreak1.png" },
-      { name: "Slam Bam", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/SlamBam1.png" },
-      { name: "Sonic Boom", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/SonicBoom1.png" },
-      { name: "Spyro", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Spyro1.png" },
-      { name: "Stealth Elf", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/StealthElf1.png" },
-      { name: "Stump Smash", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/StumpSmash1.png" },
-      { name: "Sunburn", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Sunburn.png" },
-      { name: "Terrafin", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Terrafin1.png" },
-      { name: "Trigger Happy", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/TriggerHappy1.png" },
-      { name: "Voodood", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Voodood.png" },
-      { name: "Warnado", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Warnado.png" },
-      { name: "Wham-Shell", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/WhamShell.png" },
-      { name: "Whirlwind", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Whirlwind1.png" },
-      { name: "Wrecking Ball", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/WreckingBall1.png" },
-      { name: "Zap", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Zap1.png" },
-      { name: "Zook", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Zook1.png" }
-    ];
-
+  { name: "Bash", image: "https://skylanderscharacterlist.com/wp-content/uploads/2014/03/Bash.png" },
+  { name: "Boomer", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Boomer1.png" },
+  { name: "Camo", image: "https://skylanderscharacterlist.com/wp-content/uploads/2014/02/Camo.png" },
+  { name: "Chop Chop", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/ChopChop1.png" },
+  { name: "Cynder", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Cynder1.png" },
+  { name: "Dino-Rang", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/DinoRang.png" },
+  { name: "Double Trouble", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/DoubleTrouble1.png" },
+  { name: "Drill Sergeant", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/DrillSergeant1.png" },
+  { name: "Drobot", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Drobot1.png" },
+  { name: "Eruptor", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Eruptor1.png" },
+  { name: "Flameslinger", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Flameslinger1.png" },
+  { name: "Ghost Roaster", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/GhostRoaster.png" },
+  { name: "Gill Grunt", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/GillGrunt1.png" },
+  { name: "Hex", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Hex1.png" },
+  { name: "Ignitor", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Ignitor1.png" },
+  { name: "Lightning Rod", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/LightningRod1.png" },
+  { name: "Prism Break", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/PrismBreak1.png" },
+  { name: "Slam Bam", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/SlamBam1.png" },
+  { name: "Sonic Boom", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/SonicBoom1.png" },
+  { name: "Spyro", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Spyro1.png" },
+  { name: "Stealth Elf", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/StealthElf1.png" },
+  { name: "Stump Smash", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/StumpSmash1.png" },
+  { name: "Sunburn", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Sunburn.png" },
+  { name: "Terrafin", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Terrafin1.png" },
+  { name: "Trigger Happy", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/TriggerHappy1.png" },
+  { name: "Voodood", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Voodood.png" },
+  { name: "Warnado", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Warnado.png" },
+  { name: "Wham-Shell", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/WhamShell.png" },
+  { name: "Whirlwind", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Whirlwind1.png" },
+  { name: "Wrecking Ball", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/WreckingBall1.png" },
+  { name: "Zap", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Zap1.png" },
+  { name: "Zook", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Zook1.png" }
+];
     const allCollectibles = [...collectibles];
     let collectiblesQueue = [...allCollectibles];
     let collectedItems = [];
@@ -141,10 +139,58 @@
       }
     }
 
-    document.getElementById("nextButton").addEventListener("click", function () {
-      if (collectiblesQueue.length === 0) return;
+    function logout() {
+      localStorage.removeItem("sky_user");
+      location.reload();
+    }
 
+    window.onload = () => {
+      const user = localStorage.getItem("sky_user");
+      if (!user && window.location.protocol !== "file:") {
+        alert("You must be logged in to access your collectibles.");
+        window.location.href = 'login.html';
+        return;
+      }
+      document.querySelector('.container').style.display = 'block';
+      const welcome = document.createElement('p');
+      welcome.textContent = `Welcome, ${user}!`;
+      document.querySelector('.container').prepend(welcome);
+
+      const loginBtn = document.getElementById("loginBtn");
+      const signupBtn = document.getElementById("signupBtn");
+      const logoutBtn = document.getElementById("logoutBtn");
+      if (loginBtn) loginBtn.style.display = "none";
+      if (signupBtn) signupBtn.style.display = "none";
+      if (logoutBtn) logoutBtn.style.display = "inline-block";
+
+      loadProgress(user);
+      showCurrentCollectible();
+    };
+
+    function loadProgress(user) {
+      const saved = localStorage.getItem(`sky_progress_${user}`);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        collectedItems = parsed.collected || [];
+        collectiblesQueue = parsed.queue || [...collectibles];
+        renderCollectedList();
+      }
+    }
+
+    function saveProgress() {
+      const user = localStorage.getItem("sky_user");
+      if (!user) return;
+      const data = {
+        collected: collectedItems,
+        queue: collectiblesQueue
+      };
+      localStorage.setItem(`sky_progress_${user}`, JSON.stringify(data));
+    }
+
+    document.getElementById("nextButton").onclick = () => {
       const current = collectiblesQueue.shift();
+      if (!current) return;
+
       const status = document.getElementById("statusInput").value;
       const list = document.getElementById("collectiblesList");
       const li = document.createElement("li");
@@ -164,16 +210,18 @@
       } else {
         document.getElementById("collectibleContainer").innerHTML = "<p>All collectibles reviewed!</p>";
       }
-    });
+      saveProgress();
+    };
 
-    document.getElementById("undoButton").addEventListener("click", function () {
+    document.getElementById("undoButton").onclick = () => {
       if (!lastItem) return;
       collectedItems = collectedItems.filter(c => c.name !== lastItem.name);
       collectiblesQueue.unshift(lastItem);
       renderCollectedList();
       showCurrentCollectible();
       lastItem = null;
-    });
+      saveProgress();
+    };
 
     function removeCollectible(name, button) {
       const li = button.parentElement;
@@ -183,22 +231,8 @@
       if (removed) {
         collectedItems = collectedItems.filter(c => c.name !== name);
         collectiblesQueue.push(removed);
-        if (collectiblesQueue.length === 1) {
-          const container = document.getElementById("collectibleContainer");
-          container.innerHTML = `
-            <img id="collectibleImage" alt="Collectible Image" />
-            <p id="collectibleName"></p>
-            <select id="statusInput">
-              <option value="Have it">Have it</option>
-              <option value="Don't have it">Don't have it</option>
-            </select>
-            <button id="nextButton">Next</button>
-            <button id="undoButton">Undo</button>
-          `;
-          document.getElementById("nextButton").addEventListener("click", nextButtonHandler);
-          document.getElementById("undoButton").addEventListener("click", undoButtonHandler);
-        }
         showCurrentCollectible();
+        saveProgress();
       }
     }
 
@@ -217,93 +251,6 @@
         list.appendChild(li);
       });
     }
-
-    function nextButtonHandler() {
-      document.getElementById("nextButton").click();
-    }
-
-    function undoButtonHandler() {
-      document.getElementById("undoButton").click();
-    }
-
-    window.onload = () => {
-      const savedUser = localStorage.getItem("sky_user");
-      if (savedUser) {
-        loadProgress(savedUser);
-        showCurrentCollectible();
-      }
-    };;
-  function login() {
-  const user = document.getElementById("username").value.trim();
-  const pass = document.getElementById("password").value.trim();
-  if (!user || !pass) return alert("Please enter both username and password.");
-
-  const savedPass = localStorage.getItem(`sky_pass_${user}`);
-  if (savedPass && savedPass !== pass) {
-    alert("Incorrect password.");
-    return;
-  } else if (!savedPass) {
-    localStorage.setItem(`sky_pass_${user}`, pass);
-  }
-
-  localStorage.setItem("sky_user", user);
-  loadProgress(user);
-  showCurrentCollectible();
-}
-
-function loadProgress(user) {
-  const saved = localStorage.getItem(`sky_progress_${user}`);
-  if (saved) {
-    const parsed = JSON.parse(saved);
-    collectedItems = parsed.collected || [];
-    collectiblesQueue = parsed.queue || [...collectibles];
-    renderCollectedList();
-  }
-}
-
-function saveProgress() {
-  const user = localStorage.getItem("sky_user");
-  if (!user) return;
-  const data = {
-    collected: collectedItems,
-    queue: collectiblesQueue
-  };
-  localStorage.setItem(`sky_progress_${user}`, JSON.stringify(data));
-}
-
-// Hook saveProgress into events
-const origNext = document.getElementById("nextButton").onclick;
-document.getElementById("nextButton").onclick = () => {
-  origNext && origNext();
-  saveProgress();
-};
-
-const origUndo = document.getElementById("undoButton").onclick;
-document.getElementById("undoButton").onclick = () => {
-  origUndo && origUndo();
-  saveProgress();
-};
-function logout() {
-  localStorage.removeItem("sky_user");
-  location.reload();
-}
-function signup() {
-  const user = document.getElementById("signupUsername").value.trim();
-  const pass = document.getElementById("signupPassword").value.trim();
-  if (!user || !pass) return alert("Please fill in both fields to sign up.");
-
-  if (localStorage.getItem(`sky_pass_${user}`)) {
-    alert("Username already exists. Please log in.");
-    return;
-  }
-
-  localStorage.setItem(`sky_pass_${user}`, pass);
-  localStorage.setItem("sky_user", user);
-  alert("Signup successful. You are now logged in.");
-  loadProgress(user);
-  showCurrentCollectible();
-}
-
-</script>
+  </script>
 </body>
 </html>
