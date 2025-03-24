@@ -43,11 +43,21 @@
   </style>
 </head>
 <body>
-  <div class="form-box">
+  <div id="authControls" style="position: absolute; top: 20px; right: 20px; display: flex; gap: 10px;">
+    <button id="loginBtn" onclick="window.location.href='login.html'">Login</button>
+    <button id="signupBtn" onclick="window.location.href='signup.html'">Sign Up</button>
+    <button id="logoutBtn" onclick="logout()" style="display: none;">Logout</button>
+  </div>
+
+  <div class="form-box" style="margin-left: 50px; width: 350px;">
     <h2>Login</h2>
     <input type="text" id="username" placeholder="Username" />
     <input type="password" id="password" placeholder="Password" />
+    <div class="show-password">
+      <input type="checkbox" id="showPassword" onclick="togglePassword()" /> Show Password
+    </div>
     <button onclick="login()">Login</button>
+    <button class="back-btn" onclick="window.location.href='index.html'">Back</button>
   </div>
 
   <script>
@@ -68,6 +78,27 @@
       localStorage.setItem("sky_user", user);
       window.location.href = "index.html";
     }
-  </script>
+  function logout() {
+  localStorage.removeItem("sky_user");
+  alert("Logged out successfully.");
+  window.location.href = "index.html";
+}
+
+window.onload = () => {
+  const user = localStorage.getItem("sky_user");
+  if (user) {
+    const loginBtn = document.getElementById("loginBtn");
+    const signupBtn = document.getElementById("signupBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    if (loginBtn) loginBtn.style.display = "none";
+    if (signupBtn) signupBtn.style.display = "none";
+    if (logoutBtn) logoutBtn.style.display = "inline-block";
+  }
+};
+function togglePassword() {
+  const passInput = document.getElementById("password");
+  passInput.type = passInput.type === "password" ? "text" : "password";
+}
+</script>
 </body>
 </html>
