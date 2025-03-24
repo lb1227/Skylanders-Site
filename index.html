@@ -153,13 +153,13 @@
       "Giants": [
         { name: "Bouncer", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Bouncer.png" },
         { name: "Crusher", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Crusher.png" },
-        { name: "Eyebrawl", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Eyebrawl1.png" },
+        { name: "Eyebrawl", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/EyeBrawl1.png" },
         { name: "Hot Head", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/HotHead.png" },
         { name: "Ninjini", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Ninjini.png" },
         { name: "Swarm", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Swarm.png" },
         { name: "Thumpback", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Thumpback.png" },
         { name: "Tree Rex", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/TreeRex.png" },
-        { name: "Chill", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Chill1.png" },
+        { name: "Chill", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Chill.png" },
         { name: "Flashwing", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Flashwing1.png" },
         { name: "Fright Rider", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/FrightRider1.png" },
         { name: "Hot Dog", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/HotDog1.png" },
@@ -174,7 +174,7 @@
         { name: "LightCore Jet-Vac", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/LightcoreJetVac.png" },
         { name: "LightCore Pop Fizz", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/LightcorePopFizz.png" },
         { name: "LightCore Prism Break", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/LightcorePrismBreak.png" },
-        { name: "LightCore Shroomboom", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/LightcoreShroomboom.png" },
+        { name: "LightCore Shroomboom", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/LightcoreShroomboom1.png" },
         { name: "Legendary Bouncer", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/LegendaryBouncer.png" },
         { name: "Legendary Jet-Vac", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/LegendaryJetVac.png" },
         { name: "Legendary Slam Bam", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/LegendarySlamBam.png" },
@@ -236,7 +236,17 @@
     };
 
     function loadProgress(user) {
-      const saved = localStorage.getItem(`sky_progress_${user}`);
+  const saved = localStorage.getItem(`sky_progress_${user}_${currentGame}`);
+  if (saved) {
+    const parsed = JSON.parse(saved);
+    collectedItems = parsed.collected || [];
+    collectiblesQueue = parsed.queue || [...collectibles];
+    renderCollectedList();
+  } else {
+    collectedItems = [];
+    collectiblesQueue = [...collectibles];
+  }
+}`);
       if (saved) {
         const parsed = JSON.parse(saved);
         collectedItems = parsed.collected || [];
@@ -246,22 +256,25 @@
     }
 
     function switchGame() {
-      currentGame = document.getElementById("gameSelector").value;
-      collectibles = games[currentGame];
-      collectiblesQueue = [...collectibles];
-      collectedItems = [];
-      lastItem = null;
-      document.getElementById("collectiblesList").innerHTML = "";
-      showCurrentCollectible();
-    }
+  const user = localStorage.getItem("sky_user");
+  currentGame = document.getElementById("gameSelector").value;
+  collectibles = games[currentGame];
+  loadProgress(user);
+  lastItem = null;
+  document.getElementById("collectiblesList").innerHTML = "";
+  renderCollectedList();
+  showCurrentCollectible();
+}
 
     function saveProgress() {
-      const user = localStorage.getItem("sky_user");
-      if (!user) return;
-      const data = {
-        collected: collectedItems,
-        queue: collectiblesQueue
-      };
+  const user = localStorage.getItem("sky_user");
+  if (!user) return;
+  const data = {
+    collected: collectedItems,
+    queue: collectiblesQueue
+  };
+  localStorage.setItem(`sky_progress_${user}_${currentGame}`, JSON.stringify(data));
+};
       localStorage.setItem(`sky_progress_${user}`, JSON.stringify(data));
     }
 
