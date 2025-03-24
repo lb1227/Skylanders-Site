@@ -226,7 +226,20 @@
       saveProgress();
     };
 
-    function renderCollectedList() {
+    function removeCollectible(name, button) {
+  const li = button.closest('li');
+  if (li) li.remove();
+
+  const index = collectedItems.findIndex(c => c.name === name);
+  if (index !== -1) {
+    const [restored] = collectedItems.splice(index, 1);
+    collectiblesQueue.unshift(restored);
+    showCurrentCollectible();
+    saveProgress();
+  }
+}
+
+function renderCollectedList() {
       const list = document.getElementById("collectiblesList");
       list.innerHTML = "";
       collectedItems.forEach(item => {
