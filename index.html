@@ -206,18 +206,17 @@
 
     document.getElementById("nextButton").onclick = () => {
   const status = document.getElementById("statusInput").value;
-  const current = collectiblesQueue.shift();
-
+  const current = collectiblesQueue[0];
   if (!current) return;
 
   if (status === "Don't have it") {
-    if (collectiblesQueue.length > 0) {
-      showCurrentCollectible();
-    } else {
-      document.getElementById("collectibleContainer").innerHTML = "<p>All collectibles reviewed!</p>";
-    }
+    collectiblesQueue.shift();
+    showCurrentCollectible();
+    saveProgress();
     return;
   }
+
+  collectiblesQueue.shift();
 
   const list = document.getElementById("collectiblesList");
   const li = document.createElement("li");
@@ -232,35 +231,43 @@
   collectedItems.push(current);
   lastItem = current;
 
-  if (collectiblesQueue.length > 0) {
-    showCurrentCollectible();
-  } else {
-    document.getElementById("collectibleContainer").innerHTML = "<p>All collectibles reviewed!</p>";
-  }
+  showCurrentCollectible();
   saveProgress();
 };
 
-    document.getElementById("undoButton").onclick = () => {
-      if (!lastItem) return;
-      collectedItems = collectedItems.filter(c => c.name !== lastItem.name);
-      collectiblesQueue.unshift(lastItem);
-      renderCollectedList();
-      showCurrentCollectible();
-      lastItem = null;
-      saveProgress();
-    };
+    document.getElementById("nextButton").onclick = () => {
+  const status = document.getElementById("statusInput").value;
 
-    function removeCollectible(name, button) {
-      const li = button.parentElement;
-      li.remove();
+  // Peek at current without removing yet
+  const current = collectiblesQueue[0];
+  if (!current) return;
 
-      const removed = collectedItems.find(c => c.name === name);
-      if (removed) {
-        collectedItems = collectedItems.filter(c => c.name !== name);
-        collectiblesQueue.push(removed);
-        showCurrentCollectible();
-        saveProgress();
-      }
+  if (status === "Don't have it") {
+    collectiblesQueue.shift(); // now remove
+    showCurrentCollectible();
+    saveProgress();
+    return;
+  }
+
+  // Only shift once we're keeping it
+  collectiblesQueue.shift();
+
+  const list = document.getElementById("collectiblesList");
+  const li = document.createElement("li");
+  li.innerHTML = `
+    <div class="collectible-item">
+      <img src="${current.image}" alt="${current.name}" />
+      <span>${current.name} - <strong>${status}</strong></span>
+    </div>
+    <button onclick="removeCollectible('${current.name}', this)">Remove</button>
+  `;
+  list.appendChild(li);
+  collectedItems.push(current);
+  lastItem = current;
+
+  showCurrentCollectible();
+  saveProgress();
+};
     }
 
     function renderCollectedList() {
