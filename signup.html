@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .form-box {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 300px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: red;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    h2 {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-box">
+    <h2>Sign Up</h2>
+    <input type="text" id="signupUsername" placeholder="Create username" />
+    <input type="password" id="signupPassword" placeholder="Create password" />
+    <button onclick="signup()">Sign Up</button>
+  </div>
+
+  <script>
+    function signup() {
+      const user = document.getElementById("signupUsername").value.trim();
+      const pass = document.getElementById("signupPassword").value.trim();
+      if (!user || !pass) return alert("Please fill in both fields to sign up.");
+
+      if (localStorage.getItem(`sky_pass_${user}`)) {
+        alert("Username already exists. Please log in.");
+        return;
+      }
+
+      localStorage.setItem(`sky_pass_${user}`, pass);
+      localStorage.setItem("sky_user", user);
+      alert("Signup successful. You are now logged in.");
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>
