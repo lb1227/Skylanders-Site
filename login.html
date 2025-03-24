@@ -22,6 +22,8 @@
       width: 300px;
     }
     input {
+      display: block;
+      box-sizing: border-box;
       width: 100%;
       padding: 10px;
       margin: 10px 0;
@@ -51,8 +53,8 @@
 
   <div class="form-box" style="margin-left: 50px; width: 350px;">
     <h2>Login</h2>
-    <div style="width: 100%;"><input type="text" id="username" placeholder="Username" /></div>
-    <div style="width: 100%;"><input type="password" id="password" placeholder="Password" /></div>
+    <input type="text" id="username" placeholder="Username" />
+    <input type="password" id="password" placeholder="Password" />
     <div class="show-password">
       <input type="checkbox" id="showPassword" onclick="togglePassword()" /> Show Password
     </div>
