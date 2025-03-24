@@ -205,30 +205,40 @@
     }
 
     document.getElementById("nextButton").onclick = () => {
-      const current = collectiblesQueue.shift();
-      if (!current) return;
+  const status = document.getElementById("statusInput").value;
+  const current = collectiblesQueue.shift();
 
-      const status = document.getElementById("statusInput").value;
-      const list = document.getElementById("collectiblesList");
-      const li = document.createElement("li");
-      li.innerHTML = `
-        <div class="collectible-item">
-          <img src="${current.image}" alt="${current.name}" />
-          <span>${current.name} - <strong>${status}</strong></span>
-        </div>
-        <button onclick="removeCollectible('${current.name}', this)">Remove</button>
-      `;
-      list.appendChild(li);
-      collectedItems.push(current);
-      lastItem = current;
+  if (!current) return;
 
-      if (collectiblesQueue.length > 0) {
-        showCurrentCollectible();
-      } else {
-        document.getElementById("collectibleContainer").innerHTML = "<p>All collectibles reviewed!</p>";
-      }
-      saveProgress();
-    };
+  if (status === "Don't have it") {
+    if (collectiblesQueue.length > 0) {
+      showCurrentCollectible();
+    } else {
+      document.getElementById("collectibleContainer").innerHTML = "<p>All collectibles reviewed!</p>";
+    }
+    return;
+  }
+
+  const list = document.getElementById("collectiblesList");
+  const li = document.createElement("li");
+  li.innerHTML = `
+    <div class="collectible-item">
+      <img src="${current.image}" alt="${current.name}" />
+      <span>${current.name} - <strong>${status}</strong></span>
+    </div>
+    <button onclick="removeCollectible('${current.name}', this)">Remove</button>
+  `;
+  list.appendChild(li);
+  collectedItems.push(current);
+  lastItem = current;
+
+  if (collectiblesQueue.length > 0) {
+    showCurrentCollectible();
+  } else {
+    document.getElementById("collectibleContainer").innerHTML = "<p>All collectibles reviewed!</p>";
+  }
+  saveProgress();
+};
 
     document.getElementById("undoButton").onclick = () => {
       if (!lastItem) return;
