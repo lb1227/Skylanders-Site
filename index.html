@@ -116,46 +116,16 @@
 
   <script>
     const games = {
-  "Spyro's Adventure": [
-    { name: "Bash", image: "https://skylanderscharacterlist.com/wp-content/uploads/2014/03/Bash.png" },
-    { name: "Boomer", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Boomer1.png" },
-    { name: "Camo", image: "https://skylanderscharacterlist.com/wp-content/uploads/2014/02/Camo.png" },
-    { name: "Chop Chop", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/ChopChop1.png" },
-    { name: "Cynder", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Cynder1.png" },
-    { name: "Dino-Rang", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/DinoRang.png" },
-    { name: "Double Trouble", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/DoubleTrouble1.png" },
-    { name: "Drill Sergeant", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/DrillSergeant1.png" },
-    { name: "Drobot", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Drobot1.png" },
-    { name: "Eruptor", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Eruptor1.png" },
-    { name: "Flameslinger", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Flameslinger1.png" },
-    { name: "Ghost Roaster", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/GhostRoaster.png" },
-    { name: "Gill Grunt", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/GillGrunt1.png" },
-    { name: "Hex", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Hex1.png" },
-    { name: "Ignitor", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Ignitor1.png" },
-    { name: "Lightning Rod", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/LightningRod1.png" },
-    { name: "Prism Break", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/PrismBreak1.png" },
-    { name: "Slam Bam", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/SlamBam1.png" },
-    { name: "Sonic Boom", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/SonicBoom1.png" },
-    { name: "Spyro", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Spyro1.png" },
-    { name: "Stealth Elf", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/StealthElf1.png" },
-    { name: "Stump Smash", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/StumpSmash1.png" },
-    { name: "Sunburn", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Sunburn.png" },
-    { name: "Terrafin", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Terrafin1.png" },
-    { name: "Trigger Happy", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/TriggerHappy1.png" },
-    { name: "Voodood", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Voodood.png" },
-    { name: "Warnado", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Warnado.png" },
-    { name: "Wham-Shell", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/WhamShell.png" },
-    { name: "Whirlwind", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Whirlwind1.png" },
-    { name: "Wrecking Ball", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/WreckingBall1.png" },
-    { name: "Zap", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Zap1.png" },
-    { name: "Zook", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Zook1.png" }
-  ],
-  "Giants": [] // Placeholder for Giants group
-};
+      "Spyro's Adventure": [
+        { name: "Bash", image: "https://skylanderscharacterlist.com/wp-content/uploads/2014/03/Bash.png" },
+        { name: "Boomer", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Boomer1.png" },
+        { name: "Camo", image: "https://skylanderscharacterlist.com/wp-content/uploads/2014/02/Camo.png" }
+      ],
+      "Giants": []
+    };
 
-let currentGame = "Spyro's Adventure";
-let collectibles = games[currentGame];
-    const allCollectibles = [...collectibles];
+    let currentGame = "Spyro's Adventure";
+    let collectibles = games[currentGame];
     let collectiblesQueue = [...collectibles];
     let collectedItems = [];
     let lastItem = null;
@@ -206,16 +176,16 @@ let collectibles = games[currentGame];
     }
 
     function switchGame() {
-  currentGame = document.getElementById("gameSelector").value;
-  collectibles = games[currentGame];
-  collectiblesQueue = [...collectibles];
-  collectedItems = [];
-  lastItem = null;
-  document.getElementById("collectiblesList").innerHTML = "";
-  showCurrentCollectible();
-}
+      currentGame = document.getElementById("gameSelector").value;
+      collectibles = games[currentGame];
+      collectiblesQueue = [...collectibles];
+      collectedItems = [];
+      lastItem = null;
+      document.getElementById("collectiblesList").innerHTML = "";
+      showCurrentCollectible();
+    }
 
-function saveProgress() {
+    function saveProgress() {
       const user = localStorage.getItem("sky_user");
       if (!user) return;
       const data = {
@@ -226,70 +196,35 @@ function saveProgress() {
     }
 
     document.getElementById("nextButton").onclick = () => {
-  const status = document.getElementById("statusInput").value;
-  const current = collectiblesQueue[0];
-  if (!current) return;
+      const status = document.getElementById("statusInput").value;
+      const current = collectiblesQueue[0];
+      if (!current) return;
 
-  if (status === "Don't have it") {
-    collectiblesQueue.shift();
-    showCurrentCollectible();
-    saveProgress();
-    return;
-  }
+      if (status === "Don't have it") {
+        collectiblesQueue.shift();
+        showCurrentCollectible();
+        saveProgress();
+        return;
+      }
 
-  collectiblesQueue.shift();
+      collectiblesQueue.shift();
 
-  const list = document.getElementById("collectiblesList");
-  const li = document.createElement("li");
-  li.innerHTML = `
-    <div class="collectible-item">
-      <img src="${current.image}" alt="${current.name}" />
-      <span>${current.name} - <strong>${status}</strong></span>
-    </div>
-    <button onclick="removeCollectible('${current.name}', this)">Remove</button>
-  `;
-  list.appendChild(li);
-  collectedItems.push(current);
-  lastItem = current;
+      const list = document.getElementById("collectiblesList");
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <div class="collectible-item">
+          <img src="${current.image}" alt="${current.name}" />
+          <span>${current.name} - <strong>${status}</strong></span>
+        </div>
+        <button onclick="removeCollectible('${current.name}', this)">Remove</button>
+      `;
+      list.appendChild(li);
+      collectedItems.push(current);
+      lastItem = current;
 
-  showCurrentCollectible();
-  saveProgress();
-};
-
-    document.getElementById("nextButton").onclick = () => {
-  const status = document.getElementById("statusInput").value;
-
-  // Peek at current without removing yet
-  const current = collectiblesQueue[0];
-  if (!current) return;
-
-  if (status === "Don't have it") {
-    collectiblesQueue.shift(); // now remove
-    showCurrentCollectible();
-    saveProgress();
-    return;
-  }
-
-  // Only shift once we're keeping it
-  collectiblesQueue.shift();
-
-  const list = document.getElementById("collectiblesList");
-  const li = document.createElement("li");
-  li.innerHTML = `
-    <div class="collectible-item">
-      <img src="${current.image}" alt="${current.name}" />
-      <span>${current.name} - <strong>${status}</strong></span>
-    </div>
-    <button onclick="removeCollectible('${current.name}', this)">Remove</button>
-  `;
-  list.appendChild(li);
-  collectedItems.push(current);
-  lastItem = current;
-
-  showCurrentCollectible();
-  saveProgress();
-};
-    }
+      showCurrentCollectible();
+      saveProgress();
+    };
 
     function renderCollectedList() {
       const list = document.getElementById("collectiblesList");
