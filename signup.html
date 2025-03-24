@@ -40,14 +40,29 @@
     h2 {
       text-align: center;
     }
+      .show-password {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+
+    .back-btn {
+      margin-top: 10px;
+      width: 100%;
+    }
   </style>
 </head>
 <body>
-  <div class="form-box">
+  <div class="form-box" style="margin-left: 50px; width: 350px;">
     <h2>Sign Up</h2>
     <input type="text" id="signupUsername" placeholder="Create username" />
     <input type="password" id="signupPassword" placeholder="Create password" />
+    <div class="show-password">
+      <input type="checkbox" id="showPassword" onclick="togglePassword()" /> Show Password
+    </div>
     <button onclick="signup()">Sign Up</button>
+    <button class="back-btn" onclick="window.location.href='index.html'">Back</button>
   </div>
 
   <script>
@@ -66,6 +81,10 @@
       alert("Signup successful. You are now logged in.");
       window.location.href = "index.html";
     }
-  </script>
+  function togglePassword() {
+  const passInput = document.getElementById("signupPassword");
+  passInput.type = passInput.type === "password" ? "text" : "password";
+}
+</script>
 </body>
 </html>
