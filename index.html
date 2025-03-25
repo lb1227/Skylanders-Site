@@ -105,11 +105,68 @@
     .card button {
       margin-top: 0.5rem;
     }
+      @media (max-width: 600px) {
+      nav {
+        flex-direction: column;
+        text-align: center;
+      }
+      #authButtonsNav {
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 1rem;
+      }
+      #collectibleImage {
+        width: 100%;
+        max-width: 250px;
+      }
+      .card-grid {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      }
+      .container {
+        padding: 1rem;
+      }
+    }
+      .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+    .hamburger span {
+      background: white;
+      height: 3px;
+      margin: 4px 0;
+      width: 25px;
+      display: block;
+    }
+    @media (max-width: 600px) {
+      nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .hamburger {
+        display: flex;
+      }
+      #authButtonsNav {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        gap: 0.5rem;
+        margin-top: 1rem;
+      }
+      #authButtonsNav.show {
+        display: flex;
+      }
+    }
   </style>
 </head>
 <body>
   <nav>
     <h2 style="font-size: 1.8rem; letter-spacing: 1px; color: #4caf50;">Skylanders Tracker</h2>
+    <div class="hamburger" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
     <div id="authButtonsNav" style="display: flex; align-items: center; gap: 1rem;">
       <a href="inventory.html" style="color: white; padding: 0.5rem 1rem; background: #4caf50; border-radius: 6px; text-decoration: none; font-size: 1rem; transition: 0.3s;">Inventory</a>
       <a href="totals.html" style="color: white; padding: 0.5rem 1rem; background: #4caf50; border-radius: 6px; text-decoration: none; font-size: 1rem; transition: 0.3s;">User Totals</a>
@@ -285,6 +342,9 @@ window.addEventListener("DOMContentLoaded", () => {
   renderCollectedList();
   showCurrentCollectible();
 });
+function toggleMenu() {
+  document.getElementById("authButtonsNav").classList.toggle("show");
+}
 </script>
 </body>
 </html>
