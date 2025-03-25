@@ -133,12 +133,18 @@
       align-items: center;
       gap: 1rem;
     }
-  </style>
+    .qty-input.invalid {
+    border: 2px solid red;
+    background-color: #3a0000;
+  }
+</style>
 </head>
 <body>
   <nav>
     <h2>Skylanders Tracker</h2>
-    <div id="authButtonsNav"></div>
+    <div id="authButtonsNav">
+      <a href="totals.html" style="color: white; margin-left: 1rem; text-decoration: none; font-size: 1rem;">User Totals</a>
+    </div>
   </nav>
   <div class="container">
     <h2>My Collectibles</h2>
@@ -247,7 +253,8 @@
       const li = document.createElement("li");
       li.innerHTML = `<div class="collectible-item">
         <img src="${item.image}" alt="${item.name}" />
-        <span>${item.name} - <strong>${item.status}</strong></span>
+        <span>${item.name}</span>
+        ${item.status === 'Have it' ? `<input type='number' min='1' value='${item.quantity || 1}' class='qty-input' data-name='${item.name}' style='width:60px;margin-left:10px;'>` : ''}
       </div>
       <button class="remove-button" data-name="${item.name}" data-status="${item.status}">Remove</button>`;
       list.appendChild(li);
@@ -255,6 +262,42 @@
       li.querySelector(".remove-button").addEventListener("click", function() {
         removeCollectible(this.getAttribute("data-name"), this, this.getAttribute("data-status"));
       });
+
+      const qtyInput = li.querySelector(".qty-input");
+      if (qtyInput) {
+        qtyInput.addEventListener("change", function () {
+  let qty = parseInt(this.value);
+  const tooltip = document.createElement("div");
+  tooltip.textContent = "Please enter a whole number greater than or equal to 1";
+  tooltip.style.position = "absolute";
+  tooltip.style.background = "#f44336";
+  tooltip.style.color = "#fff";
+  tooltip.style.padding = "5px 10px";
+  tooltip.style.borderRadius = "5px";
+  tooltip.style.fontSize = "0.9rem";
+  tooltip.style.zIndex = 10;
+  tooltip.style.top = (this.getBoundingClientRect().top - 35 + window.scrollY) + "px";
+  tooltip.style.left = (this.getBoundingClientRect().left + window.scrollX) + "px";
+
+  if (!Number.isInteger(qty) || qty < 1) {
+    qty = 1;
+    this.value = 1;
+    this.classList.add("invalid");
+    document.body.appendChild(tooltip);
+    setTimeout(() => {
+      this.classList.remove("invalid");
+      document.body.removeChild(tooltip);
+    }, 1000);
+  } else {
+    this.classList.remove("invalid");
+  }
+  const found = collectedItems.find(c => c.name === this.dataset.name && c.status === "Have it");
+  if (found) {
+    found.quantity = qty;
+    saveProgress();
+  }
+});
+      }
     });
   }
 
@@ -300,7 +343,6 @@
     }
   }
 
-  // Initial render
   switchGame();
 </script>
 </body>
