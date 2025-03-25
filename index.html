@@ -7,11 +7,12 @@
   <style>
     :root {
       --bg: #121212;
-      --card-bg: #1f1f1f;
+      --card-bg: #1e1e1e;
       --text: #ffffff;
       --accent: #4caf50;
       --button: #e53935;
       --button-hover: #d32f2f;
+      --nav-bg: #1a1a1a;
     }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -20,14 +21,19 @@
       color: var(--text);
     }
     nav {
-      background-color: #000;
+      background-color: var(--nav-bg);
       padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
     }
     nav h2 {
       margin: 0;
+      font-size: 1.5rem;
     }
     .container {
       max-width: 1200px;
@@ -38,9 +44,9 @@
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
     }
     select, button {
-      padding: 0.5rem 1rem;
+      padding: 0.6rem 1.2rem;
       font-size: 1rem;
-      border-radius: 6px;
+      border-radius: 8px;
       border: none;
       margin-top: 1rem;
     }
@@ -51,13 +57,14 @@
     button {
       background-color: var(--button);
       color: white;
-      transition: background 0.3s ease;
+      transition: background 0.3s ease, transform 0.2s ease;
     }
     button:hover {
       background-color: var(--button-hover);
+      transform: scale(1.03);
     }
     img {
-      width: 200px;
+      width: 100%;
       height: auto;
       border-radius: 10px;
       margin-bottom: 0.5rem;
@@ -67,11 +74,12 @@
       margin: 2rem 0;
     }
     #collectibleImage {
-      width: 300px;
+      width: 320px;
       max-width: 100%;
       height: auto;
       border-radius: 12px;
       margin-bottom: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
     }
     .qty-input.invalid {
       border: 2px solid red;
@@ -84,12 +92,16 @@
       margin-top: 2rem;
     }
     .card {
-      background: #2a2a2a;
+      background: #292929;
       border-radius: 12px;
       padding: 1rem;
       text-align: center;
       position: relative;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.6);
+      transition: transform 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
     }
     .card img {
       width: 100%;
@@ -101,6 +113,8 @@
     .card .qty-input {
       margin-top: 0.5rem;
       width: 60px;
+      padding: 0.3rem;
+      font-size: 1rem;
     }
     .card button {
       margin-top: 0.5rem;
@@ -121,7 +135,7 @@
     .animate-right {
       animation: swipeRight 0.5s ease forwards;
     }
-      .hamburger {
+    .hamburger {
       display: none;
       font-size: 2rem;
       cursor: pointer;
@@ -172,7 +186,7 @@
     <a href="totals.html">Totals</a>
     <button id="loginBtn" onclick="location.href='login.html'">Login</button>
     <button id="signupBtn" onclick="location.href='signup.html'">Sign Up</button>
-    <button id="logoutBtn" style="display:none" onclick="logout()">Logout</button>
+    <button id="logoutBtn" style="display:none; background-color: var(--button); color: white; border-radius: 8px; padding: 0.5rem 1rem; font-weight: bold;" onclick="logout()">Logout</button>
   </div>
 </nav>
   <div class="container">
@@ -230,18 +244,40 @@
           img.src = "";
           name.textContent = "";
         } else {
-          img.src = "";
-          name.textContent = "";
+          img.src = "https://skylanderscharacterlist.com/wp-content/uploads/2014/02/Skylanders-All.jpg";
+          name.textContent = "All Skylanders Reviewed! 🎉";
           reviewBtn.style.display = "none";
         }
       }
 
       function renderCollectedList() {
+        const elementColors = {
+          Fire: '#4d1c1c33',
+          Tech: '#33270a33',
+          Magic: '#2e1f4c33',
+          Life: '#1c4d1c33',
+          Water: '#1c2e4d33',
+          Air: '#1c4d4d33',
+          Earth: '#4d3b1c33',
+          Undead: '#2b2b2b33'
+        };
+
+        const elementMap = {
+          'Hot Head': 'Fire',
+          'Bouncer': 'Tech',
+          'Crusher': 'Earth',
+          'Spyro': 'Magic',
+          'Stealth Elf': 'Life',
+          'Trigger Happy': 'Tech'
+        };
+
         const grid = document.getElementById("cardGrid");
         grid.innerHTML = "";
         collectedItems.forEach(item => {
           const card = document.createElement("div");
           card.className = "card";
+          const element = elementMap[item.name] || 'Magic';
+          card.style.backgroundColor = elementColors[element] || '#292929';
           const quantity = item.quantity || 1;
           card.innerHTML = `
             <img src="${item.image}" alt="${item.name}" />
