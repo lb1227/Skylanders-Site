@@ -41,13 +41,27 @@ function showCurrentCollectible() {
 function handleDecision(type) {
   const current = collectiblesQueue.shift();
   if (!current) return;
+
   if (type === "have") {
-    current.quantity = 1;
-    tempCollected.push(current);
+    img.classList.add("animate-right");
+    const handler = () => {
+      img.classList.remove("animate-right");
+      img.removeEventListener("animationend", handler);
+      current.quantity = 1;
+      tempCollected.push(current);
+      showCurrentCollectible();
+    };
+    img.addEventListener("animationend", handler);
   } else {
-    skippedQueue.push(current);
+    img.classList.add("animate-left");
+    const handler = () => {
+      img.classList.remove("animate-left");
+      img.removeEventListener("animationend", handler);
+      skippedQueue.push(current);
+      showCurrentCollectible();
+    };
+    img.addEventListener("animationend", handler);
   }
-  showCurrentCollectible();
 }
 
 document.getElementById("haveItBtn").onclick = () => handleDecision("have");
@@ -120,6 +134,19 @@ function logout() {
 }
 
 function setupSwipe() {
+  let startX = 0;
+  let endX = 0;
+
+  img.addEventListener("touchstart", e => startX = e.changedTouches[0].screenX);
+  img.addEventListener("touchend", e => {
+    endX = e.changedTouches[0].screenX;
+    if (startX - endX > 50) {
+      handleDecision("skip");
+    } else if (endX - startX > 50) {
+      handleDecision("have");
+    }
+  });
+
   let startY = 0;
   img.addEventListener("touchstart", e => startY = e.changedTouches[0].screenY);
   img.addEventListener("touchend", e => {
