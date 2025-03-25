@@ -122,7 +122,7 @@
       const userData = JSON.parse(localStorage.getItem("sky_users")) || {};
       if (userData[username] && userData[username] === password) {
         localStorage.setItem("sky_user", username);
-        window.location.href = "index.html";
+        window.location.href = "home.html";
       } else {
         alert("Invalid credentials.");
       }
