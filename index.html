@@ -157,7 +157,20 @@
         display: flex;
       }
     }
-  </style>
+      @keyframes swipeLeft {
+      0% { transform: translateX(0); opacity: 1; }
+      100% { transform: translateX(-100vw); opacity: 0; }
+    }
+    @keyframes swipeRight {
+      0% { transform: translateX(0); opacity: 1; }
+      100% { transform: translateX(100vw); opacity: 0; }
+    }
+    .animate-left {
+      animation: swipeLeft 0.5s ease forwards;
+    }
+    .animate-right {
+      animation: swipeRight 0.5s ease forwards;
+    }
 </head>
 <body>
   <nav>
@@ -181,6 +194,7 @@
     </select>
 
     <div id="collectibleContainer">
+      <p id="swipeHint" style="display: none; font-size: 0.9rem; color: #ccc; margin-bottom: 1rem; opacity: 0; transition: opacity 1s ease;">Swipe left for ❌ or right for ✅</p>
       <img id="collectibleImage" alt="Collectible Image" />
       <p id="collectibleName"></p>
       <div style="display: flex; justify-content: center; gap: 2rem; margin: 1rem 0;">
@@ -218,6 +232,8 @@ let skippedQueue = [];
 let showingSkipped = false;
 
 function showCurrentCollectible() {
+  const isMobile = window.innerWidth <= 600;
+  document.getElementById("swipeHint").style.display = isMobile ? "block" : "none";
   const current = collectiblesQueue[0];
   const img = document.getElementById("collectibleImage");
   const name = document.getElementById("collectibleName");
@@ -246,6 +262,15 @@ function saveProgress() {
 
 function loadProgress(user) {
   const key = `sky_progress_${user}_${currentGame}`;
+  const data = JSON.parse(localStorage.getItem(key));
+  if (data && Array.isArray(data.queue) && data.queue.length > 0) {
+    collectedItems = data.collected || [];
+    collectiblesQueue = data.queue;
+  } else {
+    collectedItems = [];
+    collectiblesQueue = [...collectibles];
+  }
+}_${currentGame}`;
   const data = JSON.parse(localStorage.getItem(key));
   if (data) {
     collectedItems = data.collected || [];
@@ -303,19 +328,29 @@ function removeCollectible(name, element, status) {
 }
 
 document.getElementById("haveItBtn").onclick = () => {
-  const current = collectiblesQueue.shift();
-  if (!current) return;
-  collectedItems.push({ ...current, status: "Have it" });
-  showCurrentCollectible();
-  renderCollectedList();
-  saveProgress();
+  const img = document.getElementById("collectibleImage");
+  img.classList.add("animate-right");
+  setTimeout(() => {
+    img.classList.remove("animate-right");
+    const current = collectiblesQueue.shift();
+    if (!current) return;
+    collectedItems.push({ ...current, status: "Have it" });
+    showCurrentCollectible();
+    renderCollectedList();
+    saveProgress();
+  }, 400);
 };
 
 document.getElementById("dontHaveItBtn").onclick = () => {
-  const current = collectiblesQueue.shift();
-  if (!current) return;
-  skippedQueue.push(current);
-  showCurrentCollectible();
+  const img = document.getElementById("collectibleImage");
+  img.classList.add("animate-left");
+  setTimeout(() => {
+    img.classList.remove("animate-left");
+    const current = collectiblesQueue.shift();
+    if (!current) return;
+    skippedQueue.push(current);
+    showCurrentCollectible();
+  }, 400);
 };
 
 document.getElementById("gameSelector").addEventListener("change", () => {
@@ -335,6 +370,14 @@ document.getElementById("reviewSkippedBtn").addEventListener("click", () => {
 });
 
 window.addEventListener("DOMContentLoaded", () => {
+  const hint = document.getElementById("swipeHint");
+  const isMobile = window.innerWidth <= 600;
+  const hintShown = localStorage.getItem("swipe_hint_shown");
+  if (hint && isMobile && !hintShown) {
+    setTimeout(() => {
+      hint.style.opacity = 1;
+    }, 500);
+  }
   const user = localStorage.getItem("sky_user") || "guest";
   currentGame = document.getElementById("gameSelector").value;
   collectibles = games[currentGame];
@@ -354,9 +397,14 @@ function handleGesture() {
     const diff = touchStartX - touchEndX;
     if (Math.abs(diff) > 50) {
       if (diff > 0) {
-        document.getElementById("dontHaveItBtn").click(); // Swipe left = ❌
+        document.getElementById("dontHaveItBtn").click();
       } else {
-        document.getElementById("haveItBtn").click(); // Swipe right = ✅
+        document.getElementById("haveItBtn").click();
+      }
+      const hint = document.getElementById("swipeHint");
+      if (hint && hint.style.opacity !== "0") {
+        hint.style.opacity = 0;
+        localStorage.setItem("swipe_hint_shown", "true");
       }
     }
   }
