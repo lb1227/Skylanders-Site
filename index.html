@@ -66,27 +66,12 @@
       text-align: center;
       margin: 2rem 0;
     }
-    #progressBar {
-      height: 24px;
-      background: #333;
+    #collectibleImage {
+      width: 300px;
+      max-width: 100%;
+      height: auto;
       border-radius: 12px;
-      overflow: hidden;
-      margin: 1rem 0;
-      position: relative;
-    }
-    #progressFill {
-      height: 100%;
-      width: 0%;
-      background: var(--accent);
-      transition: width 0.4s ease;
-    }
-    #progressText {
-      position: absolute;
-      width: 100%;
-      text-align: center;
-      font-weight: bold;
-      line-height: 24px;
-      color: white;
+      margin-bottom: 1rem;
     }
     .qty-input.invalid {
       border: 2px solid red;
@@ -124,10 +109,10 @@
 </head>
 <body>
   <nav>
-    <h2>Skylanders Tracker</h2>
-    <div id="authButtonsNav">
-      <a href="inventory.html" style="color: white; margin-left: 1rem; text-decoration: none; font-size: 1rem;">Inventory</a>
-      <a href="totals.html" style="color: white; margin-left: 1rem; text-decoration: none; font-size: 1rem;">User Totals</a>
+    <h2 style="font-size: 1.8rem; letter-spacing: 1px; color: #4caf50;">Skylanders Tracker</h2>
+    <div id="authButtonsNav" style="display: flex; align-items: center; gap: 1rem;">
+      <a href="inventory.html" style="color: white; padding: 0.5rem 1rem; background: #4caf50; border-radius: 6px; text-decoration: none; font-size: 1rem; transition: 0.3s;">Inventory</a>
+      <a href="totals.html" style="color: white; padding: 0.5rem 1rem; background: #4caf50; border-radius: 6px; text-decoration: none; font-size: 1rem; transition: 0.3s;">User Totals</a>
     </div>
   </nav>
   <div class="container">
@@ -137,28 +122,17 @@
       <option value="Spyro's Adventure">Spyro's Adventure</option>
       <option value="Giants">Giants</option>
     </select>
-    <div id="progressBar">
-      <div id="progressFill"></div>
-      <span id="progressText">0%</span>
-    </div>
+
     <div id="collectibleContainer">
       <img id="collectibleImage" alt="Collectible Image" />
       <p id="collectibleName"></p>
-      <select id="statusInput">
-        <option value="Have it">Have it</option>
-        <option value="Don't have it">Don't have it</option>
-      </select>
-      <br />
-      <button id="nextButton">Next</button>
+      <div style="display: flex; justify-content: center; gap: 2rem; margin: 1rem 0;">
+        <button id="dontHaveItBtn" style="background-color: black; color: #e53935; border: 2px solid #e53935; padding: 0.5rem 1rem; border-radius: 6px; font-size: 1.5rem; cursor: pointer;">❌</button>
+        <button id="haveItBtn" style="background-color: black; color: #4caf50; border: 2px solid #4caf50; padding: 0.5rem 1rem; border-radius: 6px; font-size: 1.5rem; cursor: pointer;">✅</button>
+      </div>
+      <button id="reviewSkippedBtn" style="display:none; margin-top: 1rem; background-color: #444; color: white; border: 1px solid #ccc; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">Review Skipped</button>
     </div>
-    <div style="text-align:center; margin-bottom: 1rem;">
-      <label for="filterSelect">Filter:</label>
-      <select id="filterSelect" style="margin-left: 0.5rem;">
-        <option value="all">All</option>
-        <option value="Have it">Have It</option>
-        <option value="Don't have it">Don't Have It</option>
-      </select>
-    </div>
+    
     <div class="card-grid" id="cardGrid"></div>
   </div>
 <script>
@@ -178,50 +152,57 @@ const games = {
     { name: "Ninjini", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Ninjini.png" }
   ]
 };
+
 let currentGame = "Spyro's Adventure";
 let collectibles = games[currentGame];
 let collectiblesQueue = [...collectibles];
 let collectedItems = [];
-document.getElementById("nextButton").addEventListener("click", () => {
-  const status = document.getElementById("statusInput").value;
+let skippedQueue = [];
+let showingSkipped = false;
+
+function showCurrentCollectible() {
   const current = collectiblesQueue[0];
-  if (!current) return;
-  collectiblesQueue.shift();
-  collectedItems.push({ ...current, status });
-  renderCollectedList();
-  showCurrentCollectible();
-  updateProgress();
-  saveProgress();
-});
-document.getElementById("gameSelector").addEventListener("change", switchGame);
-function switchGame() {
-  const user = localStorage.getItem("sky_user") || "guest";
-  saveProgress();
-  currentGame = document.getElementById("gameSelector").value;
-  collectibles = games[currentGame];
-  loadProgress(user);
-  renderCollectedList();
-  showCurrentCollectible();
-  updateProgress();
+  const img = document.getElementById("collectibleImage");
+  const name = document.getElementById("collectibleName");
+  const reviewBtn = document.getElementById("reviewSkippedBtn");
+
+  if (current) {
+    img.src = current.image;
+    name.textContent = current.name;
+    reviewBtn.style.display = "none";
+  } else if (skippedQueue.length > 0 && !showingSkipped) {
+    reviewBtn.style.display = "inline-block";
+    img.src = "";
+    name.textContent = "";
+  } else {
+    img.src = "";
+    name.textContent = "";
+    reviewBtn.style.display = "none";
+  }
 }
+
+function saveProgress() {
+  const user = localStorage.getItem("sky_user") || "guest";
+  const key = `sky_progress_${user}_${currentGame}`;
+  localStorage.setItem(key, JSON.stringify({ collected: collectedItems, queue: collectiblesQueue }));
+}
+
 function loadProgress(user) {
   const key = `sky_progress_${user}_${currentGame}`;
-  const saved = localStorage.getItem(key);
-  if (saved) {
-    const parsed = JSON.parse(saved);
-    collectedItems = parsed.collected || [];
-    collectiblesQueue = parsed.queue || [...collectibles];
+  const data = JSON.parse(localStorage.getItem(key));
+  if (data) {
+    collectedItems = data.collected || [];
+    collectiblesQueue = data.queue || [...collectibles];
   } else {
     collectedItems = [];
     collectiblesQueue = [...collectibles];
   }
 }
+
 function renderCollectedList() {
   const grid = document.getElementById("cardGrid");
-  const filter = document.getElementById("filterSelect").value;
   grid.innerHTML = "";
   collectedItems.forEach(item => {
-    if (filter !== "all" && item.status !== filter) return;
     const card = document.createElement("div");
     card.className = "card";
     card.innerHTML = `
@@ -231,84 +212,79 @@ function renderCollectedList() {
       <button class="remove-button" data-name="${item.name}" data-status="${item.status}">Remove</button>
     `;
     grid.appendChild(card);
-    const removeBtn = card.querySelector(".remove-button");
-    removeBtn.addEventListener("click", function() {
-      removeCollectible(this.getAttribute("data-name"), this, this.getAttribute("data-status"));
-    });
-    const qtyInput = card.querySelector(".qty-input");
-    if (qtyInput) {
-      qtyInput.addEventListener("change", function () {
-        let qty = parseInt(this.value);
-        const tooltip = document.createElement("div");
-        tooltip.textContent = "Please enter a whole number greater than or equal to 1";
-        tooltip.style.position = "absolute";
-        tooltip.style.background = "#f44336";
-        tooltip.style.color = "#fff";
-        tooltip.style.padding = "5px 10px";
-        tooltip.style.borderRadius = "5px";
-        tooltip.style.fontSize = "0.9rem";
-        tooltip.style.zIndex = 10;
-        tooltip.style.top = (this.getBoundingClientRect().top - 35 + window.scrollY) + "px";
-        tooltip.style.left = (this.getBoundingClientRect().left + window.scrollX) + "px";
-        if (!Number.isInteger(qty) || qty < 1) {
-          qty = 1;
-          this.value = 1;
+    card.querySelector(".remove-button").onclick = () => removeCollectible(item.name, card, item.status);
+    const qty = card.querySelector(".qty-input");
+    if (qty) {
+      qty.addEventListener("change", function () {
+        let value = parseInt(this.value);
+        if (!Number.isInteger(value) || value < 1) {
           this.classList.add("invalid");
-          document.body.appendChild(tooltip);
-          setTimeout(() => {
-            this.classList.remove("invalid");
-            document.body.removeChild(tooltip);
-          }, 1000);
+          this.value = 1;
+          value = 1;
         } else {
           this.classList.remove("invalid");
         }
         const found = collectedItems.find(c => c.name === this.dataset.name && c.status === "Have it");
         if (found) {
-          found.quantity = qty;
+          found.quantity = value;
           saveProgress();
         }
       });
     }
   });
 }
-function showCurrentCollectible() {
-  if (collectiblesQueue.length > 0) {
-    document.getElementById("collectibleImage").src = collectiblesQueue[0].image;
-    document.getElementById("collectibleName").innerText = collectiblesQueue[0].name;
-  } else {
-    document.getElementById("collectibleImage").src = "";
-    document.getElementById("collectibleName").innerText = "";
-  }
-}
-function updateProgress() {
-  const total = games[currentGame].length;
-  const collected = collectedItems.length;
-  const percent = Math.round((collected / total) * 100);
-  document.getElementById("progressFill").style.width = percent + "%";
-  document.getElementById("progressText").innerText = percent + "%";
-}
-function saveProgress() {
-  const user = localStorage.getItem("sky_user") || "guest";
-  const key = `sky_progress_${user}_${currentGame}`;
-  const data = {
-    collected: collectedItems,
-    queue: collectiblesQueue
-  };
-  localStorage.setItem(key, JSON.stringify(data));
-}
-function removeCollectible(name, button, status) {
+
+function removeCollectible(name, element, status) {
   const index = collectedItems.findIndex(c => c.name === name && c.status === status);
   if (index !== -1) {
     const [restored] = collectedItems.splice(index, 1);
     collectiblesQueue.unshift({ name: restored.name, image: restored.image });
     showCurrentCollectible();
     renderCollectedList();
-    updateProgress();
     saveProgress();
   }
 }
-document.getElementById("filterSelect").addEventListener("change", renderCollectedList);
-switchGame();
+
+document.getElementById("haveItBtn").onclick = () => {
+  const current = collectiblesQueue.shift();
+  if (!current) return;
+  collectedItems.push({ ...current, status: "Have it" });
+  showCurrentCollectible();
+  renderCollectedList();
+  saveProgress();
+};
+
+document.getElementById("dontHaveItBtn").onclick = () => {
+  const current = collectiblesQueue.shift();
+  if (!current) return;
+  skippedQueue.push(current);
+  showCurrentCollectible();
+};
+
+document.getElementById("gameSelector").addEventListener("change", () => {
+  const user = localStorage.getItem("sky_user") || "guest";
+  saveProgress();
+  currentGame = document.getElementById("gameSelector").value;
+  collectibles = games[currentGame];
+  loadProgress(user);
+  renderCollectedList();
+  showCurrentCollectible();
+});
+
+document.getElementById("reviewSkippedBtn").addEventListener("click", () => {
+  collectiblesQueue = [...skippedQueue];
+  skippedQueue = [];
+  showCurrentCollectible();
+});
+
+window.addEventListener("DOMContentLoaded", () => {
+  const user = localStorage.getItem("sky_user") || "guest";
+  currentGame = document.getElementById("gameSelector").value;
+  collectibles = games[currentGame];
+  loadProgress(user);
+  renderCollectedList();
+  showCurrentCollectible();
+});
 </script>
 </body>
 </html>
