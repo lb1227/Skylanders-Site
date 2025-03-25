@@ -27,14 +27,17 @@ function showCurrentCollectible() {
     name.textContent = current.name;
     reviewBtn.style.display = "none";
     submitBtn.style.display = "none";
+    img.style.display = "block";
   } else if (skippedQueue.length > 0) {
     reviewBtn.style.display = "inline-block";
     img.src = "";
     name.textContent = "";
+    img.style.display = "none";
   } else {
     img.src = "";
     name.textContent = "All Skylanders Reviewed! 🎉";
     submitBtn.style.display = "block";
+    img.style.display = "none";
   }
 }
 
