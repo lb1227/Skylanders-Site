@@ -4,38 +4,536 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Skylanders Tracker</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script defer src="data.js"></script>
-  <script defer src="main.js"></script>
+  <style>
+    :root {
+      --bg: #121212;
+      --card-bg: #1e1e1e;
+      --text: #ffffff;
+      --accent: #4caf50;
+      --button: #e53935;
+      --button-hover: #d32f2f;
+      --nav-bg: #1a1a1a;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background-color: var(--bg);
+      color: var(--text);
+    }
+    nav {
+      background-color: var(--nav-bg);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    nav h2 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    }
+    select, button {
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: none;
+      margin-top: 1rem;
+    }
+    select {
+      background-color: #2a2a2a;
+      color: white;
+    }
+    button {
+      background-color: var(--button);
+      color: white;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    button:hover {
+      background-color: var(--button-hover);
+      transform: scale(1.03);
+    }
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin-bottom: 0.5rem;
+    }
+    #collectibleContainer {
+      text-align: center;
+      margin: 2rem 0;
+    }
+    #collectibleImage {
+      width: 320px;
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    }
+    .qty-input.invalid {
+      border: 2px solid red;
+      background-color: #3a0000;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .card {
+      background: #292929;
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.6);
+      transition: transform 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    .card img {
+      width: 100%;
+      max-width: 160px;
+      height: auto;
+      border-radius: 10px;
+      margin-bottom: 0.5rem;
+    }
+    .card .qty-input {
+      margin-top: 0.5rem;
+      width: 60px;
+      padding: 0.3rem;
+      font-size: 1rem;
+    }
+    .card button {
+      margin-top: 0.5rem;
+    }
+    @keyframes swipeLeft {
+      0% { transform: translateX(0) rotate(0); opacity: 1; }
+      50% { transform: translateX(-50vw) rotate(-10deg); opacity: 0.5; }
+      100% { transform: translateX(-100vw) rotate(-20deg); opacity: 0; }
+    }
+    @keyframes swipeRight {
+      0% { transform: translateX(0) rotate(0); opacity: 1; }
+      50% { transform: translateX(50vw) rotate(10deg); opacity: 0.5; }
+      100% { transform: translateX(100vw) rotate(20deg); opacity: 0; }
+    }
+    .animate-left {
+      animation: swipeLeft 0.5s ease forwards;
+    }
+    .animate-right {
+      animation: swipeRight 0.5s ease forwards;
+    }
+    .hamburger {
+      display: none;
+      font-size: 2rem;
+      cursor: pointer;
+      color: white;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .nav-links a, .nav-links button {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        background-color: #000;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        width: 100%;
+        padding: 1rem;
+      }
+      .nav-links.show {
+        display: flex;
+      }
+      .hamburger {
+        display: block;
+      }
+    }
+  </style>
 </head>
 <body>
   <nav>
-    <h2 style="margin: 0;">Skylanders Tracker</h2>
-    <div class="nav-links">
-      <a href="inventory.html">Inventory</a>
-      <a href="totals.html">Totals</a>
-      <button id="loginBtn" onclick="location.href='login.html'">Login</button>
-      <button id="signupBtn" onclick="location.href='signup.html'">Sign Up</button>
-      <button id="logoutBtn" style="display:none; background-color: var(--button); color: white; border-radius: 8px; padding: 0.5rem 1rem; font-weight: bold;" onclick="logout()">Logout</button>
-    </div>
-  </nav>
+  <h2 style="margin: 0;">Skylanders Tracker</h2>
+  <div class="hamburger" onclick="toggleMenu()">
+    ☰
+  </div>
+  <div id="navMenu" class="nav-links">
+    <a href="inventory.html">Inventory</a>
+    <a href="totals.html">Totals</a>
+    <button id="loginBtn" onclick="location.href='login.html'">Login</button>
+    <button id="signupBtn" onclick="location.href='signup.html'">Sign Up</button>
+    <button id="logoutBtn" style="display:none; background-color: var(--button); color: white; border-radius: 8px; padding: 0.5rem 1rem; font-weight: bold;" onclick="logout()">Logout</button>
+  </div>
+</nav>
   <div class="container">
     <h2>Welcome back to Skylanders Tracker</h2>
+    <p>Select a game and begin tracking your collection!</p>
     <label for="gameSelector">Select Game:</label>
-    <select id="gameSelector"></select>
+    <select id="gameSelector">
+      <option value="Spyro's Adventure">Spyro's Adventure</option>
+      <option value="Giants">Giants</option>
+    </select>
 
     <div id="collectibleContainer">
       <img id="collectibleImage" alt="Collectible Image" />
       <p id="collectibleName"></p>
-      <div class="swipe-buttons">
-        <button id="dontHaveItBtn">❌</button>
-        <button id="haveItBtn">✅</button>
+      <div style="display: flex; justify-content: center; gap: 2rem; margin: 1rem 0;">
+        <button id="dontHaveItBtn" style="background-color: black; color: #e53935; border: 2px solid #e53935; padding: 0.5rem 1rem; border-radius: 6px; font-size: 1.5rem; cursor: pointer;">❌</button>
+        <button id="haveItBtn" style="background-color: black; color: #4caf50; border: 2px solid #4caf50; padding: 0.5rem 1rem; border-radius: 6px; font-size: 1.5rem; cursor: pointer;">✅</button>
       </div>
-      <button id="reviewSkippedBtn" style="display:none">Review Skipped</button>
-      <button id="submitInventoryBtn" class="submit-btn desktop-visible">Submit to Inventory</button>
+      <button id="reviewSkippedBtn" style="display:none; margin-top: 1rem; background-color: #444; color: white; border: 1px solid #ccc; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">Review Skipped</button>
     </div>
-
     <div class="card-grid" id="cardGrid"></div>
+
+    <script>
+      const games = {
+        "Spyro's Adventure": [
+    { name: "Spyro", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Spyro1.png" },
+    { name: "Trigger Happy", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/TriggerHappy1.png" },
+    { name: "Stealth Elf", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/StealthElf1.png" },
+    { name: "Gill Grunt", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/GillGrunt1.png" },
+    { name: "Eruptor", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Eruptor1.png" },
+    { name: "Chop Chop", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/ChopChop1.png" },
+    { name: "Bash", image: "https://skylanderscharacterlist.com/wp-content/uploads/2014/03/Bash.png" },
+    { name: "Boomer", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Boomer1.png" },
+    { name: "Camo", image: "https://skylanderscharacterlist.com/wp-content/uploads/2014/02/Camo.png" },
+    { name: "Cynder", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Cynder1.png" },
+    { name: "Dino-Rang", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/DinoRang.png" },
+    { name: "Double Trouble", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/DoubleTrouble1.png" },
+    { name: "Drill Sergeant", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/DrillSergeant1.png" },
+    { name: "Drobot", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Drobot1.png" },
+    { name: "Flameslinger", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Flameslinger1.png" },
+    { name: "Ghost Roaster", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/GhostRoaster.png" },
+    { name: "Hex", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Hex1.png" },
+    { name: "Ignitor", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Ignitor1.png" },
+    { name: "Lightning Rod", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/LightningRod1.png" },
+    { name: "Prism Break", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/PrismBreak1.png" },
+    { name: "Slam Bam", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/SlamBam1.png" },
+    { name: "Sonic Boom", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/SonicBoom1.png" },
+    { name: "Stump Smash", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/StumpSmash1.png" },
+    { name: "Sunburn", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Sunburn.png" },
+    { name: "Terrafin", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Terrafin1.png" },
+    { name: "Voodood", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Voodood.png" },
+    { name: "Warnado", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Warnado.png" },
+    { name: "Wham-Shell", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/WhamShell.png" },
+    { name: "Whirlwind", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Whirlwind1.png" },
+    { name: "Wrecking Ball", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/WreckingBall1.png" },
+    { name: "Zap", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Zap1.png" },
+    { name: "Zook", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Zook1.png" }
+  ],
+  "Giants": [
+    { name: "Bouncer", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Bouncer.png" },
+    { name: "Crusher", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Crusher.png" },
+    { name: "Eye-Brawl", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/EyeBrawl1.png" },
+    { name: "Hot Head", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/HotHead.png" },
+    { name: "Ninjini", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Ninjini.png" },
+    { name: "Swarm", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Swarm.png" },
+    { name: "Thumpback", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Thumpback.png" },
+    { name: "Tree Rex", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/TreeRex.png" },
+    { name: "Chill", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Chill.png" },
+    { name: "Flashwing", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Flashwing.png" },
+    { name: "Fright Rider", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/FrightRider.png" },
+    { name: "Hot Dog", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/HotDog.png" },
+    { name: "Jet-Vac", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/JetVac.png" },
+    { name: "Pop Fizz", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/PopFizz.png" },
+    { name: "Shroomboom", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Shroomboom.png" },
+    { name: "Sprocket", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Sprocket.png" },
+    { name: "Chill LightCore", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/ChillLightCore.png" },
+    { name: "Drobot LightCore", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/DrobotLightCore.png" },
+    { name: "Eruptor LightCore", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/EruptorLightCore.png" },
+    { name: "Hex LightCore", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/HexLightCore.png" },
+    { name: "Jet-Vac LightCore", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/JetVacLightCore.png" },
+    { name: "Pop Fizz LightCore", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/PopFizzLightCore.png" },
+    { name: "Prism Break LightCore", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/PrismBreakLightCore.png" },
+    { name: "Shroomboom LightCore", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/ShroomboomLightCore.png" },
+    { name: "Legendary Bouncer", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/LegendaryBouncer.png" },
+    { name: "Legendary Jet-Vac", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/LegendaryJetVac.png" },
+    { name: "Legendary Slam Bam", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/LegendarySlamBam.png" },
+    { name: "Legendary Ignitor", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/LegendaryIgnitor.png" },
+    { name: "Scarlet Ninjini", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/ScarletNinjini.png" },
+    { name: "Punch Pop Fizz", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/PunchPopFizz.png" },
+    { name: "Molten Hot Dog", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/MoltenHotDog.png" },
+    { name: "Polar Whirlwind", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/PolarWhirlwind.png" },
+    { name: "Jade Flashwing", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/JadeFlashwing.png" },
+    { name: "Granite Crusher", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/GraniteCrusher.png" },
+    { name: "Gnarly Tree Rex", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/GnarlyTreeRex.png" },
+    { name: "Glow in the Dark Fright Rider", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/FrightRiderGlow.png" },
+    { name: "Golden Dragonfire Cannon Battle Pack", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/GoldenDragonfireCannon.png" },
+    { name: "Scorpion Striker Battle Pack", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/ScorpionStrikerBattlePack.png" },
+    { name: "Dragonfire Cannon", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/DragonfireCannon.png" },
+    { name: "Skylanders Giants Portal Owner’s Pack", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/PortalOwnersPack.png" }
+  ]
+      };
+
+      let currentGame = document.getElementById("gameSelector").value;
+      let collectibles = games[currentGame];
+      let collectiblesQueue = [...collectibles];
+      let collectedItems = [];
+      let skippedQueue = [];
+
+      function showCurrentCollectible() {
+        const current = collectiblesQueue[0];
+        const img = document.getElementById("collectibleImage");
+        const name = document.getElementById("collectibleName");
+        const reviewBtn = document.getElementById("reviewSkippedBtn");
+
+        if (current && current.image) {
+          img.src = current.image;
+          name.textContent = current.name;
+          reviewBtn.style.display = "none";
+        } else if (skippedQueue.length > 0) {
+          reviewBtn.style.display = "inline-block";
+          img.src = "";
+          name.textContent = "";
+        } else {
+          img.src = "https://skylanderscharacterlist.com/wp-content/uploads/2014/02/Skylanders-All.jpg";
+          name.textContent = "All Skylanders Reviewed! 🎉";
+          reviewBtn.style.display = "none";
+        }
+      }
+
+      function renderCollectedList() {
+        const elementColors = {
+          Fire: '#4d1c1c33',
+          Tech: '#33270a33',
+          Magic: '#2e1f4c33',
+          Life: '#1c4d1c33',
+          Water: '#1c2e4d33',
+          Air: '#1c4d4d33',
+          Earth: '#4d3b1c33',
+          Undead: '#2b2b2b33'
+        };
+
+        const elementMap = {
+  'Spyro': 'Magic', 'Double Trouble': 'Magic', 'Voodood': 'Magic', 'Wrecking Ball': 'Magic', 'Pop Fizz': 'Magic', 'Pop Fizz LightCore': 'Magic', 'Punch Pop Fizz': 'Magic',
+  'Stealth Elf': 'Life', 'Stump Smash': 'Life', 'Zook': 'Life', 'Camo': 'Life', 'Shroomboom': 'Life', 'Shroomboom LightCore': 'Life',
+  'Gill Grunt': 'Water', 'Slam Bam': 'Water', 'Zap': 'Water', 'Wham-Shell': 'Water', 'Thumpback': 'Water',
+  'Eruptor': 'Fire', 'Sunburn': 'Fire', 'Flameslinger': 'Fire', 'Ignitor': 'Fire', 'Hot Head': 'Fire', 'Hot Dog': 'Fire', 'Eruptor LightCore': 'Fire', 'Legendary Ignitor': 'Fire', 'Molten Hot Dog': 'Fire',
+  'Trigger Happy': 'Tech', 'Drill Sergeant': 'Tech', 'Drobot': 'Tech', 'Bouncer': 'Tech', 'Sprocket': 'Tech', 'Legendary Bouncer': 'Tech',
+  'Terrafin': 'Earth', 'Dino-Rang': 'Earth', 'Bash': 'Earth', 'Prism Break': 'Earth', 'Crusher': 'Earth', 'Flashwing': 'Earth', 'Granite Crusher': 'Earth', 'Jade Flashwing': 'Earth', 'Prism Break LightCore': 'Earth',
+  'Whirlwind': 'Air', 'Sonic Boom': 'Air', 'Lightning Rod': 'Air', 'Jet-Vac': 'Air', 'Swarm': 'Air', 'Jet-Vac LightCore': 'Air', 'Legendary Jet-Vac': 'Air',
+  'Chop Chop': 'Undead', 'Hex': 'Undead', 'Ghost Roaster': 'Undead', 'Fright Rider': 'Undead', 'Eye-Brawl': 'Undead', 'Hex LightCore': 'Undead', 'Legendary Slam Bam': 'Undead', 'Glow in the Dark Fright Rider': 'Undead',
+  'Ninjini': 'Magic', 'Scarlet Ninjini': 'Magic', 'Chill': 'Water', 'Chill LightCore': 'Water', 'Polar Whirlwind': 'Air', 'Gnarly Tree Rex': 'Life', 'Tree Rex': 'Life'
+};;
+
+        const grid = document.getElementById("cardGrid");
+        grid.innerHTML = "";
+        collectedItems.forEach(item => {
+          const card = document.createElement("div");
+          card.className = "card";
+          const element = elementMap[item.name] || 'Magic';
+          card.style.backgroundColor = elementColors[element] || '#292929';
+          const quantity = item.quantity || 1;
+          card.innerHTML = `
+            <img src="${item.image}" alt="${item.name}" />
+            <div><strong>${item.name}</strong></div>
+            <input type="number" min="1" value="${quantity}" class="qty-input" onchange="updateQuantity('${item.name}', this)">
+            <button onclick="removeCollectible('${item.name}')">Remove</button>
+          `;
+          grid.appendChild(card);
+        });
+      }
+
+      function updateQuantity(name, input) {
+        const value = parseInt(input.value);
+        if (isNaN(value) || value < 1) {
+          input.classList.add("invalid");
+          setTimeout(() => input.classList.remove("invalid"), 1000);
+          return;
+        }
+        const item = collectedItems.find(i => i.name === name);
+        if (item) item.quantity = value;
+        saveProgress();
+      }
+
+      function saveProgress() {
+        const user = localStorage.getItem("sky_user") || "guest";
+        const key = `sky_progress_${user}_${currentGame}`;
+        const data = {
+          collected: collectedItems,
+          queue: collectiblesQueue,
+          skipped: skippedQueue
+        };
+        localStorage.setItem(key, JSON.stringify(data));
+      }
+
+      function removeCollectible(name) {
+        const index = collectedItems.findIndex(item => item.name === name);
+        if (index !== -1) {
+          const removed = collectedItems.splice(index, 1)[0];
+          collectiblesQueue.push(removed);
+        }
+        showCurrentCollectible();
+        renderCollectedList();
+        saveProgress();
+      }
+
+      document.getElementById("haveItBtn").onclick = () => {
+        const img = document.getElementById("collectibleImage");
+        const current = collectiblesQueue.shift();
+        if (!current) return;
+        img.classList.add("animate-right");
+
+        const handler = () => {
+          img.classList.remove("animate-right");
+          img.removeEventListener("animationend", handler);
+          current.quantity = 1;
+          collectedItems.push(current);
+          showCurrentCollectible();
+          renderCollectedList();
+          saveProgress();
+        };
+
+        img.addEventListener("animationend", handler);
+      };
+
+      document.getElementById("dontHaveItBtn").onclick = () => {
+        const img = document.getElementById("collectibleImage");
+        const current = collectiblesQueue.shift();
+        if (!current) return;
+        img.classList.add("animate-left");
+
+        const handler = () => {
+          img.classList.remove("animate-left");
+          img.removeEventListener("animationend", handler);
+          skippedQueue.push(current);
+          showCurrentCollectible();
+          saveProgress();
+        };
+
+        img.addEventListener("animationend", handler);
+      };
+
+      document.getElementById("reviewSkippedBtn").onclick = () => {
+        if (skippedQueue.length === 0) return;
+        collectiblesQueue = [...skippedQueue];
+        skippedQueue = [];
+        showCurrentCollectible();
+      };
+
+      document.getElementById("gameSelector").onchange = () => {
+        const img = document.getElementById("collectibleImage");
+        img.classList.remove("animate-left", "animate-right");
+        const user = localStorage.getItem("sky_user") || "guest";
+        currentGame = document.getElementById("gameSelector").value;
+        const key = `sky_progress_${user}_${currentGame}`;
+        const saved = localStorage.getItem(key);
+        collectibles = games[currentGame];
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          collectedItems = parsed.collected || [];
+          collectiblesQueue = parsed.queue || [...collectibles];
+          skippedQueue = parsed.skipped || [];
+        } else {
+          collectedItems = [];
+          collectiblesQueue = [...collectibles];
+          skippedQueue = [];
+        }
+        showCurrentCollectible();
+        renderCollectedList();
+      };
+
+      window.onload = () => {
+        const user = localStorage.getItem("sky_user") || "guest";
+        const key = `sky_progress_${user}_${currentGame}`;
+        const saved = localStorage.getItem(key);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          collectedItems = parsed.collected || [];
+          collectiblesQueue = parsed.queue || [...collectibles];
+          skippedQueue = parsed.skipped || [];
+        }
+        showCurrentCollectible();
+        renderCollectedList();
+      };
+          function logout() {
+        localStorage.removeItem("sky_user");
+        location.reload();
+      }
+
+      function updateNavBar() {
+        const user = localStorage.getItem("sky_user");
+        const loginBtn = document.getElementById("loginBtn");
+        const signupBtn = document.getElementById("signupBtn");
+        const logoutBtn = document.getElementById("logoutBtn");
+
+        if (user && user !== "guest") {
+          loginBtn.style.display = "none";
+          signupBtn.style.display = "none";
+          logoutBtn.style.display = "inline-block";
+        } else {
+          loginBtn.style.display = "inline-block";
+          signupBtn.style.display = "inline-block";
+          logoutBtn.style.display = "none";
+        }
+      }
+
+      updateNavBar();
+      function toggleMenu() {
+        document.getElementById("navMenu").classList.toggle("show");
+      }
+      let touchStartX = 0;
+let touchStartY = 0;
+let touchEndY = 0;
+      let touchEndX = 0;
+
+      const image = document.getElementById("collectibleImage");
+
+      image.addEventListener("touchstart", (e) => {
+  touchStartX = e.changedTouches[0].screenX;
+  touchStartY = e.changedTouches[0].screenY;
+});
+
+      image.addEventListener("touchend", (e) => {
+  touchEndX = e.changedTouches[0].screenX;
+  touchEndY = e.changedTouches[0].screenY;
+  handleSwipe();
+});
+
+      function handleSwipe() {
+  const threshold = 50;
+  const verticalThreshold = 50;
+  const deltaX = touchEndX - touchStartX;
+  const deltaY = touchEndY - touchStartY;
+
+  if (Math.abs(deltaX) > Math.abs(deltaY)) {
+    if (deltaX < -threshold) {
+      document.getElementById("dontHaveItBtn").click();
+    } else if (deltaX > threshold) {
+      document.getElementById("haveItBtn").click();
+    }
+  } else if (deltaY < -verticalThreshold) {
+    // Swipe Up - Save progress manually if needed
+    alert("Choices submitted!");
+    saveProgress();
+  }
+} 
+
+</script>
   </div>
 </body>
 </html>
