@@ -345,6 +345,33 @@ window.addEventListener("DOMContentLoaded", () => {
 function toggleMenu() {
   document.getElementById("authButtonsNav").classList.toggle("show");
 }
+
+let touchStartX = null;
+let touchEndX = null;
+
+function handleGesture() {
+  if (touchStartX !== null && touchEndX !== null) {
+    const diff = touchStartX - touchEndX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) {
+        document.getElementById("dontHaveItBtn").click(); // Swipe left = ❌
+      } else {
+        document.getElementById("haveItBtn").click(); // Swipe right = ✅
+      }
+    }
+  }
+  touchStartX = null;
+  touchEndX = null;
+}
+
+document.getElementById("collectibleContainer").addEventListener("touchstart", e => {
+  touchStartX = e.changedTouches[0].screenX;
+}, false);
+
+document.getElementById("collectibleContainer").addEventListener("touchend", e => {
+  touchEndX = e.changedTouches[0].screenX;
+  handleGesture();
+}, false);
 </script>
 </body>
 </html>
