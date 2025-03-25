@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Collection Totals</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 2rem;
+      margin: 0;
+    }
+    nav {
+      background-color: #000;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    }
+    h1 {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: 2rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 10px;
+      margin-top: 2rem;
+    }
+    th {
+      background-color: #333;
+      padding: 12px;
+      text-align: left;
+      border-radius: 8px 8px 0 0;
+    }
+    td {
+      background-color: #1f1f1f;
+      padding: 12px;
+      border-top: 1px solid #333;
+      vertical-align: middle;
+    }
+    td img {
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    }
+    button {
+      padding: 6px 12px;
+      background: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #45a045;
+    }
+    select {
+      padding: 6px;
+      font-size: 1rem;
+      background: #1f1f1f;
+      color: white;
+      border: 1px solid #333;
+      border-radius: 6px;
+    }
+    .sort-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+  </style>
+</head>
+<body>
+  <nav style="text-align: center; background: #000; padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
+    <a href="collectibles.html" style="color: #fff; text-decoration: none; font-size: 1.2rem;">← Home</a>
+    <div class="sort-controls">
+      <label for="sortOrder" style="color: white; font-size: 1rem;">Sort:</label>
+      <select id="sortOrder" style="padding: 5px; font-size: 1rem;">
+        <option value="asc">Ascending</option>
+        <option value="desc">Descending</option>
+      </select>
+      <button id="sortButton">Sort</button>
+    </div>
+  </nav>
+  <h1>Skylanders Ownership Totals</h1>
+  <table id="totalsTable">
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Character</th>
+        <th>Quantity</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const users = Object.keys(localStorage).filter(k => k.startsWith('sky_progress_'));
+    const tableBody = document.querySelector('#totalsTable tbody');
+    const totalsMap = {};
+
+    users.forEach(key => {
+      const data = JSON.parse(localStorage.getItem(key));
+      if (!data || !Array.isArray(data.collected)) return;
+      data.collected.forEach(item => {
+        if (item.status === 'Have it') {
+          const name = item.name;
+          const quantity = item.quantity || 1;
+          if (!totalsMap[name]) {
+            totalsMap[name] = {
+              name: item.name,
+              image: item.image,
+              quantity: quantity
+            };
+          } else {
+            totalsMap[name].quantity += quantity;
+          }
+        }
+      });
+    });
+
+    Object.values(totalsMap).forEach(item => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td><img src="${item.image}" alt="${item.name}" style="width:60px;height:auto;" /></td>
+        <td>${item.name}</td>
+        <td>${item.quantity}</td>
+      `;
+      tableBody.appendChild(row);
+    });
+
+    document.getElementById("sortButton").addEventListener("click", () => {
+      const order = document.getElementById("sortOrder").value;
+      const rows = Array.from(tableBody.querySelectorAll("tr"));
+      rows.sort((a, b) => {
+        const aQty = parseInt(a.children[2].textContent);
+        const bQty = parseInt(b.children[2].textContent);
+        return order === 'asc' ? aQty - bQty : bQty - aQty;
+      });
+      tableBody.innerHTML = "";
+      rows.forEach(row => tableBody.appendChild(row));
+    });
+  </script>
+</body>
+</html>
