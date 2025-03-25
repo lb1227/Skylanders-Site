@@ -5,95 +5,135 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sign Up</title>
   <style>
+    :root {
+      --bg: #121212;
+      --card-bg: #1e1e1e;
+      --text: #ffffff;
+      --accent: #4caf50;
+      --button: #4caf50;
+      --button-hover: #43a047;
+    }
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
       margin: 0;
+      overflow: hidden;
     }
-    .form-box {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      width: 300px;
-    }
-    input {
-      box-sizing: border-box;
+    .signup-box {
+      background-color: var(--card-bg);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
       width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    button {
+      max-width: 400px;
       box-sizing: border-box;
-      width: 100%;
-      padding: 10px;
-      background-color: red;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
+      animation: fadeIn 1s ease;
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: scale(0.95); }
+      100% { opacity: 1; transform: scale(1); }
     }
     h2 {
+      margin-bottom: 1.5rem;
       text-align: center;
+      animation: slideDown 0.6s ease;
     }
-      .show-password {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      margin-bottom: 10px;
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-
-    .back-btn {
-      margin-top: 10px;
+    input[type="text"],
+    input[type="password"] {
       width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #2a2a2a;
+      color: white;
+      font-size: 1rem;
+      box-sizing: border-box;
+      transition: background 0.3s, transform 0.2s ease;
+    }
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      background-color: #333;
+      transform: scale(1.02);
+      outline: none;
+    }
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+    .button-row {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+    button {
+      background-color: var(--button);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    button:hover {
+      background-color: var(--button-hover);
+      transform: scale(1.05);
     }
   </style>
 </head>
 <body>
-  <div style="position: absolute; top: 20px; right: 20px;">
-    <button onclick="window.location.href='login.html'">Login</button>
-  </div>
-  <div style="position: absolute; top: 20px; right: 20px;">
-    <button onclick="window.location.href='login.html'">Login</button>
-  </div>
-  <div class="form-box" style="margin-left: 50px; width: 350px;">
+  <div class="signup-box">
     <h2>Sign Up</h2>
-    <div style="width: 100%;"><input type="text" id="signupUsername" placeholder="Create username" /></div>
-    <div style="width: 100%;"><input type="password" id="signupPassword" placeholder="Create password" /></div>
-    <div class="show-password">
-      <input type="checkbox" id="showPassword" onclick="togglePassword()" /> Show Password
+    <input type="text" id="newUsername" placeholder="Username" />
+    <input type="password" id="newPassword" placeholder="Password" />
+    <div class="checkbox-row">
+      <input type="checkbox" id="showPassword" onclick="togglePassword()" />
+      <label for="showPassword">Show Password</label>
     </div>
-    <button onclick="signup()">Sign Up</button>
-    
-    <button class="back-btn" onclick="window.location.href='index.html'">Back</button>
+    <div class="button-row">
+      <button onclick="signup()">Sign Up</button>
+      <button onclick="location.href='index.html'">Back</button>
+      <button onclick="location.href='login.html'">Login</button>
+    </div>
   </div>
-
   <script>
     function signup() {
-      const user = document.getElementById("signupUsername").value.trim();
-      const pass = document.getElementById("signupPassword").value.trim();
-      if (!user || !pass) return alert("Please fill in both fields to sign up.");
-
-      if (localStorage.getItem(`sky_pass_${user}`)) {
-        alert("Username already exists. Please log in.");
+      const username = document.getElementById("newUsername").value.trim();
+      const password = document.getElementById("newPassword").value.trim();
+      if (!username || !password) {
+        alert("Please enter both username and password.");
         return;
       }
-
-      localStorage.setItem(`sky_pass_${user}`, pass);
-      localStorage.setItem("sky_user", user);
-      alert("Signup successful. You are now logged in.");
+      let users = JSON.parse(localStorage.getItem("sky_users")) || {};
+      if (users[username]) {
+        alert("Username already exists.");
+        return;
+      }
+      users[username] = password;
+      localStorage.setItem("sky_users", JSON.stringify(users));
+      localStorage.setItem("sky_user", username);
       window.location.href = "index.html";
     }
-  function togglePassword() {
-  const passInput = document.getElementById("signupPassword");
-  passInput.type = passInput.type === "password" ? "text" : "password";
-}
-</script>
+
+    function togglePassword() {
+      const passwordField = document.getElementById("newPassword");
+      passwordField.type = passwordField.type === "password" ? "text" : "password";
+    }
+  </script>
 </body>
 </html>
