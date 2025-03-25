@@ -61,6 +61,10 @@
       <option value="Spyro's Adventure">Spyro's Adventure</option>
       <option value="Giants">Giants</option>
     </select>
+    <div id="progressBar" style="height: 20px; background: #ccc; border-radius: 5px; overflow: hidden; margin-bottom: 10px; position: relative;">
+      <div id="progressFill" style="height: 100%; width: 0%; background: #4CAF50;"></div>
+      <span id="progressText" style="position: absolute; width: 100%; text-align: center; font-weight: bold; line-height: 20px; color: white;">0%</span>
+    </div>
     <div id="collectibleContainer">
       <img id="collectibleImage" alt="Collectible Image" />
       <p id="collectibleName"></p>
@@ -70,8 +74,10 @@
       </select>
       <button id="nextButton">Next</button>
     </div>
-    <h3>Collected Items</h3>
-    <ul id="collectiblesList"></ul>
+    <h3>Have It</h3>
+    <ul id="haveList"></ul>
+    <h3>Don't Have It</h3>
+    <ul id="dontHaveList"></ul>
   </div>
   <script>
     const games = {
@@ -152,6 +158,7 @@
     { name: "Skylanders Giants Portal Owner’s Pack", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/PortalOwnersPack.png" }
   ]
 };
+
     let currentGame = "Spyro's Adventure";
     let collectibles = games[currentGame];
     let collectiblesQueue = [...(collectibles || [])];
@@ -173,33 +180,26 @@
       const current = collectiblesQueue[0];
       if (!current) return;
 
-      if (status === "Don't have it") {
-        collectiblesQueue.shift();
-        showCurrentCollectible();
-        saveProgress();
-        return;
-      }
-
       collectiblesQueue.shift();
 
-      const list = document.getElementById("collectiblesList");
+      const listId = status === "Have it" ? "haveList" : "dontHaveList";
+      const list = document.getElementById(listId);
       const li = document.createElement("li");
-      li.innerHTML = `
-        <div class="collectible-item">
-          <img src="${current.image}" alt="${current.name}" />
-          <span>${current.name} - <strong>${status}</strong></span>
-        </div>
-        <button onclick="removeCollectible('${current.name}', this)">Remove</button>
-      `;
+      li.innerHTML = `<div class="collectible-item">
+        <img src="${current.image}" alt="${current.name}" />
+        <span>${current.name} - <strong>${status}</strong></span>
+      </div>
+      <button onclick="removeCollectible('${current.name}', this, '${status}')">Remove</button>`;
       list.appendChild(li);
       collectedItems.push(current);
       lastItem = current;
 
       showCurrentCollectible();
+      updateProgress();
       saveProgress();
     };
 
-    function removeCollectible(name, button) {
+    function removeCollectible(name, button, status) {
       const li = button.closest('li');
       if (li) li.remove();
 
@@ -214,24 +214,35 @@
           container.style.border = "none";
         }, 800);
         showCurrentCollectible();
+        updateProgress();
         saveProgress();
       }
     }
 
     function renderCollectedList() {
-      const list = document.getElementById("collectiblesList");
-      list.innerHTML = "";
+      const haveList = document.getElementById("haveList");
+      const dontHaveList = document.getElementById("dontHaveList");
+      haveList.innerHTML = "";
+      dontHaveList.innerHTML = "";
       collectedItems.forEach(item => {
+        const listId = games[currentGame].some(g => g.name === item.name) ? "haveList" : "dontHaveList";
+        const list = document.getElementById(listId);
         const li = document.createElement("li");
-        li.innerHTML = `
-          <div class="collectible-item">
-            <img src="${item.image}" alt="${item.name}" />
-            <span>${item.name} - <strong>Have it</strong></span>
-          </div>
-          <button onclick="removeCollectible('${item.name}', this)">Remove</button>
-        `;
+        li.innerHTML = `<div class="collectible-item">
+          <img src="${item.image}" alt="${item.name}" />
+          <span>${item.name} - <strong>${listId === "haveList" ? "Have it" : "Don't have it"}</strong></span>
+        </div>
+        <button onclick="removeCollectible('${item.name}', this, '${listId === "haveList" ? "Have it" : "Don't have it"}')">Remove</button>`;
         list.appendChild(li);
       });
+    }
+
+    function updateProgress() {
+      const total = games[currentGame].length;
+      const collected = collectedItems.length;
+      const percent = Math.round((collected / total) * 100);
+      document.getElementById("progressFill").style.width = percent + "%";
+      document.getElementById("progressText").innerText = percent + "%";
     }
 
     function saveProgress() {
@@ -264,15 +275,17 @@
       collectibles = games[currentGame];
       loadProgress(user);
       lastItem = null;
-      document.getElementById("collectiblesList").innerHTML = "";
       renderCollectedList();
       showCurrentCollectible();
+      updateProgress();
     }
 
     window.onload = () => {
       const user = localStorage.getItem("sky_user") || "guest";
+      collectibles = games[currentGame];
       loadProgress(user);
       showCurrentCollectible();
+      updateProgress();
     };
   </script>
 </body>
