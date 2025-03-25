@@ -1,88 +1,76 @@
-:root {
-  --bg: #121212;
-  --card-bg: #1e1e1e;
-  --text: #ffffff;
-  --accent: #4caf50;
-  --button: #e53935;
-  --button-hover: #d32f2f;
-  --nav-bg: #1a1a1a;
-}
-
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin: 0;
-  background-color: var(--bg);
-  color: var(--text);
-}
-
-nav {
-  background-color: var(--nav-bg);
-  padding: 1rem 2rem;
+/* --- Layout and Centering --- */
+#collectibleContainer {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+  justify-content: center;
+  padding: 1rem;
+  text-align: center;
 }
 
-nav h2 {
-  margin: 0;
-  font-size: 1.5rem;
-}
-
-.nav-links a,
-.nav-links button {
-  color: white;
-  text-decoration: none;
-  background: none;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 1rem;
-  margin-left: 1rem;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 2rem auto;
-  background: var(--card-bg);
-  padding: 2rem;
+#collectibleImage {
+  display: block;
+  margin: 0 auto;
+  max-width: 320px;
+  width: 100%;
+  height: auto;
   border-radius: 12px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
 }
 
-.swipe-buttons {
+/* --- Button Container --- */
+#collectibleContainer > div {
+  background-color: black;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
   display: flex;
   justify-content: center;
   gap: 2rem;
-  margin: 1rem 0;
 }
 
-button {
+/* --- Button Styling --- */
+#dontHaveItBtn,
+#haveItBtn {
+  background-color: black;
+  border-radius: 6px;
+  font-size: 1.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+#dontHaveItBtn {
+  color: #e53935;
+  border: 2px solid #e53935;
+}
+
+#haveItBtn {
+  color: #4caf50;
+  border: 2px solid #4caf50;
+}
+
+/* --- Submit Button Styling --- */
+#submitInventoryBtn {
+  margin-top: 1rem;
+  background-color: var(--accent);
+  color: white;
+  font-weight: bold;
   padding: 0.6rem 1.2rem;
   font-size: 1rem;
   border-radius: 8px;
   border: none;
   cursor: pointer;
-  background-color: var(--button);
-  color: white;
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition: background 0.3s ease;
 }
 
-button:hover {
-  background-color: var(--button-hover);
-  transform: scale(1.03);
+#submitInventoryBtn:hover {
+  background-color: #388e3c;
 }
 
-#collectibleImage {
-  width: 320px;
-  max-width: 100%;
-  height: auto;
-  border-radius: 12px;
-  margin-bottom: 1rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+/* --- Other Elements for Consistency --- */
+.qty-input.invalid {
+  border: 2px solid red;
+  background-color: #3a0000;
 }
 
 .card-grid {
@@ -90,4 +78,37 @@ button:hover {
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1.5rem;
   margin-top: 2rem;
+}
+
+.card {
+  background: #292929;
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.6);
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card img {
+  width: 100%;
+  max-width: 160px;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 0.5rem;
+}
+
+.card .qty-input {
+  margin-top: 0.5rem;
+  width: 60px;
+  padding: 0.3rem;
+  font-size: 1rem;
+}
+
+.card button {
+  margin-top: 0.5rem;
 }
