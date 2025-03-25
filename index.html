@@ -163,7 +163,8 @@
         document.getElementById("collectibleImage").src = collectiblesQueue[0].image;
         document.getElementById("collectibleName").innerText = collectiblesQueue[0].name;
       } else {
-        document.getElementById("collectibleContainer").innerHTML = "<p>All collectibles reviewed!</p>";
+        document.getElementById("collectibleImage").src = "";
+        document.getElementById("collectibleName").innerText = "";
       }
     }
 
