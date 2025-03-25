@@ -121,9 +121,60 @@
     .animate-right {
       animation: swipeRight 0.5s ease forwards;
     }
+      .hamburger {
+      display: none;
+      font-size: 2rem;
+      cursor: pointer;
+      color: white;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .nav-links a, .nav-links button {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        background-color: #000;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        width: 100%;
+        padding: 1rem;
+      }
+      .nav-links.show {
+        display: flex;
+      }
+      .hamburger {
+        display: block;
+      }
+    }
   </style>
 </head>
 <body>
+  <nav>
+  <h2 style="margin: 0;">Skylanders Tracker</h2>
+  <div class="hamburger" onclick="toggleMenu()">
+    ☰
+  </div>
+  <div id="navMenu" class="nav-links">
+    <a href="inventory.html">Inventory</a>
+    <a href="totals.html">Totals</a>
+    <button id="loginBtn" onclick="location.href='login.html'">Login</button>
+    <button id="signupBtn" onclick="location.href='signup.html'">Sign Up</button>
+    <button id="logoutBtn" style="display:none" onclick="logout()">Logout</button>
+  </div>
+</nav>
   <div class="container">
     <h2>Welcome back to Skylanders Tracker</h2>
     <p>Select a game and begin tracking your collection!</p>
@@ -314,7 +365,57 @@
         showCurrentCollectible();
         renderCollectedList();
       };
-    </script>
+          function logout() {
+        localStorage.removeItem("sky_user");
+        location.reload();
+      }
+
+      function updateNavBar() {
+        const user = localStorage.getItem("sky_user");
+        const loginBtn = document.getElementById("loginBtn");
+        const signupBtn = document.getElementById("signupBtn");
+        const logoutBtn = document.getElementById("logoutBtn");
+
+        if (user && user !== "guest") {
+          loginBtn.style.display = "none";
+          signupBtn.style.display = "none";
+          logoutBtn.style.display = "inline-block";
+        } else {
+          loginBtn.style.display = "inline-block";
+          signupBtn.style.display = "inline-block";
+          logoutBtn.style.display = "none";
+        }
+      }
+
+      updateNavBar();
+      function toggleMenu() {
+        document.getElementById("navMenu").classList.toggle("show");
+      }
+      let touchStartX = 0;
+      let touchEndX = 0;
+
+      const image = document.getElementById("collectibleImage");
+
+      image.addEventListener("touchstart", (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      });
+
+      image.addEventListener("touchend", (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+      });
+
+      function handleSwipe() {
+        const threshold = 50; // Minimum swipe distance
+        if (touchEndX < touchStartX - threshold) {
+          // Swipe Left (Don't Have It)
+          document.getElementById("dontHaveItBtn").click();
+        } else if (touchEndX > touchStartX + threshold) {
+          // Swipe Right (Have It)
+          document.getElementById("haveItBtn").click();
+        }
+      }
+</script>
   </div>
 </body>
 </html>
