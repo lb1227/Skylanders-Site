@@ -67,9 +67,9 @@
   </nav>
   <div class="container">
     <div class="group-buttons">
-  <img src="https://static.wikia.nocookie.net/skylanders/images/b/b5/Skylanders_SA_Art.png/revision/latest?cb=20160125022836" alt="Spyro's Adventure" onclick="loadInventory('Spyro\'s Adventure')" style="width: 300px; cursor: pointer; border-radius: 10px; margin: 0.5rem;">
-  <img src="https://www.nintendo.com/eu/media/images/10_share_images/games_15/wiiu_14/SI_WiiU_SkylandersGiants_image1600w.jpg" alt="Giants" onclick="loadInventory('Giants')" style="width: 300px; cursor: pointer; border-radius: 10px; margin: 0.5rem;">
-</div>
+      <img src="https://static.wikia.nocookie.net/skylanders/images/b/b5/Skylanders_SA_Art.png/revision/latest?cb=20160125022836" alt="Spyro's Adventure" onclick="loadInventory('Spyro\'s Adventure')" style="width: 300px; cursor: pointer; border-radius: 10px; margin: 0.5rem;">
+      <img src="https://www.nintendo.com/eu/media/images/10_share_images/games_15/wiiu_14/SI_WiiU_SkylandersGiants_image1600w.jpg" alt="Giants" onclick="loadInventory('Giants')" style="width: 300px; cursor: pointer; border-radius: 10px; margin: 0.5rem;">
+    </div>
     <div id="grandTotalValue" style="text-align:center; font-size: 1.2rem; margin-bottom: 1rem;"></div>
     <div id="totalValue" style="text-align:center; font-size: 1.2rem; margin-bottom: 1rem;"></div>
     <div class="card-grid" id="inventoryGrid"></div>
@@ -77,17 +77,18 @@
 
   <script>
     const livePrices = {
-  "Spyro": 7.99,
-  "Trigger Happy": 6.49,
-  "Stealth Elf": 6.99,
-  "Gill Grunt": 5.49,
-  "Eruptor": 4.99,
-  "Bouncer": 8.99,
-  "Crusher": 7.49,
-  "Eye-Brawl": 9.99,
-  "Hot Head": 8.49,
-  "Ninjini": 10.99
-};
+      "Spyro": 7.99,
+      "Trigger Happy": 6.49,
+      "Stealth Elf": 6.99,
+      "Gill Grunt": 5.49,
+      "Eruptor": 4.99,
+      "Bouncer": 8.99,
+      "Crusher": 7.49,
+      "Eye-Brawl": 9.99,
+      "Hot Head": 8.49,
+      "Ninjini": 10.99
+    };
+
     function loadInventory(game) {
       const user = localStorage.getItem("sky_user") || "guest";
       const key = `sky_progress_${user}_${game}`;
@@ -113,23 +114,24 @@
       document.getElementById("totalValue").textContent = `Total Inventory Value: $${total.toFixed(2)}`;
       updateGrandTotal();
     }
-  function updateGrandTotal() {
-  const user = localStorage.getItem("sky_user") || "guest";
-  let grandTotal = 0;
-  ["Spyro's Adventure", "Giants"].forEach(game => {
-    const key = `sky_progress_${user}_${game}`;
-    const saved = localStorage.getItem(key);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      parsed.collected.filter(i => i.status === 'Have it').forEach(item => {
-        const price = livePrices[item.name] || 9.99;
-        const quantity = item.quantity || 1;
-        grandTotal += price * quantity;
+
+    function updateGrandTotal() {
+      const user = localStorage.getItem("sky_user") || "guest";
+      let grandTotal = 0;
+      ["Spyro's Adventure", "Giants"].forEach(game => {
+        const key = `sky_progress_${user}_${game}`;
+        const saved = localStorage.getItem(key);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          parsed.collected.filter(i => i.status === 'Have it').forEach(item => {
+            const price = livePrices[item.name] || 9.99;
+            const quantity = item.quantity || 1;
+            grandTotal += price * quantity;
+          });
+        }
       });
+      document.getElementById("grandTotalValue").textContent = `Total Value Across All Games: $${grandTotal.toFixed(2)}`;
     }
-  });
-  document.getElementById("grandTotalValue").textContent = `Total Value Across All Games: $${grandTotal.toFixed(2)}`;
-}
-</script>
+  </script>
 </body>
 </html>
