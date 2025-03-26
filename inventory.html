@@ -165,7 +165,9 @@
   transition: 0.4s;
   border-radius: 24px;
 }
-
+.slider.round {
+  border-radius: 34px;
+}
 .slider:before {
   position: absolute;
   content: "";
@@ -336,8 +338,11 @@ input:checked + .slider:before {
   <header id="navTopMobile" class="top-mobile-nav">
     <div class="nav-links">
       <input type="text" id="searchInputMobile" placeholder="Search Skylanders..." style="margin-top: 0.5rem; max-width: 200px; background-color: #2a2a2a; color: white; border-radius: 6px; border: none; padding: 0.4rem 0.8rem;">
-      <label style="font-size: 0.75rem;"><input type="checkbox" id="filterOwnedTop"> Show Owned</label>
-      <label style="font-size: 0.75rem;"><input type="checkbox" id="filterUnownedTop"> Show Unowned</label>
+      <label class="switch" style="margin-left: 1rem;">
+        <input type="checkbox" id="ownedFilterToggleMobile" onchange="applyOwnedFilterMobile()" />
+        <span class="slider round"></span>
+        </label>
+        <span style="font-size: 0.7rem;">Owned Only</span>
     </div>
 </header>
   
@@ -396,10 +401,8 @@ input:checked + .slider:before {
           const isOwned = !!found;
           const qty = found?.quantity || 1;
 
-          const showOwned = document.getElementById("filterOwned").checked;
-          const showUnowned = document.getElementById("filterUnowned").checked;
-
-          if ((showOwned && !isOwned) || (showUnowned && isOwned)) return;
+          const showOwnedOnly = document.getElementById("ownedFilterToggle").checked;
+          if (showOwnedOnly && !isOwned) return;
 
           const card = document.createElement("div");
           card.className = "card";
@@ -456,8 +459,6 @@ input:checked + .slider:before {
       }
     }
 
-    document.getElementById("filterOwned").addEventListener("change", renderInventory);
-    document.getElementById("filterUnowned").addEventListener("change", renderInventory);
 
     window.onload = () => {
       renderInventory();
@@ -499,20 +500,22 @@ window.addEventListener("scroll", () => {
   attachSearchHandler("searchInputDesktop");
   attachSearchHandler("searchInputMobile");
     function applyOwnedFilter() {
-  const showOwnedOnly = document.getElementById("ownedFilterToggle").checked;
-  const user = localStorage.getItem("sky_user") || "guest";
-  const key = `sky_progress_${user}_${currentGame}`;
-  const saved = JSON.parse(localStorage.getItem(key)) || { collected: [] };
-
-  const filtered = showOwnedOnly 
-    ? saved.collected.map(c => c.name)
-    : games[currentGame].map(c => c.name);
-
-  document.querySelectorAll(".card").forEach(card => {
-    const name = card.getAttribute("data-name");
-    card.style.display = filtered.includes(name) ? "block" : "none";
-  });
-}
+      const showOwnedOnly = document.getElementById("ownedFilterToggle").checked;
+      const toggle = document.getElementById("ownedFilterToggle");
+      const mobileToggle = document.getElementById("ownedFilterToggleMobile");
+      if (toggle && mobileToggle) {
+        mobileToggle.checked = toggle.checked;
+  }
+  renderInventory();
+    }
+    function applyOwnedFilterMobile() {
+        const toggle = document.getElementById("ownedFilterToggleMobile");
+        const desktopToggle = document.getElementById("ownedFilterToggle");
+        if (toggle && desktopToggle) {
+          desktopToggle.checked = toggle.checked;
+        }
+        renderInventory();
+    }
   </script>
 </body>
 </html>
