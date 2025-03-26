@@ -154,21 +154,33 @@
       font-size: 0.9rem;
     }
     @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-        flex-direction: column;
-        background-color: #000;
-        position: absolute;
-        top: 60px;
-        right: 0;
+      nav {
+        position: fixed;
+        bottom: 0;
+        top: auto;
         width: 100%;
-        padding: 1rem;
+        padding: 0.5rem 1rem;
+        justify-content: space-around;
       }
-      .nav-links.show {
+      nav h2 {
+        display: none;
+      }
+      .nav-links {
         display: flex;
+        width: 100%;
+        justify-content: space-around;
       }
-      .hamburger {
-        display: block;
+      .nav-links a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .nav-links a[href="home.html"]::before {
+        content: "\1F3E0"; /* Unicode house icon */
+        font-size: 1.5rem;
+      }
+      .nav-links a[href="home.html"] {
+        font-size: 0;
       }
     }
   </style>
@@ -180,7 +192,7 @@
     <div id="navMenu" class="nav-links">
       <a href="home.html">Home</a>
       <a href="totals.html">Totals</a>
-      <button id="logoutBtn" style="background-color: var(--button); color: white; border-radius: 8px; font-weight: bold;" onclick="logout()">Logout</button>
+      <button id="logoutBtn" style="background-color: var(--button); color: white; border-radius: 8px; font-weight: bold;">Logout</button>
     </div>
   </nav>
   <div class="container">
