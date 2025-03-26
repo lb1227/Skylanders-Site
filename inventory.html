@@ -51,33 +51,41 @@
 
   <script src="data.js"></script>
   <script>
-    const user = localStorage.getItem("sky_user") || "guest";
-    const collected = new Set();
+    window.addEventListener('DOMContentLoaded', () => {
+      const user = localStorage.getItem("sky_user") || "guest";
+      const inventory = {};
 
-    // Get all progress and populate collected
-    Object.keys(games).forEach(game => {
-      const saved = localStorage.getItem(`sky_progress_${user}_${game}`);
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          parsed.collected.forEach(c => collected.add(c.name));
-        } catch (e) {
-          console.error(`Error loading ${game} progress`, e);
+      Object.keys(games).forEach(game => {
+        const saved = localStorage.getItem(`sky_progress_${user}_${game}`);
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved);
+            parsed.collected.forEach(c => {
+              inventory[c.name] = {
+                quantity: c.quantity || 1,
+                image: c.image
+              };
+            });
+          } catch (e) {
+            console.error(`Error loading ${game} progress`, e);
+          }
         }
-      }
-    });
+      });
 
-    const grid = document.getElementById("inventoryGrid");
+      const grid = document.getElementById("inventoryGrid");
 
-    Object.keys(games).forEach(game => {
-      games[game].forEach(({ name, image }) => {
-        const card = document.createElement("div");
-        card.className = "card " + (collected.has(name) ? "green" : "gray");
-        card.innerHTML = `
-          <img src="${image}" alt="${name}" />
-          <div><strong>${name}</strong></div>
-        `;
-        grid.appendChild(card);
+      Object.keys(games).forEach(game => {
+        games[game].forEach(({ name, image }) => {
+          const owned = inventory[name];
+          const card = document.createElement("div");
+          card.className = "card " + (owned ? "green" : "gray");
+          card.innerHTML = `
+            <img src="${image}" alt="${name}" />
+            <div><strong>${name}</strong></div>
+            ${owned ? `<div>Quantity: ${owned.quantity}</div>` : `<div>Not owned</div>`}
+          `;
+          grid.appendChild(card);
+        });
       });
     });
   </script>
