@@ -170,8 +170,7 @@
   }
 
   .card strong {
-    font-size: 0.65rem;
-    word-break: break-word;
+  font-size: 0.75rem;
   }
 
   .card .qty-input {
@@ -180,9 +179,9 @@
   }
 
   .card button {
-    font-size: 0.65rem;
-    padding: 0.2rem 0.4rem;
-  }
+  font-size: 0.7rem;
+  padding: 0.25rem 0.5rem;
+}
 }
     .collapsed {
       max-height: 0 !important;
@@ -310,7 +309,7 @@
           card.innerHTML = `
             <img src="${char.image}" alt="${char.name}" />
             <div><strong>${char.name}</strong></div>
-            ${isOwned ? `<input type="number" min="1" value="${qty}" class="qty-input" onchange="updateQty('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}', this)">` : ''}
+            ${isOwned ? '' : ''}
             ${isOwned ? `<button onclick="removeFromInventory('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}')">Remove</button>` : ''}
           `;
           cards.appendChild(card);
