@@ -178,6 +178,165 @@
     </div>
 
     <script>
+       const games = window.games;
+       const elementMap = window.elementMap;
+       let currentGame = document.getElementById("gameSelector").value;
+       let collectibles = games[currentGame];
+       let collectiblesQueue = [...collectibles];
+       let skippedQueue = [];
+ 
+       function showCurrentCollectible() {
+         const current = collectiblesQueue[0];
+         const img = document.getElementById("collectibleImage");
+         const name = document.getElementById("collectibleName");
+         const reviewBtn = document.getElementById("reviewSkippedBtn");
+ 
+         if (current && current.image) {
+           img.src = current.image;
+           name.textContent = current.name;
+           reviewBtn.style.display = "none";
+         } else if (skippedQueue.length > 0) {
+           reviewBtn.style.display = "inline-block";
+           img.src = "";
+           name.textContent = "";
+         } else {
+           img.src = "https://skylanderscharacterlist.com/wp-content/uploads/2014/02/Skylanders-All.jpg";
+           name.textContent = "All Skylanders Reviewed! 🎉";
+           reviewBtn.style.display = "none";
+         }
+       }
+ 
+       function saveProgress() {
+         const user = localStorage.getItem("sky_user") || "guest";
+         const key = `sky_progress_${user}_${currentGame}`;
+         const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], queue: [], skipped: [] };
+         localStorage.setItem(key, JSON.stringify({
+           collected: saved.collected,
+           queue: collectiblesQueue,
+           skipped: skippedQueue
+         }));
+       }
+ 
+       document.getElementById("haveItBtn").onclick = () => {
+       const img = document.getElementById("collectibleImage");
+       const current = collectiblesQueue.shift();
+       if (!current) return;
+       img.classList.add("animate-right");
+       const handler = () => {
+         img.classList.remove("animate-right");
+         img.removeEventListener("animationend", handler);
+         current.quantity = 1;
+ 
+         const user = localStorage.getItem("sky_user") || "guest";
+         const key = `sky_progress_${user}_${currentGame}`;
+         const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], queue: [], skipped: [] };
+ 
+         if (!saved.collected.find(i => i.name === current.name)) {
+           saved.collected.push(current);
+         }
+ 
+         localStorage.setItem(key, JSON.stringify({
+           collected: saved.collected,
+           queue: collectiblesQueue,
+           skipped: skippedQueue
+         }));
+ 
+         showCurrentCollectible();
+       };
+       img.addEventListener("animationend", handler);
+     };
+ 
+       document.getElementById("dontHaveItBtn").onclick = () => {
+       const img = document.getElementById("collectibleImage");
+       const current = collectiblesQueue.shift();
+       if (!current) return;
+       img.classList.add("animate-left");
+       const handler = () => {
+         img.classList.remove("animate-left");
+         img.removeEventListener("animationend", handler);
+         skippedQueue.push(current);
+         showCurrentCollectible();
+         saveProgress();
+       };
+       img.addEventListener("animationend", handler);
+     };
+ 
+       document.getElementById("reviewSkippedBtn").onclick = () => {
+         if (skippedQueue.length === 0) return;
+         collectiblesQueue = [...skippedQueue];
+         skippedQueue = [];
+         showCurrentCollectible();
+       };
+ 
+       document.getElementById("gameSelector").onchange = () => {
+         const user = localStorage.getItem("sky_user") || "guest";
+         currentGame = document.getElementById("gameSelector").value;
+         const key = `sky_progress_${user}_${currentGame}`;
+         const saved = localStorage.getItem(key);
+         collectibles = games[currentGame];
+         if (saved) {
+           const parsed = JSON.parse(saved);
+           collectiblesQueue = parsed.queue || [...collectibles];
+           skippedQueue = parsed.skipped || [];
+         } else {
+           collectiblesQueue = [...collectibles];
+           skippedQueue = [];
+         }
+         showCurrentCollectible();
+       };
+ 
+       window.onload = () => {
+         const user = localStorage.getItem("sky_user") || "guest";
+         const key = `sky_progress_${user}_${currentGame}`;
+         const saved = localStorage.getItem(key);
+         if (saved) {
+           const parsed = JSON.parse(saved);
+           collectiblesQueue = parsed.queue || [...games[currentGame]];
+           skippedQueue = parsed.skipped || [];
+         }
+         showCurrentCollectible();
+       };
+ 
+       function logout() {
+         localStorage.removeItem("sky_user");
+         location.reload();
+       }
+ 
+       function toggleMenu() {
+         document.getElementById("navMenu").classList.toggle("show");
+       }
+ 
+       let touchStartX = 0;
+       let touchStartY = 0;
+       let touchEndX = 0;
+       let touchEndY = 0;
+ 
+       const image = document.getElementById("collectibleImage");
+ 
+       image.addEventListener("touchstart", (e) => {
+         touchStartX = e.changedTouches[0].screenX;
+         touchStartY = e.changedTouches[0].screenY;
+       });
+ 
+       image.addEventListener("touchend", (e) => {
+         touchEndX = e.changedTouches[0].screenX;
+         touchEndY = e.changedTouches[0].screenY;
+         handleSwipe();
+       });
+ 
+       function handleSwipe() {
+         const threshold = 50;
+         const verticalThreshold = 50;
+         const deltaX = touchEndX - touchStartX;
+         const deltaY = touchEndY - touchStartY;
+ 
+         if (Math.abs(deltaX) > Math.abs(deltaY)) {
+           if (deltaX < -threshold) document.getElementById("dontHaveItBtn").click();
+           else if (deltaX > threshold) document.getElementById("haveItBtn").click();
+         } else if (deltaY < -verticalThreshold) {
+           alert("Choices submitted!");
+           saveProgress();
+         }
       const user = localStorage.getItem("sky_user");
       const loginBtn = document.getElementById("loginBtn");
       const signupBtn = document.getElementById("signupBtn");
