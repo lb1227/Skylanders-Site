@@ -19,14 +19,14 @@
   ],
   "screenshots": [
     {
-      "src": "screenshot1.png",
-      "type": "540x720.JPG",
+      "src": "540x720.JPG",
+      "type": "image/JPG",
       "sizes": "540x720",
       "form_factor": "narrow"
     },
     {
-      "src": "screenshot2.png",
-      "type": "1280x720.jpg",
+      "src": "1280x720.jpg",
+      "type": "image/jpg",
       "sizes": "1280x720",
       "form_factor": "wide"
     }
