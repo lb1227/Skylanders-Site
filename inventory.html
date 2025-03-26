@@ -66,10 +66,10 @@
       transform: scale(1.03);
     }
     img {
+      display: block;
       width: 160px;
       height: auto;
-      border-radius: 10px;
-      margin-bottom: 0.5rem;
+      margin: 0 auto 0.5rem;
     }
     .card {
       background: #292929;
@@ -281,26 +281,17 @@
   if (saved) {
     const parsed = JSON.parse(saved);
 
-    // Remove from collected
-    parsed.collected = parsed.collected?.filter(x => x.name !== name);
-
-    // Ensure queue is initialized
+    parsed.collected = (parsed.collected || []).filter(x => x.name !== name);
     parsed.queue = parsed.queue || [];
 
-    // Add back to queue if not already there
     const character = window.games[game].find(x => x.name === name);
     const alreadyQueued = parsed.queue.some(x => x.name === name);
     if (character && !alreadyQueued) {
       parsed.queue.push(character);
     }
 
-    // Save and refresh
     localStorage.setItem(key, JSON.stringify(parsed));
-
-    // Wait a short moment before re-rendering
-    setTimeout(() => {
-      renderInventory();
-    }, 100);
+    renderInventory(); // no need to wait
   }
 }
 
