@@ -5,57 +5,135 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Inventory</title>
   <style>
+    :root {
+      --bg: #121212;
+      --card-bg: #1e1e1e;
+      --text: #ffffff;
+      --accent: #4caf50;
+      --button: #e53935;
+      --button-hover: #d32f2f;
+      --nav-bg: #1a1a1a;
+    }
     body {
-      background-color: #121212;
-      color: white;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
-      padding: 2rem;
+      background-color: var(--bg);
+      color: var(--text);
     }
-    h1, h2 {
-      text-align: center;
-      margin-bottom: 1.5rem;
+    nav {
+      background-color: var(--nav-bg);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
     }
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 1.5rem;
+    nav h2 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    .container {
       max-width: 1200px;
-      margin: 0 auto;
+      margin: 2rem auto;
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
     }
-    .card {
-      background: #2a2a2a;
-      border-radius: 10px;
-      padding: 1rem;
-      text-align: center;
-      transition: transform 0.3s;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    select, button {
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: none;
+      margin-top: 1rem;
     }
-    .card img {
+    select {
+      background-color: #2a2a2a;
+      color: white;
+    }
+    button {
+      background-color: var(--button);
+      color: white;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    button:hover {
+      background-color: var(--button-hover);
+      transform: scale(1.03);
+    }
+    img {
       width: 100%;
-      max-width: 120px;
       height: auto;
+      border-radius: 10px;
       margin-bottom: 0.5rem;
     }
-    .card.green {
-      background-color: #2e7d32;
+    #collectibleContainer {
+      text-align: center;
+      margin: 2rem 0;
     }
-    .card.gray {
-      background-color: #424242;
+    #collectibleImage {
+      width: 320px;
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
     }
-      .card-grid.collapsing {
-      animation: collapseDeck 0.6s ease forwards;
+    .hamburger {
+      display: none;
+      font-size: 2rem;
+      cursor: pointer;
+      color: white;
     }
-
-    @keyframes collapseDeck {
-      0% {
-        opacity: 1;
-        transform: scale(1) translateX(0);
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .nav-links a, .nav-links button {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        background-color: #000;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        width: 100%;
+        padding: 1rem;
       }
-      100% {
-        opacity: 0;
-        transform: scale(0.9) translateX(-50%) translateY(20px);
+      .nav-links.show {
+        display: flex;
       }
+      .hamburger {
+        display: block;
+      }
+    }
+    @keyframes swipeLeft {
+      0% { transform: translateX(0) rotate(0); opacity: 1; }
+      50% { transform: translateX(-50vw) rotate(-10deg); opacity: 0.5; }
+      100% { transform: translateX(-100vw) rotate(-20deg); opacity: 0; }
+    }
+    @keyframes swipeRight {
+      0% { transform: translateX(0) rotate(0); opacity: 1; }
+      50% { transform: translateX(50vw) rotate(10deg); opacity: 0.5; }
+      100% { transform: translateX(100vw) rotate(20deg); opacity: 0; }
+    }
+    .animate-left {
+      animation: swipeLeft 0.5s ease forwards;
+    }
+    .animate-right {
+      animation: swipeRight 0.5s ease forwards;
     }
 </style>
 </head>
@@ -66,22 +144,25 @@
 
   <script src="data.js"></script>
 <script>
-function removeFromInventory(name) {
-  const user = localStorage.getItem("sky_user") || "guest";
-  const gameKeys = Object.keys(games);
-  gameKeys.forEach(game => {
-    const key = `sky_progress_${user}_${game}`;
-    const data = JSON.parse(localStorage.getItem(key));
-    if (data && data.collected) {
-      const index = data.collected.findIndex(c => c.name === name);
-      if (index !== -1) {
-        data.collected.splice(index, 1);
-        localStorage.setItem(key, JSON.stringify(data));
-        location.reload();
-      }
+function removeFromInventoryAndQueue(name) {
+      const user = localStorage.getItem("sky_user") || "guest";
+      const gameKeys = Object.keys(window.games);
+      gameKeys.forEach(game => {
+        const key = `sky_progress_${user}_${game}`;
+        const data = JSON.parse(localStorage.getItem(key));
+        if (data) {
+          const index = data.collected.findIndex(i => i.name === name);
+          if (index !== -1) {
+            const removed = data.collected.splice(index, 1)[0];
+            if (!data.queue.find(i => i.name === name)) {
+              data.queue.push(removed);
+            }
+            localStorage.setItem(key, JSON.stringify(data));
+          }
+        }
+      });
+      location.reload();
     }
-  });
-}
 </script>
   <script>
     function updateQuantity(name, input) {
