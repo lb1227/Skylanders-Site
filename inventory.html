@@ -235,36 +235,38 @@ input:checked + .slider:before {
   }
   .cards-wrapper {
     display: grid;
-    grid-template-columns: repeat(5, 1fr); /* always 5 columns */
-    gap: 0.3rem;
-    justify-items: center;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    padding: 0 4px;
   }
 
   .card {
-    aspect-ratio: 1 / 1.4; /* keep consistent shape */
-    width: 100%; /* fills its grid column */
+    width: calc((100% / 5) - 8px); /* 100% divided by 5 minus gap */
+    margin: 0;
     padding: 0.3rem;
+    aspect-ratio: 1 / 1.4;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    text-align: center;
   }
 
   .card img {
     width: 100%;
-    max-width: 100%;
     height: auto;
     margin-bottom: 0.3rem;
   }
 
   .card strong {
-  font-size: 0..6rem;
+    font-size: 0.55rem;
+    line-height: 1.1;
+    text-align: center;
   }
   .card button {
-  font-size: 0.6rem;
-  padding: 0.2rem 0.4rem;
-}
+    font-size: 0.55rem;
+    padding: 0.2rem 0.3rem;
+  }
 }
     .collapsed {
       max-height: 0 !important;
