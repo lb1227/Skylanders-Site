@@ -182,6 +182,15 @@
       .nav-links a[href="home.html"] {
         font-size: 0;
       }
+      nav.hide-nav {
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+}
+@media (max-width: 768px) {
+  nav.hide-nav {
+    transform: translateY(100%);
+  }
+}
     }
   </style>
 </head>
@@ -316,6 +325,21 @@
         logoutBtn.style.display = "none";
       }
     };
+
+    let lastScrollTop = 0;
+const nav = document.querySelector("nav");
+
+window.addEventListener("scroll", () => {
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+  if (scrollTop > lastScrollTop) {
+    nav.classList.add("hide-nav"); // scrolling down
+  } else {
+    nav.classList.remove("hide-nav"); // scrolling up
+  }
+
+  lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // avoid negative scroll
+}, false);
   </script>
 </body>
 </html>
