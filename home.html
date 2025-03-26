@@ -213,10 +213,9 @@
         }
       }
       function logout() {
-  alert("Logging out!");
-  localStorage.removeItem("sky_user");
-  window.location.href = "login.html";
-}
+        localStorage.removeItem("sky_user");
+        window.location.href = "login.html";
+      }
       function toggleMenu() {
         document.getElementById("navMenu").classList.toggle("show");
       }
@@ -341,11 +340,6 @@
          }
          showCurrentCollectible();
        };
- 
-       function logout() {
-         localStorage.removeItem("sky_user");
-         location.reload();
-       }
  
        function toggleMenu() {
          document.getElementById("navMenu").classList.toggle("show");
