@@ -180,7 +180,6 @@
   </nav>
   <div class="container">
     <h2>Welcome back to Skylanders Tracker</h2>
-    <p>Select a game and begin tracking your collection!</p>
     <label for="gameSelector">Select Game:</label>
     <select id="gameSelector">
       <option value="Spyro's Adventure">Spyro's Adventure</option>
@@ -384,11 +383,7 @@
          {
            if (deltaX < -threshold) document.getElementById("dontHaveItBtn").click();
            else if (deltaX > threshold) document.getElementById("haveItBtn").click();
-         } else if (deltaY < -verticalThreshold) 
-         {
-           alert("Choices submitted!");
-           saveProgress();
-         }
+         } 
        }
     </script>
   </div>
