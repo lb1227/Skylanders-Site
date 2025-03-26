@@ -145,7 +145,7 @@
 .top-mobile-nav {
   display: none;
   background-color: var(--nav-bg);
-  padding: 0.5rem 1rem;
+  padding: 0.25rem 0.5rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
   position: fixed;
   top: 0;
@@ -153,21 +153,35 @@
   z-index: 999;
 }
 
+.top-mobile-nav input,
+.top-mobile-nav label {
+  margin-top: 0;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.7rem;
+  max-width: 140px;
+}
+
 @media (max-width: 768px) {
-  #navTopMobile {
+  #navTopMobile 
+  {
     display: flex;
     justify-content: space-around;
     align-items: center;
   }
 
   body {
-    padding-top: 60px; /* Prevent top nav overlap */
+    padding-top: 40px; /* Prevent top nav overlap */
   }
 }
     
 @media (max-width: 768px) 
-    {
-      .filter-sticky {
+{
+  .filter-sticky 
+  {
+    display: none;
+  }
+  .search-input-desktop 
+  {
     display: none;
   }
   .cards-wrapper {
@@ -268,20 +282,20 @@
     <h2 style="margin: 0;">Skylanders Tracker</h2>
     <div class="hamburger" onclick="toggleMenu()">☰</div>
     <div id="navMenu" class="nav-links">
-      <input type="text" id="searchInput" placeholder="Search Skylanders..." style="margin-top: 0.5rem; max-width: 200px; background-color: #2a2a2a; color: white; border-radius: 6px; border: none; padding: 0.4rem 0.8rem;">
+      <input type="text" id="searchInputDesktop" placeholder="Search Skylanders..." class="search-input-desktop" style="margin-top: 0.5rem; max-width: 200px; background-color: #2a2a2a; color: white; border-radius: 6px; border: none; padding: 0.4rem 0.8rem;">
       <a href="home.html">Home</a>
       <a href="totals.html">Totals</a>
       <button id="logoutBtn" onclick="logout()" style="background-color: var(--button); color: white; border-radius: 8px; font-weight: bold;">Logout</button>
     </div>
   </nav>
   
-  <nav id="navTopMobile" class="top-mobile-nav">
+  <header id="navTopMobile" class="top-mobile-nav">
     <div class="nav-links">
-      <input type="text" id="searchInput" placeholder="Search Skylanders..." style="margin-top: 0.5rem; max-width: 200px; background-color: #2a2a2a; color: white; border-radius: 6px; border: none; padding: 0.4rem 0.8rem;">
+      <input type="text" id="searchInputMobile" placeholder="Search Skylanders..." style="margin-top: 0.5rem; max-width: 200px; background-color: #2a2a2a; color: white; border-radius: 6px; border: none; padding: 0.4rem 0.8rem;">
       <label style="font-size: 0.75rem;"><input type="checkbox" id="filterOwnedTop"> Show Owned</label>
       <label style="font-size: 0.75rem;"><input type="checkbox" id="filterUnownedTop"> Show Unowned</label>
     </div>
-</nav>
+</header>
   
   <div class="container">
   <div class="filter-sticky">
@@ -421,13 +435,21 @@ window.addEventListener("scroll", () => {
 
   lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // avoid negative scroll
 }, false);
-    document.getElementById("searchInput").addEventListener("input", function() {
-    const query = this.value.toLowerCase();
-    document.querySelectorAll(".card").forEach(card => {
-      const name = card.querySelector("strong").textContent.toLowerCase();
-      card.style.display = name.includes(query) ? "inline-block" : "none";
+    
+  function attachSearchHandler(id) {
+    const input = document.getElementById(id);
+  if (input) {
+    input.addEventListener("input", function () {
+      const query = this.value.toLowerCase();
+      document.querySelectorAll(".card").forEach(card => {
+        const name = card.querySelector("strong").textContent.toLowerCase();
+        card.style.display = name.includes(query) ? "inline-block" : "none";
+      });
     });
-  });
+  }
+}
+  attachSearchHandler("searchInputDesktop");
+  attachSearchHandler("searchInputMobile");
   </script>
 </body>
 </html>
