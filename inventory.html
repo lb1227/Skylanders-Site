@@ -31,6 +31,7 @@
       position: sticky;
       top: 0;
       z-index: 1000;
+      flex-wrap: wrap;
     }
     nav h2 {
       margin: 0;
@@ -100,8 +101,9 @@
     }
     .nav-links {
       display: flex;
-      gap: 1rem;
+      gap: 1.5rem;
       align-items: center;
+      flex-wrap: wrap;
     }
     .nav-links a, .nav-links button {
       color: white;
@@ -121,6 +123,9 @@
       background: #2a2a2a;
       padding: 0.5rem 1rem;
       border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
     .cards-wrapper {
       display: flex;
@@ -135,6 +140,14 @@
       max-height: 0 !important;
       opacity: 0;
       transform: scaleY(0);
+    }
+    .sort-btn {
+      margin-left: auto;
+      background-color: var(--accent);
+      color: white;
+      padding: 0.3rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
     }
     @media (max-width: 768px) {
       .nav-links {
@@ -204,11 +217,12 @@
 
         const header = document.createElement("div");
         header.className = "group-header";
-        header.textContent = game;
+        header.innerHTML = `${game} <button class="sort-btn" onclick="sortGroup(this, '${game}')">Sort</button>`;
         section.appendChild(header);
 
         const wrapper = document.createElement("div");
         wrapper.className = "cards-wrapper";
+        wrapper.setAttribute("data-game", game);
 
         characters.forEach(char => {
           const key = `sky_progress_${user}_${game}`;
@@ -252,10 +266,26 @@
         });
 
         section.appendChild(wrapper);
-        header.onclick = () => wrapper.classList.toggle("collapsed");
+        header.onclick = (e) => {
+          if (e.target.tagName !== "BUTTON") {
+            wrapper.classList.toggle("collapsed");
+          }
+        };
         container.appendChild(section);
       });
     }
+
+    function sortGroup(button, game) {
+      const wrapper = button.closest(".group-section").querySelector(".cards-wrapper");
+      const cards = Array.from(wrapper.children);
+      cards.sort((a, b) => {
+        const nameA = a.querySelector("div").textContent;
+        const nameB = b.querySelector("div").textContent;
+        return nameA.localeCompare(nameB);
+      });
+      cards.forEach(card => wrapper.appendChild(card));
+    }
+
     window.onload = renderInventory;
   </script>
 </body>
