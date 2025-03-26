@@ -141,6 +141,50 @@
   transform: scaleY(1);
   transform-origin: top;
 }
+    /* Toggle Switch Style */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 24px;
+  margin-right: 8px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0;
+  right: 0; bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--accent);
+}
+
+input:checked + .slider:before {
+  transform: translateX(22px);
+}
 
 .top-mobile-nav {
   display: none;
@@ -300,12 +344,16 @@
   <div class="container">
   <div class="filter-sticky">
     <div class="filter-options">
-      <label><input type="checkbox" id="filterOwned"> Show Owned</label>
-      <label><input type="checkbox" id="filterUnowned"> Show Unowned</label>
+      <label class="switch">
+        <input type="checkbox" id="ownedFilterToggle" onchange="applyOwnedFilter()" />
+        <span class="slider round"></span>
+      </label>
+      <span style="margin-left: 0.5rem;">Show Owned Only</span>
     </div>
   </div>
   <div id="inventoryContainer"></div>
 </div>
+  
   <script>
     const user = localStorage.getItem("sky_user") || "guest";
     const container = document.getElementById("inventoryContainer");
@@ -450,6 +498,21 @@ window.addEventListener("scroll", () => {
 }
   attachSearchHandler("searchInputDesktop");
   attachSearchHandler("searchInputMobile");
+    function applyOwnedFilter() {
+  const showOwnedOnly = document.getElementById("ownedFilterToggle").checked;
+  const user = localStorage.getItem("sky_user") || "guest";
+  const key = `sky_progress_${user}_${currentGame}`;
+  const saved = JSON.parse(localStorage.getItem(key)) || { collected: [] };
+
+  const filtered = showOwnedOnly 
+    ? saved.collected.map(c => c.name)
+    : games[currentGame].map(c => c.name);
+
+  document.querySelectorAll(".card").forEach(card => {
+    const name = card.getAttribute("data-name");
+    card.style.display = filtered.includes(name) ? "block" : "none";
+  });
+}
   </script>
 </body>
 </html>
