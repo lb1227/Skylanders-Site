@@ -178,7 +178,8 @@
     </div>
 
     <script>
-      function initializeApp() {
+      function initializeApp() 
+      {
         const user = localStorage.getItem("sky_user");
         const loginBtn = document.getElementById("loginBtn");
         const signupBtn = document.getElementById("signupBtn");
@@ -188,7 +189,8 @@
           loginBtn.style.display = "none";
           signupBtn.style.display = "none";
           logoutBtn.style.display = "inline-block";
-        } else {
+        } else 
+        {
           loginBtn.style.display = "inline-block";
           signupBtn.style.display = "inline-block";
           logoutBtn.style.display = "none";
@@ -214,17 +216,20 @@
        let collectiblesQueue = [...collectibles];
        let skippedQueue = [];
  
-       function showCurrentCollectible() {
+       function showCurrentCollectible() 
+       {
          const current = collectiblesQueue[0];
          const img = document.getElementById("collectibleImage");
          const name = document.getElementById("collectibleName");
          const reviewBtn = document.getElementById("reviewSkippedBtn");
  
-         if (current && current.image) {
+         if (current && current.image) 
+         {
            img.src = current.image;
            name.textContent = current.name;
            reviewBtn.style.display = "none";
-         } else if (skippedQueue.length > 0) {
+         } else if (skippedQueue.length > 0) 
+         {
            reviewBtn.style.display = "inline-block";
            img.src = "";
            name.textContent = "";
@@ -353,19 +358,23 @@
          handleSwipe();
        });
  
-       function handleSwipe() {
+       function handleSwipe() 
+       {
          const threshold = 50;
          const verticalThreshold = 50;
          const deltaX = touchEndX - touchStartX;
          const deltaY = touchEndY - touchStartY;
  
-         if (Math.abs(deltaX) > Math.abs(deltaY)) {
+         if (Math.abs(deltaX) > Math.abs(deltaY)) 
+         {
            if (deltaX < -threshold) document.getElementById("dontHaveItBtn").click();
            else if (deltaX > threshold) document.getElementById("haveItBtn").click();
-         } else if (deltaY < -verticalThreshold) {
+         } else if (deltaY < -verticalThreshold) 
+         {
            alert("Choices submitted!");
            saveProgress();
          }
+       }
     </script>
   </div>
 </body>
