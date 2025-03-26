@@ -210,8 +210,13 @@
       }
 
       document.getElementById("haveItBtn").onclick = () => {
-        const current = collectiblesQueue.shift();
-        if (!current) return;
+      const img = document.getElementById("collectibleImage");
+      const current = collectiblesQueue.shift();
+      if (!current) return;
+      img.classList.add("animate-right");
+      const handler = () => {
+        img.classList.remove("animate-right");
+        img.removeEventListener("animationend", handler);
         current.quantity = 1;
 
         const user = localStorage.getItem("sky_user") || "guest";
@@ -230,14 +235,23 @@
 
         showCurrentCollectible();
       };
+      img.addEventListener("animationend", handler);
+    };
 
       document.getElementById("dontHaveItBtn").onclick = () => {
-        const current = collectiblesQueue.shift();
-        if (!current) return;
+      const img = document.getElementById("collectibleImage");
+      const current = collectiblesQueue.shift();
+      if (!current) return;
+      img.classList.add("animate-left");
+      const handler = () => {
+        img.classList.remove("animate-left");
+        img.removeEventListener("animationend", handler);
         skippedQueue.push(current);
         showCurrentCollectible();
         saveProgress();
       };
+      img.addEventListener("animationend", handler);
+    };
 
       document.getElementById("reviewSkippedBtn").onclick = () => {
         if (skippedQueue.length === 0) return;
