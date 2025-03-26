@@ -210,7 +210,8 @@
     <div class="card-grid" id="cardGrid"></div>
 
     <script>
-    
+
+      const games = window.games;
       let currentGame = document.getElementById("gameSelector").value;
       let collectibles = games[currentGame];
       let collectiblesQueue = [...collectibles];
