@@ -1,5 +1,6 @@
 const CACHE_NAME = "skylanders-cache-v1";
 const urlsToCache = [
+  "/",
   "/home.html",
   "/index.html",
   "/inventory.html",
