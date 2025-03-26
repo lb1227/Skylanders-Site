@@ -276,22 +276,27 @@
     }
 
     function removeFromInventory(name, game) {
-      const key = `sky_progress_${user}_${game}`;
-      const saved = localStorage.getItem(key);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        parsed.collected = (parsed.collected || []).filter(x => x.name !== name);
+  const key = `sky_progress_${user}_${game}`;
+  const saved = localStorage.getItem(key);
+  if (saved) {
+    const parsed = JSON.parse(saved);
 
-        const character = window.games[game].find(x => x.name === name);
-        if (character && !parsed.queue.some(x => x.name === name)) {
-          parsed.queue = parsed.queue || [];
-          parsed.queue.push(character);
-        }
+    // Remove from collected
+    parsed.collected = (parsed.collected || []).filter(x => x.name !== name);
 
-        localStorage.setItem(key, JSON.stringify(parsed));
-        renderInventory();
-      }
+    // Add to queue if not already there
+    const character = window.games[game].find(x => x.name === name);
+    if (character && !parsed.queue.some(x => x.name === name)) {
+      parsed.queue = parsed.queue || [];
+      parsed.queue.push(character);
     }
+
+    localStorage.setItem(key, JSON.stringify(parsed));
+    renderInventory();
+  } else {
+    console.warn(`No saved data found for key ${key}`);
+  }
+}
 
     document.getElementById("filterOwned").addEventListener("change", renderInventory);
     document.getElementById("filterUnowned").addEventListener("change", renderInventory);
