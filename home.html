@@ -140,16 +140,16 @@
 </head>
 <body>
   <nav>
-  <h2 style="margin: 0;">Skylanders Tracker</h2>
-  <div class="hamburger" onclick="toggleMenu()">☰</div>
-  <div id="navMenu" class="nav-links">
-    <a href="inventory.html">Inventory</a>
-    <a href="totals.html">Totals</a>
-    <button id="loginBtn" onclick="location.href='login.html'">Login</button>
-    <button id="signupBtn" onclick="location.href='signup.html'">Sign Up</button>
-    <button id="logoutBtn" style="display:none; background-color: var(--button); color: white; border-radius: 8px; padding: 0.5rem 1rem; font-weight: bold;" onclick="logout()">Logout</button>
-  </div>
-</nav>
+    <h2 style="margin: 0;">Skylanders Tracker</h2>
+    <div class="hamburger" onclick="toggleMenu()">☰</div>
+    <div id="navMenu" class="nav-links">
+      <a href="inventory.html">Inventory</a>
+      <a href="totals.html">Totals</a>
+      <button id="loginBtn" onclick="location.href='login.html'">Login</button>
+      <button id="signupBtn" onclick="location.href='signup.html'">Sign Up</button>
+      <button id="logoutBtn" style="display:none; background-color: var(--button); color: white; border-radius: 8px; padding: 0.5rem 1rem; font-weight: bold;" onclick="logout()">Logout</button>
+    </div>
+  </nav>
   <div class="container">
     <h2>Welcome back to Skylanders Tracker</h2>
     <p>Select a game and begin tracking your collection!</p>
@@ -169,13 +169,12 @@
       <button id="reviewSkippedBtn" style="display:none; margin-top: 1rem; background-color: #444; color: white; border: 1px solid #ccc; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">Review Skipped</button>
     </div>
 
-    <script>      
-
+    <script>
       const games = window.games;
+      const elementMap = window.elementMap;
       let currentGame = document.getElementById("gameSelector").value;
       let collectibles = games[currentGame];
       let collectiblesQueue = [...collectibles];
-      let collectedItems = [];
       let skippedQueue = [];
 
       function showCurrentCollectible() {
@@ -199,92 +198,45 @@
         }
       }
 
-        const grid = document.getElementById("cardGrid");
-        grid.innerHTML = "";
-        collectedItems.forEach(item => {
-          const card = document.createElement("div");
-          card.className = "card";
-          const element = elementMap[item.name] || 'Magic';
-          card.style.backgroundColor = elementColors[element] || '#292929';
-          const quantity = item.quantity || 1;
-          card.innerHTML = `
-            <img src="${item.image}" alt="${item.name}" />
-            <div><strong>${item.name}</strong></div>
-            <input type="number" min="1" value="${quantity}" class="qty-input" onchange="updateQuantity('${item.name}', this)">
-            <button onclick="removeCollectible('${item.name}')">Remove</button>
-          `;
-          grid.appendChild(card);
-        });
-      }
-
-      function updateQuantity(name, input) {
-        const value = parseInt(input.value);
-        if (isNaN(value) || value < 1) {
-          input.classList.add("invalid");
-          setTimeout(() => input.classList.remove("invalid"), 1000);
-          return;
-        }
-        const item = collectedItems.find(i => i.name === name);
-        if (item) item.quantity = value;
-        saveProgress();
-      }
-
       function saveProgress() {
         const user = localStorage.getItem("sky_user") || "guest";
         const key = `sky_progress_${user}_${currentGame}`;
-        const data = {
-          collected: collectedItems,
+        const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], queue: [], skipped: [] };
+        localStorage.setItem(key, JSON.stringify({
+          collected: saved.collected,
           queue: collectiblesQueue,
           skipped: skippedQueue
-        };
-        localStorage.setItem(key, JSON.stringify(data));
-      }
-
-      function removeCollectible(name) {
-        const index = collectedItems.findIndex(item => item.name === name);
-        if (index !== -1) {
-          const removed = collectedItems.splice(index, 1)[0];
-          collectiblesQueue.push(removed);
-        }
-        showCurrentCollectible();
-        renderCollectedList();
-        saveProgress();
+        }));
       }
 
       document.getElementById("haveItBtn").onclick = () => {
-        const img = document.getElementById("collectibleImage");
         const current = collectiblesQueue.shift();
         if (!current) return;
-        img.classList.add("animate-right");
+        current.quantity = 1;
 
-        const handler = () => {
-          img.classList.remove("animate-right");
-          img.removeEventListener("animationend", handler);
-          current.quantity = 1;
-          collectedItems.push(current);
-          showCurrentCollectible();
-          renderCollectedList();
-          saveProgress();
-        };
+        const user = localStorage.getItem("sky_user") || "guest";
+        const key = `sky_progress_${user}_${currentGame}`;
+        const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], queue: [], skipped: [] };
 
-        img.addEventListener("animationend", handler);
+        if (!saved.collected.find(i => i.name === current.name)) {
+          saved.collected.push(current);
+        }
+
+        localStorage.setItem(key, JSON.stringify({
+          collected: saved.collected,
+          queue: collectiblesQueue,
+          skipped: skippedQueue
+        }));
+
+        showCurrentCollectible();
       };
 
       document.getElementById("dontHaveItBtn").onclick = () => {
-        const img = document.getElementById("collectibleImage");
         const current = collectiblesQueue.shift();
         if (!current) return;
-        img.classList.add("animate-left");
-
-        const handler = () => {
-          img.classList.remove("animate-left");
-          img.removeEventListener("animationend", handler);
-          skippedQueue.push(current);
-          showCurrentCollectible();
-          saveProgress();
-        };
-
-        img.addEventListener("animationend", handler);
+        skippedQueue.push(current);
+        showCurrentCollectible();
+        saveProgress();
       };
 
       document.getElementById("reviewSkippedBtn").onclick = () => {
@@ -295,8 +247,6 @@
       };
 
       document.getElementById("gameSelector").onchange = () => {
-        const img = document.getElementById("collectibleImage");
-        img.classList.remove("animate-left", "animate-right");
         const user = localStorage.getItem("sky_user") || "guest";
         currentGame = document.getElementById("gameSelector").value;
         const key = `sky_progress_${user}_${currentGame}`;
@@ -304,16 +254,13 @@
         collectibles = games[currentGame];
         if (saved) {
           const parsed = JSON.parse(saved);
-          collectedItems = parsed.collected || [];
           collectiblesQueue = parsed.queue || [...collectibles];
           skippedQueue = parsed.skipped || [];
         } else {
-          collectedItems = [];
           collectiblesQueue = [...collectibles];
           skippedQueue = [];
         }
         showCurrentCollectible();
-        renderCollectedList();
       };
 
       window.onload = () => {
@@ -322,77 +269,54 @@
         const saved = localStorage.getItem(key);
         if (saved) {
           const parsed = JSON.parse(saved);
-          collectedItems = parsed.collected || [];
-          collectiblesQueue = parsed.queue || [...collectibles];
+          collectiblesQueue = parsed.queue || [...games[currentGame]];
           skippedQueue = parsed.skipped || [];
         }
         showCurrentCollectible();
-        renderCollectedList();
       };
-          function logout() {
+
+      function logout() {
         localStorage.removeItem("sky_user");
         location.reload();
       }
 
-      function updateNavBar() {
-        const user = localStorage.getItem("sky_user");
-        const loginBtn = document.getElementById("loginBtn");
-        const signupBtn = document.getElementById("signupBtn");
-        const logoutBtn = document.getElementById("logoutBtn");
-
-        if (user && user !== "guest") {
-          loginBtn.style.display = "none";
-          signupBtn.style.display = "none";
-          logoutBtn.style.display = "inline-block";
-        } else {
-          loginBtn.style.display = "inline-block";
-          signupBtn.style.display = "inline-block";
-          logoutBtn.style.display = "none";
-        }
-      }
-
-      updateNavBar();
       function toggleMenu() {
         document.getElementById("navMenu").classList.toggle("show");
       }
+
       let touchStartX = 0;
-let touchStartY = 0;
-let touchEndY = 0;
+      let touchStartY = 0;
       let touchEndX = 0;
+      let touchEndY = 0;
 
       const image = document.getElementById("collectibleImage");
 
       image.addEventListener("touchstart", (e) => {
-  touchStartX = e.changedTouches[0].screenX;
-  touchStartY = e.changedTouches[0].screenY;
-});
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+      });
 
       image.addEventListener("touchend", (e) => {
-  touchEndX = e.changedTouches[0].screenX;
-  touchEndY = e.changedTouches[0].screenY;
-  handleSwipe();
-});
+        touchEndX = e.changedTouches[0].screenX;
+        touchEndY = e.changedTouches[0].screenY;
+        handleSwipe();
+      });
 
       function handleSwipe() {
-  const threshold = 50;
-  const verticalThreshold = 50;
-  const deltaX = touchEndX - touchStartX;
-  const deltaY = touchEndY - touchStartY;
+        const threshold = 50;
+        const verticalThreshold = 50;
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
 
-  if (Math.abs(deltaX) > Math.abs(deltaY)) {
-    if (deltaX < -threshold) {
-      document.getElementById("dontHaveItBtn").click();
-    } else if (deltaX > threshold) {
-      document.getElementById("haveItBtn").click();
-    }
-  } else if (deltaY < -verticalThreshold) {
-    // Swipe Up - Save progress manually if needed
-    alert("Choices submitted!");
-    saveProgress();
-  }
-} 
-
-</script>
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+          if (deltaX < -threshold) document.getElementById("dontHaveItBtn").click();
+          else if (deltaX > threshold) document.getElementById("haveItBtn").click();
+        } else if (deltaY < -verticalThreshold) {
+          alert("Choices submitted!");
+          saveProgress();
+        }
+      }
+    </script>
   </div>
 </body>
 </html>
