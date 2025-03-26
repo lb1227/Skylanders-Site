@@ -225,12 +225,14 @@
     </div>
   </nav>
   <div class="container">
+  <div class="filter-sticky">
     <div class="filter-options">
       <label><input type="checkbox" id="filterOwned"> Show Owned</label>
       <label><input type="checkbox" id="filterUnowned"> Show Unowned</label>
     </div>
-    <div id="inventoryContainer"></div>
   </div>
+  <div id="inventoryContainer"></div>
+</div>
   <script>
     const user = localStorage.getItem("sky_user") || "guest";
     const container = document.getElementById("inventoryContainer");
