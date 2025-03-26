@@ -133,6 +133,22 @@
           touch-action: pan-x;   /* Enable left/right swiping only */
           position: fixed;
         }
+      nav {
+        position: fixed;
+        bottom: 0;
+        top: auto;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        background-color: var(--nav-bg);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        z-index: 1000;
+      }
+
+      nav h2 {
+        display: none;
+      }
       .nav-links {
         display: none;
         flex-direction: column;
@@ -142,12 +158,28 @@
         right: 0;
         width: 100%;
         padding: 1rem;
+        justify-content: space-around;
+      }
+      .nav-icon {
+        font-size: 0;
+        width: 40px;
+        height: 40px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
       }
       .nav-links.show {
         display: flex;
       }
       .hamburger {
         display: block;
+      }
+      .home-icon {
+        background-image: url('icons/home.svg'); /* use a house icon */
+      }
+
+      .inventory-icon {
+        background-image: url('icons/cards.svg'); /* use a card icon */
       }
     }
     @keyframes swipeLeft {
