@@ -78,6 +78,10 @@
       box-shadow: 0 2px 12px rgba(0,0,0,0.6);
       margin: 1rem;
       display: inline-block;
+      transition: background-color 0.3s ease;
+    }
+    .owned {
+      background-color: #1f4d1f !important;
     }
     .card .qty-input {
       margin-top: 0.5rem;
@@ -187,6 +191,7 @@
 
           const card = document.createElement("div");
           card.className = "card";
+          if (owned) card.classList.add("owned");
 
           const img = document.createElement("img");
           img.src = char.image;
