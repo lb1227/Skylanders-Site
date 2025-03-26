@@ -7,7 +7,9 @@ const urlsToCache = [
   "/totals.html",
   "/data.js",
   "/manifest.json",
-  "/Bash.png"
+  "/Bash.png",
+  "/1280x720.jpg",
+  "/540x720.JPG"
 ];
 
 // Install event
