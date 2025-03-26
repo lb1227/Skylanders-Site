@@ -149,6 +149,20 @@
       border-radius: 6px;
       font-size: 0.9rem;
     }
+    .sort-options {
+      margin-top: 0.5rem;
+      display: none;
+    }
+    .sort-options select {
+      width: 100%;
+    }
+    .filter-options {
+      margin-top: 0.5rem;
+    }
+    .filter-options label {
+      margin-right: 1rem;
+      font-size: 0.9rem;
+    }
     @media (max-width: 768px) {
       .nav-links {
         display: none;
@@ -217,8 +231,21 @@
 
         const header = document.createElement("div");
         header.className = "group-header";
-        header.innerHTML = `${game} <button class="sort-btn" onclick="sortGroup(this, '${game}')">Sort</button>`;
+        header.innerHTML = `${game} <button class="sort-btn" onclick="toggleSortOptions(this)">Sort ▼</button>`;
         section.appendChild(header);
+
+        const sortOptions = document.createElement("div");
+        sortOptions.className = "sort-options";
+        sortOptions.innerHTML = `
+          <select onchange="sortGroup(this, '${game}')">
+            <option value="alpha">Alphabetical</option>
+          </select>
+          <div class="filter-options">
+            <label><input type="checkbox" onchange="filterOwned(this, '${game}')"> Show Only Owned</label>
+            <label><input type="checkbox" onchange="filterUnowned(this, '${game}')"> Show Only Unowned</label>
+          </div>
+        `;
+        section.appendChild(sortOptions);
 
         const wrapper = document.createElement("div");
         wrapper.className = "cards-wrapper";
@@ -275,15 +302,42 @@
       });
     }
 
-    function sortGroup(button, game) {
-      const wrapper = button.closest(".group-section").querySelector(".cards-wrapper");
+    function toggleSortOptions(button) {
+      const section = button.closest(".group-section");
+      const options = section.querySelector(".sort-options");
+      options.style.display = options.style.display === "block" ? "none" : "block";
+    }
+
+    function sortGroup(selectEl, game) {
+      const wrapper = selectEl.closest(".group-section").querySelector(".cards-wrapper");
       const cards = Array.from(wrapper.children);
+      const value = selectEl.value;
+
       cards.sort((a, b) => {
         const nameA = a.querySelector("div").textContent;
         const nameB = b.querySelector("div").textContent;
         return nameA.localeCompare(nameB);
       });
+
       cards.forEach(card => wrapper.appendChild(card));
+    }
+
+    function filterOwned(checkbox, game) {
+      const wrapper = document.querySelector(`.cards-wrapper[data-game='${game}']`);
+      const cards = wrapper.querySelectorAll(".card");
+      cards.forEach(card => {
+        const show = checkbox.checked ? card.classList.contains("owned") : true;
+        card.style.display = show ? "inline-block" : "none";
+      });
+    }
+
+    function filterUnowned(checkbox, game) {
+      const wrapper = document.querySelector(`.cards-wrapper[data-game='${game}']`);
+      const cards = wrapper.querySelectorAll(".card");
+      cards.forEach(card => {
+        const show = checkbox.checked ? !card.classList.contains("owned") : true;
+        card.style.display = show ? "inline-block" : "none";
+      });
     }
 
     window.onload = renderInventory;
