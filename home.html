@@ -120,6 +120,22 @@
         display: block;
       }
     }
+    @keyframes swipeLeft {
+      0% { transform: translateX(0) rotate(0); opacity: 1; }
+      50% { transform: translateX(-50vw) rotate(-10deg); opacity: 0.5; }
+      100% { transform: translateX(-100vw) rotate(-20deg); opacity: 0; }
+    }
+    @keyframes swipeRight {
+      0% { transform: translateX(0) rotate(0); opacity: 1; }
+      50% { transform: translateX(50vw) rotate(10deg); opacity: 0.5; }
+      100% { transform: translateX(100vw) rotate(20deg); opacity: 0; }
+    }
+    .animate-left {
+      animation: swipeLeft 0.5s ease forwards;
+    }
+    .animate-right {
+      animation: swipeRight 0.5s ease forwards;
+    }
   </style>
 </head>
 <body>
@@ -182,18 +198,6 @@
           reviewBtn.style.display = "none";
         }
       }
-
-      function renderCollectedList() {
-        const elementColors = {
-          Fire: '#4d1c1c33',
-          Tech: '#33270a33',
-          Magic: '#2e1f4c33',
-          Life: '#1c4d1c33',
-          Water: '#1c2e4d33',
-          Air: '#1c4d4d33',
-          Earth: '#4d3b1c33',
-          Undead: '#2b2b2b33'
-        };
 
         const grid = document.getElementById("cardGrid");
         grid.innerHTML = "";
