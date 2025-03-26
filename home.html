@@ -126,6 +126,13 @@
       color: white;
     }
     @media (max-width: 768px) {
+      html, body {
+          height: 100%;
+          overflow-y: hidden;    /* Prevent vertical scroll */
+          overflow-x: auto;      /* Allow horizontal swipe */
+          touch-action: pan-x;   /* Enable left/right swiping only */
+          position: fixed;
+        }
       .nav-links {
         display: none;
         flex-direction: column;
