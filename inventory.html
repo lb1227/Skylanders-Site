@@ -43,17 +43,7 @@
     .card.gray {
       background-color: #424242;
     }
-      .card-grid.collapsing .card {
-      animation: stackCollapse 0.4s ease-in-out forwards;
-      opacity: 1;
-    }
-    @keyframes stackCollapse {
-      to {
-        transform: translateY(-40px) scale(0.8);
-        opacity: 0;
-      }
-    }
-
+  </style>
 </head>
 <body>
   <h1>Your Skylanders Collection</h1>
@@ -136,23 +126,7 @@ function removeFromInventory(name) {
           if (grid.style.display === "none") {
             grid.style.display = "grid";
           } else {
-            const cards = Array.from(grid.children);
-            const columns = Math.floor(grid.offsetWidth / 180); // approx card width + gap
-            let delay = 0;
-            for (let i = cards.length - 1; i >= 0; i--) {
-              cards[i].style.animation = `stackCollapse 0.4s ease-in-out forwards`;
-              cards[i].style.animationDelay = `${delay}s`;
-              delay += 0.05;
-            }
-            setTimeout(() => {
-              grid.style.display = "none";
-              cards.forEach(c => {
-                c.style.animation = "";
-                c.style.animationDelay = "";
-              });
-            }, delay * 1000 + 400);
-          }
-        };
+            grid.style.display = "none";
             }, 600);
           }
         };
