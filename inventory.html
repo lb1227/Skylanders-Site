@@ -49,7 +49,23 @@
   <h1>Your Skylanders Collection</h1>
   <div id="inventoryGrid"></div>
 
-  <script src="data.js"></script>
+  <script src="data.js">function removeFromInventory(name) {
+  const user = localStorage.getItem("sky_user") || "guest";
+  const gameKeys = Object.keys(games);
+  gameKeys.forEach(game => {
+    const key = `sky_progress_${user}_${game}`;
+    const data = JSON.parse(localStorage.getItem(key));
+    if (data && data.collected) {
+      const index = data.collected.findIndex(c => c.name === name);
+      if (index !== -1) {
+        data.collected.splice(index, 1);
+        localStorage.setItem(key, JSON.stringify(data));
+        location.reload();
+      }
+    }
+  });
+}
+</script>
   <script>
     function updateQuantity(name, input) {
       const value = parseInt(input.value);
@@ -126,6 +142,7 @@
               <button onclick="changeQuantity('${name}', -1)">-</button>
               <input type="number" data-name="${name}" min="1" step="1" value="${owned.quantity}" onchange="updateQuantity('${name}', this)" style="width: 50px; text-align: center;">
               <button onclick="changeQuantity('${name}', 1)">+</button>
+              <br><button onclick="removeFromInventory('${name}')" style="margin-top: 0.5rem; background: #e53935; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer;">Remove</button>
             </div>` : `<div>Not owned</div>`}
           `;
           grid.appendChild(card);
