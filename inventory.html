@@ -47,25 +47,76 @@
 </head>
 <body>
   <h1>Your Skylanders Collection</h1>
-  <div class="card-grid" id="inventoryGrid"></div>
+  <div id="inventoryGrid"></div>
 
-  <script src="data.js"></script>
-  <script>
+  <script src="data.js">function updateQuantity(name, input) {
+      const value = parseInt(input.value);
+      if (isNaN(value) || value < 1) {
+        input.style.border = "2px solid red";
+        setTimeout(() => input.style.border = "", 1000);
+        return;
+      }
+      const user = localStorage.getItem("sky_user") || "guest";
+      const gameKeys = Object.keys(games);
+      gameKeys.forEach(game => {
+        const key = `sky_progress_${user}_${game}`;
+        const data = JSON.parse(localStorage.getItem(key));
+        if (data && data.collected) {
+          const match = data.collected.find(c => c.name === name);
+          if (match) {
+            match.quantity = value;
+            localStorage.setItem(key, JSON.stringify(data));
+          }
+        }
+      });
+    }
+  function changeQuantity(name, delta) {
+  const inputs = document.querySelectorAll(`input[onchange*='${name.replace(/'/g, "\'")}'"]);
+  inputs.forEach(input => {
+    let current = parseInt(input.value);
+    if (!isNaN(current)) {
+      const newVal = Math.max(1, current + delta);
+      input.value = newVal;
+      updateQuantity(name, input);
+    }
+  });
+}
+</script>
+<script>
     window.addEventListener('DOMContentLoaded', () => {
       const user = localStorage.getItem("sky_user") || "guest";
       const inventory = {};
 
       Object.keys(games).forEach(game => {
-        const saved = localStorage.getItem(`sky_progress_${user}_${game}`);
-        if (saved) {
-          try {
-            const parsed = JSON.parse(saved);
-            parsed.collected.forEach(c => {
-              inventory[c.name] = {
-                quantity: c.quantity || 1,
-                image: c.image
-              };
-            });
+  const section = document.createElement("section");
+  const heading = document.createElement("h2");
+  heading.textContent = game;
+  heading.style.marginTop = "2rem";
+  heading.style.textAlign = "center";
+  section.appendChild(heading);
+
+  const grid = document.createElement("div");
+  grid.className = "card-grid";
+
+  games[game].forEach(({ name, image }) => {
+    const owned = inventory[name];
+    const card = document.createElement("div");
+    card.className = "card " + (owned ? "green" : "gray");
+    card.innerHTML = `
+      <img src="${image}" alt="${name}" />
+      <div><strong>${name}</strong></div>
+      ${owned ? `<div>Quantity:
+        <button onclick="changeQuantity('${name}', -1')">-</button>
+        <input type="number" min="1" step="1" value="${owned.quantity}" onchange="updateQuantity('${name}', this)" style="width: 50px; text-align: center;">
+        <button onclick="changeQuantity('${name}', 1')">+</button>
+      </div>` : `<div>Not owned</div>`}
+    `;
+    grid.appendChild(card);
+  });
+
+  section.appendChild(grid);
+  document.getElementById("inventoryGrid").appendChild(section);
+});
           } catch (e) {
             console.error(`Error loading ${game} progress`, e);
           }
@@ -82,7 +133,11 @@
           card.innerHTML = `
             <img src="${image}" alt="${name}" />
             <div><strong>${name}</strong></div>
-            ${owned ? `<div>Quantity: ${owned.quantity}</div>` : `<div>Not owned</div>`}
+            ${owned ? `<div>Quantity:
+              <button onclick="changeQuantity('${name}', -1)">-</button>
+              <input type="number" min="1" step="1" value="${owned.quantity}" onchange="updateQuantity('${name}', this)" style="width: 50px; text-align: center;">
+              <button onclick="changeQuantity('${name}', 1)">+</button>
+            </div>` : `<div>Not owned</div>`}
           `;
           grid.appendChild(card);
         });
