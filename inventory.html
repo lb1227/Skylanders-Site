@@ -1,137 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Inventory</title>
   <style>
     body {
-      background: #121212;
+      background-color: #121212;
       color: white;
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
+      padding: 2rem;
     }
-    nav {
-      background-color: #000;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .container {
-      max-width: 1000px;
-      margin: 2rem auto;
-      padding: 1rem;
-    }
-    h2 {
-      text-align: center;
-    }
-    .group-buttons {
+    h1 {
       text-align: center;
       margin-bottom: 2rem;
     }
-    .group-buttons button {
-      padding: 0.7rem 1.2rem;
-      margin: 0.5rem;
-      font-size: 1rem;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-      background-color: #4caf50;
-      color: white;
-    }
     .card-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
     }
     .card {
-      background-color: #1f1f1f;
+      background: #2a2a2a;
+      border-radius: 10px;
       padding: 1rem;
-      border-radius: 8px;
       text-align: center;
+      transition: transform 0.3s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
     }
     .card img {
       width: 100%;
       max-width: 120px;
-      border-radius: 6px;
+      height: auto;
+      margin-bottom: 0.5rem;
+    }
+    .card.green {
+      background-color: #2e7d32;
+    }
+    .card.gray {
+      background-color: #424242;
     }
   </style>
 </head>
 <body>
-  <nav>
-    <h2>Inventory</h2>
-    <div>
-      <a href="home.html" style="color: white; text-decoration: none; margin-right: 1rem;">← Home</a>
-    </div>
-  </nav>
-  <div class="container">
-    <div class="group-buttons">
-      <img src="https://static.wikia.nocookie.net/skylanders/images/b/b5/Skylanders_SA_Art.png/revision/latest?cb=20160125022836" alt="Spyro's Adventure" onclick="loadInventory('Spyro\'s Adventure')" style="width: 300px; cursor: pointer; border-radius: 10px; margin: 0.5rem;">
-      <img src="https://www.nintendo.com/eu/media/images/10_share_images/games_15/wiiu_14/SI_WiiU_SkylandersGiants_image1600w.jpg" alt="Giants" onclick="loadInventory('Giants')" style="width: 300px; cursor: pointer; border-radius: 10px; margin: 0.5rem;">
-    </div>
-    <div id="grandTotalValue" style="text-align:center; font-size: 1.2rem; margin-bottom: 1rem;"></div>
-    <div id="totalValue" style="text-align:center; font-size: 1.2rem; margin-bottom: 1rem;"></div>
-    <div class="card-grid" id="inventoryGrid"></div>
-  </div>
+  <h1>Your Skylanders Collection</h1>
+  <div class="card-grid" id="inventoryGrid"></div>
 
+  <script src="data.js"></script>
   <script>
-    const livePrices = {
-      "Spyro": 7.99,
-      "Trigger Happy": 6.49,
-      "Stealth Elf": 6.99,
-      "Gill Grunt": 5.49,
-      "Eruptor": 4.99,
-      "Bouncer": 8.99,
-      "Crusher": 7.49,
-      "Eye-Brawl": 9.99,
-      "Hot Head": 8.49,
-      "Ninjini": 10.99
-    };
+    const user = localStorage.getItem("sky_user") || "guest";
+    const collected = new Set();
 
-    function loadInventory(game) {
-      const user = localStorage.getItem("sky_user") || "guest";
-      const key = `sky_progress_${user}_${game}`;
-      const saved = localStorage.getItem(key);
-      const grid = document.getElementById("inventoryGrid");
-      grid.innerHTML = "";
-      if (!saved) return;
-      const parsed = JSON.parse(saved);
-      let total = 0;
-      parsed.collected.filter(i => i.status === 'Have it').forEach(item => {
-        const price = livePrices[item.name] || 9.99;
-        const quantity = item.quantity || 1;
-        total += price * quantity;
-        const card = document.createElement('div');
-        card.className = 'card';
+    // Get all progress and populate collected
+    Object.keys(games).forEach(game => {
+      const saved = localStorage.getItem(`sky_progress_${user}_${game}`);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          parsed.collected.forEach(c => collected.add(c.name));
+        } catch (e) {
+          console.error(`Error loading ${game} progress`, e);
+        }
+      }
+    });
+
+    const grid = document.getElementById("inventoryGrid");
+
+    Object.keys(games).forEach(game => {
+      games[game].forEach(({ name, image }) => {
+        const card = document.createElement("div");
+        card.className = "card " + (collected.has(name) ? "green" : "gray");
         card.innerHTML = `
-          <img src="${item.image}" alt="${item.name}" />
-          <div><strong>${item.name}</strong></div>
-          <div>Quantity: ${quantity}</div>
-          <div>Price: $${(quantity * price).toFixed(2)} <span style='color:#4caf50;'>(Live)</span></div>`;
+          <img src="${image}" alt="${name}" />
+          <div><strong>${name}</strong></div>
+        `;
         grid.appendChild(card);
       });
-      document.getElementById("totalValue").textContent = `Total Inventory Value: $${total.toFixed(2)}`;
-      updateGrandTotal();
-    }
-
-    function updateGrandTotal() {
-      const user = localStorage.getItem("sky_user") || "guest";
-      let grandTotal = 0;
-      ["Spyro's Adventure", "Giants"].forEach(game => {
-        const key = `sky_progress_${user}_${game}`;
-        const saved = localStorage.getItem(key);
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          parsed.collected.filter(i => i.status === 'Have it').forEach(item => {
-            const price = livePrices[item.name] || 9.99;
-            const quantity = item.quantity || 1;
-            grandTotal += price * quantity;
-          });
-        }
-      });
-      document.getElementById("grandTotalValue").textContent = `Total Value Across All Games: $${grandTotal.toFixed(2)}`;
-    }
+    });
   </script>
 </body>
 </html>
