@@ -235,17 +235,15 @@ input:checked + .slider:before {
   }
   .cards-wrapper {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 0.5rem;
+    grid-template-columns: repeat(5, 1fr); /* always 5 columns */
+    gap: 0.3rem;
     justify-items: center;
   }
 
   .card {
-    margin: 0.3rem;
-    padding: 0.5rem;
-    width: 100%;
-    max-width: 70px;
-    min-height: 100px;
+    aspect-ratio: 1 / 1.4; /* keep consistent shape */
+    width: 100%; /* fills its grid column */
+    padding: 0.3rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -255,16 +253,17 @@ input:checked + .slider:before {
 
   .card img {
     width: 100%;
-    max-width: 50px;
+    max-width: 100%;
+    height: auto;
     margin-bottom: 0.3rem;
   }
 
   .card strong {
-  font-size: 0.75rem;
+  font-size: 0..6rem;
   }
   .card button {
-  font-size: 0.7rem;
-  padding: 0.25rem 0.5rem;
+  font-size: 0.6rem;
+  padding: 0.2rem 0.4rem;
 }
 }
     .collapsed {
