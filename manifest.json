@@ -20,13 +20,13 @@
   "screenshots": [
     {
       "src": "540x720.JPG",
-      "type": "image/JPG",
+      "type": "image/jpeg",
       "sizes": "540x720",
       "form_factor": "narrow"
     },
     {
       "src": "1280x720.jpg",
-      "type": "image/jpg",
+      "type": "image/jpeg",
       "sizes": "1280x720",
       "form_factor": "wide"
     }
