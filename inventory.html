@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="manifest" href="manifest.json" />
+  <script>
+    if ('serviceWorker' in navigator) 
+    {
+      navigator.serviceWorker.register('/service-worker.js');
+    }
+  </script>
   <script src="data.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,6 +27,7 @@
       margin: 0;
       background-color: var(--bg);
       color: var(--text);
+      overflow-x: hidden;
     }
     nav {
       background-color: var(--nav-bg);
@@ -219,6 +227,7 @@ input:checked + .slider:before {
     padding-top: 40px; /* Prevent top nav overlap */
   }
 }
+
     
 @media (max-width: 768px) 
 {
@@ -240,9 +249,9 @@ input:checked + .slider:before {
   .card {
     margin: 0.3rem;
     padding: 0.5rem;
-    width: 100%;
+    width: 18%;
     max-width: 70px;
-    min-height: 130px;
+    min-height: 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -259,12 +268,6 @@ input:checked + .slider:before {
   .card strong {
   font-size: 0.75rem;
   }
-
-  .card .qty-input {
-    width: 40px;
-    font-size: 0.65rem;
-  }
-
   .card button {
   font-size: 0.7rem;
   padding: 0.25rem 0.5rem;
