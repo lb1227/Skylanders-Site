@@ -198,6 +198,26 @@
       document.getElementById("navMenu").classList.toggle("show");
     }
 
+    function removeFromInventoryAndQueue(name) {
+       const user = localStorage.getItem("sky_user") || "guest";
+       const gameKeys = Object.keys(window.games);
+       gameKeys.forEach(game => {
+         const key = `sky_progress_${user}_${game}`;
+         const data = JSON.parse(localStorage.getItem(key));
+         if (data) {
+           const index = data.collected.findIndex(i => i.name === name);
+           if (index !== -1) {
+             const removed = data.collected.splice(index, 1)[0];
+             if (!data.queue.find(i => i.name === name)) {
+               data.queue.push(removed);
+             }
+             localStorage.setItem(key, JSON.stringify(data));
+           }
+         }
+       });
+       location.reload();
+      }
+
     function logout() {
       localStorage.removeItem("sky_user");
       location.href = "login.html";
