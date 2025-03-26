@@ -234,39 +234,29 @@ input:checked + .slider:before {
     display: none;
   }
   .cards-wrapper {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 4px;
-    padding: 0 4px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* Exactly 5 */
+  gap: 0.5rem;
+  justify-items: center;
   }
 
   .card {
-    width: calc((100% / 5) - 8px); /* 100% divided by 5 minus gap */
-    margin: 0;
+    width: auto;
     padding: 0.3rem;
-    aspect-ratio: 1 / 1.4;
     box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
   }
 
   .card img {
-    width: auto;
-    max-width: 64px;
+    width: 100%;
     height: auto;
-    margin-bottom: 0.3rem;
   }
 
   .card strong {
-    font-size: 0.55rem;
-    line-height: 1.1;
-    text-align: center;
+    font-size: 0.65rem;
   }
   .card button {
-    font-size: 0.55rem;
-    padding: 0.2rem 0.3rem;
+    font-size: 0.6rem;
+    padding: 0.25rem 0.4rem;
   }
 }
     .collapsed {
@@ -461,6 +451,7 @@ input:checked + .slider:before {
 
     window.onload = () => {
       renderInventory();
+      resizeAllCardWrappers();
       const logoutBtn = document.getElementById("logoutBtn");
       if (user && user !== "guest") {
         logoutBtn.style.display = "inline-block";
@@ -515,6 +506,23 @@ window.addEventListener("scroll", () => {
         }
         renderInventory();
     }
+    function resizeAllCardWrappers() {
+  const wrappers = document.querySelectorAll(".cards-wrapper");
+  wrappers.forEach(wrapper => {
+    const screenWidth = wrapper.clientWidth;
+    const cardCount = 5;
+    const gap = 8; // Adjust if you change your CSS gap
+    const totalGap = (cardCount - 1) * gap;
+    const cardWidth = (screenWidth - totalGap) / cardCount;
+
+    wrapper.querySelectorAll(".card").forEach(card => {
+      card.style.width = `${cardWidth}px`;
+    });
+  });
+}
+
+window.addEventListener("load", resizeAllCardWrappers);
+window.addEventListener("resize", resizeAllCardWrappers);
   </script>
 </body>
 </html>
