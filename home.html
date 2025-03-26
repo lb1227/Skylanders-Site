@@ -31,7 +31,6 @@
       position: sticky;
       top: 0;
       z-index: 1000;
-      flex-wrap: wrap;
     }
     nav h2 {
       margin: 0;
@@ -66,32 +65,22 @@
       transform: scale(1.03);
     }
     img {
-      width: 160px;
+      width: 100%;
       height: auto;
       border-radius: 10px;
       margin-bottom: 0.5rem;
     }
-    .card {
-      background: #292929;
-      border-radius: 12px;
-      padding: 1rem;
+    #collectibleContainer {
       text-align: center;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.6);
-      margin: 1rem;
-      display: inline-block;
-      transition: background-color 0.3s ease;
+      margin: 2rem 0;
     }
-    .owned {
-      background-color: #1f4d1f !important;
-    }
-    .card .qty-input {
-      margin-top: 0.5rem;
-      width: 60px;
-      padding: 0.3rem;
-      font-size: 1rem;
-    }
-    .card button {
-      margin-top: 0.5rem;
+    #collectibleImage {
+      width: 320px;
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
     }
     .hamburger {
       display: none;
@@ -101,9 +90,8 @@
     }
     .nav-links {
       display: flex;
-      gap: 1.5rem;
+      gap: 1rem;
       align-items: center;
-      flex-wrap: wrap;
     }
     .nav-links a, .nav-links button {
       color: white;
@@ -113,45 +101,6 @@
       border: none;
       cursor: pointer;
       font-size: 1rem;
-      padding: 0.3rem 0.6rem;
-    }
-    #logoutBtn {
-      padding: 0.3rem 0.6rem;
-      margin: 0;
-    }
-    .group-section {
-      margin-bottom: 2rem;
-    }
-    .group-header {
-      cursor: pointer;
-      font-size: 1.4rem;
-      background: #2a2a2a;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .cards-wrapper {
-      display: flex;
-      flex-wrap: wrap;
-      transition: all 0.6s ease-in-out;
-      overflow: hidden;
-      opacity: 1;
-      transform: scaleY(1);
-      transform-origin: top;
-    }
-    .collapsed {
-      max-height: 0 !important;
-      opacity: 0;
-      transform: scaleY(0);
-    }
-    .filter-options {
-      margin: 1rem 0;
-    }
-    .filter-options label {
-      margin-right: 1rem;
-      font-size: 0.9rem;
     }
     @media (max-width: 768px) {
       .nav-links {
@@ -171,6 +120,22 @@
         display: block;
       }
     }
+    @keyframes swipeLeft {
+      0% { transform: translateX(0) rotate(0); opacity: 1; }
+      50% { transform: translateX(-50vw) rotate(-10deg); opacity: 0.5; }
+      100% { transform: translateX(-100vw) rotate(-20deg); opacity: 0; }
+    }
+    @keyframes swipeRight {
+      0% { transform: translateX(0) rotate(0); opacity: 1; }
+      50% { transform: translateX(50vw) rotate(10deg); opacity: 0.5; }
+      100% { transform: translateX(100vw) rotate(20deg); opacity: 0; }
+    }
+    .animate-left {
+      animation: swipeLeft 0.5s ease forwards;
+    }
+    .animate-right {
+      animation: swipeRight 0.5s ease forwards;
+    }
   </style>
 </head>
 <body>
@@ -178,128 +143,194 @@
     <h2 style="margin: 0;">Skylanders Tracker</h2>
     <div class="hamburger" onclick="toggleMenu()">☰</div>
     <div id="navMenu" class="nav-links">
-      <a href="home.html">Home</a>
+      <a href="inventory.html">Inventory</a>
       <a href="totals.html">Totals</a>
-      <button id="logoutBtn" style="background-color: var(--button); color: white; border-radius: 8px; font-weight: bold;" onclick="logout()">Logout</button>
+      <button id="loginBtn" onclick="location.href='login.html'">Login</button>
+      <button id="signupBtn" onclick="location.href='signup.html'">Sign Up</button>
+      <button id="logoutBtn" style="display:none; background-color: var(--button); color: white; border-radius: 8px; padding: 0.5rem 1rem; font-weight: bold;" onclick="logout()">Logout</button>
     </div>
   </nav>
   <div class="container">
-    <div class="filter-options">
-      <label><input type="checkbox" id="filterOwned"> Show Owned</label>
-      <label><input type="checkbox" id="filterUnowned"> Show Unowned</label>
+    <h2>Welcome back to Skylanders Tracker</h2>
+    <p>Select a game and begin tracking your collection!</p>
+    <label for="gameSelector">Select Game:</label>
+    <select id="gameSelector">
+      <option value="Spyro's Adventure">Spyro's Adventure</option>
+      <option value="Giants">Giants</option>
+    </select>
+
+    <div id="collectibleContainer">
+      <img id="collectibleImage" alt="Collectible Image" />
+      <p id="collectibleName"></p>
+      <div style="display: flex; justify-content: center; gap: 2rem; margin: 1rem 0;">
+        <button id="dontHaveItBtn" style="background-color: black; color: #e53935; border: 2px solid #e53935; padding: 0.5rem 1rem; border-radius: 6px; font-size: 1.5rem; cursor: pointer;">❌</button>
+        <button id="haveItBtn" style="background-color: black; color: #4caf50; border: 2px solid #4caf50; padding: 0.5rem 1rem; border-radius: 6px; font-size: 1.5rem; cursor: pointer;">✅</button>
+      </div>
+      <button id="reviewSkippedBtn" style="display:none; margin-top: 1rem; background-color: #444; color: white; border: 1px solid #ccc; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">Review Skipped</button>
     </div>
-    <div id="inventoryContainer"></div>
-  </div>
-  <script>
-    const user = localStorage.getItem("sky_user") || "guest";
-    const container = document.getElementById("inventoryContainer");
 
-    function toggleMenu() {
-      document.getElementById("navMenu").classList.toggle("show");
-    }
+    <script>
+      const games = window.games;
+      const elementMap = window.elementMap;
+      let currentGame = document.getElementById("gameSelector").value;
+      let collectibles = games[currentGame];
+      let collectiblesQueue = [...collectibles];
+      let skippedQueue = [];
 
-    function logout() {
-      localStorage.removeItem("sky_user");
-      location.href = "login.html";
-    }
+      function showCurrentCollectible() {
+        const current = collectiblesQueue[0];
+        const img = document.getElementById("collectibleImage");
+        const name = document.getElementById("collectibleName");
+        const reviewBtn = document.getElementById("reviewSkippedBtn");
 
-    function renderInventory() {
-      container.innerHTML = '';
-      for (const [game, characters] of Object.entries(window.games)) {
-        const section = document.createElement("div");
-        section.className = "group-section";
-
-        const header = document.createElement("div");
-        header.className = "group-header";
-        header.innerHTML = `<span>${game}</span><span>▼</span>`;
-        header.onclick = () => cards.classList.toggle("collapsed");
-
-        const cards = document.createElement("div");
-        cards.className = "cards-wrapper";
-
-        characters.forEach(char => {
-          const key = `sky_progress_${user}_${game}`;
-          const saved = localStorage.getItem(key);
-          let isOwned = false;
-          let qty = 1;
-
-          if (saved) {
-            const parsed = JSON.parse(saved);
-            const found = parsed.collected?.find(x => x.name === char.name);
-            if (found) {
-              isOwned = true;
-              qty = found.quantity || 1;
-            }
-          }
-
-          const showOwned = document.getElementById("filterOwned").checked;
-          const showUnowned = document.getElementById("filterUnowned").checked;
-
-          if ((showOwned && !isOwned) || (showUnowned && isOwned)) return;
-
-          const card = document.createElement("div");
-          card.className = "card";
-          if (isOwned) card.classList.add("owned");
-          card.innerHTML = `
-            <img src="${char.image}" alt="${char.name}" />
-            <div><strong>${char.name}</strong></div>
-            <input type="number" min="1" value="${qty}" class="qty-input" onchange="updateQty('${char.name}', '${game}', this)">
-            ${isOwned ? `<button onclick="removeFromInventory('${char.name}', '${game}')">Remove</button>` : ''}
-          `;
-          cards.appendChild(card);
-        });
-
-        section.appendChild(header);
-        section.appendChild(cards);
-        container.appendChild(section);
-      }
-    }
-
-    function updateQty(name, game, input) {
-      const val = parseInt(input.value);
-      if (isNaN(val) || val < 1) {
-        input.classList.add("invalid");
-        setTimeout(() => input.classList.remove("invalid"), 1000);
-        return;
-      }
-      const key = `sky_progress_${user}_${game}`;
-      const saved = localStorage.getItem(key);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        const found = parsed.collected?.find(x => x.name === name);
-        if (found) {
-          found.quantity = val;
-          localStorage.setItem(key, JSON.stringify(parsed));
+        if (current && current.image) {
+          img.src = current.image;
+          name.textContent = current.name;
+          reviewBtn.style.display = "none";
+        } else if (skippedQueue.length > 0) {
+          reviewBtn.style.display = "inline-block";
+          img.src = "";
+          name.textContent = "";
+        } else {
+          img.src = "https://skylanderscharacterlist.com/wp-content/uploads/2014/02/Skylanders-All.jpg";
+          name.textContent = "All Skylanders Reviewed! 🎉";
+          reviewBtn.style.display = "none";
         }
       }
-    }
 
-    function removeFromInventory(name, game) {
-      const key = `sky_progress_${user}_${game}`;
-      const saved = localStorage.getItem(key);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        parsed.collected = parsed.collected?.filter(x => x.name !== name);
-        parsed.queue = parsed.queue || [];
-        const character = window.games[game].find(x => x.name === name);
-        if (character) parsed.queue.push(character);
-        localStorage.setItem(key, JSON.stringify(parsed));
-        renderInventory();
+      function saveProgress() {
+        const user = localStorage.getItem("sky_user") || "guest";
+        const key = `sky_progress_${user}_${currentGame}`;
+        const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], queue: [], skipped: [] };
+        localStorage.setItem(key, JSON.stringify({
+          collected: saved.collected,
+          queue: collectiblesQueue,
+          skipped: skippedQueue
+        }));
       }
-    }
 
-    document.getElementById("filterOwned").addEventListener("change", renderInventory);
-    document.getElementById("filterUnowned").addEventListener("change", renderInventory);
+      document.getElementById("haveItBtn").onclick = () => {
+      const img = document.getElementById("collectibleImage");
+      const current = collectiblesQueue.shift();
+      if (!current) return;
+      img.classList.add("animate-right");
+      const handler = () => {
+        img.classList.remove("animate-right");
+        img.removeEventListener("animationend", handler);
+        current.quantity = 1;
 
-    window.onload = () => {
-      renderInventory();
-      const logoutBtn = document.getElementById("logoutBtn");
-      if (user && user !== "guest") {
-        logoutBtn.style.display = "inline-block";
-      } else {
-        logoutBtn.style.display = "none";
-      }
+        const user = localStorage.getItem("sky_user") || "guest";
+        const key = `sky_progress_${user}_${currentGame}`;
+        const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], queue: [], skipped: [] };
+
+        if (!saved.collected.find(i => i.name === current.name)) {
+          saved.collected.push(current);
+        }
+
+        localStorage.setItem(key, JSON.stringify({
+          collected: saved.collected,
+          queue: collectiblesQueue,
+          skipped: skippedQueue
+        }));
+
+        showCurrentCollectible();
+      };
+      img.addEventListener("animationend", handler);
     };
-  </script>
+
+      document.getElementById("dontHaveItBtn").onclick = () => {
+      const img = document.getElementById("collectibleImage");
+      const current = collectiblesQueue.shift();
+      if (!current) return;
+      img.classList.add("animate-left");
+      const handler = () => {
+        img.classList.remove("animate-left");
+        img.removeEventListener("animationend", handler);
+        skippedQueue.push(current);
+        showCurrentCollectible();
+        saveProgress();
+      };
+      img.addEventListener("animationend", handler);
+    };
+
+      document.getElementById("reviewSkippedBtn").onclick = () => {
+        if (skippedQueue.length === 0) return;
+        collectiblesQueue = [...skippedQueue];
+        skippedQueue = [];
+        showCurrentCollectible();
+      };
+
+      document.getElementById("gameSelector").onchange = () => {
+        const user = localStorage.getItem("sky_user") || "guest";
+        currentGame = document.getElementById("gameSelector").value;
+        const key = `sky_progress_${user}_${currentGame}`;
+        const saved = localStorage.getItem(key);
+        collectibles = games[currentGame];
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          collectiblesQueue = parsed.queue || [...collectibles];
+          skippedQueue = parsed.skipped || [];
+        } else {
+          collectiblesQueue = [...collectibles];
+          skippedQueue = [];
+        }
+        showCurrentCollectible();
+      };
+
+      window.onload = () => {
+        const user = localStorage.getItem("sky_user") || "guest";
+        const key = `sky_progress_${user}_${currentGame}`;
+        const saved = localStorage.getItem(key);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          collectiblesQueue = parsed.queue || [...games[currentGame]];
+          skippedQueue = parsed.skipped || [];
+        }
+        showCurrentCollectible();
+      };
+
+      function logout() {
+        localStorage.removeItem("sky_user");
+        location.reload();
+      }
+
+      function toggleMenu() {
+        document.getElementById("navMenu").classList.toggle("show");
+      }
+
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let touchEndX = 0;
+      let touchEndY = 0;
+
+      const image = document.getElementById("collectibleImage");
+
+      image.addEventListener("touchstart", (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+      });
+
+      image.addEventListener("touchend", (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        touchEndY = e.changedTouches[0].screenY;
+        handleSwipe();
+      });
+
+      function handleSwipe() {
+        const threshold = 50;
+        const verticalThreshold = 50;
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+          if (deltaX < -threshold) document.getElementById("dontHaveItBtn").click();
+          else if (deltaX > threshold) document.getElementById("haveItBtn").click();
+        } else if (deltaY < -verticalThreshold) {
+          alert("Choices submitted!");
+          saveProgress();
+        }
+      }
+    </script>
+  </div>
 </body>
 </html>
