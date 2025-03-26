@@ -119,11 +119,14 @@
       margin-bottom: 1rem;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
     }
+    #mobileNav {
+      display: none;
+    }
+    #mobileMenu {
+      display: none;
+    }
     .hamburger {
       display: none;
-      font-size: 2rem;
-      cursor: pointer;
-      color: white;
     }
 
     @media (max-width: 768px) {
@@ -134,6 +137,17 @@
           touch-action: pan-x;   /* Enable left/right swiping only */
           position: fixed;
         }
+      #mobileNav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        justify-content: space-around;
+        background-color: var(--nav-bg);
+        padding: 0.5rem 0;
+        box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+      }
       .bottom-mobile-nav {
         position: fixed;
         bottom: 0;
@@ -243,14 +257,6 @@
       background-color: var(--button-hover);
     }
     }
-    @media (min-width: 769px) {
-        .mobile-menu {
-          display: none !important;
-        }
-        .hamburger {
-          display: none !important;
-        }
-    }
     @keyframes swipeLeft {
       0% { transform: translateX(0) rotate(0); opacity: 1; }
       50% { transform: translateX(-50vw) rotate(-10deg); opacity: 0.5; }
@@ -287,10 +293,10 @@
       <option value="Giants">Giants</option>
     </select>
 
-    <nav class="bottom-mobile-nav">
+    <nav id= "mobileNav"class="bottom-mobile-nav">
       <a href="home.html" title="Home">🏠</a>
       <a href="inventory.html" title="Inventory">🃏</a>
-      <button class="hamburger" onclick="toggleMenu()">☰</button>
+      <button class="hamburger" onclick="toggleMobileMenu()">☰</button>
     </nav>
 
     <div id="mobileMenu" class="mobile-menu">
@@ -467,10 +473,6 @@
          }
          showCurrentCollectible();
        };
- 
-       function toggleMenu() {
-         document.getElementById("navMenu").classList.toggle("show");
-       }
  
        let touchStartX = 0;
        let touchStartY = 0;
