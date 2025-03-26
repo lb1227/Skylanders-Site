@@ -1,14 +1,13 @@
 const CACHE_NAME = "skylanders-cache-v1";
 const urlsToCache = [
-  "/",
+  "/home.html",
   "/index.html",
   "/inventory.html",
   "/totals.html",
-  "/style.css",
   "/data.js",
   "/manifest.json",
-  "/icon-192.png",
-  "/icon-512.png"
+  "/Bash.png",
+  "/Bash.png"
 ];
 
 // Install event
