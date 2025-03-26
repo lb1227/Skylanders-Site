@@ -133,6 +133,33 @@
           touch-action: pan-x;   /* Enable left/right swiping only */
           position: fixed;
         }
+      .bottom-mobile-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: var(--nav-bg);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 0.5rem 0;
+        z-index: 1000;
+        box-shadow: 0 -2px 6px rgba(0,0,0,0.3);
+      }
+      .bottom-mobile-nav a,
+      .bottom-mobile-nav button {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        padding: 0.5rem;
+        text-decoration: none;
+      }
+    
+      /* Hide top nav on mobile */
+      nav:not(.bottom-mobile-nav) {
+        display: none;
+      }
       nav {
         position: fixed;
         bottom: 0;
@@ -218,6 +245,12 @@
       <option value="Giants">Giants</option>
     </select>
 
+    <nav class="bottom-mobile-nav">
+      <a href="home.html" title="Home">🏠</a>
+      <a href="inventory.html" title="Inventory">🃏</a>
+      <button class="hamburger" onclick="toggleMenu()">☰</button>
+    </nav>
+    
     <div id="collectibleContainer">
       <img id="collectibleImage" alt="Collectible Image" />
       <p id="collectibleName"></p>
