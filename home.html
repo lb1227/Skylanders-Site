@@ -137,7 +137,8 @@
           touch-action: pan-x;   /* Enable left/right swiping only */
           position: fixed;
         }
-      #mobileNav {
+      #mobileNav 
+      {
         display: flex;
         position: fixed;
         bottom: 0;
@@ -345,11 +346,10 @@
       }
       function toggleMobileMenu() {
           const menu = document.getElementById("mobileMenu");
-          menu.classList.toggle("show");
+          menu.style.display = menu.style.display === "flex" ? "none" : "flex";
         }
         
         function goToAccount() {
-          // Replace this with your actual account page if needed
           window.location.href = "account.html";
         }
        const games = window.games;
