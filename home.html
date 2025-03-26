@@ -125,6 +125,7 @@
       cursor: pointer;
       color: white;
     }
+
     @media (max-width: 768px) {
       html, body {
           height: 100%;
@@ -208,6 +209,47 @@
       .inventory-icon {
         background-image: url('icons/cards.svg'); /* use a card icon */
       }
+
+      .mobile-menu {
+        position: fixed;
+        bottom: 60px;
+        right: 20px;
+        background-color: var(--nav-bg);
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+        padding: 1rem;
+        display: none;
+        flex-direction: column;
+        gap: 0.5rem;
+        z-index: 1001;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+      
+      .mobile-menu.show {
+        display: flex;
+      }
+      
+      .mobile-menu button {
+        background-color: var(--card-bg);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        cursor: pointer;
+      }
+    
+    .mobile-menu button:hover {
+      background-color: var(--button-hover);
+    }
+    }
+    @media (min-width: 769px) {
+        .mobile-menu {
+          display: none !important;
+        }
+        .hamburger {
+          display: none !important;
+        }
     }
     @keyframes swipeLeft {
       0% { transform: translateX(0) rotate(0); opacity: 1; }
@@ -230,7 +272,7 @@
 <body onload="initializeApp()">
   <nav>
     <h2 style="margin: 0;">Skylanders Tracker</h2>
-    <div class="hamburger" onclick="toggleMenu()">☰</div>
+    <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
     <div id="navMenu" class="nav-links">
       <a href="inventory.html" class="nav-button">Inventory</a>
       <a href="totals.html" class="nav-button">Totals</a>
@@ -250,6 +292,11 @@
       <a href="inventory.html" title="Inventory">🃏</a>
       <button class="hamburger" onclick="toggleMenu()">☰</button>
     </nav>
+
+    <div id="mobileMenu" class="mobile-menu">
+      <button onclick="goToAccount()">Account</button>
+      <button onclick="logout()">Logout</button>
+    </div>
     
     <div id="collectibleContainer">
       <img id="collectibleImage" alt="Collectible Image" />
@@ -290,9 +337,15 @@
         localStorage.removeItem("sky_user");
         window.location.href = "login.html";
       }
-      function toggleMenu() {
-        document.getElementById("navMenu").classList.toggle("show");
-      }
+      function toggleMobileMenu() {
+          const menu = document.getElementById("mobileMenu");
+          menu.classList.toggle("show");
+        }
+        
+        function goToAccount() {
+          // Replace this with your actual account page if needed
+          window.location.href = "account.html";
+        }
        const games = window.games;
        const elementMap = window.elementMap;
        let currentGame = document.getElementById("gameSelector").value;
