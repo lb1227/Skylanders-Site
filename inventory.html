@@ -8,25 +8,30 @@
     .card-grid.collapsing .card {
       animation: collapseCard 0.4s ease-in-out forwards;
     }
-    .card-grid.collapsing .card:nth-child(1) { animation-delay: 0s; }
-    .card-grid.collapsing .card:nth-child(2) { animation-delay: 0.05s; }
-    .card-grid.collapsing .card:nth-child(3) { animation-delay: 0.1s; }
-    .card-grid.collapsing .card:nth-child(4) { animation-delay: 0.15s; }
-    .card-grid.collapsing .card:nth-child(5) { animation-delay: 0.2s; }
-    .card-grid.collapsing .card:nth-child(6) { animation-delay: 0.25s; }
-    .card-grid.collapsing .card:nth-child(7) { animation-delay: 0.3s; }
-    .card-grid.collapsing .card:nth-child(8) { animation-delay: 0.35s; }
-    .card-grid.collapsing .card:nth-child(9) { animation-delay: 0.4s; }
-    .card-grid.collapsing .card:nth-child(10) { animation-delay: 0.45s; }
+    .card-grid.collapsing .card {
+      animation: collapseCard 0.4s ease-in-out forwards;
+    }
+    .card-grid.collapsing .card:nth-last-child(1) { animation-delay: 0s; }
+    .card-grid.collapsing .card:nth-last-child(2) { animation-delay: 0.05s; }
+    .card-grid.collapsing .card:nth-last-child(3) { animation-delay: 0.1s; }
+    .card-grid.collapsing .card:nth-last-child(4) { animation-delay: 0.15s; }
+    .card-grid.collapsing .card:nth-last-child(5) { animation-delay: 0.2s; }
+    .card-grid.collapsing .card:nth-last-child(6) { animation-delay: 0.25s; }
+    .card-grid.collapsing .card:nth-last-child(7) { animation-delay: 0.3s; }
+    .card-grid.collapsing .card:nth-last-child(8) { animation-delay: 0.35s; }
+    .card-grid.collapsing .card:nth-last-child(9) { animation-delay: 0.4s; }
+    .card-grid.collapsing .card:nth-last-child(10) { animation-delay: 0.45s; }
 
     @keyframes collapseCard {
       0% {
         opacity: 1;
         transform: translate(0, 0);
+        z-index: 1;
       }
       100% {
         opacity: 0;
-        transform: translate(-50%, -20px) scale(0.8);
+        transform: translateY(-40px) scale(0.8);
+        z-index: 0;
       }
     }
     body {
@@ -67,21 +72,7 @@
     .card.gray {
       background-color: #424242;
     }
-      .card-grid.collapsing {
-      animation: collapseDeck 0.6s ease forwards;
-    }
-
-    @keyframes collapseDeck {
-      0% {
-        opacity: 1;
-        transform: scale(1) translateX(0);
-      }
-      100% {
-        opacity: 0;
-        transform: scale(0.9) translateX(-50%) translateY(20px);
-      }
-    }
-</style>
+  </style>
 </head>
 <body>
   <h1>Your Skylanders Collection</h1>
@@ -156,6 +147,10 @@ function removeFromInventory(name) {
         const heading = document.createElement("h2");
         heading.textContent = game;
         heading.style.cursor = "pointer";
+
+        const grid = document.createElement("div");
+        grid.className = "card-grid";
+
         heading.onclick = () => {
           if (grid.style.display === "none") {
             grid.style.display = "grid";
@@ -167,10 +162,8 @@ function removeFromInventory(name) {
             }, 600);
           }
         };
-        section.appendChild(heading);
 
-        const grid = document.createElement("div");
-        grid.className = "card-grid";
+        section.appendChild(heading);
 
         games[game].forEach(({ name, image }) => {
           const owned = inventory[name];
