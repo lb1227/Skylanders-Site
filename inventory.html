@@ -49,7 +49,9 @@
   <h1>Your Skylanders Collection</h1>
   <div id="inventoryGrid"></div>
 
-  <script src="data.js">function removeFromInventory(name) {
+  <script src="data.js"></script>
+<script>
+function removeFromInventory(name) {
   const user = localStorage.getItem("sky_user") || "guest";
   const gameKeys = Object.keys(games);
   gameKeys.forEach(game => {
@@ -85,18 +87,6 @@
             match.quantity = value;
             localStorage.setItem(key, JSON.stringify(data));
           }
-        }
-      });
-    }
-
-    function changeQuantity(name, delta) {
-      const inputs = document.querySelectorAll(`input[data-name='${name}']`);
-      inputs.forEach(input => {
-        let current = parseInt(input.value);
-        if (!isNaN(current)) {
-          const newVal = Math.max(1, current + delta);
-          input.value = newVal;
-          updateQuantity(name, input);
         }
       });
     }
@@ -139,9 +129,7 @@
             <img src="${image}" alt="${name}" />
             <div><strong>${name}</strong></div>
             ${owned ? `<div>Quantity:
-              <button onclick="changeQuantity('${name}', -1)">-</button>
               <input type="number" data-name="${name}" min="1" step="1" value="${owned.quantity}" onchange="updateQuantity('${name}', this)" style="width: 50px; text-align: center;">
-              <button onclick="changeQuantity('${name}', 1)">+</button>
               <br><button onclick="removeFromInventory('${name}')" style="margin-top: 0.5rem; background: #e53935; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer;">Remove</button>
             </div>` : `<div>Not owned</div>`}
           `;
