@@ -217,20 +217,20 @@
         const cards = document.createElement("div");
         cards.className = "cards-wrapper";
 
-        characters.forEach(char => {
-          const key = `sky_progress_${user}_${game}`;
-          const saved = localStorage.getItem(key);
-          let isOwned = false;
-          let qty = 1;
+        const key = `sky_progress_${user}_${game}`;
+        const saved = localStorage.getItem(key);
+        let collected = [];
+        let queue = [];
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          collected = parsed.collected || [];
+          queue = parsed.queue || [];
+        }
 
-          if (saved) {
-            const parsed = JSON.parse(saved);
-            const found = parsed.collected?.find(x => x.name === char.name);
-            if (found) {
-              isOwned = true;
-              qty = found.quantity || 1;
-            }
-          }
+        characters.forEach(char => {
+          const found = collected.find(x => x.name === char.name);
+          const isOwned = !!found;
+          const qty = found?.quantity || 1;
 
           const showOwned = document.getElementById("filterOwned").checked;
           const showUnowned = document.getElementById("filterUnowned").checked;
@@ -276,24 +276,22 @@
     }
 
     function removeFromInventory(name, game) {
-  const key = `sky_progress_${user}_${game}`;
-  const saved = localStorage.getItem(key);
-  if (saved) {
-    const parsed = JSON.parse(saved);
+      const key = `sky_progress_${user}_${game}`;
+      const saved = localStorage.getItem(key);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        parsed.collected = (parsed.collected || []).filter(x => x.name !== name);
 
-    parsed.collected = (parsed.collected || []).filter(x => x.name !== name);
-    parsed.queue = parsed.queue || [];
+        const character = window.games[game].find(x => x.name === name);
+        if (character && !parsed.queue.some(x => x.name === name)) {
+          parsed.queue = parsed.queue || [];
+          parsed.queue.push(character);
+        }
 
-    const character = window.games[game].find(x => x.name === name);
-    const alreadyQueued = parsed.queue.some(x => x.name === name);
-    if (character && !alreadyQueued) {
-      parsed.queue.push(character);
+        localStorage.setItem(key, JSON.stringify(parsed));
+        renderInventory();
+      }
     }
-
-    localStorage.setItem(key, JSON.stringify(parsed));
-    renderInventory(); // no need to wait
-  }
-}
 
     document.getElementById("filterOwned").addEventListener("change", renderInventory);
     document.getElementById("filterUnowned").addEventListener("change", renderInventory);
