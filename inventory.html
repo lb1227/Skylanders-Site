@@ -142,23 +142,8 @@
       opacity: 0;
       transform: scaleY(0);
     }
-    .sort-btn {
-      margin-left: auto;
-      background-color: var(--accent);
-      color: white;
-      padding: 0.3rem 0.8rem;
-      border-radius: 6px;
-      font-size: 0.9rem;
-    }
-    .sort-options {
-      margin-top: 0.5rem;
-      display: none;
-    }
-    .sort-options select {
-      width: 100%;
-    }
     .filter-options {
-      margin-top: 0.5rem;
+      margin: 1rem 0;
     }
     .filter-options label {
       margin-right: 1rem;
@@ -194,7 +179,13 @@
       <button id="logoutBtn" style="background-color: var(--button); color: white; border-radius: 8px; font-weight: bold;" onclick="logout()">Logout</button>
     </div>
   </nav>
-  <div class="container" id="inventoryContainer"></div>
+  <div class="container">
+    <div class="filter-options">
+      <label><input type="checkbox" id="filterOwned"> Show Owned</label>
+      <label><input type="checkbox" id="filterUnowned"> Show Unowned</label>
+    </div>
+    <div id="inventoryContainer"></div>
+  </div>
   <script>
     const user = localStorage.getItem("sky_user") || "guest";
     const container = document.getElementById("inventoryContainer");
@@ -236,6 +227,11 @@
               qty = found.quantity || 1;
             }
           }
+
+          const showOwned = document.getElementById("filterOwned").checked;
+          const showUnowned = document.getElementById("filterUnowned").checked;
+
+          if ((showOwned && !isOwned) || (showUnowned && isOwned)) return;
 
           const card = document.createElement("div");
           card.className = "card";
@@ -287,6 +283,9 @@
         renderInventory();
       }
     }
+
+    document.getElementById("filterOwned").addEventListener("change", renderInventory);
+    document.getElementById("filterUnowned").addEventListener("change", renderInventory);
 
     window.onload = renderInventory;
   </script>
