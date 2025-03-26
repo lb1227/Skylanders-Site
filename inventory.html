@@ -241,6 +241,7 @@
     <h2 style="margin: 0;">Skylanders Tracker</h2>
     <div class="hamburger" onclick="toggleMenu()">☰</div>
     <div id="navMenu" class="nav-links">
+      <input type="text" id="searchInput" placeholder="Search Skylanders..." style="margin-top: 0.5rem; max-width: 200px; background-color: #2a2a2a; color: white; border-radius: 6px; border: none; padding: 0.4rem 0.8rem;">
       <a href="home.html">Home</a>
       <a href="totals.html">Totals</a>
       <button id="logoutBtn" onclick="logout()" style="background-color: var(--button); color: white; border-radius: 8px; font-weight: bold;">Logout</button>
@@ -384,6 +385,13 @@ window.addEventListener("scroll", () => {
 
   lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // avoid negative scroll
 }, false);
+    document.getElementById("searchInput").addEventListener("input", function() {
+    const query = this.value.toLowerCase();
+    document.querySelectorAll(".card").forEach(card => {
+      const name = card.querySelector("strong").textContent.toLowerCase();
+      card.style.display = name.includes(query) ? "inline-block" : "none";
+    });
+  });
   </script>
 </body>
 </html>
