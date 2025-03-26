@@ -228,7 +228,7 @@
         }
 
         characters.forEach(char => {
-          const found = collected.find(x => x.name === char.name);
+          const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
           const isOwned = !!found;
           const qty = found?.quantity || 1;
 
@@ -244,8 +244,8 @@
           card.innerHTML = `
             <img src="${char.image}" alt="${char.name}" />
             <div><strong>${char.name}</strong></div>
-            ${isOwned ? `<input type="number" min="1" value="${qty}" class="qty-input" onchange="updateQty('${char.name}', '${game}', this)">` : ''}
-            ${isOwned ? `<button onclick="removeFromInventory('${char.name}', '${game}')">Remove</button>` : ''}
+            ${isOwned ? `<input type="number" min="1" value="${qty}" class="qty-input" onchange="updateQty('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}', this)">` : ''}
+            ${isOwned ? `<button onclick="removeFromInventory('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}')">Remove</button>` : ''}
           `;
           cards.appendChild(card);
         });
@@ -267,7 +267,7 @@
       const saved = localStorage.getItem(key);
       if (saved) {
         const parsed = JSON.parse(saved);
-        const found = parsed.collected?.find(x => x.name === name);
+        const found = parsed.collected?.find(x => x.name.trim().toLowerCase() === name.trim().toLowerCase());
         if (found) {
           found.quantity = val;
           localStorage.setItem(key, JSON.stringify(parsed));
@@ -276,27 +276,21 @@
     }
 
     function removeFromInventory(name, game) {
-  const key = `sky_progress_${user}_${game}`;
-  const saved = localStorage.getItem(key);
-  if (saved) {
-    const parsed = JSON.parse(saved);
-
-    // Remove from collected
-    parsed.collected = (parsed.collected || []).filter(x => x.name !== name);
-
-    // Add to queue if not already there
-    const character = window.games[game].find(x => x.name === name);
-    if (character && !parsed.queue.some(x => x.name === name)) {
-      parsed.queue = parsed.queue || [];
-      parsed.queue.push(character);
+      const key = `sky_progress_${user}_${game}`;
+      const saved = localStorage.getItem(key);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        parsed.collected = (parsed.collected || []).filter(x => x.name.trim().toLowerCase() !== name.trim().toLowerCase());
+        const character = window.games[game].find(x => x.name.trim().toLowerCase() === name.trim().toLowerCase());
+        if (character && !parsed.queue.some(x => x.name.trim().toLowerCase() === name.trim().toLowerCase())) {
+          parsed.queue.push(character);
+        }
+        localStorage.setItem(key, JSON.stringify(parsed));
+        renderInventory();
+      } else {
+        console.warn(`No saved data found for key ${key}`);
+      }
     }
-
-    localStorage.setItem(key, JSON.stringify(parsed));
-    renderInventory();
-  } else {
-    console.warn(`No saved data found for key ${key}`);
-  }
-}
 
     document.getElementById("filterOwned").addEventListener("change", renderInventory);
     document.getElementById("filterUnowned").addEventListener("change", renderInventory);
