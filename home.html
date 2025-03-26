@@ -82,60 +82,6 @@
       margin-bottom: 1rem;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
     }
-    .qty-input.invalid {
-      border: 2px solid red;
-      background-color: #3a0000;
-    }
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2rem;
-    }
-    .card {
-      background: #292929;
-      border-radius: 12px;
-      padding: 1rem;
-      text-align: center;
-      position: relative;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.6);
-      transition: transform 0.3s ease;
-    }
-    .card:hover {
-      transform: translateY(-5px);
-    }
-    .card img {
-      width: 100%;
-      max-width: 160px;
-      height: auto;
-      border-radius: 10px;
-      margin-bottom: 0.5rem;
-    }
-    .card .qty-input {
-      margin-top: 0.5rem;
-      width: 60px;
-      padding: 0.3rem;
-      font-size: 1rem;
-    }
-    .card button {
-      margin-top: 0.5rem;
-    }
-    @keyframes swipeLeft {
-      0% { transform: translateX(0) rotate(0); opacity: 1; }
-      50% { transform: translateX(-50vw) rotate(-10deg); opacity: 0.5; }
-      100% { transform: translateX(-100vw) rotate(-20deg); opacity: 0; }
-    }
-    @keyframes swipeRight {
-      0% { transform: translateX(0) rotate(0); opacity: 1; }
-      50% { transform: translateX(50vw) rotate(10deg); opacity: 0.5; }
-      100% { transform: translateX(100vw) rotate(20deg); opacity: 0; }
-    }
-    .animate-left {
-      animation: swipeLeft 0.5s ease forwards;
-    }
-    .animate-right {
-      animation: swipeRight 0.5s ease forwards;
-    }
     .hamburger {
       display: none;
       font-size: 2rem;
@@ -179,9 +125,7 @@
 <body>
   <nav>
   <h2 style="margin: 0;">Skylanders Tracker</h2>
-  <div class="hamburger" onclick="toggleMenu()">
-    ☰
-  </div>
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
   <div id="navMenu" class="nav-links">
     <a href="inventory.html">Inventory</a>
     <a href="totals.html">Totals</a>
@@ -208,7 +152,6 @@
       </div>
       <button id="reviewSkippedBtn" style="display:none; margin-top: 1rem; background-color: #444; color: white; border: 1px solid #ccc; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">Review Skipped</button>
     </div>
-    <div class="card-grid" id="cardGrid"></div>
 
     <script>      
 
