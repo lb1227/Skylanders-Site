@@ -115,6 +115,10 @@
       font-size: 1rem;
       padding: 0.3rem 0.6rem;
     }
+    #logoutBtn {
+      padding: 0.3rem 0.6rem;
+      margin: 0;
+    }
     .group-section {
       margin-bottom: 2rem;
     }
@@ -287,7 +291,15 @@
     document.getElementById("filterOwned").addEventListener("change", renderInventory);
     document.getElementById("filterUnowned").addEventListener("change", renderInventory);
 
-    window.onload = renderInventory;
+    window.onload = () => {
+      renderInventory();
+      const logoutBtn = document.getElementById("logoutBtn");
+      if (user && user !== "guest") {
+        logoutBtn.style.display = "inline-block";
+      } else {
+        logoutBtn.style.display = "none";
+      }
+    };
   </script>
 </body>
 </html>
