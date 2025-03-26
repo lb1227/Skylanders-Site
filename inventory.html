@@ -12,9 +12,9 @@
       margin: 0;
       padding: 2rem;
     }
-    h1 {
+    h1, h2 {
       text-align: center;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
     .card-grid {
       display: grid;
@@ -49,7 +49,9 @@
   <h1>Your Skylanders Collection</h1>
   <div id="inventoryGrid"></div>
 
-  <script src="data.js">function updateQuantity(name, input) {
+  <script src="data.js"></script>
+  <script>
+    function updateQuantity(name, input) {
       const value = parseInt(input.value);
       if (isNaN(value) || value < 1) {
         input.style.border = "2px solid red";
@@ -70,62 +72,49 @@
         }
       });
     }
-  function changeQuantity(name, delta) {
-  const inputs = document.querySelectorAll(`input[onchange*='${name.replace(/'/g, "\'")}'"]);
-  inputs.forEach(input => {
-    let current = parseInt(input.value);
-    if (!isNaN(current)) {
-      const newVal = Math.max(1, current + delta);
-      input.value = newVal;
-      updateQuantity(name, input);
+
+    function changeQuantity(name, delta) {
+      const inputs = document.querySelectorAll(`input[data-name='${name}']`);
+      inputs.forEach(input => {
+        let current = parseInt(input.value);
+        if (!isNaN(current)) {
+          const newVal = Math.max(1, current + delta);
+          input.value = newVal;
+          updateQuantity(name, input);
+        }
+      });
     }
-  });
-}
-</script>
-<script>
+
     window.addEventListener('DOMContentLoaded', () => {
       const user = localStorage.getItem("sky_user") || "guest";
       const inventory = {};
 
       Object.keys(games).forEach(game => {
-  const section = document.createElement("section");
-  const heading = document.createElement("h2");
-  heading.textContent = game;
-  heading.style.marginTop = "2rem";
-  heading.style.textAlign = "center";
-  section.appendChild(heading);
-
-  const grid = document.createElement("div");
-  grid.className = "card-grid";
-
-  games[game].forEach(({ name, image }) => {
-    const owned = inventory[name];
-    const card = document.createElement("div");
-    card.className = "card " + (owned ? "green" : "gray");
-    card.innerHTML = `
-      <img src="${image}" alt="${name}" />
-      <div><strong>${name}</strong></div>
-      ${owned ? `<div>Quantity:
-        <button onclick="changeQuantity('${name}', -1')">-</button>
-        <input type="number" min="1" step="1" value="${owned.quantity}" onchange="updateQuantity('${name}', this)" style="width: 50px; text-align: center;">
-        <button onclick="changeQuantity('${name}', 1')">+</button>
-      </div>` : `<div>Not owned</div>`}
-    `;
-    grid.appendChild(card);
-  });
-
-  section.appendChild(grid);
-  document.getElementById("inventoryGrid").appendChild(section);
-});
+        const saved = localStorage.getItem(`sky_progress_${user}_${game}`);
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved);
+            parsed.collected.forEach(c => {
+              inventory[c.name] = {
+                quantity: Math.max(1, Math.floor(c.quantity || 1)),
+                image: c.image
+              };
+            });
           } catch (e) {
             console.error(`Error loading ${game} progress`, e);
           }
         }
       });
 
-      const grid = document.getElementById("inventoryGrid");
-
       Object.keys(games).forEach(game => {
+        const section = document.createElement("section");
+        const heading = document.createElement("h2");
+        heading.textContent = game;
+        section.appendChild(heading);
+
+        const grid = document.createElement("div");
+        grid.className = "card-grid";
+
         games[game].forEach(({ name, image }) => {
           const owned = inventory[name];
           const card = document.createElement("div");
@@ -135,12 +124,15 @@
             <div><strong>${name}</strong></div>
             ${owned ? `<div>Quantity:
               <button onclick="changeQuantity('${name}', -1)">-</button>
-              <input type="number" min="1" step="1" value="${owned.quantity}" onchange="updateQuantity('${name}', this)" style="width: 50px; text-align: center;">
+              <input type="number" data-name="${name}" min="1" step="1" value="${owned.quantity}" onchange="updateQuantity('${name}', this)" style="width: 50px; text-align: center;">
               <button onclick="changeQuantity('${name}', 1)">+</button>
             </div>` : `<div>Not owned</div>`}
           `;
           grid.appendChild(card);
         });
+
+        section.appendChild(grid);
+        document.getElementById("inventoryGrid").appendChild(section);
       });
     });
   </script>
