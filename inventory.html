@@ -113,6 +113,7 @@
       border: none;
       cursor: pointer;
       font-size: 1rem;
+      padding: 0.3rem 0.6rem;
     }
     .group-section {
       margin-bottom: 2rem;
@@ -190,154 +191,101 @@
     <div id="navMenu" class="nav-links">
       <a href="home.html">Home</a>
       <a href="totals.html">Totals</a>
-      <button id="logoutBtn" onclick="logout()">Logout</button>
+      <button id="logoutBtn" style="background-color: var(--button); color: white; border-radius: 8px; font-weight: bold;" onclick="logout()">Logout</button>
     </div>
   </nav>
   <div class="container" id="inventoryContainer"></div>
   <script>
+    const user = localStorage.getItem("sky_user") || "guest";
+    const container = document.getElementById("inventoryContainer");
+
+    function toggleMenu() {
+      document.getElementById("navMenu").classList.toggle("show");
+    }
+
     function logout() {
       localStorage.removeItem("sky_user");
       location.href = "login.html";
     }
-    function toggleMenu() {
-      document.getElementById("navMenu").classList.toggle("show");
-    }
-    function removeFromInventoryAndQueue(name) {
-      const user = localStorage.getItem("sky_user") || "guest";
-      const gameKeys = Object.keys(window.games);
-      gameKeys.forEach(game => {
-        const key = `sky_progress_${user}_${game}`;
-        const data = JSON.parse(localStorage.getItem(key));
-        if (data) {
-          const index = data.collected.findIndex(i => i.name === name);
-          if (index !== -1) {
-            const removed = data.collected.splice(index, 1)[0];
-            if (!data.queue.find(i => i.name === name)) {
-              data.queue.push(removed);
-            }
-            localStorage.setItem(key, JSON.stringify(data));
-          }
-        }
-      });
-      location.reload();
-    }
+
     function renderInventory() {
-      const container = document.getElementById("inventoryContainer");
-      const user = localStorage.getItem("sky_user") || "guest";
-      const games = window.games;
-      Object.entries(games).forEach(([game, characters]) => {
+      container.innerHTML = '';
+      for (const [game, characters] of Object.entries(window.games)) {
         const section = document.createElement("div");
         section.className = "group-section";
 
         const header = document.createElement("div");
         header.className = "group-header";
-        header.innerHTML = `${game} <button class="sort-btn" onclick="toggleSortOptions(this)">Sort ▼</button>`;
-        section.appendChild(header);
+        header.innerHTML = `<span>${game}</span><span>▼</span>`;
+        header.onclick = () => cards.classList.toggle("collapsed");
 
-        const sortOptions = document.createElement("div");
-        sortOptions.className = "sort-options";
-        sortOptions.innerHTML = `
-          <select onchange="sortGroup(this, '${game}')">
-            <option value="alpha">Alphabetical</option>
-          </select>
-          <div class="filter-options">
-            <label><input type="checkbox" onchange="filterOwned(this, '${game}')"> Show Only Owned</label>
-            <label><input type="checkbox" onchange="filterUnowned(this, '${game}')"> Show Only Unowned</label>
-          </div>
-        `;
-        section.appendChild(sortOptions);
-
-        const wrapper = document.createElement("div");
-        wrapper.className = "cards-wrapper";
-        wrapper.setAttribute("data-game", game);
+        const cards = document.createElement("div");
+        cards.className = "cards-wrapper";
 
         characters.forEach(char => {
           const key = `sky_progress_${user}_${game}`;
-          const data = JSON.parse(localStorage.getItem(key));
-          const owned = data?.collected?.find(item => item.name === char.name);
+          const saved = localStorage.getItem(key);
+          let isOwned = false;
+          let qty = 1;
+
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            const found = parsed.collected?.find(x => x.name === char.name);
+            if (found) {
+              isOwned = true;
+              qty = found.quantity || 1;
+            }
+          }
 
           const card = document.createElement("div");
           card.className = "card";
-          if (owned) card.classList.add("owned");
-
-          const img = document.createElement("img");
-          img.src = char.image;
-          card.appendChild(img);
-
-          const name = document.createElement("div");
-          name.textContent = char.name;
-          card.appendChild(name);
-
-          if (owned) {
-            const qty = document.createElement("input");
-            qty.type = "number";
-            qty.value = owned.quantity || 1;
-            qty.min = 1;
-            qty.className = "qty-input";
-            qty.addEventListener("change", () => {
-              const val = parseInt(qty.value);
-              if (!isNaN(val) && val >= 1) {
-                owned.quantity = val;
-                data.collected = data.collected.map(i => i.name === owned.name ? owned : i);
-                localStorage.setItem(key, JSON.stringify(data));
-              }
-            });
-            card.appendChild(qty);
-
-            const removeBtn = document.createElement("button");
-            removeBtn.textContent = "Remove";
-            removeBtn.onclick = () => removeFromInventoryAndQueue(owned.name);
-            card.appendChild(removeBtn);
-          }
-          wrapper.appendChild(card);
+          if (isOwned) card.classList.add("owned");
+          card.innerHTML = `
+            <img src="${char.image}" alt="${char.name}" />
+            <div><strong>${char.name}</strong></div>
+            <input type="number" min="1" value="${qty}" class="qty-input" onchange="updateQty('${char.name}', '${game}', this)">
+            ${isOwned ? `<button onclick="removeFromInventory('${char.name}', '${game}')">Remove</button>` : ''}
+          `;
+          cards.appendChild(card);
         });
 
-        section.appendChild(wrapper);
-        header.onclick = (e) => {
-          if (e.target.tagName !== "BUTTON") {
-            wrapper.classList.toggle("collapsed");
-          }
-        };
+        section.appendChild(header);
+        section.appendChild(cards);
         container.appendChild(section);
-      });
+      }
     }
 
-    function toggleSortOptions(button) {
-      const section = button.closest(".group-section");
-      const options = section.querySelector(".sort-options");
-      options.style.display = options.style.display === "block" ? "none" : "block";
+    function updateQty(name, game, input) {
+      const val = parseInt(input.value);
+      if (isNaN(val) || val < 1) {
+        input.classList.add("invalid");
+        setTimeout(() => input.classList.remove("invalid"), 1000);
+        return;
+      }
+      const key = `sky_progress_${user}_${game}`;
+      const saved = localStorage.getItem(key);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        const found = parsed.collected?.find(x => x.name === name);
+        if (found) {
+          found.quantity = val;
+          localStorage.setItem(key, JSON.stringify(parsed));
+        }
+      }
     }
 
-    function sortGroup(selectEl, game) {
-      const wrapper = selectEl.closest(".group-section").querySelector(".cards-wrapper");
-      const cards = Array.from(wrapper.children);
-      const value = selectEl.value;
-
-      cards.sort((a, b) => {
-        const nameA = a.querySelector("div").textContent;
-        const nameB = b.querySelector("div").textContent;
-        return nameA.localeCompare(nameB);
-      });
-
-      cards.forEach(card => wrapper.appendChild(card));
-    }
-
-    function filterOwned(checkbox, game) {
-      const wrapper = document.querySelector(`.cards-wrapper[data-game='${game}']`);
-      const cards = wrapper.querySelectorAll(".card");
-      cards.forEach(card => {
-        const show = checkbox.checked ? card.classList.contains("owned") : true;
-        card.style.display = show ? "inline-block" : "none";
-      });
-    }
-
-    function filterUnowned(checkbox, game) {
-      const wrapper = document.querySelector(`.cards-wrapper[data-game='${game}']`);
-      const cards = wrapper.querySelectorAll(".card");
-      cards.forEach(card => {
-        const show = checkbox.checked ? !card.classList.contains("owned") : true;
-        card.style.display = show ? "inline-block" : "none";
-      });
+    function removeFromInventory(name, game) {
+      const key = `sky_progress_${user}_${game}`;
+      const saved = localStorage.getItem(key);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        parsed.collected = parsed.collected?.filter(x => x.name !== name);
+        parsed.queue = parsed.queue || [];
+        const character = window.games[game].find(x => x.name === name);
+        if (character) parsed.queue.push(character);
+        localStorage.setItem(key, JSON.stringify(parsed));
+        renderInventory();
+      }
     }
 
     window.onload = renderInventory;
