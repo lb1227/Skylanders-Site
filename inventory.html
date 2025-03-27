@@ -34,7 +34,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
       position: sticky;
       top: 0;
       z-index: 1000;
@@ -235,14 +235,44 @@
       transform: translateX(22px);
     }
 
-    /* Mobile navbar styling */
+    .top-mobile-nav
+    {
+      display: none;
+      background-color: var(--nav-bg);
+      padding: 0.25rem 0.5rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 999;
+    }
+
+    .top-mobile-nav input,
+    .top-mobile-nav label
+    {
+      margin-top: 0;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.7rem;
+      max-width: 140px;
+    }
+
     @media (max-width: 768px)
     {
+      #navTopMobile
+      {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+      }
+
       body
       {
         padding-top: 40px;
       }
+    }
 
+    @media (max-width: 768px)
+    {
       .filter-sticky
       {
         display: none;
@@ -312,7 +342,28 @@
         height: 100%;
         width: 100%;
       }
+    }
 
+    .collapsed
+    {
+      max-height: 0 !important;
+      opacity: 0;
+      transform: scaleY(0);
+    }
+
+    .filter-options
+    {
+      margin: 1rem 0;
+    }
+
+    .filter-options label
+    {
+      margin-right: 1rem;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px)
+    {
       #mobileNav
       {
         display: flex;
@@ -324,6 +375,53 @@
         padding: 0.5rem 0;
         box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.3);
         z-index: 1000;
+      }
+
+      .bottom-mobile-nav
+      {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: var(--nav-bg);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 0.5rem 0;
+        z-index: 1000;
+        box-shadow: 0 -2px 6px rgba(0,0,0,0.3);
+      }
+
+      .bottom-mobile-nav a, .bottom-mobile-nav button
+      {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        padding: 0.5rem;
+        text-decoration: none;
+      }
+
+      .home-icon
+      {
+        display: block;
+        background-image: url('icons/home.svg');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 40px;
+        height: 40px;
+      }
+
+      .inventory-icon
+      {
+        display: block;
+        background-image: url('icons/cards.svg');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 40px;
+        height: 40px;
       }
 
       .hamburger
@@ -428,6 +526,12 @@
     </div>
   </nav>
 
+  <nav id="mobileNav" class="bottom-mobile-nav">
+    <a href="home.html" title="Home" class="home-icon"></a>
+    <a href="inventory.html" title="Inventory" class="inventory-icon"></a>
+    <button class="hamburger" onclick="toggleMobileMenu()">☰</button>
+  </nav>
+
   <div id="mobileMenu" class="mobile-menu">
     <button onclick="goToAccount()">Account</button>
     <button onclick="logout()">Logout</button>
@@ -456,9 +560,3 @@
     </div>
     <div id="inventoryContainer"></div>
   </div>
-  
-  <script>
-    // Your script here
-  </script>
-</body>
-</html>
