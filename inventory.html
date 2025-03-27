@@ -157,6 +157,7 @@
       transform: scaleY(1);
       transform-origin: top;
     }
+
     /* Toggle Switch Style */
     .switch 
     {
@@ -211,27 +212,6 @@
       transform: translateX(22px);
     }
 
-    .top-mobile-nav 
-    {
-      display: none;
-      background-color: var(--nav-bg);
-      padding: 0.25rem 0.5rem;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 999;
-    }
-
-    .top-mobile-nav input,
-    .top-mobile-nav label 
-    {
-      margin-top: 0;
-      padding: 0.2rem 0.5rem;
-      font-size: 0.7rem;
-      max-width: 140px;
-    }
-
     @media (max-width: 768px) 
     {
       #desktopNav 
@@ -249,10 +229,7 @@
       {
         padding-top: 40px; /* Prevent top nav overlap */
       }
-    }
 
-    @media (max-width: 768px) 
-    {
       .filter-sticky 
       {
         display: none;
@@ -266,22 +243,22 @@
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 4px;
-        padding: 0; /* keep it tight */
+        padding: 0;
       }
 
       .card 
       {
-        width: 100%;        /* fill the grid cell */
-        margin: 0;          /* no external spacing */
-        padding: 4px;       /* small internal spacing */
-        box-sizing: border-box; /* include padding in width */
+        width: 100%;
+        margin: 0;
+        padding: 4px;
+        box-sizing: border-box;
         border-radius: 12px;
         text-align: center;
         box-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
         transition: background-color 0.3s ease;
 
-        display: flex;        /* Use flex to align items inside the card */
-        flex-direction: column; /* Stack image and text vertically */
+        display: flex;
+        flex-direction: column;
         height: auto;  
         width: 65px;
       }
@@ -291,9 +268,9 @@
         width: 60px;
         height: 60px;
         border-radius: 8px;
-        object-fit: contain; /* Maintain aspect ratio without cropping */
-        max-width: 100%;    /* Prevent stretching beyond container */
-        max-height: 100%; 
+        object-fit: contain;
+        max-width: 100%;
+        max-height: 100%;
         margin: 0;
         padding: 0;
       }
@@ -303,10 +280,11 @@
         font-size: 0.4rem;
         margin: 0;
         padding: 0;
-        line-height: 1;  /* Still using a tight line-height */
-        display: inline-block;  /* Make it inline-block to avoid vertical space */
+        line-height: 1;
+        display: inline-block;
         vertical-align: top;  
       }
+
       .card button 
       {
         padding: 0.25rem 0.5rem;
@@ -314,19 +292,21 @@
         margin-top: 0;
         padding-top: 0;
         line-height: 1; 
-        display: flex; /* Use flex to center content */
-        justify-content: center; /* Align text horizontally */
-        align-items: center; /* Align text vertically */
-        height: 100%; /* Ensure the button height is consistent */
-        width: 100%; /* Ensure the button width is consistent */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 100%;
       }
     }
+
     .collapsed 
     {
       max-height: 0 !important;
       opacity: 0;
       transform: scaleY(0);
     }
+
     .filter-options 
     {
       margin: 1rem 0;
@@ -336,9 +316,10 @@
       margin-right: 1rem;
       font-size: 0.9rem;
     }
+
+    /* Mobile navbar styling */
     @media (max-width: 768px) 
     {
-      /* Mobile navbar styling */
       #mobileNav 
       {
         display: flex;
@@ -351,6 +332,7 @@
         box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.3);
         z-index: 1000;
       }
+
       .bottom-mobile-nav 
       {
         position: fixed;
@@ -365,7 +347,7 @@
         z-index: 1000;
         box-shadow: 0 -2px 6px rgba(0,0,0,0.3);
       }
-
+      
       .bottom-mobile-nav a, .bottom-mobile-nav button 
       {
         background: none;
@@ -375,11 +357,11 @@
         padding: 0.5rem;
         text-decoration: none;
       }
-      /* Show home icon on mobile */
+
       .home-icon 
       {
         display: block;
-        background-image: url('icons/home.svg'); /* Use home icon image */
+        background-image: url('icons/home.svg');
         background-size: contain;
         background-repeat: no-repeat;
         background-position: center;
@@ -387,17 +369,17 @@
         height: 40px;
       }
 
-      /* Show inventory icon on mobile */
       .inventory-icon 
       {
         display: block;
-        background-image: url('icons/cards.svg'); /* Use inventory icon image */
+        background-image: url('icons/cards.svg');
         background-size: contain;
         background-repeat: no-repeat;
         background-position: center;
         width: 40px;
         height: 40px;
       }
+
       .hamburger 
       {
         display: block;
@@ -409,7 +391,6 @@
         cursor: pointer;
       }
 
-      /* Mobile menu button styles */
       .mobile-menu 
       {
         position: fixed;
@@ -445,40 +426,6 @@
       .mobile-menu button:hover 
       {
         background-color: var(--button-hover);
-      }
-      nav 
-      {
-        position: fixed;
-        bottom: 0;
-        top: auto;
-        width: 100%;
-        padding: 0.5rem 1rem;
-        justify-content: space-around;
-      }
-      nav h2 
-      {
-        display: none;
-      }
-      .nav-links 
-      {
-        display: flex;
-        width: 100%;
-        justify-content: space-around;
-      }
-      .nav-links a 
-      {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .nav-links a[href="home.html"]::before 
-      {
-        content: "\1F3E0"; /* Unicode house icon */
-        font-size: 1.5rem;
-      }
-      .nav-links a[href="home.html"] 
-      {
-        font-size: 0;
       }
     }
   </style>
