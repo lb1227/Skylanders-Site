@@ -127,15 +127,10 @@
     .hamburger {
       display: none;
     }
-     .home-icon {
-        display: none; /* use a house icon */
-       background-image: none;
-      }
-
-      .inventory-icon {
-        display: none; /* use a card icon */
-        background-image: none;
-      }
+    .home-icon, .inventory-icon {
+      display: none;
+      background-image: none; /* Hide background images */
+    }
 
     @media (max-width: 768px) {
        .container {
@@ -233,11 +228,23 @@
         display: block;
       }
       .home-icon {
-        background-image: url('icons/home.svg'); /* use a house icon */
+        display: block; /* Show the home icon on mobile */
+        background-image: url('icons/home.svg'); /* Use home icon image */
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 40px; /* Adjust size */
+        height: 40px;
       }
 
       .inventory-icon {
-        background-image: url('icons/cards.svg'); /* use a card icon */
+        display: block; /* Show the inventory icon on mobile */
+        background-image: url('icons/cards.svg'); /* Use inventory icon image */
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 40px; /* Adjust size */
+        height: 40px;
       }
 
       .mobile-menu {
