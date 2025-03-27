@@ -230,7 +230,7 @@ input:checked + .slider:before {
   .cards-wrapper 
   {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 4px;
   padding: 0; /* keep it tight */
   }
@@ -248,23 +248,25 @@ input:checked + .slider:before {
 
     display: flex;        /* Use flex to align items inside the card */
     flex-direction: column; /* Stack image and text vertically */
-    height: 75px;  
-    width: 75px;
+    height: 90px;  
+    width: 65px;
   }
 
   .card img 
   {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     border-radius: 8px;
     object-fit: contain; /* Maintain aspect ratio without cropping */
     max-width: 100%;    /* Prevent stretching beyond container */
     max-height: 100%; 
+    margin-top: 1px;
   }
 
   .card strong 
   {
     font-size: 0.5rem;
+    margin-top: 1px;
   }
   .card button 
   {
