@@ -241,6 +241,10 @@ input:checked + .slider:before {
   margin: 0;          /* no external spacing */
   padding: 4px;       /* small internal spacing */
   box-sizing: border-box; /* include padding in width */
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+  transition: background-color 0.3s ease;
   }
 
   .card img 
@@ -248,6 +252,7 @@ input:checked + .slider:before {
   width: 100%;
   height: auto;
   max-width: 100%;
+  object-fit: cover;
   }
 
   .card strong 
