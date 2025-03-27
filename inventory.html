@@ -266,10 +266,12 @@ input:checked + .slider:before {
 
   .card strong 
   {
-    font-size: 0.3rem;
-    margin-top: 0;
-    padding-top: 0;
-    line-height: .1; 
+    font-size: 0.4rem;
+    margin: 0;
+    padding: 0;
+    line-height: 0.1;  /* Still using a tight line-height */
+    display: inline-block;  /* Make it inline-block to avoid vertical space */
+    vertical-align: top;  
   }
   .card button 
   {
@@ -278,6 +280,8 @@ input:checked + .slider:before {
     margin-top: 0;
     padding-top: 0;
     line-height: 1; 
+    display: inline-block;  /* Make the button inline-block */
+  vertical-align: top;
   }
 }
     .collapsed {
