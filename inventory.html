@@ -245,6 +245,11 @@ input:checked + .slider:before {
   text-align: center;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
   transition: background-color 0.3s ease;
+
+    display: flex;        /* Use flex to align items inside the card */
+    flex-direction: column; /* Stack image and text vertically */
+    height: 75px;  
+    width: 75px;
   }
 
   .card img 
@@ -259,11 +264,11 @@ input:checked + .slider:before {
 
   .card strong 
   {
-    font-size: 0.65rem;
+    font-size: 0.5rem;
   }
   .card button 
   {
-    font-size: 0.6rem;
+    font-size: 0.5rem;
     padding: 0.25rem 0.4rem;
   }
 }
