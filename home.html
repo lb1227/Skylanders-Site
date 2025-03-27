@@ -280,6 +280,13 @@
       background-color: var(--button-hover);
     }
     }
+    /* Hide icons by default (desktop) */
+    @media (min-width: 769px) {
+      .home-icon, .inventory-icon 
+      {
+        display: none !important; /* Force hide icons on desktop */
+      }
+    }
     @keyframes swipeLeft {
       0% { transform: translateX(0) rotate(0); opacity: 1; }
       50% { transform: translateX(-50vw) rotate(-10deg); opacity: 0.5; }
