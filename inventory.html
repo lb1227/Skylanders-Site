@@ -280,8 +280,11 @@ input:checked + .slider:before {
     margin-top: 0;
     padding-top: 0;
     line-height: 1; 
-    display: inline-block;  /* Make the button inline-block */
-  vertical-align: top;
+    display: flex; /* Use flex to center content */
+    justify-content: center; /* Align text horizontally */
+    align-items: center; /* Align text vertically */
+    height: 100%; /* Ensure the button height is consistent */
+    width: 100%; /* Ensure the button width is consistent */
   }
 }
     .collapsed {
