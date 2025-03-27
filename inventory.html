@@ -204,6 +204,9 @@ input:checked + .slider:before {
 }
 
 @media (max-width: 768px) {
+  #desktopNav {
+    display: none; /* Hides the top navigation bar on mobile */
+  }
   #navTopMobile 
   {
     display: flex;
@@ -435,16 +438,16 @@ input:checked + .slider:before {
   </style>
 </head>
 <body>
-  <nav>
-    <h2 style="margin: 0;">Skylanders Tracker</h2>
-    <div class="hamburger" onclick="toggleMenu()">☰</div>
-    <div id="navMenu" class="nav-links">
-      <input type="text" id="searchInputDesktop" placeholder="Search Skylanders..." class="search-input-desktop" style="margin-top: 0.5rem; max-width: 200px; background-color: #2a2a2a; color: white; border-radius: 6px; border: none; padding: 0.4rem 0.8rem;">
-      <a href="home.html">Home</a>
-      <a href="totals.html">Totals</a>
-      <button id="logoutBtn" onclick="logout()" style="background-color: var(--button); color: white; border-radius: 8px; font-weight: bold;">Logout</button>
-    </div>
-  </nav>
+  <nav id="desktopNav">
+  <h2 style="margin: 0;">Skylanders Tracker</h2>
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+  <div id="navMenu" class="nav-links">
+    <input type="text" id="searchInputDesktop" placeholder="Search Skylanders..." class="search-input-desktop" style="margin-top: 0.5rem; max-width: 200px; background-color: #2a2a2a; color: white; border-radius: 6px; border: none; padding: 0.4rem 0.8rem;">
+    <a href="home.html">Home</a>
+    <a href="totals.html">Totals</a>
+    <button id="logoutBtn" onclick="logout()" style="background-color: var(--button); color: white; border-radius: 8px; font-weight: bold;">Logout</button>
+  </div>
+</nav>
 
   <nav id= "mobileNav"class="bottom-mobile-nav">
       <a href="home.html" title="Home">🏠</a>
