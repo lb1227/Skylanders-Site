@@ -232,6 +232,7 @@
       max-width: 140px;
     }
 
+    /*Top HEADER MOBIILE*/
     @media (max-width: 768px) 
     {
       .search-input-desktop 
@@ -275,12 +276,23 @@
         transform: translateX(30px); /* Adjust ball movement */
       }
 
+      .filter-options 
+    {
+      margin: 1rem 0;
+    }
+    .filter-options label 
+    {
+      margin-right: 1rem;
+      font-size: 0.9rem;
+    }
+
       body 
       {
         padding-top: 40px; /* Prevent top nav overlap */
       }
     }
 
+    /*CARDS*/
     @media (max-width: 768px) 
     {
       .cards-wrapper 
@@ -348,15 +360,6 @@
       max-height: 0 !important;
       opacity: 0;
       transform: scaleY(0);
-    }
-    .filter-options 
-    {
-      margin: 1rem 0;
-    }
-    .filter-options label 
-    {
-      margin-right: 1rem;
-      font-size: 0.9rem;
     }
     @media (max-width: 768px) 
     {
