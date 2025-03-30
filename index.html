@@ -50,6 +50,10 @@
       .desktop {
         display: none;
       }
+
+      .mobile-buttons {
+        display: none; /* Hide mobile buttons */
+      }
     }
 
     @media (min-width: 769px) {
@@ -60,15 +64,15 @@
   </style>
 </head>
 <body>
+  <!-- Mobile Version -->
   <div class="mobile" id="mobileStartPage">
     <h1>Touch to Start</h1>
-    <div id="loginButtons">
-      <button onclick="event.stopPropagation(); location.href='login.html'">Login</button>
-      <button onclick="event.stopPropagation(); location.href='signup.html'">Sign Up</button>
+    <div id="mobile-buttons">
+      <!-- Only show these if the user is logged in -->
     </div>
-    <div class="hamburger" onclick="toggleMenu()">☰</div>
   </div>
 
+  <!-- Desktop Version -->
   <div class="desktop">
     <h1>Please Log In to Continue</h1>
     <div>
@@ -77,40 +81,22 @@
     </div>
   </div>
 
-  <!-- Mobile Menu -->
-  <div id="mobileMenu" class="mobile-menu">
-    <a href="account.html">Account</a>
-    <a href="login.html">Login</a>
-  </div>
-
   <script>
     // Check if user is logged in
     const user = localStorage.getItem("sky_user");
 
-    // Only allow interaction on mobile if the user is logged in
+    // Only show "Touch to Start" if the user is logged in
     function checkLogin() {
       const mobileStartPage = document.getElementById("mobileStartPage");
-      const loginButtons = document.getElementById("loginButtons");
 
       if (user && user !== "guest") {
-        // If the user is logged in, show the buttons
-        mobileStartPage.style.pointerEvents = "auto"; // Enable buttons
-        loginButtons.style.display = "block";
+        mobileStartPage.style.pointerEvents = "auto"; // Enable buttons on mobile
       } else {
-        // If the user is not logged in, disable the buttons
-        mobileStartPage.style.pointerEvents = "none"; // Disable buttons
-        loginButtons.style.display = "none"; // Hide buttons
+        mobileStartPage.style.pointerEvents = "none"; // Disable mobile buttons if not logged in
         alert("Please log in to continue.");
       }
     }
 
-    // Function to toggle the mobile menu visibility
-    function toggleMenu() {
-      const menu = document.getElementById("mobileMenu");
-      menu.style.display = menu.style.display === "block" ? "none" : "block";
-    }
-
-    // Call checkLogin when page loads
     window.onload = checkLogin;
   </script>
 </body>
