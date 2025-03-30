@@ -611,12 +611,6 @@
         section.appendChild(cards);
         container.appendChild(section);
       }
-      function applyOwnedFilterMobile() {
-        const toggle = document.getElementById("ownedFilterToggleMobile");
-        const desktopToggle = document.getElementById("ownedFilterToggle");
-        if (toggle && desktopToggle) {
-          desktopToggle.checked = toggle.checked;
-        }
     }
 
     function updateQty(name, game, input) {
@@ -690,6 +684,16 @@ const nav = document.querySelector("nav");
       if (toggle && mobileToggle) {
         mobileToggle.checked = toggle.checked;
   }
+  renderInventory();
+    }
+    function applyOwnedFilterMobile() {
+        const toggle = document.getElementById("ownedFilterToggleMobile");
+        const desktopToggle = document.getElementById("ownedFilterToggle");
+        if (toggle && desktopToggle) {
+          desktopToggle.checked = toggle.checked;
+        }
+        renderInventory();
+    }
 
     function toggleMobileMenu() {
       const menu = document.getElementById("mobileMenu");
