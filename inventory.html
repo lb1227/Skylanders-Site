@@ -732,12 +732,23 @@ const nav = document.querySelector("nav");
       const modal = document.getElementById("skylanderModal");
       const detailsContainer = document.getElementById("skylanderDetails");
     
+      // Get user's inventory data from localStorage
+      const userInventory = localStorage.getItem(`sky_progress_${user}_${skylander.game}`);
+      let isOwned = false;
+      
+      if (userInventory) {
+        const parsedInventory = JSON.parse(userInventory);
+        const collected = parsedInventory.collected || [];
+        // Check if the Skylander is in the collected inventory
+        isOwned = collected.some(item => item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase());
+      }
+    
       // Dynamically set the modal content
       detailsContainer.innerHTML = `
         <h2>${skylander.name}</h2>
         <img src="${skylander.image}" alt="${skylander.name}" style="width: 200px; height: auto; margin-bottom: 1rem;" />
         <p><strong>Game:</strong> ${skylander.game}</p>
-        <p><strong>Owned:</strong> ${skylander.isOwned ? "Yes" : "No"}</p>
+        <p><strong>Owned:</strong> ${isOwned ? "Yes" : "No"}</p>
       `;
       
       // Show the modal
