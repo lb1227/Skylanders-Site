@@ -232,22 +232,42 @@
       max-width: 140px;
     }
 
+    /*TOP NAVIGATION FOR MOBILE*/
     @media (max-width: 768px) 
     {
       #desktopNav 
       {
         display: none; /* Hides the top navigation bar on mobile */
       }
-      #navTopMobile 
-      {
+     #navTopMobile {
         display: flex;
-        justify-content: space-around;
+        justify-content: space-between;
         align-items: center;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        background-color: var(--nav-bg);
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      }
+      #navTopMobile .nav-links {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      #navTopMobile input {
+        max-width: 150px; /* Reduce width of search input */
       }
 
       body 
       {
-        padding-top: 40px; /* Prevent top nav overlap */
+        padding-top: 15px; /* Prevent top nav overlap */
       }
     }
 
