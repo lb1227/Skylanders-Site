@@ -304,13 +304,19 @@
         display: flex;
         justify-content: space-between;
         width: 100%;
-        gap: 1rem;
+        gap: .75rem;
         flex-wrap: wrap;
       }
 
       #navTopMobile input {
-        max-width: 150px; /* Reduce width of search input */
+        max-width: 100px; /* Reduce width of search input */
         font-size: 0.8rem;
+      }
+      /* Align the switch and text next to each other */
+      #navTopMobile label.switch {
+        display: flex;
+        align-items: center; /* Vertically align the switch and the text */
+        gap: 0.5rem; /* Space between the switch and the text */
       }
 
       body 
