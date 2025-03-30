@@ -157,6 +157,42 @@
       transform: scaleY(1);
       transform-origin: top;
     }
+
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5); /* Black with opacity */
+      padding-top: 60px;
+    }
+    
+    .modal-content {
+      background-color: #292929;
+      margin: 5% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%; /* Larger size */
+      border-radius: 12px;
+      color: white;
+    }
+    
+    .close {
+      color: white;
+      float: right;
+      font-size: 30px;
+      font-weight: bold;
+    }
+    
+    .close:hover,
+    .close:focus {
+      color: #e53935;
+      text-decoration: none;
+      cursor: pointer;
+    }
     /* Toggle Switch Style */
     @media (max-width: 768px) 
     {
@@ -526,6 +562,14 @@
   <div class="container">
     <div id="inventoryContainer"></div> <!-- Inventory will be rendered here -->
   </div>
+
+  <!-- Modal for Skylanders info -->
+  <div id="skylanderModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <div id="skylanderDetails"></div> <!-- This will hold the details of the clicked Skylander -->
+  </div>
+</div>
   
   <script>
     const user = localStorage.getItem("sky_user") || "guest";
@@ -543,7 +587,7 @@
     function renderInventory(showOwnedOnly = false) {
       const container = document.getElementById("inventoryContainer");
       container.innerHTML = '';  // Clear the current inventory
-    
+      
       for (const [game, characters] of Object.entries(window.games)) {
         const section = document.createElement("div");
         section.className = "group-section";
@@ -584,6 +628,10 @@
             ${isOwned ? '' : ''}
             ${isOwned ? `<button onclick="removeFromInventory('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}')">Remove</button>` : ''}
           `;
+    
+          // Add click event to open modal
+          card.onclick = () => openModal(char);  // Open modal on card click
+    
           cards.appendChild(card);
         });
     
@@ -669,6 +717,29 @@ const nav = document.querySelector("nav");
     function toggleMobileMenu() {
       const menu = document.getElementById("mobileMenu");
       menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+    }
+
+    function openModal(skylander) {
+      const modal = document.getElementById("skylanderModal");
+      const detailsContainer = document.getElementById("skylanderDetails");
+    
+      // Create detailed content dynamically
+      detailsContainer.innerHTML = `
+        <h2>${skylander.name}</h2>
+        <img src="${skylander.image}" alt="${skylander.name}" style="width: 100px; height: 100px;"/>
+        <p><strong>Game:</strong> ${skylander.game}</p>
+        <p><strong>Quantity:</strong> ${skylander.quantity}</p>
+        <p><strong>Owned:</strong> ${skylander.isOwned ? "Yes" : "No"}</p>
+        <button onclick="removeFromInventory('${skylander.name.replace(/'/g, "\\'")}', '${skylander.game.replace(/'/g, "\\'")}')">Remove</button>
+      `;
+      
+      // Show the modal
+      modal.style.display = "block";
+    }
+    
+    function closeModal() {
+      const modal = document.getElementById("skylanderModal");
+      modal.style.display = "none";
     }
   </script>
 </body>
