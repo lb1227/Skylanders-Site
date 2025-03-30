@@ -482,42 +482,46 @@
   </style>
 </head>
 <body>
+  <!-- Desktop Navigation -->
   <nav id="desktopNav">
-  <h2 style="margin: 0;">Skylanders Tracker</h2>
-  <div class="hamburger" onclick="toggleMenu()">☰</div>
-  <div id="navMenu" class="nav-links">
-    <input type="text" id="searchInputDesktop" placeholder="Search Skylanders..." class="search-input-desktop" style="margin-top: 0.5rem; max-width: 200px; background-color: #2a2a2a; color: white; border-radius: 6px; border: none; padding: 0.4rem 0.8rem;">
-    <a href="home.html">Home</a>
-    <a href="totals.html">Totals</a>
-    <button id="logoutBtn" onclick="logout()" style="background-color: var(--button); color: white; border-radius: 8px; font-weight: bold;">Logout</button>
-  </div>
-</nav>
+    <h2 style="margin: 0;">Skylanders Tracker</h2>
+    <div class="hamburger" onclick="toggleMenu()">☰</div>
+    <div id="navMenu" class="nav-links">
+      <input type="text" id="searchInputDesktop" placeholder="Search Skylanders..." class="search-input-desktop" style="margin-top: 0.5rem; max-width: 200px; background-color: #2a2a2a; color: white; border-radius: 6px; border: none; padding: 0.4rem 0.8rem;">
+      <a href="home.html">Home</a>
+      <a href="totals.html">Totals</a>
+      <button id="logoutBtn" onclick="logout()" style="background-color: var(--button); color: white; border-radius: 8px; font-weight: bold;">Logout</button>
+    </div>
+  </nav>
 
-  <nav id= "mobileNav"class="bottom-mobile-nav">
-      <a href="home.html" title="Home">🏠</a>
-      <a href="inventory.html" title="Inventory">🃏</a>
-      <button class="hamburger" onclick="toggleMobileMenu()">☰</button>
-    </nav>
-  
+  <!-- Mobile Navigation -->
+  <nav id="mobileNav" class="bottom-mobile-nav">
+    <a href="home.html" title="Home">🏠</a>
+    <a href="inventory.html" title="Inventory">🃏</a>
+    <button class="hamburger" onclick="toggleMobileMenu()">☰</button>
+  </nav>
+
   <div id="mobileMenu" class="mobile-menu">
     <button onclick="goToAccount()">Account</button>
     <button onclick="logout()">Logout</button>
   </div>
-  
+
+  <!-- Mobile Header with Search and Filter -->
   <header id="navTopMobile" class="top-mobile-nav">
     <div class="nav-links">
       <input type="text" id="searchInputMobile" placeholder="Search Skylanders..." style="margin-top: 0.5rem; max-width: 200px; background-color: #2a2a2a; color: white; border-radius: 6px; border: none; padding: 0.4rem 0.8rem;">
       <label class="switch" style="margin-left: 1rem;">
         <input type="checkbox" id="ownedFilterToggleMobile" onchange="applyOwnedFilterMobile()" />
         <span class="slider round"></span>
-        </label>
-        <span style="font-size: 0.7rem;">Owned Only</span>
+      </label>
+      <span style="font-size: 0.7rem;">Owned Only</span>
     </div>
-</header>
-  
+  </header>
+
+  <!-- Inventory Container (Inside .container) -->
   <div class="container">
-  <div id="inventoryContainer"></div>
-</div>
+    <div id="inventoryContainer"></div> <!-- Inventory will be rendered here -->
+  </div>
   
   <script>
     const user = localStorage.getItem("sky_user") || "guest";
