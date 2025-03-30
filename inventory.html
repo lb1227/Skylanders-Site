@@ -510,19 +510,6 @@
     </div>
 </header>
   
-  <div class="container">
-  <div class="filter-sticky">
-    <div class="filter-options">
-      <label class="switch">
-        <input type="checkbox" id="ownedFilterToggle" onchange="applyOwnedFilter()" />
-        <span class="slider round"></span>
-      </label>
-      <span style="margin-left: 0.5rem;">Show Owned Only</span>
-    </div>
-  </div>
-  <div id="inventoryContainer"></div>
-</div>
-  
   <script>
     const user = localStorage.getItem("sky_user") || "guest";
     const container = document.getElementById("inventoryContainer");
