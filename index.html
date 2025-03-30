@@ -162,10 +162,17 @@
 
       if (user && user !== "guest") {
         mobileStartPage.style.pointerEvents = "auto"; // Enable buttons on mobile
+        mobileStartPage.querySelector("h1").innerHTML = "Press to Start"; // Show "Press to Start"
+        mobileStartPage.querySelector("#mobile-buttons").innerHTML = '<button onclick="goToHome()">Start</button>';
       } else {
         mobileStartPage.style.pointerEvents = "none"; // Disable mobile buttons if not logged in
-        alert("Please log in to continue.");
+        mobileStartPage.querySelector("h1").innerHTML = "Please Log In"; // Show login message
+        mobileStartPage.querySelector("#mobile-buttons").innerHTML = '<button onclick="location.href=\'signup.html\'">Sign Up</button>';
       }
+    }
+
+    function goToHome() {
+      window.location.href = 'home.html';
     }
 
     window.onload = checkLogin;
