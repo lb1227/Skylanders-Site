@@ -534,7 +534,17 @@
         </label>
         <span style="font-size: 0.7rem;">Owned Only</span>
     </div>
-</header>
+  </header>
+
+    <!-- Modal -->
+  <div id="skylanderModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">×</span>
+      <h2 id="modalSkylanderName"></h2>
+      <img id="modalSkylanderImage" src="" alt="" />
+      <div id="modalSkylanderDetails"></div>
+    </div>
+  </div>
   
   <div class="container">
   <div class="filter-sticky">
@@ -560,57 +570,6 @@
     function logout() {
       localStorage.removeItem("sky_user");
       location.href = "login.html";
-    }
-
-    function renderInventory() {
-      container.innerHTML = '';
-      for (const [game, characters] of Object.entries(window.games)) {
-        const section = document.createElement("div");
-        section.className = "group-section";
-
-        const header = document.createElement("div");
-        header.className = "group-header";
-        header.innerHTML = `<span>${game}</span><span>▼</span>`;
-        header.onclick = () => cards.classList.toggle("collapsed");
-
-        const cards = document.createElement("div");
-        cards.className = "cards-wrapper";
-
-        const key = `sky_progress_${user}_${game}`;
-        const saved = localStorage.getItem(key);
-        let collected = [];
-        let queue = [];
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          collected = parsed.collected || [];
-          queue = parsed.queue || [];
-        }
-
-        characters.forEach(char => {
-          const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
-          const isOwned = !!found;
-          const qty = found?.quantity || 1;
-
-          const showOwnedOnly = document.getElementById("ownedFilterToggle").checked;
-          if (showOwnedOnly && !isOwned) return;
-
-          const card = document.createElement("div");
-          card.className = "card";
-          if (isOwned) card.classList.add("owned");
-
-          card.innerHTML = `
-            <img src="${char.image}" alt="${char.name}" />
-            <div><strong>${char.name}</strong></div>
-            ${isOwned ? '' : ''}
-            ${isOwned ? `<button onclick="removeFromInventory('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}')">Remove</button>` : ''}
-          `;
-          cards.appendChild(card);
-        });
-
-        section.appendChild(header);
-        section.appendChild(cards);
-        container.appendChild(section);
-      }
     }
 
     function updateQty(name, game, input) {
@@ -663,18 +622,18 @@
     let lastScrollTop = 0;
 const nav = document.querySelector("nav");
     
-  function attachSearchHandler(id) {
-    const input = document.getElementById(id);
-  if (input) {
-    input.addEventListener("input", function () {
-      const query = this.value.toLowerCase();
-      document.querySelectorAll(".card").forEach(card => {
-        const name = card.querySelector("strong").textContent.toLowerCase();
-        card.style.display = name.includes(query) ? "inline-block" : "none";
+    function attachSearchHandler(id) {
+      const input = document.getElementById(id);
+    if (input) {
+      input.addEventListener("input", function () {
+        const query = this.value.toLowerCase();
+        document.querySelectorAll(".card").forEach(card => {
+          const name = card.querySelector("strong").textContent.toLowerCase();
+          card.style.display = name.includes(query) ? "inline-block" : "none";
+        });
       });
-    });
+    }
   }
-}
   attachSearchHandler("searchInputDesktop");
   attachSearchHandler("searchInputMobile");
     function applyOwnedFilter() {
@@ -684,20 +643,84 @@ const nav = document.querySelector("nav");
       if (toggle && mobileToggle) {
         mobileToggle.checked = toggle.checked;
   }
-  renderInventory();
-    }
-    function applyOwnedFilterMobile() {
-        const toggle = document.getElementById("ownedFilterToggleMobile");
-        const desktopToggle = document.getElementById("ownedFilterToggle");
-        if (toggle && desktopToggle) {
-          desktopToggle.checked = toggle.checked;
+  function renderInventory() {
+      container.innerHTML = '';
+    
+      for (const [game, characters] of Object.entries(window.games)) {
+        const section = document.createElement("div");
+        section.className = "group-section";
+    
+        const header = document.createElement("div");
+        header.className = "group-header";
+        header.innerHTML = `<span>${game}</span><span>▼</span>`;
+        header.onclick = () => cards.classList.toggle("collapsed");
+    
+        const cards = document.createElement("div");
+        cards.className = "cards-wrapper";
+    
+        const key = `sky_progress_${user}_${game}`;
+        const saved = localStorage.getItem(key);
+        let collected = [];
+        let queue = [];
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          collected = parsed.collected || [];
+          queue = parsed.queue || [];
         }
-        renderInventory();
+    
+        const showOwnedOnly = document.getElementById("ownedFilterToggleMobile")?.checked || document.getElementById("ownedFilterToggle")?.checked;
+        
+        characters.forEach(char => {
+          const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
+          const isOwned = !!found;
+    
+          if (showOwnedOnly && !isOwned) return;  // Filter out non-owned Skylanders if filter is enabled
+    
+          const card = document.createElement("div");
+          card.className = "card";
+          if (isOwned) card.classList.add("owned");
+    
+          card.innerHTML = `
+            <img src="${char.image}" alt="${char.name}" />
+            <div><strong>${char.name}</strong></div>
+          `;
+    
+          // Add click event to open modal for mobile
+          card.onclick = () => openModal(char);  // Open modal when card is clicked
+    
+          // Only add remove button for owned Skylanders
+          if (isOwned) {
+            card.innerHTML += `<button onclick="removeFromInventory('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}')">Remove</button>`;
+          }
+    
+          cards.appendChild(card);
+        });
+    
+        section.appendChild(header);
+        section.appendChild(cards);
+        container.appendChild(section);
+      }
     }
 
     function toggleMobileMenu() {
       const menu = document.getElementById("mobileMenu");
       menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+    }
+
+    function openModal(skylander) {
+      // Populate the modal with Skylander details
+      document.getElementById("modalSkylanderName").textContent = skylander.name;
+      document.getElementById("modalSkylanderImage").src = skylander.image;
+      document.getElementById("modalSkylanderDetails").innerHTML = `
+        <p><strong>Type:</strong> ${skylander.type}</p>
+        <p><strong>Power:</strong> ${skylander.power}</p>
+        <p><strong>Release Date:</strong> ${skylander.releaseDate}</p>
+      `;
+      document.getElementById("skylanderModal").style.display = "block";
+    }
+    
+    function closeModal() {
+      document.getElementById("skylanderModal").style.display = "none";
     }
   </script>
 </body>
