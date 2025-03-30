@@ -668,10 +668,7 @@
       }
     }
 
-    function removeFromInventory(name, game, event) {
-      // Stop the click event from propagating to the parent card (which would open the modal)
-      event.stopPropagation();
-    
+    function removeFromInventory(name, game) {
       const key = `sky_progress_${user}_${game}`;
       const saved = localStorage.getItem(key);
       if (saved) {
@@ -682,7 +679,7 @@
           parsed.queue.push(character);
         }
         localStorage.setItem(key, JSON.stringify(parsed));
-        renderInventory();  // Re-render the inventory to reflect the changes
+        renderInventory();
       } else {
         console.warn(`No saved data found for key ${key}`);
       }
@@ -731,12 +728,9 @@ const nav = document.querySelector("nav");
       menu.style.display = menu.style.display === "flex" ? "none" : "flex";
     }
 
-   function openModal(skylander) {
+    function openModal(skylander) {
       const modal = document.getElementById("skylanderModal");
       const detailsContainer = document.getElementById("skylanderDetails");
-    
-      // Debugging
-      console.log("openModal triggered", skylander);  // Add this line to debug
     
       // Get the inventory for this user and game from localStorage
       const userInventory = localStorage.getItem(`sky_progress_${user}_${skylander.game}`);
@@ -757,10 +751,9 @@ const nav = document.querySelector("nav");
         <p><strong>Owned:</strong> ${isOwned ? "Yes" : "No"}</p>
         <button onclick="removeFromInventory('${skylander.name.replace(/'/g, "\\'")}', '${skylander.game.replace(/'/g, "\\'")}', event)">Remove</button>
       `;
-    
+      
       // Show the modal
       modal.style.display = "block";
-      console.log("Modal displayed");  // Add this line to debug
     }
     
     function closeModal() {
