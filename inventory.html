@@ -234,6 +234,10 @@
 
     @media (max-width: 768px) 
     {
+      .search-input-desktop 
+      {
+        display: none;
+      }
       #desktopNav 
       {
         display: none; /* Hides the top navigation bar on mobile */
@@ -244,15 +248,13 @@
         justify-content: space-around;
         align-items: center;
       }
-
-      body 
-      {
-        padding-top: 40px; /* Prevent top nav overlap */
+       #searchInputMobile {
+        max-width: 100px; /* Make it less wide */
       }
-    }
-
-    @media (max-width: 768px) 
-    {
+      .top-mobile-nav span {
+        margin-left: 0.5rem; /* Decrease the margin */
+        font-size: 0.6rem; /* Smaller font size for mobile */
+      }
       .switch {
         width: 38px; /* Smaller width for mobile */
         height: 20px; /* Adjust height */
@@ -272,14 +274,15 @@
       input:checked + .slider:before {
         transform: translateX(30px); /* Adjust ball movement */
       }
-      .filter-sticky 
+
+      body 
       {
-        display: none;
+        padding-top: 40px; /* Prevent top nav overlap */
       }
-      .search-input-desktop 
-      {
-        display: none;
-      }
+    }
+
+    @media (max-width: 768px) 
+    {
       .cards-wrapper 
       {
         display: grid;
