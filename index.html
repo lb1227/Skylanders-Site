@@ -26,6 +26,7 @@
       height: 100vh;
       flex-direction: column;
       text-align: center;
+      position: relative; /* Needed to position the hamburger icon */
     }
     h1 {
       font-size: 2.5rem;
@@ -46,13 +47,58 @@
       background-color: #388e3c;
     }
 
+    /* Hamburger Menu Styling */
+    .hamburger {
+      display: none;
+      font-size: 2rem;
+      cursor: pointer;
+      color: white;
+      position: absolute;
+      top: 20px; /* Position it 20px from the top */
+      right: 20px; /* Position it 20px from the right */
+    }
+
+    /* Mobile Menu Styling */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 70%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      z-index: 1000;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .mobile-menu a {
+      padding: 1rem 2rem;
+      font-size: 1.5rem;
+      text-decoration: none;
+      color: white;
+      border-bottom: 1px solid white;
+      width: 100%;
+      text-align: center;
+    }
+
+    .mobile-menu a:hover {
+      background-color: #388e3c;
+    }
+
+    /* Media Queries */
     @media (max-width: 768px) {
       .desktop {
         display: none;
       }
 
-      .mobile-buttons {
-        display: none; /* Hide mobile buttons */
+      .hamburger {
+        display: block; /* Show hamburger on mobile */
+      }
+
+      .mobile {
+        display: none;
       }
     }
 
@@ -60,18 +106,14 @@
       .mobile {
         display: none;
       }
+
+      .desktop {
+        display: block;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Mobile Version -->
-  <div class="mobile" id="mobileStartPage">
-    <h1>Touch to Start</h1>
-    <div id="mobile-buttons">
-      <!-- Only show these if the user is logged in -->
-    </div>
-  </div>
-
   <!-- Desktop Version -->
   <div class="desktop">
     <h1>Please Log In to Continue</h1>
@@ -81,13 +123,41 @@
     </div>
   </div>
 
+  <!-- Mobile Version (Buttons) -->
+  <div class="mobile">
+    <h1>Touch to Start</h1>
+    <div id="mobile-buttons">
+      <!-- Only show these if the user is logged in -->
+    </div>
+  </div>
+
+  <!-- Hamburger Icon -->
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+
+  <!-- Mobile Menu (Hidden by default) -->
+  <div id="mobileMenu" class="mobile-menu">
+    <a href="account.html">Account</a>
+    <a href="login.html">Login</a>
+    <a href="signup.html">Sign Up</a>
+  </div>
+
   <script>
-    // Check if user is logged in
+    // Function to toggle the visibility of the mobile menu
+    function toggleMenu() {
+      const menu = document.getElementById("mobileMenu");
+      if (menu.style.display === "flex") {
+        menu.style.display = "none";
+      } else {
+        menu.style.display = "flex";
+      }
+    }
+
+    // Check if the user is logged in (localStorage-based)
     const user = localStorage.getItem("sky_user");
 
-    // Only show "Touch to Start" if the user is logged in
+    // Only show "Touch to Start" or login/signup based on user login state
     function checkLogin() {
-      const mobileStartPage = document.getElementById("mobileStartPage");
+      const mobileStartPage = document.querySelector(".mobile");
 
       if (user && user !== "guest") {
         mobileStartPage.style.pointerEvents = "auto"; // Enable buttons on mobile
