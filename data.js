@@ -11,6 +11,26 @@ window.elementMap = {
 };;
 window.games = {
   "Spyro's Adventure": [
+    {
+      name: "Spyro",
+      image: "images/spyro.png",
+      description: "A brave purple dragon...",
+      game: "Spyro's Adventure",
+      quantity: 5,
+      isOwned: true
+    },
+    {
+      name: "Gill Grunt",
+      image: "images/gillgrun.png",
+      description: "A brave water-based warrior...",
+      game: "Spyro's Adventure",
+      quantity: 3,
+      isOwned: true
+    }
+  ]
+};
+/*window.games = {
+  "Spyro's Adventure": [
     { name: "Spyro", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/Spyro1.png" },
     { name: "Trigger Happy", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/TriggerHappy1.png" },
     { name: "Stealth Elf", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/StealthElf1.png" },
