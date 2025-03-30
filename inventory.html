@@ -282,6 +282,10 @@
     /*TOP NAVIGATION FOR MOBILE*/
     @media (max-width: 768px) 
     {
+      .search-input-desktop 
+      {
+        display: none;
+      }
       #desktopNav 
       {
         display: none; /* Hides the top navigation bar on mobile */
@@ -304,40 +308,38 @@
         display: flex;
         justify-content: space-between;
         width: 100%;
-        gap: .75rem;
+        gap: .5rem;
         flex-wrap: wrap;
       }
 
       #navTopMobile input {
-        max-width: 100px; /* Reduce width of search input */
+        max-width: 75px; /* Reduce width of search input */
         font-size: 0.8rem;
       }
       /* Align the switch and text next to each other */
       #navTopMobile label.switch {
         display: flex;
         align-items: center; /* Vertically align the switch and the text */
-        gap: 0.5rem; /* Space between the switch and the text */
+        gap: 0.3rem; /* Space between the switch and the text */
       }
 
       body 
       {
-        padding-top: 60px; /* Prevent top nav overlap */
+        padding-top: 40px; /* Prevent top nav overlap */
       }
     }
 
     /*CARDS*/
     @media (max-width: 768px) 
     {
-      position: relative;
-      display: inline-block;
-      width: 46px;
-      height: 24px;
-      margin-right: 8px;
-    
-    
-      .switch .slider {
-        border-radius: 20px; /* Rounded corners for mobile */
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 46px;
+        height: 24px;
+        margin-right: 8px;
       }
+
     .switch input {
       opacity: 0;
       width: 0;
@@ -364,7 +366,7 @@
         position: absolute;
         content: "";
         height: 18px;
-        width: 22px;
+        width: 18px;
         left: 3px;
         bottom: 3px;
         background-color: white;
@@ -377,17 +379,9 @@
     }
     
       input:checked + .slider:before {
-        transform: translateX(22px);
+        transform: translateX(45px);
         width: 18px;  /* Match circle size to the slider */
         height: 18px;
-      }
-      .filter-sticky 
-      {
-        display: none;
-      }
-      .search-input-desktop 
-      {
-        display: none;
       }
       .cards-wrapper 
       {
