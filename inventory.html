@@ -286,7 +286,7 @@
       {
         display: none; /* Hides the top navigation bar on mobile */
       }
-     #navTopMobile {
+      #navTopMobile {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -310,6 +310,7 @@
 
       #navTopMobile input {
         max-width: 150px; /* Reduce width of search input */
+        font-size: 0.8rem;
       }
 
       body 
@@ -690,9 +691,16 @@
     };
 
     function renderInventory() {
-      container.innerHTML = '';
+      container.innerHTML = ''; // Clear existing cards
+    
+      if (!window.games) {
+        console.error('window.games is not defined!');
+        return;
+      }
     
       for (const [game, characters] of Object.entries(window.games)) {
+        console.log(`Rendering cards for ${game}:`, characters);
+    
         const section = document.createElement("div");
         section.className = "group-section";
     
@@ -714,14 +722,13 @@
           queue = parsed.queue || [];
         }
     
-        // Handle "Show Owned Only" filter (works for both mobile and desktop)
         const showOwnedOnly = document.getElementById("ownedFilterToggleMobile")?.checked || document.getElementById("ownedFilterToggle")?.checked;
     
         characters.forEach(char => {
           const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
           const isOwned = !!found;
     
-          if (showOwnedOnly && !isOwned) return;  // Filter out non-owned Skylanders if filter is enabled
+          if (showOwnedOnly && !isOwned) return;
     
           const card = document.createElement("div");
           card.className = "card";
@@ -732,10 +739,8 @@
             <div><strong>${char.name}</strong></div>
           `;
     
-          // Add click event to open modal for mobile
-          card.onclick = () => openModal(char);  // Open modal when card is clicked
+          card.onclick = () => openModal(char);
     
-          // Only add remove button for owned Skylanders
           if (isOwned) {
             card.innerHTML += `<button onclick="removeFromInventory('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}')">Remove</button>`;
           }
@@ -777,6 +782,7 @@ const nav = document.querySelector("nav");
     function toggleMobileMenu() {
       const menu = document.getElementById("mobileMenu");
       menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+      menu.classList.toggle("show");
     }
 
     function openModal(skylander) {
