@@ -540,21 +540,22 @@
       location.href = "login.html";
     }
 
-    function renderInventory() {
+    function renderInventory(showOwnedOnly = false) {
       const container = document.getElementById("inventoryContainer");
-      container.innerHTML = '';
+      container.innerHTML = '';  // Clear the current inventory
+    
       for (const [game, characters] of Object.entries(window.games)) {
         const section = document.createElement("div");
         section.className = "group-section";
-
+    
         const header = document.createElement("div");
         header.className = "group-header";
         header.innerHTML = `<span>${game}</span><span>▼</span>`;
         header.onclick = () => cards.classList.toggle("collapsed");
-
+    
         const cards = document.createElement("div");
         cards.className = "cards-wrapper";
-
+    
         const key = `sky_progress_${user}_${game}`;
         const saved = localStorage.getItem(key);
         let collected = [];
@@ -564,20 +565,19 @@
           collected = parsed.collected || [];
           queue = parsed.queue || [];
         }
-
+    
         characters.forEach(char => {
           const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
           const isOwned = !!found;
           const qty = found?.quantity || 1;
-
-          const showOwnedOnly = window.innerWidth <= 768 
-            ? document.getElementById("ownedFilterToggleMobile").checked 
-            : document.getElementById("ownedFilterToggle").checked;
-
+    
+          // Apply the owned filter
+          if (showOwnedOnly && !isOwned) return;
+    
           const card = document.createElement("div");
           card.className = "card";
           if (isOwned) card.classList.add("owned");
-
+    
           card.innerHTML = `
             <img src="${char.image}" alt="${char.name}" />
             <div><strong>${char.name}</strong></div>
@@ -586,13 +586,12 @@
           `;
           cards.appendChild(card);
         });
-
+    
         section.appendChild(header);
         section.appendChild(cards);
         container.appendChild(section);
       }
     }
-
     function updateQty(name, game, input) {
       const val = parseInt(input.value);
       if (isNaN(val) || val < 1) {
@@ -659,20 +658,12 @@ const nav = document.querySelector("nav");
   attachSearchHandler("searchInputMobile");
     function applyOwnedFilter() {
       const showOwnedOnly = document.getElementById("ownedFilterToggle").checked;
-      const toggle = document.getElementById("ownedFilterToggle");
-      const mobileToggle = document.getElementById("ownedFilterToggleMobile");
-      if (toggle && mobileToggle) {
-        mobileToggle.checked = toggle.checked;
-  }
-  renderInventory();
+      // Removed the desktop sync code since it's not needed anymore
+      renderInventory(showOwnedOnly);  // Pass the filter state to renderInventory
     }
     function applyOwnedFilterMobile() {
-        const toggle = document.getElementById("ownedFilterToggleMobile");
-        const desktopToggle = document.getElementById("ownedFilterToggle");
-        if (toggle && desktopToggle) {
-          desktopToggle.checked = toggle.checked;
-        }
-        renderInventory();
+      const showOwnedOnly = document.getElementById("ownedFilterToggleMobile").checked;
+      renderInventory(showOwnedOnly);  // Pass the filter state to renderInventory
     }
 
     function toggleMobileMenu() {
