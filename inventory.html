@@ -102,6 +102,13 @@
     {
       margin-top: 0.5rem;
     }
+    .hamburger 
+    {
+      display: none;
+      font-size: 2rem;
+      cursor: pointer;
+      color: white;
+    }
     .nav-links 
     {
       display: flex;
@@ -150,119 +157,129 @@
       transform: scaleY(1);
       transform-origin: top;
     }
+    /* Toggle Switch Style */
+    .switch 
+    {
+      position: relative;
+      display: inline-block;
+      width: 46px;
+      height: 24px;
+      margin-right: 8px;
+    }
 
-    /*Top HEADER MOBIILE*/
+    .switch input 
+    {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider 
+    {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0;
+      right: 0; bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 24px;
+    }
+    .slider.round 
+    {
+      border-radius: 34px;
+    }
+    .slider:before 
+    {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider 
+    {
+      background-color: var(--accent);
+    }
+
+    input:checked + .slider:before 
+    {
+      transform: translateX(22px);
+    }
+
+    .top-mobile-nav 
+    {
+      display: none;
+      background-color: var(--nav-bg);
+      padding: 0.25rem 0.5rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 999;
+    }
+
+    .top-mobile-nav input,
+    .top-mobile-nav label 
+    {
+      margin-top: 0;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.7rem;
+      max-width: 140px;
+    }
+
     @media (max-width: 768px) 
     {
+      #desktopNav 
+      {
+        display: none; /* Hides the top navigation bar on mobile */
+      }
       #navTopMobile 
       {
         display: flex;
         justify-content: space-around;
         align-items: center;
       }
-      .top-mobile-nav 
-      {
-        display: none;
-        background-color: var(--nav-bg);
-        padding: 0.25rem 0.5rem;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-        position: fixed;
-        top: 0;
-        width: 100%;
-        z-index: 999;
-      }
 
-      .top-mobile-nav input,
-      .top-mobile-nav label 
+      body 
       {
-        margin-top: 0;
-        padding: 0.2rem 0.5rem;
-        font-size: 0.7rem;
-        max-width: 140px;
+        padding-top: 40px; /* Prevent top nav overlap */
       }
-      /* Toggle Switch Style */
-      .switch 
-      {
-        position: relative;
-        display: inline-block;
-        width: 46px;
-        height: 24px;
-        margin-right: 8px;
-      }
-  
-      .switch input 
-      {
-        opacity: 0;
-        width: 0;
-        height: 0;
-      }
-  
-      .slider 
-      {
-        position: absolute;
-        cursor: pointer;
-        top: 0; left: 0;
-        right: 0; bottom: 0;
-        background-color: #ccc;
-        transition: 0.4s;
-        border-radius: 24px;
-      }
-      .slider.round 
-      {
-        border-radius: 34px;
-      }
-      .slider:before 
-      {
-        position: absolute;
-        content: "";
-        height: 22px;
-        width: 22px;
-        left: 3px;
-        bottom: 3px;
-        background-color: white;
-        transition: 0.4s;
-        border-radius: 50%;
-      }
-
-      input:checked + .slider 
-      {
-        background-color: var(--accent);
-      }
-  
-      input:checked + .slider:before 
-      {
-        transform: translateX(25px);
-      }
-        .search-input-desktop 
-        {
-          display: none;
-        }
-        #desktopNav 
-        {
-          display: none; /* Hides the top navigation bar on mobile */
-        }
-        #navTopMobile 
-        {
-          display: flex;
-          justify-content: space-around;
-          align-items: center;
-        }
-         #searchInputMobile {
-          max-width: 100px; /* Make it less wide */
-        }
-        .top-mobile-nav span {
-          margin-left: 0.5rem; /* Decrease the margin */
-          font-size: 0.6rem; /* Smaller font size for mobile */
-        }
-        body 
-        {
-          padding-top: 40px; /* Prevent top nav overlap */
-        }
     }
 
-    /*CARDS*/
     @media (max-width: 768px) 
     {
+      .switch {
+        width: 38px; /* Smaller width for mobile */
+        height: 20px; /* Adjust height */
+      }
+    
+      .switch .slider {
+        border-radius: 20px; /* Rounded corners for mobile */
+      }
+    
+      .switch .slider:before {
+        width: 14px; /* Smaller ball */
+        height: 14px; /* Smaller ball */
+        left: 3px; /* Adjust left position */
+        bottom: 3px; /* Adjust bottom position */
+      }
+    
+      input:checked + .slider:before {
+        transform: translateX(18px); /* Adjust ball movement */
+      }
+      .filter-sticky 
+      {
+        display: none;
+      }
+      .search-input-desktop 
+      {
+        display: none;
+      }
       .cards-wrapper 
       {
         display: grid;
@@ -328,6 +345,15 @@
       max-height: 0 !important;
       opacity: 0;
       transform: scaleY(0);
+    }
+    .filter-options 
+    {
+      margin: 1rem 0;
+    }
+    .filter-options label 
+    {
+      margin-right: 1rem;
+      font-size: 0.9rem;
     }
     @media (max-width: 768px) 
     {
@@ -494,12 +520,12 @@
       <button class="hamburger" onclick="toggleMobileMenu()">☰</button>
     </nav>
   
-  <div id= "mobileMenu" class="mobile-menu">
+  <div id="mobileMenu" class="mobile-menu">
     <button onclick="goToAccount()">Account</button>
     <button onclick="logout()">Logout</button>
   </div>
   
-  <header id= "navTopMobile" class="top-mobile-nav">
+  <header id="navTopMobile" class="top-mobile-nav">
     <div class="nav-links">
       <input type="text" id="searchInputMobile" placeholder="Search Skylanders..." style="margin-top: 0.5rem; max-width: 200px; background-color: #2a2a2a; color: white; border-radius: 6px; border: none; padding: 0.4rem 0.8rem;">
       <label class="switch" style="margin-left: 1rem;">
@@ -508,20 +534,20 @@
         </label>
         <span style="font-size: 0.7rem;">Owned Only</span>
     </div>
-
-    <div class="container">
-      <div class="filter-sticky">
-        <div class="filter-options">
-          <label class="switch">
-            <input type="checkbox" id="ownedFilterToggle" onchange="applyOwnedFilter()" />
-            <span class="slider round"></span>
-          </label>
-          <span style="margin-left: 0.5rem;">Show Owned Only</span>
-        </div>
-      </div>
-      <div id="inventoryContainer"></div>
-    </div>
 </header>
+  
+  <div class="container">
+  <div class="filter-sticky">
+    <div class="filter-options">
+      <label class="switch">
+        <input type="checkbox" id="ownedFilterToggle" onchange="applyOwnedFilter()" />
+        <span class="slider round"></span>
+      </label>
+      <span style="margin-left: 0.5rem;">Show Owned Only</span>
+    </div>
+  </div>
+  <div id="inventoryContainer"></div>
+</div>
   
   <script>
     const user = localStorage.getItem("sky_user") || "guest";
