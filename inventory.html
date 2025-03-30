@@ -732,14 +732,14 @@ const nav = document.querySelector("nav");
       const modal = document.getElementById("skylanderModal");
       const detailsContainer = document.getElementById("skylanderDetails");
     
-      // Get the inventory for this user and game from localStorage
+      // Get user's inventory data from localStorage
       const userInventory = localStorage.getItem(`sky_progress_${user}_${skylander.game}`);
       let isOwned = false;
-    
+      
       if (userInventory) {
         const parsedInventory = JSON.parse(userInventory);
         const collected = parsedInventory.collected || [];
-        // Check if this skylander is owned
+        // Check if the Skylander is in the collected inventory
         isOwned = collected.some(item => item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase());
       }
     
@@ -749,7 +749,6 @@ const nav = document.querySelector("nav");
         <img src="${skylander.image}" alt="${skylander.name}" style="width: 200px; height: auto; margin-bottom: 1rem;" />
         <p><strong>Game:</strong> ${skylander.game}</p>
         <p><strong>Owned:</strong> ${isOwned ? "Yes" : "No"}</p>
-        <button onclick="removeFromInventory('${skylander.name.replace(/'/g, "\\'")}', '${skylander.game.replace(/'/g, "\\'")}', event)">Remove</button>
       `;
       
       // Show the modal
