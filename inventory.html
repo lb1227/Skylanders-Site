@@ -83,6 +83,26 @@
       height: auto;
       margin: 0 auto 0.5rem;
     }
+
+    .element-group {
+      margin-bottom: 1rem;
+    }
+    
+    .element-header {
+      cursor: pointer;
+      font-size: 1.2rem;
+      background-color: #333;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .element-cards-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      margin-left: 1rem;
+    }
     .card 
     {
       background: #292929;
@@ -620,29 +640,62 @@
           queue = parsed.queue || [];
         }
     
+        // Grouping characters by their element
+        const elements = {};
+    
         characters.forEach(char => {
-          const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
-          const isOwned = !!found;
-    
-          // Apply the owned filter
-          if (showOwnedOnly && !isOwned) return;
-    
-          const card = document.createElement("div");
-          card.className = "card";
-          if (isOwned) card.classList.add("owned");
-    
-          card.innerHTML = `
-            <img src="${char.image}" alt="${char.name}" />
-            <div><strong>${char.name}</strong></div>
-            ${isOwned ? '' : ''}
-            ${isOwned ? `<button onclick="removeFromInventory('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}')">Remove</button>` : ''}
-          `;
-    
-          // Add click event to open modal
-          card.onclick = () => openModal(char);  // Open modal on card click
-    
-          cards.appendChild(card);
+          // Create a group for each character's element
+          const element = char.element || 'Unknown';  // Default to 'Unknown' if no element is specified
+          if (!elements[element]) {
+            elements[element] = [];
+          }
+          elements[element].push(char);
         });
+    
+        // For each element in the game, create a dropdown and show characters
+        for (const [element, elementCharacters] of Object.entries(elements)) {
+          // Create a dropdown for each element
+          const elementGroup = document.createElement("div");
+          elementGroup.className = "element-group";
+    
+          const elementHeader = document.createElement("div");
+          elementHeader.className = "element-header";
+          elementHeader.innerHTML = `<span>${element}</span><span>▼</span>`;
+          elementHeader.onclick = () => elementCards.classList.toggle("collapsed");
+    
+          const elementCards = document.createElement("div");
+          elementCards.className = "element-cards-wrapper";
+    
+          // Filter by owned status
+          elementCharacters.forEach(char => {
+            const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
+            const isOwned = !!found;
+    
+            // Apply the owned filter
+            if (showOwnedOnly && !isOwned) return;
+    
+            const card = document.createElement("div");
+            card.className = "card";
+            if (isOwned) card.classList.add("owned");
+    
+            card.innerHTML = `
+              <img src="${char.image}" alt="${char.name}" />
+              <div><strong>${char.name}</strong></div>
+              ${isOwned ? '' : ''}
+              ${isOwned ? `<button onclick="removeFromInventory('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}', event)">Remove</button>` : ''}
+            `;
+    
+            // Add click event to open modal
+            card.onclick = () => openModal(char);  // Open modal on card click
+    
+            elementCards.appendChild(card);
+          });
+    
+          // Append to the section
+          elementGroup.appendChild(elementHeader);
+          elementGroup.appendChild(elementCards);
+          cards.appendChild(elementGroup);
+        }
     
         section.appendChild(header);
         section.appendChild(cards);
