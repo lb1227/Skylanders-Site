@@ -668,7 +668,10 @@
       }
     }
 
-    function removeFromInventory(name, game) {
+    function removeFromInventory(name, game, event) {
+      // Stop the click event from propagating to the parent card (which would open the modal)
+      event.stopPropagation();
+    
       const key = `sky_progress_${user}_${game}`;
       const saved = localStorage.getItem(key);
       if (saved) {
@@ -679,7 +682,7 @@
           parsed.queue.push(character);
         }
         localStorage.setItem(key, JSON.stringify(parsed));
-        renderInventory();
+        renderInventory();  // Re-render the inventory to reflect the changes
       } else {
         console.warn(`No saved data found for key ${key}`);
       }
