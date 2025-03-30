@@ -57,7 +57,6 @@
     top: 20px; /* Position it 20px from the top */
     right: 20px; /* Position it 20px from the right */
   }
-
   /* Mobile Menu Styling */
   .mobile-menu {
     display: none;
@@ -69,10 +68,11 @@
     border-radius: 12px; /* Round corners */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Soft shadow for depth */
     padding: 1rem; /* More padding to make the menu look better */
-    flex-direction: column;
+    display: flex;
+    flex-direction: column; /* Stack the items vertically */
+    gap: 1rem; /* Space between buttons */
     z-index: 1000; /* Ensure it's on top */
-    transition: all 0.3s ease;
-    max-height: 90vh; /* Limit the maximum height to 90% of the viewport height */
+    max-height: 80vh; /* Limit the maximum height to 80% of the viewport height */
     overflow-y: auto; /* Allow scrolling if the content overflows */
   }
 
