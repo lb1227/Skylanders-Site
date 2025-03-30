@@ -105,6 +105,9 @@
     .hamburger 
     {
       display: none;
+      font-size: 2rem;
+      cursor: pointer;
+      color: white;
     }
     .nav-links 
     {
@@ -205,7 +208,7 @@
 
     input:checked + .slider:before 
     {
-      transform: translateX(37px);
+      transform: translateX(22px);
     }
 
     .top-mobile-nav 
@@ -250,6 +253,29 @@
 
     @media (max-width: 768px) 
     {
+      .switch {
+        width: 38px; /* Smaller width for mobile */
+        height: 20px; /* Adjust height */
+      }
+    
+      .switch .slider {
+        border-radius: 20px; /* Rounded corners for mobile */
+      }
+    
+      .switch .slider:before {
+        width: 14px; /* Smaller ball */
+        height: 14px; /* Smaller ball */
+        left: 3px; /* Adjust left position */
+        bottom: 3px; /* Adjust bottom position */
+      }
+    
+      input:checked + .slider:before {
+        transform: translateX(18px); /* Adjust ball movement */
+      }
+      .filter-sticky 
+      {
+        display: none;
+      }
       .search-input-desktop 
       {
         display: none;
