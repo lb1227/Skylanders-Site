@@ -232,6 +232,53 @@
       max-width: 140px;
     }
 
+    @media (max-width: 768px)
+    {
+        /* Modal Styles */
+        .modal {
+          display: none;
+          position: fixed;
+          z-index: 1;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.7);
+          padding-top: 60px;
+          text-align: center;
+        }
+        
+        .modal-content {
+          background-color: #292929;
+          margin: 5% auto;
+          padding: 20px;
+          border-radius: 12px;
+          width: 90%; /* Adjust for mobile */
+          max-width: 500px;
+          color: white;
+          position: relative;
+        }
+        
+        #modalSkylanderImage {
+          width: 100%;
+          height: auto;
+          border-radius: 8px;
+        }
+        
+        .close-btn {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          color: #fff;
+          font-size: 30px;
+          font-weight: bold;
+          cursor: pointer;
+        }
+        
+        .close-btn:hover {
+          color: #e53935;
+        }
+    }
     /*TOP NAVIGATION FOR MOBILE*/
     @media (max-width: 768px) 
     {
@@ -267,10 +314,11 @@
 
       body 
       {
-        padding-top: 15px; /* Prevent top nav overlap */
+        padding-top: 60px; /* Prevent top nav overlap */
       }
     }
 
+    /*CARDS*/
     @media (max-width: 768px) 
     {
       .switch {
@@ -375,6 +423,7 @@
       margin-right: 1rem;
       font-size: 0.9rem;
     }
+      
     @media (max-width: 768px) 
     {
       /* Mobile navbar styling */
@@ -556,6 +605,7 @@
     </div>
   </header>
 
+
     <!-- Modal -->
   <div id="skylanderModal" class="modal">
     <div class="modal-content">
@@ -639,31 +689,7 @@
       }
     };
 
-    let lastScrollTop = 0;
-const nav = document.querySelector("nav");
-    
-    function attachSearchHandler(id) {
-      const input = document.getElementById(id);
-    if (input) {
-      input.addEventListener("input", function () {
-        const query = this.value.toLowerCase();
-        document.querySelectorAll(".card").forEach(card => {
-          const name = card.querySelector("strong").textContent.toLowerCase();
-          card.style.display = name.includes(query) ? "inline-block" : "none";
-        });
-      });
-    }
-  }
-  attachSearchHandler("searchInputDesktop");
-  attachSearchHandler("searchInputMobile");
-    function applyOwnedFilter() {
-      const showOwnedOnly = document.getElementById("ownedFilterToggle").checked;
-      const toggle = document.getElementById("ownedFilterToggle");
-      const mobileToggle = document.getElementById("ownedFilterToggleMobile");
-      if (toggle && mobileToggle) {
-        mobileToggle.checked = toggle.checked;
-  }
-  function renderInventory() {
+    function renderInventory() {
       container.innerHTML = '';
     
       for (const [game, characters] of Object.entries(window.games)) {
@@ -688,8 +714,9 @@ const nav = document.querySelector("nav");
           queue = parsed.queue || [];
         }
     
+        // Handle "Show Owned Only" filter (works for both mobile and desktop)
         const showOwnedOnly = document.getElementById("ownedFilterToggleMobile")?.checked || document.getElementById("ownedFilterToggle")?.checked;
-        
+    
         characters.forEach(char => {
           const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
           const isOwned = !!found;
@@ -721,6 +748,31 @@ const nav = document.querySelector("nav");
         container.appendChild(section);
       }
     }
+
+    let lastScrollTop = 0;
+const nav = document.querySelector("nav");
+    
+    function attachSearchHandler(id) {
+      const input = document.getElementById(id);
+    if (input) {
+      input.addEventListener("input", function () {
+        const query = this.value.toLowerCase();
+        document.querySelectorAll(".card").forEach(card => {
+          const name = card.querySelector("strong").textContent.toLowerCase();
+          card.style.display = name.includes(query) ? "inline-block" : "none";
+        });
+      });
+    }
+  }
+  attachSearchHandler("searchInputDesktop");
+  attachSearchHandler("searchInputMobile");
+    function applyOwnedFilter() {
+      const showOwnedOnly = document.getElementById("ownedFilterToggle").checked;
+      const toggle = document.getElementById("ownedFilterToggle");
+      const mobileToggle = document.getElementById("ownedFilterToggleMobile");
+      if (toggle && mobileToggle) {
+        mobileToggle.checked = toggle.checked;
+  }
 
     function toggleMobileMenu() {
       const menu = document.getElementById("mobileMenu");
