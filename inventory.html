@@ -541,6 +541,7 @@
     }
 
     function renderInventory() {
+      const container = document.getElementById("inventoryContainer");
       container.innerHTML = '';
       for (const [game, characters] of Object.entries(window.games)) {
         const section = document.createElement("div");
@@ -569,8 +570,9 @@
           const isOwned = !!found;
           const qty = found?.quantity || 1;
 
-          const showOwnedOnly = document.getElementById("ownedFilterToggle").checked;
-          if (showOwnedOnly && !isOwned) return;
+          const showOwnedOnly = window.innerWidth <= 768 
+            ? document.getElementById("ownedFilterToggleMobile").checked 
+            : document.getElementById("ownedFilterToggle").checked;
 
           const card = document.createElement("div");
           card.className = "card";
