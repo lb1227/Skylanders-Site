@@ -106,4 +106,4 @@ window.games = {
     { name: "Dragonfire Cannon", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/DragonfireCannon.png" },
     { name: "Skylanders Giants Portal Owner’s Pack", image: "https://skylanderscharacterlist.com/wp-content/uploads/2013/02/PortalOwnersPack.png" }
   ]
-};
+};*/
