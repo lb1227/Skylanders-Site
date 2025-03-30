@@ -723,10 +723,15 @@ const nav = document.querySelector("nav");
       const modal = document.getElementById("skylanderModal");
       const detailsContainer = document.getElementById("skylanderDetails");
     
-      // Temporarily not displaying any data (leave the modal open with no content)
-      detailsContainer.innerHTML = '';  // Clear any content
-    
-      // Open the modal by setting display to block
+      // Dynamically set the modal content
+      detailsContainer.innerHTML = `
+        <h2>${skylander.name}</h2>
+        <img src="${skylander.image}" alt="${skylander.name}" style="width: 200px; height: auto; margin-bottom: 1rem;" />
+        <p><strong>Game:</strong> ${skylander.game}</p>
+        <p><strong>Owned:</strong> ${skylander.isOwned ? "Yes" : "No"}</p>
+      `;
+      
+      // Show the modal
       modal.style.display = "block";
     }
     
