@@ -81,7 +81,10 @@
       box-shadow: 0 2px 12px rgba(0,0,0,0.6);
       margin: 1rem;
       display: inline-block;
-      transition: background-color 0.3s ease;
+      transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
+      /* Start offset and invisible */
+      transform: translateY(20px);
+      opacity: 0;
     }
     .owned {
       background-color: #1f4d1f !important;
@@ -130,6 +133,8 @@
       align-items: center;
       transition: background 0.3s ease, box-shadow 0.3s ease;
       margin-bottom: 0.5rem;         /* Space below header */
+      transform: translateY(0);
+      opacity: 1;
     }
     
     .group-header:hover {
@@ -152,7 +157,6 @@
       overflow: hidden;
       opacity: 1;
       transform: scaleY(1);
-      transform-origin: top;
     }
     /* Modal styling */
     .modal {
@@ -550,6 +554,9 @@
         // Create cards container without the "collapsed" class (cards always visible)
         const cards = document.createElement("div");
         cards.className = "cards-wrapper collapsed";
+        // Calculate the delay so that the last card (highest index) has no delay.
+        const delay = (arr.length - index - 1) * 0.1; // adjust multiplier as needed
+        card.style.transitionDelay = delay + "s";
     
         const key = `sky_progress_${user}_${game}`;
         const saved = localStorage.getItem(key);
