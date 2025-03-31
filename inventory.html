@@ -552,11 +552,10 @@
         section.id = `section-${game}`; // Unique ID for each group
 
         // Create cards container without the "collapsed" class (cards always visible)
-        const cards = document.createElement("div");
-        cards.className = "cards-wrapper collapsed";
-        // Calculate the delay so that the last card (highest index) has no delay.
-        const delay = (arr.length - index - 1) * 0.1; // adjust multiplier as needed
-        card.style.transitionDelay = delay + "s";
+         const card = document.createElement("div");
+        card.className = "card";
+        if (collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase())) {
+          card.classList.add("owned");
     
         const key = `sky_progress_${user}_${game}`;
         const saved = localStorage.getItem(key);
@@ -584,35 +583,20 @@
             <div><strong>${char.name}</strong></div>
             ${isOwned ? `<button onclick="removeFromInventory('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}')">Remove</button>` : ''}
           `;
-    
+          
+          // Calculate the delay so that the last card (highest index) has no delay.
+          const delay = (arr.length - index - 1) * 0.1; // adjust multiplier as needed
+          card.style.transitionDelay = delay + "s";
+          
           // Open modal on card click
           card.onclick = () => openModal(char);
-    
+          
           cards.appendChild(card);
         });
     
         // Append only the cards container (no header)
         section.appendChild(cards);
         container.appendChild(section);
-      }
-    }
-
-    function updateQty(name, game, input) {
-      const val = parseInt(input.value);
-      if (isNaN(val) || val < 1) {
-        input.classList.add("invalid");
-        setTimeout(() => input.classList.remove("invalid"), 1000);
-        return;
-      }
-      const key = `sky_progress_${user}_${game}`;
-      const saved = localStorage.getItem(key);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        const found = parsed.collected?.find(x => x.name.trim().toLowerCase() === name.trim().toLowerCase());
-        if (found) {
-          found.quantity = val;
-          localStorage.setItem(key, JSON.stringify(parsed));
-        }
       }
     }
 
