@@ -182,6 +182,11 @@
       window.location.href = 'home.html';
     }
 
+    function toggleMenu() {
+      const menu = document.getElementById("mobileMenu");
+      menu.classList.toggle("show"); // Toggle the 'show' class to display the menu
+    }
+
     window.onload = checkLogin;
   </script>
 </body>
