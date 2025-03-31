@@ -312,6 +312,23 @@
       z-index: 999;
       opacity: 0;
     }
+
+    @keyframes swipeLeft {
+      0% { transform: translateX(0) rotate(0); opacity: 1; }
+      50% { transform: translateX(-50vw) rotate(-10deg); opacity: 0.5; }
+      100% { transform: translateX(-100vw) rotate(-20deg); opacity: 0; }
+    }
+    @keyframes swipeRight {
+      0% { transform: translateX(0) rotate(0); opacity: 1; }
+      50% { transform: translateX(50vw) rotate(10deg); opacity: 0.5; }
+      100% { transform: translateX(100vw) rotate(20deg); opacity: 0; }
+    }
+    .animate-left {
+      animation: swipeLeft 0.5s ease forwards;
+    }
+    .animate-right {
+      animation: swipeRight 0.5s ease forwards;
+    }
     
     .overlay-green {
       background: rgba(76, 175, 80, 0.3); /* green tint */
