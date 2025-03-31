@@ -74,16 +74,20 @@
       padding: 1rem; /* More padding to make the menu look better */
       display: flex;
       flex-direction: column; /* Stack the items vertically */
-      align-items: flex-start; /* Align items to the start of the container */
+      align-items: center; /* Center the buttons */
       gap: 1rem; /* Space between buttons */
       z-index: 1000; /* Ensure it's on top */
       transition: all 0.3s ease;
+    }
+
+    .mobile-menu.show {
+      display: flex; /* Show the menu when .show class is added */
     }
     
 
     .mobile-menu a {
       display: block; /* Make sure buttons are treated as block elements */
-      width: 100%; /* Ensure buttons take up full width */
+      width: 80%; /* Ensure buttons take up most of the menu width */
       padding: 1rem;
       font-size: 1.2rem;
       text-decoration: none;
@@ -91,7 +95,6 @@
       border-bottom: 1px solid white;
       background-color: #333; /* Darker background for items */
       border-radius: 8px;
-      margin-bottom: 0.5rem; /* Space between the items */
       text-align: center;
     }
 
