@@ -544,20 +544,38 @@
         // When touch ends, decide if swipe is far enough to trigger an action
         image.addEventListener("touchend", (e) => {
           // Re-enable transition for a smooth end animation
-          image.style.transition = "transform 0.3s ease";
+          image.style.transition = "transform 0.5s ease-out";
           
-          if (currentDeltaX === threshold) {
-            // User swiped right past threshold
-            swipeAction("right");
-          } else if (currentDeltaX === -threshold) {
-            // User swiped left past threshold
-            swipeAction("left");
+          const threshold = 50;
+          if (currentDeltaX > threshold) {
+            // For right swipe: animate off-screen to the right
+            const targetX = window.innerWidth; // Off-screen right position
+            const targetRotation = 20; // in degrees; adjust as needed
+            image.style.transform = `translateX(${targetX}px) rotate(${targetRotation}deg)`;
+            
+            image.addEventListener("transitionend", function handler() {
+              image.removeEventListener("transitionend", handler);
+              swipeActionComplete("right");
+            });
+            
+          } else if (currentDeltaX < -threshold) {
+            // For left swipe: animate off-screen to the left
+            const targetX = -window.innerWidth; // Off-screen left position
+            const targetRotation = -20; // in degrees; adjust as needed
+            image.style.transform = `translateX(${targetX}px) rotate(${targetRotation}deg)`;
+            
+            image.addEventListener("transitionend", function handler() {
+              image.removeEventListener("transitionend", handler);
+              swipeActionComplete("left");
+            });
+            
           } else {
-            // Not far enough; animate back to center
+            // Not far enough: animate back to center
+            image.style.transition = "transform 0.3s ease";
             image.style.transform = "translateX(0) rotate(0)";
           }
           
-          // Reset delta for the next swipe
+          // Reset for the next swipe
           currentDeltaX = 0;
         });
 
@@ -686,6 +704,44 @@
         };
         
         img.addEventListener("animationend", handler);
+      }
+
+      function swipeActionComplete(direction) {
+        // Reset transition/transform for next character
+        const img = document.getElementById("collectibleImage");
+        img.style.transition = "";
+        img.style.transform = "translateX(0) rotate(0)";
+        
+        // Get the current collectible (we assume the user swiped past threshold, so remove it)
+        const current = collectiblesQueue.shift();
+        lastAction = direction === "right" ? "have" : "dont";
+        lastCollectible = current;
+        
+        // Update localStorage and/or queue
+        if (direction === "right") {
+          current.quantity = 1;
+          const user = localStorage.getItem("sky_user") || "guest";
+          const key = `sky_progress_${user}_${currentGame}`;
+          const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], queue: [], skipped: [] };
+          if (!saved.collected.find(i => i.name === current.name)) {
+            saved.collected.push(current);
+          }
+          localStorage.setItem(key, JSON.stringify({
+            collected: saved.collected,
+            queue: collectiblesQueue,
+            skipped: skippedQueue
+          }));
+        } else {
+          skippedQueue.push(current);
+          saveProgress();
+        }
+        
+        // Optionally reinitialize the queue if empty
+        if (collectiblesQueue.length === 0) {
+          collectiblesQueue = [...games[currentGame]];
+        }
+        
+        showCurrentCollectible();
       }
     </script>
   </div>
