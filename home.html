@@ -548,32 +548,34 @@
         
         const threshold = 50;
         if (currentDeltaX >= threshold) {
-          // For right swipe: animate off-screen to the right
-          const targetX = window.innerWidth; // Off-screen right position
-          const targetRotation = 20; // in degrees; adjust as needed
-          image.style.transform = `translateX(${targetX}px) rotate(${targetRotation}deg)`;
-          
-          image.addEventListener("transitionend", function handler() {
-            image.removeEventListener("transitionend", handler);
-            swipeActionComplete("right");
-          });
-          
-        } else if (currentDeltaX <= -threshold) {
-          // For left swipe: animate off-screen to the left
-          const targetX = -window.innerWidth; // Off-screen left position
-          const targetRotation = -20; // in degrees; adjust as needed
-          image.style.transform = `translateX(${targetX}px) rotate(${targetRotation}deg)`;
-          
-          image.addEventListener("transitionend", function handler() {
-            image.removeEventListener("transitionend", handler);
-            swipeActionComplete("left");
-          });
-          
-        } else {
-          // Not far enough: animate the image back to center
-          image.style.transition = "transform 0.3s ease";
-          image.style.transform = "translateX(0) rotate(0)";
-        }
+        // Trigger green overlay before animating off-screen
+        triggerOverlay("overlay-green");
+      
+        const targetX = window.innerWidth; // Off-screen right position
+        const targetRotation = 20; // Adjust as needed
+        image.style.transform = `translateX(${targetX}px) rotate(${targetRotation}deg)`;
+        
+        image.addEventListener("transitionend", function handler() {
+          image.removeEventListener("transitionend", handler);
+          swipeActionComplete("right");
+        });
+      } else if (currentDeltaX <= -threshold) {
+        // Trigger red overlay before animating off-screen
+        triggerOverlay("overlay-red");
+      
+        const targetX = -window.innerWidth; // Off-screen left position
+        const targetRotation = -20; // Adjust as needed
+        image.style.transform = `translateX(${targetX}px) rotate(${targetRotation}deg)`;
+        
+        image.addEventListener("transitionend", function handler() {
+          image.removeEventListener("transitionend", handler);
+          swipeActionComplete("left");
+        });
+      } else {
+        // Animate back to center if threshold not met
+        image.style.transition = "transform 0.3s ease";
+        image.style.transform = "translateX(0) rotate(0)";
+      }
         
         // Reset for the next swipe
         currentDeltaX = 0;
