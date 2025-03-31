@@ -57,9 +57,9 @@
     top: 20px; /* Position it 20px from the top */
     right: 20px; /* Position it 20px from the right */
   }
-  /* Mobile Menu Styling */
+  /* Initially, the menu is hidden */
   .mobile-menu {
-    display: none;
+    display: none; /* Hidden by default */
     position: absolute;
     top: 60px; /* Positioned just below the hamburger icon */
     right: 20px; /* 20px from the right */
@@ -70,27 +70,33 @@
     padding: 1rem; /* More padding to make the menu look better */
     display: flex;
     flex-direction: column; /* Stack the items vertically */
+    align-items: flex-start; /* Align items to the start of the container */
     gap: 1rem; /* Space between buttons */
     z-index: 1000; /* Ensure it's on top */
     max-height: 80vh; /* Limit the maximum height to 80% of the viewport height */
     overflow-y: auto; /* Allow scrolling if the content overflows */
+    transition: all 0.3s ease;
   }
-
-  /* Mobile Menu Links */
+  
+  /* Add the .show class to make the menu visible */
+  .mobile-menu.show {
+    display: flex; /* Show the menu when .show class is added */
+  }
+  
   .mobile-menu a {
+    display: block; /* Make sure buttons are treated as block elements */
+    width: 100%; /* Ensure buttons take up full width */
     padding: 1rem;
     font-size: 1.2rem;
     text-decoration: none;
     color: white;
     border-bottom: 1px solid white;
-    width: 100%;
-    text-align: center;
     background-color: #333; /* Darker background for items */
     border-radius: 8px;
     margin-bottom: 0.5rem; /* Space between the items */
+    text-align: center;
   }
-
-  /* Hover Effect for Menu Links */
+  
   .mobile-menu a:hover {
     background-color: #388e3c;
   }
@@ -153,11 +159,7 @@
     // Function to toggle the visibility of the mobile menu
     function toggleMenu() {
       const menu = document.getElementById("mobileMenu");
-      if (menu.style.display === "block") {
-        menu.style.display = "none";
-      } else {
-        menu.style.display = "block";
-      }
+      menu.classList.toggle("show"); // Toggle the 'show' class on the menu
     }
 
     // Check if the user is logged in (localStorage-based)
