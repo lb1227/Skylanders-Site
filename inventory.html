@@ -568,6 +568,9 @@
     </div>
   </header>
 
+  <!-- Group Categories Navigation -->
+  <div id="groupCategoriesNav" style="display: flex; justify-content: center; gap: 1rem; margin: 1rem 0;"></div>
+  
   <!-- Inventory Container (Inside .container) -->
   <div class="container">
     <div id="inventoryContainer"></div> <!-- Inventory will be rendered here -->
@@ -601,14 +604,21 @@
       for (const [game, characters] of Object.entries(window.games)) {
         const section = document.createElement("div");
         section.className = "group-section";
-    
+        section.id = `section-${game}`; // assign an id based on the game name
+      
         const header = document.createElement("div");
         header.className = "group-header";
         header.innerHTML = `<span>${game}</span><span>▼</span>`;
-        header.onclick = () => cards.classList.toggle("collapsed");
-    
+        // Optional: you can attach a similar collapse-all-then-toggle behavior here too
+        header.onclick = () => {
+          document.querySelectorAll('.cards-wrapper').forEach(wrapper => {
+            wrapper.classList.add('collapsed');
+          });
+          cards.classList.remove('collapsed');
+        };
+      
         const cards = document.createElement("div");
-        cards.className = "cards-wrapper";
+        cards.className = "cards-wrapper collapsed"; // start collapsed
     
         const key = `sky_progress_${user}_${game}`;
         const saved = localStorage.getItem(key);
@@ -687,6 +697,7 @@
 
 
     window.onload = () => {
+       renderGroupCategoriesNav();
       renderInventory();
       const logoutBtn = document.getElementById("logoutBtn");
       if (user && user !== "guest") {
@@ -758,6 +769,34 @@ const nav = document.querySelector("nav");
     function closeModal() {
       const modal = document.getElementById("skylanderModal");
       modal.style.display = "none";  // Hide the modal when close button is clicked
+    }
+
+    function renderGroupCategoriesNav() {
+      const groupNav = document.getElementById("groupCategoriesNav");
+      groupNav.innerHTML = ""; // clear any existing buttons
+    
+      Object.keys(window.games).forEach(game => {
+        const btn = document.createElement("button");
+        btn.textContent = game;
+        btn.style.padding = "0.5rem 1rem";
+        btn.style.borderRadius = "8px";
+        btn.style.border = "none";
+        btn.style.cursor = "pointer";
+    
+        btn.onclick = () => {
+          // Collapse every group's cards container first:
+          document.querySelectorAll('.cards-wrapper').forEach(wrapper => {
+            wrapper.classList.add('collapsed');
+          });
+    
+          // Then expand the selected group's cards
+          const section = document.getElementById(`section-${game}`);
+          const cards = section.querySelector(".cards-wrapper");
+          cards.classList.remove('collapsed');
+        };
+    
+        groupNav.appendChild(btn);
+      });
     }
   </script>
 </body>
