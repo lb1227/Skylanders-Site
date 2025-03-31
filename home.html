@@ -525,13 +525,19 @@
           // Remove any transition to follow finger immediately
           image.style.transition = "none";
         });
-        
+        const threshold = 50; 
         // Update the image position as the finger moves
         image.addEventListener("touchmove", (e) => {
           const touchCurrentX = e.changedTouches[0].screenX;
           currentDeltaX = touchCurrentX - touchStartX;
+          // Clamp the value so it never goes beyond ±threshold
+          if (currentDeltaX > threshold) {
+            currentDeltaX = threshold;
+          } else if (currentDeltaX < -threshold) {
+            currentDeltaX = -threshold;
+          }
           // Optionally add a slight rotation based on delta
-          const rotation = currentDeltaX * 0.05; // adjust rotation factor as needed
+          const rotation = currentDeltaX * 0.05;
           image.style.transform = `translateX(${currentDeltaX}px) rotate(${rotation}deg)`;
         });
         
@@ -540,17 +546,18 @@
           // Re-enable transition for a smooth end animation
           image.style.transition = "transform 0.3s ease";
           
-          const threshold = 50; 
-          if (currentDeltaX > threshold) {
+          if (currentDeltaX === threshold) {
+            // User swiped right past threshold
             swipeAction("right");
-          } else if (currentDeltaX < -threshold) {
+          } else if (currentDeltaX === -threshold) {
+            // User swiped left past threshold
             swipeAction("left");
           } else {
-            // Not far enough: animate the image back to center
+            // Not far enough; animate back to center
             image.style.transform = "translateX(0) rotate(0)";
           }
-        
-          // Reset the delta for the next swipe
+          
+          // Reset delta for the next swipe
           currentDeltaX = 0;
         });
 
