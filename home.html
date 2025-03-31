@@ -386,6 +386,12 @@
       <button onclick="goToAccount()">Account</button>
       <button onclick="logout()">Logout</button>
     </div>
+
+    <div style="display: flex; justify-content: center; gap: 2rem; margin: 1rem 0;">
+      <button id="dontHaveItBtn" style="background-color: black; color: #e53935; border: 2px solid #e53935; padding: 0.5rem 1rem; border-radius: 6px; font-size: 1.5rem; cursor: pointer;">❌</button>
+      <button id="haveItBtn" style="background-color: black; color: #4caf50; border: 2px solid #4caf50; padding: 0.5rem 1rem; border-radius: 6px; font-size: 1.5rem; cursor: pointer;">✅</button>
+    </div>
+    <button id="undoBtn" style="display: block; margin: 1rem auto; background-color: #555; color: white; border: 1px solid #ccc; padding: 0.5rem 1rem; border-radius: 6px; font-size: 1.2rem; cursor: pointer;">Undo</button>
     
     <div id="collectibleContainer">
       <img id="collectibleImage" alt="Collectible Image" />
@@ -398,6 +404,8 @@
     </div>
 
     <script>
+      let lastAction = null;       // "have" or "dont"
+      let lastCollectible = null;  // The collectible that was last processed
       function initializeApp() 
       {
         const user = localStorage.getItem("sky_user");
@@ -481,48 +489,54 @@
        }
  
        document.getElementById("haveItBtn").onclick = () => {
-       const img = document.getElementById("collectibleImage");
-       const current = collectiblesQueue.shift();
-       if (!current) return;
-       img.classList.add("animate-right");
-       const handler = () => {
-         img.classList.remove("animate-right");
-         img.removeEventListener("animationend", handler);
-         current.quantity = 1;
- 
-         const user = localStorage.getItem("sky_user") || "guest";
-         const key = `sky_progress_${user}_${currentGame}`;
-         const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], queue: [], skipped: [] };
- 
-         if (!saved.collected.find(i => i.name === current.name)) {
-           saved.collected.push(current);
-         }
- 
-         localStorage.setItem(key, JSON.stringify({
-           collected: saved.collected,
-           queue: collectiblesQueue,
-           skipped: skippedQueue
-         }));
- 
-         showCurrentCollectible();
-       };
-       img.addEventListener("animationend", handler);
-     };
+        const img = document.getElementById("collectibleImage");
+        const current = collectiblesQueue.shift();
+        if (!current) return;
+        
+        // Store this action
+        lastAction = "have";
+        lastCollectible = current;
+        
+        img.classList.add("animate-right");
+        const handler = () => {
+          img.classList.remove("animate-right");
+          img.removeEventListener("animationend", handler);
+          current.quantity = 1;
+          const user = localStorage.getItem("sky_user") || "guest";
+          const key = `sky_progress_${user}_${currentGame}`;
+          const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], queue: [], skipped: [] };
+          if (!saved.collected.find(i => i.name === current.name)) {
+            saved.collected.push(current);
+          }
+          localStorage.setItem(key, JSON.stringify({
+            collected: saved.collected,
+            queue: collectiblesQueue,
+            skipped: skippedQueue
+          }));
+          showCurrentCollectible();
+        };
+        img.addEventListener("animationend", handler);
+      };
  
        document.getElementById("dontHaveItBtn").onclick = () => {
-       const img = document.getElementById("collectibleImage");
-       const current = collectiblesQueue.shift();
-       if (!current) return;
-       img.classList.add("animate-left");
-       const handler = () => {
-         img.classList.remove("animate-left");
-         img.removeEventListener("animationend", handler);
-         skippedQueue.push(current);
-         showCurrentCollectible();
-         saveProgress();
-       };
-       img.addEventListener("animationend", handler);
-     };
+        const img = document.getElementById("collectibleImage");
+        const current = collectiblesQueue.shift();
+        if (!current) return;
+        
+        // Store this action
+        lastAction = "dont";
+        lastCollectible = current;
+        
+        img.classList.add("animate-left");
+        const handler = () => {
+          img.classList.remove("animate-left");
+          img.removeEventListener("animationend", handler);
+          skippedQueue.push(current);
+          showCurrentCollectible();
+          saveProgress();
+        };
+        img.addEventListener("animationend", handler);
+      };
  
        document.getElementById("reviewSkippedBtn").onclick = () => {
          if (skippedQueue.length === 0) return;
@@ -609,6 +623,43 @@
           img.addEventListener("click", removeNudge);
         }
       }
+      document.getElementById("undoBtn").onclick = () => {
+        // If there is no last action, do nothing.
+        if (!lastAction || !lastCollectible) return;
+        
+        const user = localStorage.getItem("sky_user") || "guest";
+        const key = `sky_progress_${user}_${currentGame}`;
+        let saved = JSON.parse(localStorage.getItem(key)) || { collected: [], queue: [], skipped: [] };
+      
+        if (lastAction === "have") {
+          // Remove the collectible from the "collected" array.
+          saved.collected = saved.collected.filter(i => i.name !== lastCollectible.name);
+          // Reinsert the collectible at the beginning of the queue.
+          collectiblesQueue.unshift(lastCollectible);
+        } else if (lastAction === "dont") {
+          // Remove the collectible from the skipped queue if present.
+          const index = skippedQueue.findIndex(i => i.name === lastCollectible.name);
+          if (index !== -1) {
+            skippedQueue.splice(index, 1);
+          }
+          // Reinsert the collectible at the beginning of the queue.
+          collectiblesQueue.unshift(lastCollectible);
+        }
+        
+        // Update localStorage with the reverted state.
+        localStorage.setItem(key, JSON.stringify({
+          collected: saved.collected,
+          queue: collectiblesQueue,
+          skipped: skippedQueue
+        }));
+        
+        // Clear lastAction so that undo only happens once.
+        lastAction = null;
+        lastCollectible = null;
+        
+        // Re-render the current collectible.
+        showCurrentCollectible();
+      };
     </script>
   </div>
 </body>
