@@ -536,20 +536,7 @@
           // Reset the delta for the next swipe
           currentDeltaX = 0;
         });
- 
-       function handleSwipe() 
-       {
-         const threshold = 50;
-         const verticalThreshold = 50;
-         const deltaX = touchEndX - touchStartX;
-         const deltaY = touchEndY - touchStartY;
- 
-         if (Math.abs(deltaX) > Math.abs(deltaY)) 
-         {
-           if (deltaX < -threshold) document.getElementById("dontHaveItBtn").click();
-           else if (deltaX > threshold) document.getElementById("haveItBtn").click();
-         } 
-       }
+
       function startNudgeAnimationIfNeeded() {
         // Assuming collectibles and collectiblesQueue are defined and represent the current game data
         // If the queue hasn't been modified, it means no collectible has been chosen yet.
@@ -620,27 +607,33 @@
         // Clear any inline transform from touchmove
         img.style.transform = "";
         
-        const current = collectiblesQueue.shift();
+        // Instead of shifting immediately, get the current collectible without removing it:
+        const current = collectiblesQueue[0];
         if (!current) return;
         
-        // Store the action
+        // Store the action for later use
         lastAction = direction === "right" ? "have" : "dont";
         lastCollectible = current;
         
-        // Trigger overlay
+        // Trigger overlay based on direction
         triggerOverlay(direction === "right" ? "overlay-green" : "overlay-red");
         
-        // Determine animation class and add it
+        // Determine the appropriate animation class
         const animationClass = direction === "right" ? "animate-right" : "animate-left";
         img.classList.add(animationClass);
         
+        // Set up the animationend handler:
         const handler = () => {
           img.classList.remove(animationClass);
-          // Reset the transform to ensure the new image appears centered
+          // Reset the transform for the new image
           img.style.transform = "translateX(0) rotate(0)";
           img.removeEventListener("animationend", handler);
           
-          // Update storage/queues based on swipe direction
+          // Now remove the current collectible from the queue:
+          collectiblesQueue.shift();
+          console.log("Queue after shift:", collectiblesQueue.length);
+          
+          // Update localStorage and/or skipped queue based on the swipe direction:
           if (direction === "right") {
             current.quantity = 1;
             const user = localStorage.getItem("sky_user") || "guest";
@@ -657,6 +650,12 @@
           } else {
             skippedQueue.push(current);
             saveProgress();
+          }
+          
+          // If the queue is empty, consider reinitializing:
+          if (collectiblesQueue.length === 0) {
+            console.log("Queue empty, reinitializing...");
+            collectiblesQueue = [...games[currentGame]];
           }
           
           showCurrentCollectible();
