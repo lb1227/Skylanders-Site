@@ -103,6 +103,12 @@
       background-color: #388e3c;
     }
 
+    .mobile-buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
     /* Media Queries */
     @media (max-width: 768px) {
       .desktop {
@@ -159,25 +165,19 @@
 
   <script>
     // Function to toggle the visibility of the mobile menu
-    function toggleMenu() {
-      const menu = document.getElementById("mobileMenu");
-      menu.classList.toggle("show"); // Toggle the 'show' class on the menu
-    }
-
-    // Check if the user is logged in (localStorage-based)
     const user = localStorage.getItem("sky_user");
 
-    // Only show "Touch to Start" or login/signup based on user login state
     function checkLogin() {
       const mobileStartPage = document.querySelector(".mobile");
-
+      const touchToStartText = document.querySelector("#touchToStartText");
+    
       if (user && user !== "guest") {
-        mobileStartPage.style.pointerEvents = "auto"; // Enable buttons on mobile
-        mobileStartPage.querySelector("h1").innerHTML = "Press to Start"; // Show "Press to Start"
+        // User is logged in
+        touchToStartText.innerHTML = "Press to Start"; // Change the text
         mobileStartPage.querySelector("#mobile-buttons").innerHTML = '<button onclick="goToHome()">Start</button>';
       } else {
-        mobileStartPage.style.pointerEvents = "none"; // Disable mobile buttons if not logged in
-        mobileStartPage.querySelector("h1").innerHTML = "Please Log In"; // Show login message
+        // User is not logged in
+        touchToStartText.innerHTML = "Please Log In"; // Change the text to indicate login
         mobileStartPage.querySelector("#mobile-buttons").innerHTML = '<button onclick="location.href=\'signup.html\'">Sign Up</button>';
       }
     }
