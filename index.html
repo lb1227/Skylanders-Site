@@ -157,7 +157,7 @@
 
   <!-- Mobile Version (Buttons) -->
   <div class="mobile">
-    <h1>Touch to Start</h1>
+    <h1 id="touchToStartText">Touch to Start</h1>
     <div id="mobile-buttons">
       <!-- Only show these if the user is logged in -->
     </div>
@@ -167,11 +167,7 @@
   <div class="hamburger" onclick="toggleMenu()">☰</div>
 
   <!-- Mobile Menu (Hidden by default) -->
-  <div id="mobileMenu" class="mobile-menu">
-    <a href="account.html">Account</a>
-    <a href="login.html">Login</a>
-    <a href="signup.html">Sign Up</a>
-  </div>
+  <div id="mobileMenu" class="mobile-menu"></div>
 
   <script>
     // Function to toggle the visibility of the mobile menu
@@ -179,16 +175,24 @@
 
     function checkLogin() {
       const mobileStartPage = document.querySelector(".mobile");
-      const touchToStartText = document.querySelector("#touchToStartText");
+      const touchToStartText = document.getElementById("touchToStartText");
+      const mobileButtons = mobileStartPage.querySelector("#mobile-buttons");
+      const mobileMenu = document.getElementById("mobileMenu");
     
       if (user && user !== "guest") {
-        // User is logged in
-        touchToStartText.innerHTML = "Press to Start"; // Change the text
-        mobileStartPage.querySelector("#mobile-buttons").innerHTML = '<button onclick="goToHome()">Start</button>';
+        // User is logged in:
+        touchToStartText.innerHTML = "Press to Start";
+        // Show a "Start" button on the mobile start page:
+        mobileButtons.innerHTML = '<button onclick="goToHome()">Start</button>';
+        // Update the mobile menu to show only Account and Logout
+        mobileMenu.innerHTML = '<a href="account.html">Account</a><a href="logout.html">Logout</a>';
       } else {
-        // User is not logged in
-        touchToStartText.innerHTML = "Please Log In"; // Change the text to indicate login
-        mobileStartPage.querySelector("#mobile-buttons").innerHTML = '<button onclick="location.href=\'signup.html\'">Sign Up</button>';
+        // User is not logged in:
+        touchToStartText.innerHTML = "Please Log In";
+        // Do not show a Start button
+        mobileButtons.innerHTML = '';
+        // Update the mobile menu to show Login and Sign Up
+        mobileMenu.innerHTML = '<a href="login.html">Login</a><a href="signup.html">Sign Up</a>';
       }
     }
 
