@@ -616,8 +616,10 @@
         overlay.classList.add(className);
       }
       function swipeAction(direction) {
-        // direction should be either "right" or "left"
         const img = document.getElementById("collectibleImage");
+        // Clear any inline transform from touchmove
+        img.style.transform = "";
+        
         const current = collectiblesQueue.shift();
         if (!current) return;
         
@@ -625,20 +627,20 @@
         lastAction = direction === "right" ? "have" : "dont";
         lastCollectible = current;
         
-        // Trigger the overlay based on direction
+        // Trigger overlay
         triggerOverlay(direction === "right" ? "overlay-green" : "overlay-red");
         
-        // Determine the animation class to add
+        // Determine animation class and add it
         const animationClass = direction === "right" ? "animate-right" : "animate-left";
         img.classList.add(animationClass);
         
         const handler = () => {
           img.classList.remove(animationClass);
-          // Reset transform so the new image appears centered.
+          // Reset the transform to ensure the new image appears centered
           img.style.transform = "translateX(0) rotate(0)";
           img.removeEventListener("animationend", handler);
           
-          // Update storage and queues
+          // Update storage/queues based on swipe direction
           if (direction === "right") {
             current.quantity = 1;
             const user = localStorage.getItem("sky_user") || "guest";
@@ -653,7 +655,6 @@
               skipped: skippedQueue
             }));
           } else {
-            // For swipe left
             skippedQueue.push(current);
             saveProgress();
           }
