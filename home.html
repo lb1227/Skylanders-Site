@@ -301,22 +301,7 @@
     .nudge {
       animation: swipeNudge 1s ease-in-out infinite;
     }
-    @keyframes swipeLeft {
-      0% { transform: translateX(0) rotate(0); opacity: 1; }
-      50% { transform: translateX(-50vw) rotate(-10deg); opacity: 0.5; }
-      100% { transform: translateX(-100vw) rotate(-20deg); opacity: 0; }
-    }
-    @keyframes swipeRight {
-      0% { transform: translateX(0) rotate(0); opacity: 1; }
-      50% { transform: translateX(50vw) rotate(10deg); opacity: 0.5; }
-      100% { transform: translateX(100vw) rotate(20deg); opacity: 0; }
-    }
-    .animate-left {
-      animation: swipeLeft 0.5s ease forwards;
-    }
-    .animate-right {
-      animation: swipeRight 0.5s ease forwards;
-    }
+   
     #swipeOverlay {
       position: fixed;
       top: 0;
@@ -560,23 +545,49 @@
          showCurrentCollectible();
        };
  
-       let touchStartX = 0;
-       let touchStartY = 0;
-       let touchEndX = 0;
-       let touchEndY = 0;
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let currentDeltaX = 0;
+      const image = document.getElementById("collectibleImage");
  
-       const image = document.getElementById("collectibleImage");
- 
-       image.addEventListener("touchstart", (e) => {
-         touchStartX = e.changedTouches[0].screenX;
-         touchStartY = e.changedTouches[0].screenY;
-       });
- 
-       image.addEventListener("touchend", (e) => {
-         touchEndX = e.changedTouches[0].screenX;
-         touchEndY = e.changedTouches[0].screenY;
-         handleSwipe();
-       });
+       // When touch starts, record the starting position
+        image.addEventListener("touchstart", (e) => {
+          touchStartX = e.changedTouches[0].screenX;
+          touchStartY = e.changedTouches[0].screenY;
+          // Remove any transition to follow finger immediately
+          image.style.transition = "none";
+        });
+        
+        // Update the image position as the finger moves
+        image.addEventListener("touchmove", (e) => {
+          const touchCurrentX = e.changedTouches[0].screenX;
+          currentDeltaX = touchCurrentX - touchStartX;
+          // Optionally add a slight rotation based on delta
+          const rotation = currentDeltaX * 0.05; // adjust rotation factor as needed
+          image.style.transform = `translateX(${currentDeltaX}px) rotate(${rotation}deg)`;
+        });
+        
+        // When touch ends, decide if swipe is far enough to trigger an action
+        image.addEventListener("touchend", (e) => {
+          // Re-enable transition for a smooth end animation
+          image.style.transition = "transform 0.3s ease";
+        
+          // Define the threshold for a swipe
+          const threshold = 50; 
+          if (currentDeltaX > threshold) {
+            // Swipe right: trigger haveItBtn click and animate out (if needed)
+            document.getElementById("haveItBtn").click();
+          } else if (currentDeltaX < -threshold) {
+            // Swipe left: trigger dontHaveItBtn click and animate out (if needed)
+            document.getElementById("dontHaveItBtn").click();
+          } else {
+            // Not far enough: animate the image back to center
+            image.style.transform = "translateX(0) rotate(0)";
+          }
+          
+          // Reset the delta for the next swipe
+          currentDeltaX = 0;
+        });
  
        function handleSwipe() 
        {
