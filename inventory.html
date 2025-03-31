@@ -272,6 +272,27 @@
         justify-content: space-around;
         align-items: center;
       }
+      /* Target the container with the search and filter */
+      #navTopMobile .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem; /* Reduced gap */
+      }
+      /* Tighter styling for the search input */
+      #navTopMobile input {
+        max-width: 150px;
+        padding: 0.3rem 0.6rem;
+        margin: 0; /* Remove extra margin */
+      }
+      /* Adjust the switch label spacing */
+      #navTopMobile .switch {
+        margin-left: 0.2rem;
+      }
+      /* Reduce the Owned Only text margin and font-size if needed */
+      #navTopMobile span {
+        font-size: 0.65rem;
+        margin-left: 0.2rem;
+      }
       body {
         padding-top: 40px; /* Prevent top nav overlap */
       }
