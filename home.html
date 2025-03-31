@@ -360,7 +360,7 @@
     }
   </style>
 </head>
-<body onload="initializeApp()">
+<body>
   <nav>
     <div id="navMenu" class="nav-links">
       <a href="inventory.html" class="nav-button">Inventory</a>
@@ -406,34 +406,45 @@
     <script>
       let lastAction = null;       // "have" or "dont"
       let lastCollectible = null;  // The collectible that was last processed
-      function initializeApp() 
-      {
+      function initializeApp() {
         const user = localStorage.getItem("sky_user");
         const loginBtn = document.getElementById("loginBtn");
         const signupBtn = document.getElementById("signupBtn");
         const logoutBtn = document.getElementById("logoutBtn");
-
+      
         if (user && user !== "guest") {
           loginBtn.style.display = "none";
           signupBtn.style.display = "none";
           logoutBtn.style.display = "inline-block";
-        } else 
-        {
+        } else {
           loginBtn.style.display = "inline-block";
           signupBtn.style.display = "inline-block";
           logoutBtn.style.display = "none";
         }
-
+      
         const currentGame = document.getElementById("gameSelector").value;
         const img = document.getElementById("collectibleImage");
         if (!img.src) {
           img.src = "https://static.wikia.nocookie.net/skylanders/images/5/5d/Skylanders.jpg/revision/latest?cb=20170212184928";
         }
-        // Only start the nudge animation if no collectible has been chosen yet.
+      
+        // If no collectible has been chosen yet, start the nudge animation
         if (collectiblesQueue.length === collectibles.length) {
           startNudgeAnimationIfNeeded();
         }
+      
+        // Load saved progress
+        const key = `sky_progress_${user || "guest"}_${currentGame}`;
+        const saved = localStorage.getItem(key);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          collectiblesQueue = parsed.queue || [...games[currentGame]];
+          skippedQueue = parsed.skipped || [];
+        }
+        showCurrentCollectible();
       }
+      window.onload = initializeApp;
+
       function logout() {
         localStorage.removeItem("sky_user");
         window.location.href = "login.html";
@@ -558,18 +569,6 @@
          } else {
            collectiblesQueue = [...collectibles];
            skippedQueue = [];
-         }
-         showCurrentCollectible();
-       };
- 
-       window.onload = () => {
-         const user = localStorage.getItem("sky_user") || "guest";
-         const key = `sky_progress_${user}_${currentGame}`;
-         const saved = localStorage.getItem(key);
-         if (saved) {
-           const parsed = JSON.parse(saved);
-           collectiblesQueue = parsed.queue || [...games[currentGame]];
-           skippedQueue = parsed.skipped || [];
          }
          showCurrentCollectible();
        };
