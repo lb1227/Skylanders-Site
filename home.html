@@ -351,23 +351,28 @@
 
   <div class="wrapper">
     <div class="container">
+      <!-- Welcome Section -->
       <h2>Welcome back to Skylanders Tracker</h2>
       <label for="gameSelector">Select Game:</label>
       <select id="gameSelector">
         <option value="Spyro's Adventure">Spyro's Adventure</option>
         <option value="Giants">Giants</option>
       </select>
-    </div>
+  
+      <!-- Undo Button and Swipe Overlay -->
       <button id="undoBtn" style="display: block; margin: 1rem auto; background-color: #555; color: white; border: 1px solid #ccc; padding: 0.5rem 1rem; border-radius: 6px; font-size: 1.2rem; cursor: pointer;">Undo</button>
       <div id="swipeOverlay"></div>
-    <div id="collectibleContainer">
-      <img id="collectibleImage" alt="Collectible Image" />
-      <p id="collectibleName"></p>
-      <div style="display: flex; justify-content: center; gap: 2rem; margin: 1rem 0;">
-        <button id="dontHaveItBtn" style="background-color: black; color: #e53935; border: 2px solid #e53935; padding: 0.5rem 1rem; border-radius: 6px; font-size: 1.5rem; cursor: pointer;">❌</button>
-        <button id="haveItBtn" style="background-color: black; color: #4caf50; border: 2px solid #4caf50; padding: 0.5rem 1rem; border-radius: 6px; font-size: 1.5rem; cursor: pointer;">✅</button>
+  
+      <!-- Collectibles Section -->
+      <div id="collectibleContent">
+        <img id="collectibleImage" alt="Collectible Image" />
+        <p id="collectibleName"></p>
+        <div style="display: flex; justify-content: center; gap: 2rem; margin: 1rem 0;">
+          <button id="dontHaveItBtn" style="background-color: black; color: #e53935; border: 2px solid #e53935; padding: 0.5rem 1rem; border-radius: 6px; font-size: 1.5rem; cursor: pointer;">❌</button>
+          <button id="haveItBtn" style="background-color: black; color: #4caf50; border: 2px solid #4caf50; padding: 0.5rem 1rem; border-radius: 6px; font-size: 1.5rem; cursor: pointer;">✅</button>
+        </div>
+        <button id="reviewSkippedBtn" style="display:none; margin-top: 1rem; background-color: #444; color: white; border: 1px solid #ccc; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">Review Skipped</button>
       </div>
-      <button id="reviewSkippedBtn" style="display:none; margin-top: 1rem; background-color: #444; color: white; border: 1px solid #ccc; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">Review Skipped</button>
     </div>
   </div>
 
