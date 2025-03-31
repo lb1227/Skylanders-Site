@@ -185,7 +185,7 @@
         // Show a "Start" button on the mobile start page:
         mobileButtons.innerHTML = '<button onclick="goToHome()">Start</button>';
         // Update the mobile menu to show only Account and Logout
-        mobileMenu.innerHTML = '<a href="account.html">Account</a><a href="logout.html">Logout</a>';
+        mobileMenu.innerHTML = '<a href="account.html">Account</a><button onclick="logout()">Logout</button>';
       } else {
         // User is not logged in:
         touchToStartText.innerHTML = "Please Log In";
@@ -220,6 +220,10 @@
     });
 
     window.onload = checkLogin;
+    function logout() {
+      localStorage.removeItem("sky_user");
+      window.location.href = "index.html"; // or another appropriate location
+    }
   </script>
 </body>
 </html>
