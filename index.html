@@ -14,119 +14,118 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Skylanders Tracker - Start</title>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: black;
-      color: white;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      flex-direction: column;
-      text-align: center;
-      position: relative;
-    }
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 2rem;
-    }
-    button {
-      padding: 0.75rem 1.5rem;
-      margin: 0.5rem;
-      font-size: 1.2rem;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background-color: #4caf50;
-      color: white;
-      transition: background 0.3s ease;
-    }
-    button:hover {
-      background-color: #388e3c;
-    }
+  body {
+    margin: 0;
+    padding: 0;
+    background: black;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+    text-align: center;
+    position: relative;
+  }
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+  }
+  button {
+    padding: 0.75rem 1.5rem;
+    margin: 0.5rem;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #4caf50;
+    color: white;
+    transition: background 0.3s ease;
+  }
+  button:hover {
+    background-color: #388e3c;
+  }
 
-    /* Hamburger Menu Styling */
-    .hamburger {
+  /* Hamburger Menu Styling */
+  .hamburger {
+    display: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: white;
+    position: absolute;
+    top: 20px; /* Position it 20px from the top */
+    right: 20px; /* Position it 20px from the right */
+  }
+  /* Initially, the menu is hidden */
+  .mobile-menu {
+    display: none; /* Hidden by default */
+    position: absolute;
+    top: 60px; /* Positioned just below the hamburger icon */
+    right: 20px; /* 20px from the right */
+    width: 250px; /* Increased width for a more spacious layout */
+    background-color: rgba(0, 0, 0, 0.9); /* Dark background with more opacity */
+    border-radius: 12px; /* Round corners */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Soft shadow for depth */
+    padding: 1rem; /* More padding to make the menu look better */
+    display: flex;
+    flex-direction: column; /* Stack the items vertically */
+    align-items: center; /* Center items horizontally */
+    gap: 1rem; /* Space between the items */
+    z-index: 1000; /* Ensure it's on top */
+    max-height: 80vh; /* Limit the maximum height to 80% of the viewport height */
+    overflow-y: auto; /* Allow scrolling if the content overflows */
+    transition: all 0.3s ease;
+  }
+  
+  /* Add the .show class to make the menu visible */
+  .mobile-menu.show {
+    display: flex; /* Show the menu when .show class is added */
+  }
+
+  .mobile-menu a {
+    display: block; /* Make sure buttons are treated as block elements */
+    width: 100%; /* Ensure buttons take up full width */
+    padding: 1rem;
+    font-size: 1.2rem;
+    text-decoration: none;
+    color: white;
+    border-bottom: 1px solid white;
+    background-color: #333; /* Darker background for items */
+    border-radius: 8px;
+    margin-bottom: 0.5rem; /* Space between the items */
+    text-align: center;
+  }
+
+  .mobile-menu a:hover {
+    background-color: #388e3c;
+  }
+
+  /* Media Queries */
+  @media (max-width: 768px) {
+    .desktop {
       display: none;
-      font-size: 2rem;
-      cursor: pointer;
-      color: white;
-      position: absolute;
-      top: 20px; /* Position it 20px from the top */
-      right: 20px; /* Position it 20px from the right */
     }
 
-    /* Initially, the menu is hidden */
-    .mobile-menu {
-      display: none; /* Hidden by default */
-      position: absolute;
-      top: 60px; /* Positioned just below the hamburger icon */
-      right: 20px; /* 20px from the right */
-      width: 250px; /* Increased width for a more spacious layout */
-      background-color: rgba(0, 0, 0, 0.9); /* Dark background with more opacity */
-      border-radius: 12px; /* Round corners */
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Soft shadow for depth */
-      padding: 1rem; /* More padding to make the menu look better */
-      display: flex;
-      flex-direction: column; /* Stack the items vertically */
-      align-items: center; /* Center items horizontally */
-      gap: 1rem; /* Space between the items */
-      z-index: 1000; /* Ensure it's on top */
-      max-height: 80vh; /* Limit the maximum height to 80% of the viewport height */
-      overflow-y: auto; /* Allow scrolling if the content overflows */
-      transition: all 0.3s ease;
+    .hamburger {
+      display: block; /* Show hamburger on mobile */
     }
 
-    /* Add the .show class to make the menu visible */
-    .mobile-menu.show {
-      display: flex; /* Show the menu when .show class is added */
+    .mobile {
+      display: none;
+    }
+  }
+
+  @media (min-width: 769px) {
+    .mobile {
+      display: none;
     }
 
-    .mobile-menu a {
-      display: block; /* Make sure buttons are treated as block elements */
-      width: 100%; /* Ensure buttons take up full width */
-      padding: 1rem;
-      font-size: 1.2rem;
-      text-decoration: none;
-      color: white;
-      border-bottom: 1px solid white;
-      background-color: #333; /* Darker background for items */
-      border-radius: 8px;
-      margin-bottom: 0.5rem; /* Space between the items */
-      text-align: center;
+    .desktop {
+      display: block;
     }
-
-    .mobile-menu a:hover {
-      background-color: #388e3c;
-    }
-
-    /* Media Queries */
-    @media (max-width: 768px) {
-      .desktop {
-        display: none;
-      }
-
-      .hamburger {
-        display: block; /* Show hamburger on mobile */
-      }
-
-      .mobile {
-        display: none;
-      }
-    }
-
-    @media (min-width: 769px) {
-      .mobile {
-        display: none;
-      }
-
-      .desktop {
-        display: block;
-      }
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
   <!-- Desktop Version -->
