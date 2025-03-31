@@ -472,15 +472,17 @@
         // Store this action
         lastAction = "have";
         lastCollectible = current;
-
+      
         // Trigger green overlay for swipe right
         triggerOverlay("overlay-green");
-
-        
+      
         img.classList.add("animate-right");
         const handler = () => {
+          // Remove the animation class and reset transform so the image goes back to its default state
           img.classList.remove("animate-right");
+          img.style.transform = "translateX(0) rotate(0)";
           img.removeEventListener("animationend", handler);
+          
           current.quantity = 1;
           const user = localStorage.getItem("sky_user") || "guest";
           const key = `sky_progress_${user}_${currentGame}`;
@@ -497,8 +499,8 @@
         };
         img.addEventListener("animationend", handler);
       };
- 
-       document.getElementById("dontHaveItBtn").onclick = () => {
+      
+      document.getElementById("dontHaveItBtn").onclick = () => {
         const img = document.getElementById("collectibleImage");
         const current = collectiblesQueue.shift();
         if (!current) return;
@@ -506,13 +508,15 @@
         // Store this action
         lastAction = "dont";
         lastCollectible = current;
-
+      
         // Trigger red overlay for swipe left
         triggerOverlay("overlay-red");
         
         img.classList.add("animate-left");
         const handler = () => {
           img.classList.remove("animate-left");
+          // Reset the transform to move image back to the center position
+          img.style.transform = "translateX(0) rotate(0)";
           img.removeEventListener("animationend", handler);
           skippedQueue.push(current);
           showCurrentCollectible();
