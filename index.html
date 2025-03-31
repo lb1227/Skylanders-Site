@@ -186,6 +186,16 @@
       const menu = document.getElementById("mobileMenu");
       menu.classList.toggle("show"); // Toggle the 'show' class to display the menu
     }
+      // Close the mobile menu if clicked outside
+    window.addEventListener('click', function(event) {
+      const menu = document.getElementById("mobileMenu");
+      const hamburger = document.querySelector(".hamburger");
+
+      // If the clicked element is not the menu or the hamburger, hide the menu
+      if (!menu.contains(event.target) && !hamburger.contains(event.target)) {
+        menu.classList.remove("show"); // Hide the menu
+      }
+    });
 
     window.onload = checkLogin;
   </script>
