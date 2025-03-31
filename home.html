@@ -23,19 +23,6 @@
       background-color: var(--bg);
       color: var(--text);
     }
-    .nav-button 
-    {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 0.9rem;
-      padding: 0.3rem 0.6rem;
-      line-height: 1.5;
-      display: inline-block;
-    }
     nav {
       background-color: var(--nav-bg);
       padding: 0.5rem 1rem;
@@ -48,17 +35,7 @@
       z-index: 1000;
       flex-wrap: wrap;
     }
-    nav h2 {
-      margin: 0;
-      font-size: 1.5rem;
-    }
-    .nav-links {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .nav-links a, .nav-links button {
+    .nav-links a, .nav-links button, .nav-button {
       color: white;
       text-decoration: none;
       font-weight: bold;
@@ -66,19 +43,22 @@
       border: none;
       cursor: pointer;
       font-size: 0.9rem;
-      
+      padding: 0.3rem 0.6rem;
+      line-height: 1.5;
     }
     #logoutBtn {
       padding: 0.3rem 0.6rem;
       margin: 0;
     }
+    /* Main container for everything */
     .container {
-      max-width: 1200px;
-      margin: 2rem auto;
+      max-width: 600px;         /* Set a defined width or max-width */
+      margin: 2rem auto;        /* Centers the container horizontally */
       background: var(--card-bg);
       padding: 2rem;
       border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+      text-align: center;
     }
     select, button {
       padding: 0.6rem 1.2rem;
@@ -355,16 +335,28 @@
       <button id="logoutBtn" onclick="logout()" style="background-color: var(--button); color: white; border-radius: 8px; font-weight: bold;">Logout</button>
     </div>
   </nav>
-  <div class="container">
-    <h2>Welcome back to Skylanders Tracker</h2>
-    <label for="gameSelector">Select Game:</label>
-    <select id="gameSelector">
-      <option value="Spyro's Adventure">Spyro's Adventure</option>
-      <option value="Giants">Giants</option>
-    </select>
+
+  <div class="wrapper">
+    <div class="container">
+      <h2>Welcome back to Skylanders Tracker</h2>
+      <label for="gameSelector">Select Game:</label>
+      <select id="gameSelector">
+        <option value="Spyro's Adventure">Spyro's Adventure</option>
+        <option value="Giants">Giants</option>
+      </select>
+    </div>
+      <button id="undoBtn" style="display: block; margin: 1rem auto; background-color: #555; color: white; border: 1px solid #ccc; padding: 0.5rem 1rem; border-radius: 6px; font-size: 1.2rem; cursor: pointer;">Undo</button>
+      <div id="swipeOverlay"></div>
+    <div id="collectibleContainer">
+      <img id="collectibleImage" alt="Collectible Image" />
+      <p id="collectibleName"></p>
+      <div style="display: flex; justify-content: center; gap: 2rem; margin: 1rem 0;">
+        <button id="dontHaveItBtn" style="background-color: black; color: #e53935; border: 2px solid #e53935; padding: 0.5rem 1rem; border-radius: 6px; font-size: 1.5rem; cursor: pointer;">❌</button>
+        <button id="haveItBtn" style="background-color: black; color: #4caf50; border: 2px solid #4caf50; padding: 0.5rem 1rem; border-radius: 6px; font-size: 1.5rem; cursor: pointer;">✅</button>
+      </div>
+      <button id="reviewSkippedBtn" style="display:none; margin-top: 1rem; background-color: #444; color: white; border: 1px solid #ccc; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">Review Skipped</button>
+    </div>
   </div>
-    <button id="undoBtn" style="display: block; margin: 1rem auto; background-color: #555; color: white; border: 1px solid #ccc; padding: 0.5rem 1rem; border-radius: 6px; font-size: 1.2rem; cursor: pointer;">Undo</button>
-    <div id="swipeOverlay"></div>
 
     <nav id= "mobileNav"class="bottom-mobile-nav">
       <a href="home.html" title="Home">🏠</a>
@@ -375,17 +367,6 @@
     <div id="mobileMenu" class="mobile-menu">
       <button onclick="goToAccount()">Account</button>
       <button onclick="logout()">Logout</button>
-    </div>
-
-    
-    <div id="collectibleContainer">
-      <img id="collectibleImage" alt="Collectible Image" />
-      <p id="collectibleName"></p>
-      <div style="display: flex; justify-content: center; gap: 2rem; margin: 1rem 0;">
-        <button id="dontHaveItBtn" style="background-color: black; color: #e53935; border: 2px solid #e53935; padding: 0.5rem 1rem; border-radius: 6px; font-size: 1.5rem; cursor: pointer;">❌</button>
-        <button id="haveItBtn" style="background-color: black; color: #4caf50; border: 2px solid #4caf50; padding: 0.5rem 1rem; border-radius: 6px; font-size: 1.5rem; cursor: pointer;">✅</button>
-      </div>
-      <button id="reviewSkippedBtn" style="display:none; margin-top: 1rem; background-color: #444; color: white; border: 1px solid #ccc; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">Review Skipped</button>
     </div>
 
     <script>
