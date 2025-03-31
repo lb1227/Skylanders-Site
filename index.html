@@ -61,44 +61,46 @@
     }
 
     /* Initially, the menu is hidden */
+    /* Mobile Menu Container */
     .mobile-menu {
-      display: none; /* Hidden by default */
+      display: none; /* hidden by default */
       position: absolute;
-      top: 60px; /* Positioned just below the hamburger icon */
-      right: 20px; /* 20px from the right */
-      width: 300px; /* Fixed width */
-      height: 400px; /* Fixed height (larger box) */
-      background-color: rgba(0, 0, 0, 0.9); /* Dark background with more opacity */
-      border-radius: 12px; /* Round corners */
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Soft shadow for depth */
-      padding: 1rem; /* More padding to make the menu look better */
-      flex-direction: column; /* Stack the items vertically */
-      align-items: center; /* Center the buttons */
-      gap: 1rem; /* Space between buttons */
-      z-index: 1000; /* Ensure it's on top */
+      top: 60px;
+      right: 20px;
+      width: 80%;
+      max-width: 300px;
+      background-color: rgba(0, 0, 0, 0.95); /* almost solid dark background */
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      z-index: 1000;
       transition: all 0.3s ease;
+    }
+    
+    /* Mobile Menu Links */
+    .mobile-menu a {
+      display: block;
+      text-decoration: none;
+      color: #ffffff;
+      font-size: 1.1rem;
+      background-color: #333;         /* a darker background */
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem;
+      border-radius: 4px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    
+    .mobile-menu a:hover {
+      background-color: #4caf50;      /* change to your accent color or a hover color */
+      transform: scale(1.02);
+    }
+    
+    .mobile-menu a:last-child {
+      margin-bottom: 0;
     }
 
     .mobile-menu.show {
       display: flex; /* Show the menu when .show class is added */
-    }
-    
-
-    .mobile-menu a {
-      display: block; /* Make sure buttons are treated as block elements */
-      width: 80%; /* Ensure buttons take up most of the menu width */
-      padding: 1rem;
-      font-size: 1.2rem;
-      text-decoration: none;
-      color: white;
-      border-bottom: 1px solid white;
-      background-color: #333; /* Darker background for items */
-      border-radius: 8px;
-      text-align: center;
-    }
-
-    .mobile-menu a:hover {
-      background-color: #388e3c;
     }
 
     .mobile-buttons {
