@@ -545,18 +545,10 @@
     function renderInventory(showOwnedOnly = false) {
       const container = document.getElementById("inventoryContainer");
       container.innerHTML = '';  // Clear existing inventory
-      
-      for (const [game, characters] of Object.entries(window.games)) {
-        const section = document.createElement("div");
-        section.className = "group-section";
-        section.id = `section-${game}`; // Unique ID for each group
-
-        // Create cards container without the "collapsed" class (cards always visible)
-         const card = document.createElement("div");
-        card.className = "card";
-        if (collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase())) {
-          card.classList.add("owned");
     
+      // Loop over each game group
+      for (const [game, characters] of Object.entries(window.games)) {
+        // Retrieve saved progress for this group
         const key = `sky_progress_${user}_${game}`;
         const saved = localStorage.getItem(key);
         let collected = [];
@@ -567,16 +559,36 @@
           queue = parsed.queue || [];
         }
     
-        characters.forEach(char => {
+        // Create a group section container
+        const section = document.createElement("div");
+        section.className = "group-section";
+        section.id = `section-${game}`;
+    
+        // Create a header for the group with an arrow
+        const header = document.createElement("div");
+        header.className = "group-header";
+        header.innerHTML = `<span>${game}</span><span class="arrow">▼</span>`;
+        header.onclick = () => {
+          header.classList.toggle("collapsed");
+          cards.classList.toggle("collapsed");
+        };
+        section.appendChild(header);
+    
+        // Create the cards container, starting collapsed
+        const cards = document.createElement("div");
+        cards.className = "cards-wrapper collapsed";
+    
+        // Loop over each character and create a card with a stacking delay
+        characters.forEach((char, index, arr) => {
           const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
           const isOwned = !!found;
-    
-          // Apply the owned filter if enabled
           if (showOwnedOnly && !isOwned) return;
     
           const card = document.createElement("div");
           card.className = "card";
-          if (isOwned) card.classList.add("owned");
+          if (isOwned) {
+            card.classList.add("owned");
+          }
     
           card.innerHTML = `
             <img src="${char.image}" alt="${char.name}" />
@@ -584,17 +596,21 @@
             ${isOwned ? `<button onclick="removeFromInventory('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}')">Remove</button>` : ''}
           `;
           
-          // Calculate the delay so that the last card (highest index) has no delay.
-          const delay = (arr.length - index - 1) * 0.1; // adjust multiplier as needed
+          // Calculate the delay so that the last card has no delay
+          const delay = (arr.length - index - 1) * 0.1; // Adjust multiplier as needed
           card.style.transitionDelay = delay + "s";
           
-          // Open modal on card click
-          card.onclick = () => openModal(char);
+          // Add click event to open the modal; you might want to stop propagation if a button is clicked
+          card.onclick = (e) => {
+            // Prevent triggering when the remove button is clicked
+            if (e.target.tagName.toLowerCase() !== 'button') {
+              openModal(char);
+            }
+          };
           
           cards.appendChild(card);
         });
     
-        // Append only the cards container (no header)
         section.appendChild(cards);
         container.appendChild(section);
       }
