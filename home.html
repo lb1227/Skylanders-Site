@@ -542,42 +542,42 @@
         });
         
         // When touch ends, decide if swipe is far enough to trigger an action
-        image.addEventListener("touchend", (e) => {
-          // Re-enable transition for a smooth end animation
-          image.style.transition = "transform 0.5s ease-out";
+       image.addEventListener("touchend", (e) => {
+        // Re-enable transition for a smooth end animation
+        image.style.transition = "transform 0.5s ease-out";
+        
+        const threshold = 50;
+        if (currentDeltaX >= threshold) {
+          // For right swipe: animate off-screen to the right
+          const targetX = window.innerWidth; // Off-screen right position
+          const targetRotation = 20; // in degrees; adjust as needed
+          image.style.transform = `translateX(${targetX}px) rotate(${targetRotation}deg)`;
           
-          const threshold = 50;
-          if (currentDeltaX > threshold) {
-            // For right swipe: animate off-screen to the right
-            const targetX = window.innerWidth; // Off-screen right position
-            const targetRotation = 20; // in degrees; adjust as needed
-            image.style.transform = `translateX(${targetX}px) rotate(${targetRotation}deg)`;
-            
-            image.addEventListener("transitionend", function handler() {
-              image.removeEventListener("transitionend", handler);
-              swipeActionComplete("right");
-            });
-            
-          } else if (currentDeltaX < -threshold) {
-            // For left swipe: animate off-screen to the left
-            const targetX = -window.innerWidth; // Off-screen left position
-            const targetRotation = -20; // in degrees; adjust as needed
-            image.style.transform = `translateX(${targetX}px) rotate(${targetRotation}deg)`;
-            
-            image.addEventListener("transitionend", function handler() {
-              image.removeEventListener("transitionend", handler);
-              swipeActionComplete("left");
-            });
-            
-          } else {
-            // Not far enough: animate back to center
-            image.style.transition = "transform 0.3s ease";
-            image.style.transform = "translateX(0) rotate(0)";
-          }
+          image.addEventListener("transitionend", function handler() {
+            image.removeEventListener("transitionend", handler);
+            swipeActionComplete("right");
+          });
           
-          // Reset for the next swipe
-          currentDeltaX = 0;
-        });
+        } else if (currentDeltaX <= -threshold) {
+          // For left swipe: animate off-screen to the left
+          const targetX = -window.innerWidth; // Off-screen left position
+          const targetRotation = -20; // in degrees; adjust as needed
+          image.style.transform = `translateX(${targetX}px) rotate(${targetRotation}deg)`;
+          
+          image.addEventListener("transitionend", function handler() {
+            image.removeEventListener("transitionend", handler);
+            swipeActionComplete("left");
+          });
+          
+        } else {
+          // Not far enough: animate the image back to center
+          image.style.transition = "transform 0.3s ease";
+          image.style.transform = "translateX(0) rotate(0)";
+        }
+        
+        // Reset for the next swipe
+        currentDeltaX = 0;
+      });
 
       function startNudgeAnimationIfNeeded() {
         // Assuming collectibles and collectiblesQueue are defined and represent the current game data
