@@ -333,6 +333,15 @@
         margin: 1rem 0;
       }
     }
+    @keyframes swipeNudge {
+      0% { transform: translateX(0); }
+      50% { transform: translateX(-20px); }
+      100% { transform: translateX(0); }
+    }
+    
+    .nudge {
+      animation: swipeNudge 1s ease-in-out infinite;
+    }
     @keyframes swipeLeft {
       0% { transform: translateX(0) rotate(0); opacity: 1; }
       50% { transform: translateX(-50vw) rotate(-10deg); opacity: 0.5; }
@@ -411,6 +420,10 @@
         const img = document.getElementById("collectibleImage");
         if (!img.src) {
           img.src = "https://static.wikia.nocookie.net/skylanders/images/5/5d/Skylanders.jpg/revision/latest?cb=20170212184928";
+        }
+        // Only start the nudge animation if no collectible has been chosen yet.
+        if (collectiblesQueue.length === collectibles.length) {
+          startNudgeAnimationIfNeeded();
         }
       }
       function logout() {
@@ -578,6 +591,24 @@
            else if (deltaX > threshold) document.getElementById("haveItBtn").click();
          } 
        }
+      function startNudgeAnimationIfNeeded() {
+        // Assuming collectibles and collectiblesQueue are defined and represent the current game data
+        // If the queue hasn't been modified, it means no collectible has been chosen yet.
+        if (collectiblesQueue.length === collectibles.length) {
+          const img = document.getElementById("collectibleImage");
+          img.classList.add("nudge");
+          
+          // Remove the nudge when the user touches or clicks the image.
+          function removeNudge() {
+            img.classList.remove("nudge");
+            img.removeEventListener("touchstart", removeNudge);
+            img.removeEventListener("click", removeNudge);
+          }
+          
+          img.addEventListener("touchstart", removeNudge);
+          img.addEventListener("click", removeNudge);
+        }
+      }
     </script>
   </div>
 </body>
