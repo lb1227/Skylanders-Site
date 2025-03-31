@@ -292,47 +292,6 @@
         display: none !important; /* Force hide icons on desktop */
       }
     }
-    /* For phones between 400px and 768px */
-    @media (min-width: 400px) and (max-width: 768px) {
-      #collectibleContainer {
-        max-width: 600px;      /* Increase container width */
-        margin: 2rem auto;     /* Center horizontally with auto margins */
-        text-align: center;
-      }
-      #collectibleImage {
-        width: 100%;           /* Fill the container */
-        max-width: 600px;       /* Ensure it doesn’t exceed the container */
-        margin-bottom: 1rem;
-      }
-      /* If the button container is a direct child of #collectibleContainer */
-      #collectibleContainer > div {
-        display: flex;
-        justify-content: center;
-        gap: 2rem;
-        margin: 1rem 0;
-      }
-    }
-    
-    /* For phones under 400px wide */
-    @media (max-width: 400px) {
-      #collectibleContainer {
-        max-width: 90%;        /* Use a percentage width so it scales on very small screens */
-        margin: 2rem auto;
-        text-align: center;
-      }
-      #collectibleImage {
-        width: 100%;
-        max-width: 90%;
-        margin-bottom: 1rem;
-      }
-      /* Adjust the button container spacing */
-      #collectibleContainer > div {
-        display: flex;
-        justify-content: center;
-        gap: 1rem;
-        margin: 1rem 0;
-      }
-    }
     @keyframes swipeNudge {
       0% { transform: translateX(0); }
       50% { transform: translateX(-20px); }
