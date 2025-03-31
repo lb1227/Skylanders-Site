@@ -66,18 +66,17 @@
       position: absolute;
       top: 60px; /* Positioned just below the hamburger icon */
       right: 20px; /* 20px from the right */
-      width: 250px; /* Increased width for a more spacious layout */
+      width: 300px; /* Fixed width */
+      height: 400px; /* Fixed height (larger box) */
       background-color: rgba(0, 0, 0, 0.9); /* Dark background with more opacity */
       border-radius: 12px; /* Round corners */
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Soft shadow for depth */
       padding: 1rem; /* More padding to make the menu look better */
       display: flex;
       flex-direction: column; /* Stack the items vertically */
-      align-items: center; /* Center items horizontally */
-      gap: 1rem; /* Space between the items */
+      align-items: flex-start; /* Align items to the start of the container */
+      gap: 1rem; /* Space between buttons */
       z-index: 1000; /* Ensure it's on top */
-      max-height: 80vh; /* Limit the maximum height to 80% of the viewport height */
-      overflow-y: auto; /* Allow scrolling if the content overflows */
       transition: all 0.3s ease;
     }
     
