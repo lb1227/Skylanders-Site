@@ -132,15 +132,12 @@
       padding: 0.3rem 0.6rem;
       margin: 0;
     }
-    .group-section {
-      display: flex; /* Flexbox to align game sections in columns */
-      flex-direction: column;
+    .group-section 
+    {
       margin-bottom: 2rem;
-      width: 100%;
-      flex-basis: 30%; /* Ensure each section takes up 30% of the width */
     }
-    
-    .group-header {
+    .group-header 
+    {
       cursor: pointer;
       font-size: 1.4rem;
       background: #2a2a2a;
@@ -149,9 +146,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1rem;
     }
-    .cards-wrapper {
+    .cards-wrapper 
+    {
       display: flex;
       flex-wrap: wrap;
       transition: all 0.6s ease-in-out;
@@ -159,34 +156,6 @@
       opacity: 1;
       transform: scaleY(1);
       transform-origin: top;
-      max-height: 0;  /* Collapsed state */
-    }
-    .cards-wrapper.show {
-      max-height: 500px; /* Allow scrolling and show content when expanded */
-      opacity: 1;
-    }
-    .collapsed {
-      max-height: 0;
-      opacity: 0;
-      transform: scaleY(0);
-      display: none;
-    }
-    .card {
-      background: #292929;
-      border-radius: 12px;
-      padding: 1rem;
-      text-align: center;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
-      margin: 1rem;
-      display: inline-block;
-      transition: background-color 0.3s ease;
-      width: 160px;
-    }
-    
-    .card img {
-      width: 160px;
-      height: auto;
-      margin: 0 auto 0.5rem;
     }
 
     /* Modal styling */
@@ -629,27 +598,18 @@
       const container = document.getElementById("inventoryContainer");
       container.innerHTML = '';  // Clear the current inventory
       
-      let firstSectionExpanded = false; // Keep track of the first expanded section
-      
       for (const [game, characters] of Object.entries(window.games)) {
         const section = document.createElement("div");
         section.className = "group-section";
-        
+    
         const header = document.createElement("div");
         header.className = "group-header";
         header.innerHTML = `<span>${game}</span><span>▼</span>`;
-        header.onclick = () => {
-          // Close other sections and expand this one
-          const allCards = document.querySelectorAll(".cards-wrapper");
-          allCards.forEach(cards => cards.classList.add("collapsed"));
-          
-          const currentCards = section.querySelector(".cards-wrapper");
-          currentCards.classList.toggle("collapsed");  // Toggle current section's visibility
-        };
-        
+        header.onclick = () => cards.classList.toggle("collapsed");
+    
         const cards = document.createElement("div");
-        cards.className = "cards-wrapper collapsed"; // Initially collapsed
-        
+        cards.className = "cards-wrapper";
+    
         const key = `sky_progress_${user}_${game}`;
         const saved = localStorage.getItem(key);
         let collected = [];
@@ -659,11 +619,12 @@
           collected = parsed.collected || [];
           queue = parsed.queue || [];
         }
-        
+    
         characters.forEach(char => {
           const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
           const isOwned = !!found;
     
+          // Apply the owned filter
           if (showOwnedOnly && !isOwned) return;
     
           const card = document.createElement("div");
@@ -676,8 +637,9 @@
             ${isOwned ? '' : ''}
             ${isOwned ? `<button onclick="removeFromInventory('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}')">Remove</button>` : ''}
           `;
-          
-          card.onclick = () => openModal(char);
+    
+          // Add click event to open modal
+          card.onclick = () => openModal(char);  // Open modal on card click
     
           cards.appendChild(card);
         });
