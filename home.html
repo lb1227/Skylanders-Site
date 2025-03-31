@@ -506,13 +506,14 @@
           name.textContent = "";
           img.style.display = "none";
         } else {
-          // All collectibles have been reviewed; clear the image and show a message
+          // No collectible to show; clear image and text without showing a default
           img.src = "";
-          name.textContent = "All Skylanders Reviewed! 🎉";
+          name.textContent = "";
           reviewBtn.style.display = "none";
           img.style.display = "none";
         }
       }
+
  
        function saveProgress() {
          const user = localStorage.getItem("sky_user") || "guest";
