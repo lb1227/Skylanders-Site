@@ -407,7 +407,7 @@
         const loginBtn = document.getElementById("loginBtn");
         const signupBtn = document.getElementById("signupBtn");
         const logoutBtn = document.getElementById("logoutBtn");
-      
+    
         if (user && user !== "guest") {
           loginBtn.style.display = "none";
           signupBtn.style.display = "none";
@@ -417,18 +417,13 @@
           signupBtn.style.display = "inline-block";
           logoutBtn.style.display = "none";
         }
-      
+    
         const currentGame = document.getElementById("gameSelector").value;
         const img = document.getElementById("collectibleImage");
         if (!img.src) {
-          img.src = "https://i0.wp.com/cdn.makezine.com/uploads/2012/03/portalofpower.jpg?resize=550%2C393&ssl=1";
+          img.src = "https://static.wikia.nocookie.net/skylanders/images/5/5d/Skylanders.jpg/revision/latest?cb=20170212184928";
         }
-      
-        // If no collectible has been chosen yet, start the nudge animation
-        if (collectiblesQueue.length === collectibles.length) {
-          startNudgeAnimationIfNeeded();
-        }
-      
+    
         // Load saved progress
         const key = `sky_progress_${user || "guest"}_${currentGame}`;
         const saved = localStorage.getItem(key);
@@ -437,8 +432,16 @@
           collectiblesQueue = parsed.queue || [...games[currentGame]];
           skippedQueue = parsed.skipped || [];
         }
+    
         showCurrentCollectible();
+    
+        // If no collectible has been chosen yet, start the nudge animation.
+        // (Assuming collectibles and collectiblesQueue are already defined)
+        if (collectiblesQueue.length === collectibles.length) {
+          startNudgeAnimationIfNeeded();
+        }
       }
+    
       window.onload = initializeApp;
 
       function logout() {
