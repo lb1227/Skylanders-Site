@@ -448,12 +448,6 @@
           logoutBtn.style.display = "none";
         }
     
-        const currentGame = document.getElementById("gameSelector").value;
-        const img = document.getElementById("collectibleImage");
-        if (!img.src) {
-          img.src = "https://static.wikia.nocookie.net/skylanders/images/5/5d/Skylanders.jpg/revision/latest?cb=20170212184928";
-        }
-    
         // Load saved progress
         const key = `sky_progress_${user || "guest"}_${currentGame}`;
         const saved = localStorage.getItem(key);
@@ -493,29 +487,32 @@
        let collectiblesQueue = [...collectibles];
        let skippedQueue = [];
  
-       function showCurrentCollectible() 
-       {
-         const current = collectiblesQueue[0];
-         const img = document.getElementById("collectibleImage");
-         const name = document.getElementById("collectibleName");
-         const reviewBtn = document.getElementById("reviewSkippedBtn");
- 
-         if (current && current.image) 
-         {
-           img.src = current.image;
-           name.textContent = current.name;
-           reviewBtn.style.display = "none";
-         } else if (skippedQueue.length > 0) 
-         {
-           reviewBtn.style.display = "inline-block";
-           img.src = "";
-           name.textContent = "";
-         } else {
-           img.src = "https://skylanderscharacterlist.com/wp-content/uploads/2014/02/Skylanders-All.jpg";
-           name.textContent = "All Skylanders Reviewed! 🎉";
-           reviewBtn.style.display = "none";
-         }
-       }
+       function showCurrentCollectible() {
+        const current = collectiblesQueue[0];
+        const img = document.getElementById("collectibleImage");
+        const name = document.getElementById("collectibleName");
+        const reviewBtn = document.getElementById("reviewSkippedBtn");
+      
+        if (current && current.image) {
+          // Show the current collectible
+          img.src = current.image;
+          name.textContent = current.name;
+          reviewBtn.style.display = "none";
+          img.style.display = "block";
+        } else if (skippedQueue.length > 0) {
+          // Allow user to review skipped collectibles
+          reviewBtn.style.display = "inline-block";
+          img.src = "";
+          name.textContent = "";
+          img.style.display = "none";
+        } else {
+          // All collectibles have been reviewed; clear the image and show a message
+          img.src = "";
+          name.textContent = "All Skylanders Reviewed! 🎉";
+          reviewBtn.style.display = "none";
+          img.style.display = "none";
+        }
+      }
  
        function saveProgress() {
          const user = localStorage.getItem("sky_user") || "guest";
