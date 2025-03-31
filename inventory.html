@@ -513,7 +513,7 @@
 
         // Create cards container without the "collapsed" class (cards always visible)
         const cards = document.createElement("div");
-        cards.className = "cards-wrapper";
+        cards.className = "cards-wrapper collapsed";
     
         const key = `sky_progress_${user}_${game}`;
         const saved = localStorage.getItem(key);
@@ -668,8 +668,14 @@
         btn.style.border = "none";
         btn.style.cursor = "pointer";
         btn.onclick = () => {
+          // Collapse all groups
+          document.querySelectorAll('.cards-wrapper').forEach(wrapper => {
+            wrapper.classList.add('collapsed');
+          });
+          // Expand the selected group's cards (e.g. Giants)
           const section = document.getElementById(`section-${game}`);
-          section.scrollIntoView({ behavior: "smooth" });
+          const cards = section.querySelector(".cards-wrapper");
+          cards.classList.remove('collapsed');
         };
         groupNav.appendChild(btn);
       });
