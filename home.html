@@ -358,7 +358,36 @@
     .animate-right {
       animation: swipeRight 0.5s ease forwards;
     }
-  </style>
+    #swipeOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0;
+    }
+    
+    .overlay-green {
+      background: rgba(76, 175, 80, 0.3); /* green tint */
+      animation: fadeOverlay 0.5s ease-out forwards;
+    }
+    
+    .overlay-red {
+      background: rgba(229, 57, 53, 0.3); /* red tint */
+      animation: fadeOverlay 0.5s ease-out forwards;
+    }
+    
+    @keyframes fadeOverlay {
+      0% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
+      </style>
 </head>
 <body>
   <nav>
@@ -388,6 +417,7 @@
     </div>
 
     <button id="undoBtn" style="display: block; margin: 1rem auto; background-color: #555; color: white; border: 1px solid #ccc; padding: 0.5rem 1rem; border-radius: 6px; font-size: 1.2rem; cursor: pointer;">Undo</button>
+    <div id="swipeOverlay"></div>
     
     <div id="collectibleContainer">
       <img id="collectibleImage" alt="Collectible Image" />
@@ -506,6 +536,10 @@
         // Store this action
         lastAction = "have";
         lastCollectible = current;
+
+        // Trigger green overlay for swipe right
+        triggerOverlay("overlay-green");
+
         
         img.classList.add("animate-right");
         const handler = () => {
@@ -536,6 +570,9 @@
         // Store this action
         lastAction = "dont";
         lastCollectible = current;
+
+        // Trigger red overlay for swipe left
+        triggerOverlay("overlay-red");
         
         img.classList.add("animate-left");
         const handler = () => {
@@ -658,6 +695,16 @@
         // Re-render the current collectible.
         showCurrentCollectible();
       };
+      // Helper function to trigger the overlay effect.
+      function triggerOverlay(className) {
+        const overlay = document.getElementById("swipeOverlay");
+        // Remove any existing overlay class
+        overlay.classList.remove("overlay-green", "overlay-red");
+        // Force reflow to restart the animation (if needed)
+        void overlay.offsetWidth;
+        // Add the new class to trigger animation
+        overlay.classList.add(className);
+      }
     </script>
   </div>
 </body>
