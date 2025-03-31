@@ -393,17 +393,11 @@
       let lastCollectible = null;  // The collectible that was last processed
       function initializeApp() {
         const user = localStorage.getItem("sky_user");
-        const loginBtn = document.getElementById("loginBtn");
-        const signupBtn = document.getElementById("signupBtn");
         const logoutBtn = document.getElementById("logoutBtn");
     
         if (user && user !== "guest") {
-          loginBtn.style.display = "none";
-          signupBtn.style.display = "none";
           logoutBtn.style.display = "inline-block";
         } else {
-          loginBtn.style.display = "inline-block";
-          signupBtn.style.display = "inline-block";
           logoutBtn.style.display = "none";
         }
     
