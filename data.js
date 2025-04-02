@@ -389,7 +389,7 @@ window.games = {
     
     {"name": "Clear Short Cut", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/ClearShortCut.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Clear Thunderbolt", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/ClearThunderbolt.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
-    {"name": "Clear Tuff Luck", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/ClearTuffLuck.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
+    {"name": "Clear Tuff Luck", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/ClearTuffLuck.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"}
   ],
      "Traps": [
     { "name": "Air Hourglass (Tempest Timer)", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/Traps/AirHourglassTrap.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99" },
