@@ -318,8 +318,6 @@ window.games = {
     {"name": "Wallop", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Wallop.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Wildfire", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/WildFire.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
   
-    // Header: New (Series 1) Skylanders
-    {"name": "New (Series 1) Skylanders", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/New%20(Series%201)%20Skylanders.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Bat Spin - Series 1", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Bat%20Spin%20-%20Series%201.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Blackout - Series 1", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Blackout%20-%20Series%201.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Blades - Series 1", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Blades%20-%20Series%201.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
@@ -339,8 +337,6 @@ window.games = {
     {"name": "Trail Blazer - Series 1", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Trail%20Blazer%20-%20Series%201.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Tread Head - Series 1", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Tread%20Head%20-%20Series%201.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
   
-    // Header: Returning (Series 2, 3, and 4) Skylanders
-    {"name": "Returning (Series 2, 3, and 4) Skylanders", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Returning (Series 2, 3, and 4) Skylanders.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Pop Fizz - Series 3", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Pop Fizz - Series 3.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Fizzy Frenzy Pop Fizz (S3)", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Fizzy Frenzy Pop Fizz (S3).png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Jet-Vac - Series 3", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Jet-Vac - Series 3.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
@@ -352,8 +348,6 @@ window.games = {
     {"name": "Gill Grunt - Series 4", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Gill Grunt - Series 4.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Tidal Wave Gill Grunt (S4)", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Tidal Wave Gill Grunt (S4).png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
   
-    // Header: Mini Skylanders
-    {"name": "Mini Skylanders", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Mini Skylanders.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Mini Barkley", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Mini Barkley.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Mini Bop", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Mini Bop.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Mini Breeze", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Mini Breeze.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
@@ -369,9 +363,7 @@ window.games = {
     {"name": "Mini Trigger Snappy", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Mini Trigger Snappy.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Mini Weeruptor", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Mini Weeruptor.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Mini Whisper Elf", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Mini Whisper Elf.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
-  
-    // Header: Trap Team Magic Items (with Variants)
-    {"name": "Trap Team Magic Items (with Variants)", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Trap Team Magic Items (with Variants).png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
+
     {"name": "Hand of Fate", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Hand of Fate.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Legendary Hand of Fate", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Legendary Hand of Fate.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Midnight Museum", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Midnight Museum.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
@@ -382,8 +374,6 @@ window.games = {
     {"name": "Sunscraper Spire", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Sunscraper Spire.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Tiki Speaky", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Tiki Speaky.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
   
-    // Header: Skylanders Trap Team In-Game Variants
-    {"name": "Skylanders Trap Team In-Game Variants", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Skylanders Trap Team In-Game Variants.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Dark Food Fight", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Dark Food Fight.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Dark Snap Shot", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Dark Snap Shot.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Dark Wildfire", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Dark Wildfire.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
@@ -400,13 +390,8 @@ window.games = {
     {"name": "Power Punch Pet Vac", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Power Punch Pet Vac.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Winterfest Lob-Star", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Winterfest Lob-Star.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     
-    // Header: Skylanders Trap Team Chase Variants
-    {"name": "Skylanders Trap Team Chase Variants", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Skylanders Trap Team Chase Variants.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
-    {"name": "Clear Short Cut", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Clear Short Cut.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
-    {"name": "Clear Short Cut", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Clear Short Cut.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
-    {"name": "Clear Tunderbolt", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Clear Tunderbolt.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
-    {"name": "Clear Thunderbolt", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Clear Thunderbolt.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
-    {"name": "Clear Tuff Luck", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Clear Tuff Luck.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
-    {"name": "Clear Tuff Luck", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Clear Tuff Luck.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"}
+    {"name": "Clear Short Cut", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/ClearShortCut.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
+    {"name": "Clear Thunderbolt", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/ClearThunderbolt.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
+    {"name": "Clear Tuff Luck", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/ClearTuffLuck.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
   ]
 };
