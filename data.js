@@ -301,11 +301,11 @@ window.games = {
     ],
     "Trap Team": [
     {"name": "Blastermind", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Blastermind.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
-    {"name": "Bushwhack", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Bushwhack.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
+    {"name": "Bushwhack", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/BushWhack.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Enigma", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Enigma.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Gearshift", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Gearshift.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Gusto", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Gusto.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
-    {"name": "Head Rush", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Head%Rush.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
+    {"name": "Head Rush", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/HeadRush.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Jawbreaker", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Jawbreaker.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Ka-Boom", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Ka-Boom.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Knight Light", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Knight%Light.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
