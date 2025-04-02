@@ -216,4 +216,1042 @@ window.games = {
     { name: "White Flocked LightCore Prism Break", image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/Giants/WhiteFlockedLightCorePrismBreak.png" },
     { name: "White Flocked Stump Smash", image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/Giants/WhiteFlockedStumpSmash.png" }
   ]
+   "SWAP Force": [
+    // Base SWAP Force Characters
+    {
+      name: "Blast Zone",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/BlastZone.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Boom Jet",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/BoomJet.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Doom Stone",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/DoomStone.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Fire Kraken",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/FireKraken.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Free Ranger",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/FreeRanger.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Freeze Blade",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/FreezeBlade.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Grilla Drilla",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/GrillaDrilla.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Hoot Loop",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/HootLoop.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Magna Charge",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/MagnaCharge.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Night Shift",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/NightShift.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Rattle Shake",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/RattleShake.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Rubble Rouser",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/RubbleRouser.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Spy Rise",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SpyRise.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Stink Bomb",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/StinkBomb.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Trap Shadow",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapShadow.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Wash Buckler",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/WashBuckler.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+
+    // New (Series 1) Skylanders
+    {
+      name: "Bumble Blast - Series 1",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/BumbleBlast.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Bumble Blast",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/BumbleBlast.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Countdown - Series 1",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/Countdown.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Countdown",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/Countdown.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Dune Bug - Series 1",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/DuneBug.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Dune Bug",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/DuneBug.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Fryno - Series 1",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/Fryno.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Fryno",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/Fryno.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Grim Creeper - Series 1",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/GrimCreeper.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Grim Creeper",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/GrimCreeper.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Pop Thorn - Series 1",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/Popthorn.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Pop Thorn",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/Popthorn.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Punk Shock - Series 1",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/PunkShock.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Punk Shock",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/PunkShock.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Rip Tide - Series 1",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/Riptide.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Rip Tide",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/Riptide.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Roller Brawl - Series 1",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/RollerBrawl.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Roller Brawl",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/RollerBrawl.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Scorp - Series 1",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/Scorp.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Scorp",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/Scorp.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Scratch - Series 1",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/Scratch.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Scratch",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/Scratch.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Slobber Tooth - Series 1",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SlobberTooth.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Slobber Tooth",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SlobberTooth.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Smolderdash - Series 1",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/Smolderdash.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Smolderdash",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/Smolderdash.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Star Strike - Series 1",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/StarStrike.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Star Strike",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/StarStrike.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Wind Up - Series 1",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/WindUp.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Wind Up",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/WindUp.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Zoo Lou - Series 1",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/ZooLou.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Zoo Lou",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/ZooLou.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+
+    // Returning (Series 2 and Series 3) Skylanders
+    {
+      name: "Gill Grunt - Series 3",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/AnchorsAwayGillGrunt.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Anchors Away Gill Grunt (S3)",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/AnchorsAwayGillGrunt.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Trigger Happy - Series 3",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/BigBangTriggerHappy.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Big Bang Trigger Happy (S3)",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/BigBangTriggerHappy.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Chill - Series 2",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/BlizzardChill.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Blizzard Chill (S2)",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/BlizzardChill.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Hot Dog - Series 2",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/FireBoneHotDog.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Fire Bone Hot Dog (S2)",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/FireBoneHotDog.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Sprocket - Series 2",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/HeavyDutySprocket.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Heavy Duty Sprocket (S2)",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/HeavyDutySprocket.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Whirlwind - Series 3",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/HornBlastWhirlwind.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Horn Blast Whirlwind (S3)",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/HornBlastWhirlwind.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Prism Break - Series 3",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/HyperBeamPrismBreak.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Hyper Beam Prism Break (S3)",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/HyperBeamPrismBreak.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Terrafin - Series 3",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/KnockoutTerrafin.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Knockout Terrafin (S3)",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/KnockoutTerrafin.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Eruptor - Series 3",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/LavaBarfEruptor.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Lava Barf Eruptor (S3)",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/LavaBarfEruptor.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Spyro - Series 3",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/MegaRamSpyro.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Mega Ram Spyro (S3)",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/MegaRamSpyro.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Stealth Elf - Series 3",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/StealthElf.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Ninja Stealth Elf (S3)",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/StealthElf.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Cynder - Series 3",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/PhantomCynder.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Phantom Cynder (S3)",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/PhantomCynder.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Pop Fizz - Series 2",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SuperGulpPopFizz.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Super Gulp Pop Fizz (S2)",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SuperGulpPopFizz.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Camo - Series 2",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/ThornHornCamo.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Thorn Horn Camo (S2)",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/ThornHornCamo.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Jet-Vac - Series 2",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TurboJetVac.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Turbo Jet-Vac (S2)",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TurboJetVac.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Chop Chop - Series 3",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TwinBladeChopChop.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Twin Blade Chop Chop (S3)",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TwinBladeChopChop.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+
+    // LightCore Skylanders
+    {
+      name: "LightCore Bumble Blast",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/LightCoreBumbleBlast.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Bumble Blast LightCore",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/LightCoreBumbleBlast.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "LightCore Countdown",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/LightCoreCountdown.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Countdown LightCore",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/LightCoreCountdown.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "LightCore Flashwing",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/LightCoreFlashwing.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Flashwing LightCore",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/LightCoreFlashwing.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "LightCore Grim Creeper",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/LightCoreGrimCreeper.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Grim Creeper LightCore",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/LightCoreGrimCreeper.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "LightCore Smolderdash",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/LightCoreSmoulderdash.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Smolderdash LightCore",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/LightCoreSmoulderdash.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "LightCore Star Strike",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/LightCoreStarStrike.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Star Strike LightCore",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/LightCoreStarStrike.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "LightCore Warnado",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/LightCoreWarnado.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Warnado LightCore",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/LightCoreWarnado.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "LightCore Wham-Shell",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/LightCoreWhamShell.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Wham-Shell LightCore",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/LightCoreWhamShell.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+
+    // SWAP Force Magic Items
+    {
+      name: "Arkeyan Crossbow",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/ArkeyanCrossbow.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Battle Hammer",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/BattleHammer.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Fiery Forge",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/FieryForge.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Groove Machine",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/GrooveMachine.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Platinum Sheep",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/PlatinumSheep.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Sheep Wreck Island",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SheepWreckIsland.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Sky Diamond",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SkyDiamond.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Tower of Time",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TowerOfTime.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    // The user did not provide a "UFOHat.png" file, so you can remove or leave it as-is:
+    {
+      name: "UFO Hat",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/UFOHat.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+
+    // Skylanders SWAP Force In-Game Variants
+    {
+      name: "Dark Blast Zone",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/DarkBlastZone.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Dark Slobber Tooth",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/DarkSlobberTooth.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Dark Mega Ram Spyro - Series 3",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/DarkSpyro.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Dark Spyro",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/DarkSpyro.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Dark Stealth Elf",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/DarkStealthElf.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Dark Wash Buckler",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/DarkWashBuckler.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Enchanted Hoot Loop",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/EnchantedHootLoop.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Enchanted LightCore Star Strike",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/EnchantedStarStrike.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Jade Fire Kraken",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/JadeFireKraken.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Jolly Bumble Blast",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/Jolly-BumbleBlast.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Kickoff Countdown",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/KickoffCountdown.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Legendary Free Ranger",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/LegendaryFreeRanger.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Legendary LightCore Grim Creeper",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/LegendaryLightCoreGrimCreeper.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Legendary Night Shift",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/LegendaryNightShift.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Legendary Zoo Lou",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/LegendaryZooLou.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Nitro Freeze Blade",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/NitroFreezeBlade.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Nitro Magna Charge",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/NitroMagnaCharge.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Quick Draw Rattle Shake",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/QuickdrawRattleShake.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Springtime Trigger Happy",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SpringtimeTriggerHappy.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Volcanic Eruptor",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/VolcanicEruptor.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+
+    // Skylanders SWAP Force Chase Variants
+    {
+      name: "Bronze and Silver Trap Shadow",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/Bronze&SilverTrapShadow.jpg",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Bronze & Silver Trap Shadow",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/Bronze&SilverTrapShadow.jpg",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Flocked Springtime Trigger Happy",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/FlockedSpringtimeTriggerHappy.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Green Flame Frito-Lay Hot Dog",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/FritoLayHotDog%20(Green).jpg",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Frito-Lay Hot Dog (Green)",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/FritoLayHotDog%20(Green).jpg",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Purple Flame Frito-Lay Hot Dog",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/FritoLayHotDog(Purple).jpg",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Frito-Lay Hot Dog (Purple)",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/FritoLayHotDog(Purple).jpg",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Red Flame Frito-Lay Hot Dog",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/FritoLayHotDog(red).jpg",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Frito-Lay Hot Dog (Red)",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/FritoLayHotDog(red).jpg",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Gold and Bronze Doom Stone",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/GoldBronzeDoomStone.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Gold & Bronze Doom Stone",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/GoldBronzeDoomStone.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Gold Fire Kraken",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/GoldFireKraken.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Gold Wash Buckler",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/GoldWashBuckler.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Green Chop Chop",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/GreenChopChop.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Green Rip Tide",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/GreenRipTide.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Green Scorp",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/GreenScorp.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Heavy Metal Sprocket",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/ArmySprocket.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Metallic Red Dune Bug",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/MetallicRedDuneBug.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Silver and Gold Stink Bomb",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SilverStinkGoldBomb.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Silver & Gold Stink Bomb",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SilverStinkGoldBomb.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    },
+    {
+      name: "Snowderdash",
+      image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/Snowderdash.png",
+      game: "SWAP Force",
+      price: "$4.00",
+      retail_price: "$7.99"
+    }
+  ]
 };
