@@ -215,7 +215,7 @@ window.games = {
     { name: "White Flocked Eruptor", image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/Giants/WhiteFlockedEruptor.png" },
     { name: "White Flocked LightCore Prism Break", image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/Giants/WhiteFlockedLightCorePrismBreak.png" },
     { name: "White Flocked Stump Smash", image: "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/Giants/WhiteFlockedStumpSmash.png" }
-  ]
+  ],
    "SWAP Force": [
     {"name": "Blast Zone", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SwapForce/BlastZone.png", "game": "SWAP Force", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Boom Jet", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SwapForce/BoomJet.png", "game": "SWAP Force", "price": "$4.00", "retail_price": "$7.99"},
