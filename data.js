@@ -284,7 +284,6 @@ window.games = {
     {"name": "Sheep Wreck Island", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SwapForce/SheepWreckIsland.png", "game": "SWAP Force", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Sky Diamond", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SwapForce/SkyDiamond.png", "game": "SWAP Force", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Tower of Time", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SwapForce/TowerOfTime.png", "game": "SWAP Force", "price": "$4.00", "retail_price": "$7.99"},
-    {"name": "UFO Hat", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SwapForce/UFOHat.png", "game": "SWAP Force", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Dark Blast Zone", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SwapForce/DarkBlastZone.png", "game": "SWAP Force", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Dark Slobber Tooth", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SwapForce/DarkSlobberTooth.png", "game": "SWAP Force", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Dark Mega Ram Spyro - Series 3", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SwapForce/DarkSpyro.png", "game": "SWAP Force", "price": "$4.00", "retail_price": "$7.99"},
