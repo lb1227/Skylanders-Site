@@ -319,7 +319,7 @@ window.games = {
     {"name": "Silver & Gold Stink Bomb", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SwapForce/SilverStinkGoldBomb.png", "game": "SWAP Force", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Snowderdash", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SwapForce/Snowderdash.png", "game": "SWAP Force", "price": "$4.00", "retail_price": "$7.99"}
   ],
-    ["Trap Team"] = [
+    "Trap Team" = [
      {"name": "Blastermind", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Blastermind.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Bushwhack", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Bushwhack.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Enigma", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Enigma.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
