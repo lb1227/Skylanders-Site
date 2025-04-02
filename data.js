@@ -318,9 +318,9 @@ window.games = {
     {"name": "Metallic Red Dune Bug", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SwapForce/MetallicRedDuneBug.png", "game": "SWAP Force", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Silver & Gold Stink Bomb", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SwapForce/SilverStinkGoldBomb.png", "game": "SWAP Force", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Snowderdash", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SwapForce/Snowderdash.png", "game": "SWAP Force", "price": "$4.00", "retail_price": "$7.99"}
-  ],
-    "Trap Team": = [
-     {"name": "Blastermind", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Blastermind.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
+    ],
+    "Trap Team": [
+    {"name": "Blastermind", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Blastermind.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Bushwhack", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Bushwhack.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Enigma", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Enigma.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Gearshift", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Gearshift.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
@@ -429,5 +429,5 @@ window.games = {
     {"name": "Clear Thunderbolt", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Clear Thunderbolt.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Clear Tuff Luck", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Clear Tuff Luck.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Clear Tuff Luck", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/Clear Tuff Luck.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"}
-  ];
+  ]
 };
