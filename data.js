@@ -9,27 +9,7 @@ window.elementMap = {
   'Chop Chop': 'Undead', 'Hex': 'Undead', 'Ghost Roaster': 'Undead', 'Fright Rider': 'Undead', 'Eye-Brawl': 'Undead', 'Hex LightCore': 'Undead', 'Legendary Slam Bam': 'Undead', 'Glow in the Dark Fright Rider': 'Undead',
   'Ninjini': 'Magic', 'Scarlet Ninjini': 'Magic', 'Chill': 'Water', 'Chill LightCore': 'Water', 'Polar Whirlwind': 'Air', 'Gnarly Tree Rex': 'Life', 'Tree Rex': 'Life'
 };;
-/*
-window.games = {
-  "Spyro's Adventure": [
-    {
-      name: "Spyro",
-      image: "images/spyro.png",
-      description: "A brave purple dragon...",
-      game: "Spyro's Adventure",
-      quantity: 5,
-      isOwned: true
-    },
-    {
-      name: "Gill Grunt",
-      image: "images/gillgrun.png",
-      description: "A brave water-based warrior...",
-      game: "Spyro's Adventure",
-      quantity: 3,
-      isOwned: true
-    }
-  ]
-}; */
+
 window.games = {
   "Spyro's Adventure": [
     // Base Game Characters
