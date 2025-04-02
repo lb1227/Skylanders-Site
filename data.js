@@ -249,7 +249,7 @@ window.games = {
     {"name": "Smolderdash - Series 1", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SwapForce/Smolderdash.png", "game": "SWAP Force", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Star Strike - Series 1", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SwapForce/StarStrike.png", "game": "SWAP Force", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Wind Up - Series 1", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SwapForce/WindUp.png", "game": "SWAP Force", "price": "$4.00", "retail_price": "$7.99"},
-    {"name": "Zoo Lou - Series 1", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SwapForce/ZooLou.png", "game": "SWAP Force", "price": "$4.00", "retail_price": "$7.99"}
+    {"name": "Zoo Lou - Series 1", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SwapForce/ZooLou.png", "game": "SWAP Force", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Gill Grunt - Series 3", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SwapForce/AnchorsAwayGillGrunt.png", "game": "SWAP Force", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Anchors Away Gill Grunt (S3)", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SwapForce/AnchorsAwayGillGrunt.png", "game": "SWAP Force", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Trigger Happy - Series 3", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/SwapForce/BigBangTriggerHappy.png", "game": "SWAP Force", "price": "$4.00", "retail_price": "$7.99"},
