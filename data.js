@@ -385,7 +385,7 @@ window.games = {
     { "name": "Nitro Head Rush", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/NitroHeadRush.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99" },
     { "name": "Nitro Krypt King", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/NitroKryptKing.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99" },
     { "name": "Power Punch Pet Vac", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/PowerPunchPetVac.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99" },
-    { "name": "Winterfest Lob-Star", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/WinterfestLobStar.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99" }
+    { "name": "Winterfest Lob-Star", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/WinterfestLobStar.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99" },
     
     {"name": "Clear Short Cut", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/ClearShortCut.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
     {"name": "Clear Thunderbolt", "image": "https://raw.githubusercontent.com/lb1227/Skylanders-Site/master/TrapTeam/ClearThunderbolt.png", "game": "Trap Team", "price": "$4.00", "retail_price": "$7.99"},
