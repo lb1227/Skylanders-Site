@@ -238,6 +238,9 @@
       }
     }
     @media (max-width: 768px) {
+      .card.selected {
+        background-color: #1f4d1f !important; /* Green background */
+      }
       #desktopNav {
         display: none; /* Hide desktop nav on mobile */
       }
@@ -568,48 +571,46 @@
           queue = parsed.queue || [];
         }
         
-        characters.forEach(char => {
-          const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
-          const isOwned = !!found;
-        
-          // Skip if owned filter is on and this item is not owned
-          if (showOwnedOnly && !isOwned) return;
-        
-          const card = document.createElement("div");
-          card.className = "card";
-          if (isOwned) card.classList.add("owned");
-        
-          // If selection mode is active, add a checkbox.
-          if (selectionMode) {
-            const checkbox = document.createElement("input");
-            checkbox.type = "checkbox";
-            checkbox.className = "select-checkbox";
-            checkbox.dataset.name = char.name;
-            checkbox.dataset.game = game;
-            card.appendChild(checkbox);
-          }
-        
-          // Append the Skylander image and name.
-          card.innerHTML += `
-            <img src="${char.image}" alt="${char.name}" />
-            <div><strong>${char.name}</strong></div>
-            ${!selectionMode && isOwned ? `<button onclick="removeFromInventory('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}')">Remove</button>` : ''}
-          `;
-        
-          // Add long-press listeners to trigger selection mode.
-          card.addEventListener("mousedown", e => startPress(e, toggleSelectionMode));
-          card.addEventListener("touchstart", e => startPress(e, toggleSelectionMode));
-          card.addEventListener("mouseup", cancelPress);
-          card.addEventListener("mouseleave", cancelPress);
-          card.addEventListener("touchend", cancelPress);
-        
-          // Only add the modal click if not in selection mode.
-          if (!selectionMode) {
-            card.onclick = () => openModal(char);
-          }
-        
-          cards.appendChild(card);
-        });
+       characters.forEach(char => {
+        const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
+        const isOwned = !!found;
+      
+        // Skip if owned filter is on and this item is not owned
+        if (showOwnedOnly && !isOwned) return;
+      
+        const card = document.createElement("div");
+        card.className = "card";
+        if (isOwned) card.classList.add("owned");
+      
+        // Append the Skylander image and name.
+        card.innerHTML = `
+          <img src="${char.image}" alt="${char.name}" />
+          <div><strong>${char.name}</strong></div>
+          ${!selectionMode && isOwned ? `<button onclick="removeFromInventory('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}')">Remove</button>` : ''}
+        `;
+      
+        // In selection mode, clicking toggles the selected state.
+        if (selectionMode) {
+          card.onclick = function(e) {
+            // Prevent the click from bubbling up to other handlers (like modal open)
+            e.stopPropagation();
+            card.classList.toggle("selected");
+          };
+        } else {
+          // Normal click opens the modal.
+          card.onclick = () => openModal(char);
+        }
+      
+        // (Optional) Add your long-press listeners here if you still want to trigger selection mode via long-press.
+        // For example:
+        card.addEventListener("mousedown", startPress);
+        card.addEventListener("touchstart", startPress);
+        card.addEventListener("mouseup", cancelPress);
+        card.addEventListener("mouseleave", cancelPress);
+        card.addEventListener("touchend", cancelPress);
+      
+        cards.appendChild(card);
+      });
         
         section.appendChild(cards);
         container.appendChild(section);
