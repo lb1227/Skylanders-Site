@@ -507,9 +507,16 @@
   <select id="gameSelect" style="width: 80%; max-width: 300px; margin: 1rem auto; display: block; padding: 0.5rem;">
     <option value="">Select a Game</option>
   </select>
-  
-  <!-- Inventory Container -->
+
+  <!-- Combined Inventory Container with Bulk Select Controls -->
   <div class="container">
+    <!-- Bulk Action Controls -->
+    <button id="toggleSelectMode" onclick="toggleSelectionMode()">Select Items</button>
+    <div id="bulkActions" style="display:none;">
+      <button onclick="bulkMarkAsOwnedSelected()">Mark Selected as Owned</button>
+      <button onclick="bulkRemoveSelected()">Remove Selected</button>
+    </div>
+    <!-- Inventory Container -->
     <div id="inventoryContainer"></div>
   </div>
 
@@ -519,16 +526,6 @@
       <span class="close" onclick="closeModal()">&times;</span>
       <div id="skylanderDetails"></div>
     </div>
-  </div>
-
-  <!-- Select all buttons for Skylanders -->
-  <div class="container">
-    <button id="toggleSelectMode" onclick="toggleSelectionMode()">Select Items</button>
-    <div id="bulkActions" style="display:none;">
-      <button onclick="bulkMarkAsOwnedSelected()">Mark Selected as Owned</button>
-      <button onclick="bulkRemoveSelected()">Remove Selected</button>
-    </div>
-    <div id="inventoryContainer"></div>
   </div>
   
   <script>
