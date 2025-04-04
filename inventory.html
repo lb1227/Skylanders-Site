@@ -571,7 +571,7 @@
           queue = parsed.queue || [];
         }
         
-      characters.forEach(char => {
+       characters.forEach(char => {
         const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
         const isOwned = !!found;
       
@@ -589,18 +589,20 @@
           ${!selectionMode && isOwned ? `<button onclick="removeFromInventory('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}')">Remove</button>` : ''}
         `;
       
-        // In selection mode, tapping toggles the "selected" class.
+        // In selection mode, clicking toggles the selected state.
         if (selectionMode) {
           card.onclick = function(e) {
+            // Prevent the click from bubbling up to other handlers (like modal open)
             e.stopPropagation();
             card.classList.toggle("selected");
           };
         } else {
-          // When not in selection mode, a quick tap opens the modal.
+          // Normal click opens the modal.
           card.onclick = () => openModal(char);
         }
       
-        // Add long-press listeners (if still desired) to toggle selection mode.
+        // (Optional) Add your long-press listeners here if you still want to trigger selection mode via long-press.
+        // For example:
         card.addEventListener("mousedown", startPress);
         card.addEventListener("touchstart", startPress);
         card.addEventListener("mouseup", cancelPress);
@@ -742,23 +744,9 @@
 
     function toggleSelectionMode() {
       selectionMode = !selectionMode;
-      const container = document.getElementById("inventoryContainer");
-      
-      if (selectionMode) {
-        // Show bulk actions container if needed.
-        document.getElementById("bulkActions").style.display = "block";
-        // Attach swipe listeners.
-        container.addEventListener("touchstart", onSelectionTouchStart);
-        container.addEventListener("touchmove", onSelectionTouchMove);
-        container.addEventListener("touchend", onSelectionTouchEnd);
-      } else {
-        document.getElementById("bulkActions").style.display = "none";
-        // Remove swipe listeners.
-        container.removeEventListener("touchstart", onSelectionTouchStart);
-        container.removeEventListener("touchmove", onSelectionTouchMove);
-        container.removeEventListener("touchend", onSelectionTouchEnd);
-      }
-      // Re-render the inventory so that cards are built in the correct mode.
+      // If selection mode is enabled, you might want to show the bulk actions container
+      document.getElementById("bulkActions").style.display = selectionMode ? "block" : "none";
+      // Re-render inventory so that the cards now either show checkboxes (if in selection mode) or the modal click (if not)
       renderInventory();
     }
     function bulkMarkAsOwnedSelected() {
@@ -831,56 +819,6 @@
     
     function cancelPress(e) {
       clearTimeout(pressTimer);
-    }
-    let selectionStartX = 0;
-    let selectionDeltaX = 0;
-    
-    function onSelectionTouchStart(e) {
-      selectionStartX = e.changedTouches[0].screenX;
-      selectionDeltaX = 0;
-    }
-    
-    function onSelectionTouchMove(e) {
-      const currentX = e.changedTouches[0].screenX;
-      selectionDeltaX = currentX - selectionStartX;
-    }
-    
-    function onSelectionTouchEnd(e) {
-      const threshold = 50; // Minimum swipe distance in pixels
-      if (selectionDeltaX > threshold) {
-        // Swipe right: complete the selection.
-        completeSelection();
-      } else if (selectionDeltaX < -threshold) {
-        // Swipe left: cancel selection.
-        cancelSelection();
-      }
-      selectionDeltaX = 0;
-    }
-    
-    function completeSelection() {
-      // Process the selected cards.
-      // For example, call your bulkMarkAsOwnedSelected() which
-      // looks for cards that are visually "selected" (you can query by the .selected class)
-      // and then process them.
-      const selectedCards = document.querySelectorAll(".card.selected");
-      selectedCards.forEach(card => {
-        // Retrieve the name and game data you stored on the card.
-        // For example, if you stored these as data attributes:
-        const name = card.querySelector("strong").textContent;
-        const game = card.dataset.game; // (Ensure you add dataset.game when rendering the card.)
-        // Locate the skylander object from window.games for the given game.
-        const skylander = window.games[game].find(item => item.name === name);
-        if (skylander) {
-          addToInventory(skylander, game);
-        }
-      });
-      // Exit selection mode after completion.
-      toggleSelectionMode();
-    }
-    
-    function cancelSelection() {
-      // Simply exit selection mode (which will re-render the UI and remove any selected classes).
-      toggleSelectionMode();
     }
   </script>
 </body>
