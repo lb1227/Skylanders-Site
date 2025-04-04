@@ -520,6 +520,16 @@
       <div id="skylanderDetails"></div>
     </div>
   </div>
+
+  <!-- Select all buttons for Skylanders -->
+  <div class="container">
+    <button id="toggleSelectMode" onclick="toggleSelectionMode()">Select Items</button>
+    <div id="bulkActions" style="display:none;">
+      <button onclick="bulkMarkAsOwnedSelected()">Mark Selected as Owned</button>
+      <button onclick="bulkRemoveSelected()">Remove Selected</button>
+    </div>
+    <div id="inventoryContainer"></div>
+  </div>
   
   <script>
     const user = localStorage.getItem("sky_user") || "guest";
@@ -564,23 +574,36 @@
         characters.forEach(char => {
           const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
           const isOwned = !!found;
-          
-          // Apply the owned filter if enabled
+        
+          // Skip if owned filter is on and this item is not owned
           if (showOwnedOnly && !isOwned) return;
-          
+        
           const card = document.createElement("div");
           card.className = "card";
           if (isOwned) card.classList.add("owned");
-          
-          card.innerHTML = `
+        
+          // If selection mode is active, add a checkbox
+          if (selectionMode) {
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.className = "select-checkbox";
+            checkbox.dataset.name = char.name;
+            checkbox.dataset.game = game;
+            card.appendChild(checkbox);
+          }
+        
+          // Append the Skylander image and name
+          card.innerHTML += `
             <img src="${char.image}" alt="${char.name}" />
             <div><strong>${char.name}</strong></div>
-            ${isOwned ? `<button onclick="removeFromInventory('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}')">Remove</button>` : ''}
+            ${!selectionMode && isOwned ? `<button onclick="removeFromInventory('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}')">Remove</button>` : ''}
           `;
-          
-          // Open modal on card click
-          card.onclick = () => openModal(char);
-          
+        
+          // Only add the modal click if not in selection mode
+          if (!selectionMode) {
+            card.onclick = () => openModal(char);
+          }
+        
           cards.appendChild(card);
         });
         
@@ -711,6 +734,62 @@
         const selectedGame = select.value;
         renderInventory(false, selectedGame);
       });
+    }
+    let selectionMode = false;
+
+    function toggleSelectionMode() {
+      selectionMode = !selectionMode;
+      document.getElementById("toggleSelectMode").textContent = selectionMode ? "Cancel Selection" : "Select Items";
+      document.getElementById("bulkActions").style.display = selectionMode ? "block" : "none";
+      // Re-render inventory so checkboxes appear or disappear.
+      renderInventory();
+    }
+    function bulkMarkAsOwnedSelected() {
+      const checkboxes = document.querySelectorAll(".select-checkbox:checked");
+      checkboxes.forEach(cb => {
+        const name = cb.dataset.name;
+        const game = cb.dataset.game;
+        // Locate the skylander object from window.games for the given game
+        const skylander = window.games[game].find(item => item.name === name);
+        if (skylander) {
+          addToInventory(skylander, game);
+        }
+      });
+      // Exit selection mode and re-render
+      selectionMode = false;
+      document.getElementById("toggleSelectMode").textContent = "Select Items";
+      document.getElementById("bulkActions").style.display = "none";
+      renderInventory();
+    }
+    
+    function bulkRemoveSelected() {
+      const checkboxes = document.querySelectorAll(".select-checkbox:checked");
+      checkboxes.forEach(cb => {
+        const name = cb.dataset.name;
+        const game = cb.dataset.game;
+        removeFromInventory(name, game);
+      });
+      // Exit selection mode and re-render
+      selectionMode = false;
+      document.getElementById("toggleSelectMode").textContent = "Select Items";
+      document.getElementById("bulkActions").style.display = "none";
+      renderInventory();
+    }
+
+    function addToInventory(skylander, game) {
+      const key = `sky_progress_${user}_${game}`;
+      let parsed = { collected: [], queue: [] };
+      const saved = localStorage.getItem(key);
+      if (saved) {
+        parsed = JSON.parse(saved);
+      }
+      // Check if the skylander is already owned
+      const exists = parsed.collected.find(item => item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase());
+      if (!exists) {
+        // You can adjust the object structure as needed (e.g., quantity, etc.)
+        parsed.collected.push({ name: skylander.name, quantity: 1 });
+      }
+      localStorage.setItem(key, JSON.stringify(parsed));
     }
   </script>
 </body>
