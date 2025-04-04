@@ -511,10 +511,10 @@
   <!-- Combined Inventory Container with Bulk Select Controls -->
   <div class="container">
     <!-- Bulk Action Controls -->
-    <button id="toggleSelectMode" onclick="toggleSelectionMode()">Select Items</button>
     <div id="bulkActions" style="display:none;">
-      <button onclick="bulkMarkAsOwnedSelected()">Mark Selected as Owned</button>
-      <button onclick="bulkRemoveSelected()">Remove Selected</button>
+       <button onclick="bulkMarkAsOwnedSelected()">Mark Selected as Owned</button>
+       <button onclick="bulkRemoveSelected()">Remove Selected</button>
+       <button onclick="toggleSelectionMode()">Cancel Selection</button>
     </div>
     <!-- Inventory Container -->
     <div id="inventoryContainer"></div>
@@ -579,7 +579,7 @@
           card.className = "card";
           if (isOwned) card.classList.add("owned");
         
-          // If selection mode is active, add a checkbox
+          // If selection mode is active, add a checkbox.
           if (selectionMode) {
             const checkbox = document.createElement("input");
             checkbox.type = "checkbox";
@@ -589,14 +589,21 @@
             card.appendChild(checkbox);
           }
         
-          // Append the Skylander image and name
+          // Append the Skylander image and name.
           card.innerHTML += `
             <img src="${char.image}" alt="${char.name}" />
             <div><strong>${char.name}</strong></div>
             ${!selectionMode && isOwned ? `<button onclick="removeFromInventory('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}')">Remove</button>` : ''}
           `;
         
-          // Only add the modal click if not in selection mode
+          // Add long-press listeners to trigger selection mode.
+          card.addEventListener("mousedown", e => startPress(e, toggleSelectionMode));
+          card.addEventListener("touchstart", e => startPress(e, toggleSelectionMode));
+          card.addEventListener("mouseup", cancelPress);
+          card.addEventListener("mouseleave", cancelPress);
+          card.addEventListener("touchend", cancelPress);
+        
+          // Only add the modal click if not in selection mode.
           if (!selectionMode) {
             card.onclick = () => openModal(char);
           }
@@ -736,9 +743,9 @@
 
     function toggleSelectionMode() {
       selectionMode = !selectionMode;
-      document.getElementById("toggleSelectMode").textContent = selectionMode ? "Cancel Selection" : "Select Items";
+      // If selection mode is enabled, you might want to show the bulk actions container
       document.getElementById("bulkActions").style.display = selectionMode ? "block" : "none";
-      // Re-render inventory so checkboxes appear or disappear.
+      // Re-render inventory so that the cards now either show checkboxes (if in selection mode) or the modal click (if not)
       renderInventory();
     }
     function bulkMarkAsOwnedSelected() {
@@ -787,6 +794,30 @@
         parsed.collected.push({ name: skylander.name, quantity: 1 });
       }
       localStorage.setItem(key, JSON.stringify(parsed));
+    }
+
+    let pressTimer;
+
+    function addLongPressListener(card) {
+      // Start the timer on mousedown or touchstart
+      card.addEventListener("mousedown", startPress);
+      card.addEventListener("touchstart", startPress);
+    
+      // Clear the timer if the press is released early or the pointer leaves
+      card.addEventListener("mouseup", cancelPress);
+      card.addEventListener("mouseleave", cancelPress);
+      card.addEventListener("touchend", cancelPress);
+    }
+    
+    function startPress(e) {
+      // Start a timer – if the press lasts 800ms, toggle selection mode
+      pressTimer = setTimeout(() => {
+        toggleSelectionMode();
+      }, 800);
+    }
+    
+    function cancelPress(e) {
+      clearTimeout(pressTimer);
     }
   </script>
 </body>
