@@ -628,11 +628,15 @@
         `;
       
         if (selectionMode) {
-          // Toggling the selected class: if it's already selected (green),
-          // clicking again will remove the class (reverting to original color).
           card.onclick = function(e) {
             e.stopPropagation();
-            card.classList.toggle("selected");
+            // If the card is already owned, toggle the "removed" state.
+            if (card.classList.contains("owned")) {
+              card.classList.toggle("removed");
+            } else {
+              // Otherwise, toggle the "selected" state.
+              card.classList.toggle("selected");
+            }
           };
         } else {
           card.onclick = () => openModal(char);
