@@ -277,6 +277,9 @@
       .card.selected {
         background-color: #1f4d1f !important; /* Green background */
       }
+      .card.removed {
+        background-color: #808080 !important; /* Grey background to indicate removal */
+      }
       #desktopNav {
         display: none; /* Hide desktop nav on mobile */
       }
@@ -878,19 +881,28 @@
       const selectedCards = document.querySelectorAll(".card.selected");
       selectedCards.forEach(card => {
         const name = card.querySelector("strong").textContent;
-        const game = card.dataset.game; // Ensure you set card.dataset.game when creating the card
-        // If the card is already owned, remove it; if not, add it.
+        const game = card.dataset.game; // Make sure you store game info on each card
         if (card.classList.contains("owned")) {
-          removeFromInventory(name, game);
+          // Add a "removed" class so the card turns grey.
+          card.classList.add("removed");
+          // Optionally, remove the "owned" class to update the appearance.
+          card.classList.remove("owned");
+          // After a short delay, remove from inventory.
+          setTimeout(() => {
+            removeFromInventory(name, game);
+          }, 500);
         } else {
+          // If not already owned, add it.
           const skylander = window.games[game].find(item => item.name === name);
           if (skylander) {
             addToInventory(skylander, game);
           }
         }
       });
-      // Exit selection mode (which re-renders the UI, clearing selections)
-      toggleSelectionMode();
+      // After processing all cards, exit selection mode after a delay
+      setTimeout(() => {
+        toggleSelectionMode();
+      }, 600);
     }
     
     function removeSelection() {
