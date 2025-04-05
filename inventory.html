@@ -763,13 +763,6 @@
         renderInventory(false, selectedGame);
       });
     }
-      
-      // When a game is selected, re-render inventory for that game only.
-      select.addEventListener("change", () => {
-        const selectedGame = select.value;
-        renderInventory(false, selectedGame);
-      });
-    }
     let selectionMode = false;
 
     function toggleSelectionMode() {
