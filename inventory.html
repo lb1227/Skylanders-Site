@@ -875,17 +875,21 @@
     }
     
     function completeSelection() {
-      // Confirm: add each selected Skylander to inventory.
       const selectedCards = document.querySelectorAll(".card.selected");
       selectedCards.forEach(card => {
         const name = card.querySelector("strong").textContent;
-        const game = card.dataset.game;
-        const skylander = window.games[game].find(item => item.name === name);
-        if (skylander) {
-          addToInventory(skylander, game);
+        const game = card.dataset.game; // Ensure you set card.dataset.game when creating the card
+        // If the card is already owned, remove it; if not, add it.
+        if (card.classList.contains("owned")) {
+          removeFromInventory(name, game);
+        } else {
+          const skylander = window.games[game].find(item => item.name === name);
+          if (skylander) {
+            addToInventory(skylander, game);
+          }
         }
       });
-      // Exit selection mode.
+      // Exit selection mode (which re-renders the UI, clearing selections)
       toggleSelectionMode();
     }
     
