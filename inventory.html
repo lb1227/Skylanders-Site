@@ -673,7 +673,8 @@
     // On page load, render both the mobile group navigation and inventory.
     window.onload = () => {
       populateGameSelect();
-      renderInventory();
+      const selectedGame = document.getElementById("gameSelect").value; // This should be "Spyros adventure" if it's the default
+      renderInventory(false, selectedGame);
       const logoutBtn = document.getElementById("logoutBtn");
       if (user && user !== "guest") {
         logoutBtn.style.display = "inline-block";
