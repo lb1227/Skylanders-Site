@@ -166,6 +166,42 @@
       font-size: 1rem;
       margin: 0.5rem 0;
     }
+    #leftVignette,
+    #rightVignette {
+      display: none;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      width: 20%;
+      pointer-events: none;
+      animation: flash 2s ease-in-out infinite;
+      z-index: 9999; /* Ensure they appear above content */
+    }
+    
+    #leftVignette {
+      left: 0;
+      background: linear-gradient(to right, rgba(229,57,53,0.5), transparent);
+    }
+    
+    #rightVignette {
+      right: 0;
+      background: linear-gradient(to left, rgba(76,175,80,0.5), transparent);
+    }
+    
+    /* Show overlays when body has a class 'selection-mode' */
+    body.selection-mode #leftVignette,
+    body.selection-mode #rightVignette {
+      display: block;
+    }
+    
+    @keyframes flash {
+      0%, 100% {
+        opacity: 0.5;
+      }
+      50% {
+        opacity: 0.8;
+      }
+    }
     /*COLLAPSIBLE BUTTONS*/
      @media (max-width: 768px) {
         .group-header {
@@ -517,6 +553,8 @@
     <div id="bulkActions" style="display:none;">
        <button onclick="toggleSelectionMode()">Cancel Selection</button>
     </div>
+    <div id="leftVignette"></div>
+    <div id="rightVignette"></div>
     <!-- Inventory Container -->
     <div id="inventoryContainer"></div>
   </div>
@@ -719,21 +757,21 @@
     function toggleSelectionMode() {
       selectionMode = !selectionMode;
       const container = document.getElementById("inventoryContainer");
+      const body = document.body;
       
       if (selectionMode) {
-        // Show bulk actions if desired.
         document.getElementById("bulkActions").style.display = "block";
-        // Attach swipe listeners.
         container.addEventListener("touchstart", onSelectionTouchStart);
         container.addEventListener("touchmove", onSelectionTouchMove);
         container.addEventListener("touchend", onSelectionTouchEnd);
+        body.classList.add("selection-mode");
       } else {
         document.getElementById("bulkActions").style.display = "none";
         container.removeEventListener("touchstart", onSelectionTouchStart);
         container.removeEventListener("touchmove", onSelectionTouchMove);
         container.removeEventListener("touchend", onSelectionTouchEnd);
+        body.classList.remove("selection-mode");
       }
-      // Re-render the inventory to update card behavior.
       renderInventory();
     }
     
