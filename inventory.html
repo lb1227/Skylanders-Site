@@ -863,11 +863,11 @@
     function onSelectionTouchEnd(e) {
       const threshold = 50; // Minimum swipe distance in pixels
       if (selectionDeltaX > threshold) {
-        // Swipe right: confirm selection.
+        // Swipe right: complete the selection.
         completeSelection();
       } else if (selectionDeltaX < -threshold) {
-        // Swipe left: remove selection.
-        removeSelection();
+        // Swipe left: cancel selection mode.
+        cancelSelection();
       }
       selectionDeltaX = 0;
     }
@@ -896,6 +896,11 @@
         removeFromInventory(name, game);
       });
       // Exit selection mode.
+      toggleSelectionMode();
+    }
+
+    function cancelSelection() {
+      // Simply exit selection mode (re-rendering will clear all "selected" states).
       toggleSelectionMode();
     }
   </script>
