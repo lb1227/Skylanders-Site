@@ -609,12 +609,13 @@
           queue = parsed.queue || [];
         }
         
-      characters.forEach(char => {
-        const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
-        const isOwned = !!found;
+     characters.forEach(char => {
+      const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
+      const inQueue = queue.some(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
+      const isOwned = !!found;
       
-        // Skip if owned filter is on and this item is not owned
-        if (showOwnedOnly && !isOwned) return;
+      if (inQueue) return; // Do not render characters that have been removed.
+      if (showOwnedOnly && !isOwned) return;
       
         const card = document.createElement("div");
         card.className = "card";
@@ -666,9 +667,11 @@
       const saved = localStorage.getItem(key);
       if (saved) {
         const parsed = JSON.parse(saved);
+        // Remove the character from the collected list
         parsed.collected = (parsed.collected || []).filter(x => 
           x.name.trim().toLowerCase() !== name.trim().toLowerCase()
         );
+        // Add the character to the queue (if not already there)
         const character = window.games[game].find(x => 
           x.name.trim().toLowerCase() === name.trim().toLowerCase()
         );
@@ -678,8 +681,7 @@
           parsed.queue.push(character);
         }
         localStorage.setItem(key, JSON.stringify(parsed));
-        // Do not re-render here; let completeSelection() handle it.
-        // renderInventory();
+        // Do not call renderInventory() here; let completeSelection() re-render.
       } else {
         console.warn(`No saved data found for key ${key}`);
       }
@@ -921,11 +923,11 @@
         const name = card.querySelector("strong").textContent;
         const game = card.dataset.game;
         
-        // If the card was originally owned and now marked "removed", remove it.
+        // For originally owned cards that are marked "removed", remove them.
         if (card.dataset.owned === "true" && card.classList.contains("removed")) {
           removeFromInventory(name, game);
         }
-        // Otherwise, if it was not originally owned and marked "selected", add it.
+        // For cards not originally owned that are marked "selected", add them.
         else if (card.dataset.owned === "false" && card.classList.contains("selected")) {
           const skylander = window.games[game].find(item => item.name === name);
           if (skylander) {
@@ -934,7 +936,7 @@
         }
       });
       
-      // Delay exiting selection mode so changes have time to register, then re-render.
+      // Delay exiting selection mode so the changes register.
       setTimeout(() => {
         selectionMode = false;
         document.body.classList.remove("selection-mode");
