@@ -775,6 +775,11 @@
     let selectionMode = false;
 
     function toggleSelectionMode() {
+       const scrollPosition = window.scrollY;
+        const collapseStates = {};
+        document.querySelectorAll('.group-section').forEach(section => {
+          collapseStates[section.id] = section.classList.contains('collapsed');
+        });
       selectionMode = !selectionMode;
       const container = document.getElementById("inventoryContainer");
       const body = document.body;
@@ -793,6 +798,18 @@
         body.classList.remove("selection-mode");
       }
       renderInventory();
+      
+      for (let id in collapseStates) {
+      const section = document.getElementById(id);
+      if (section) {
+        if (collapseStates[id]) {
+          section.classList.add('collapsed');
+        } else {
+          section.classList.remove('collapsed');
+        }
+      }
+    }
+    window.scrollTo(0, scrollPosition);
     }
 
     function addToInventory(skylander, game) {
