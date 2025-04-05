@@ -608,15 +608,16 @@
           queue = parsed.queue || [];
         }
         
-       characters.forEach(char => {
+      characters.forEach(char => {
         const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
         const isOwned = !!found;
       
+        // Skip if owned filter is on and this item is not owned
         if (showOwnedOnly && !isOwned) return;
       
         const card = document.createElement("div");
         card.className = "card";
-        card.dataset.game = game; // Store game info on the card.
+        card.dataset.game = game; // Store game for later use
         if (isOwned) card.classList.add("owned");
       
         card.innerHTML = `
@@ -626,6 +627,8 @@
         `;
       
         if (selectionMode) {
+          // Toggling the selected class: if it's already selected (green),
+          // clicking again will remove the class (reverting to original color).
           card.onclick = function(e) {
             e.stopPropagation();
             card.classList.toggle("selected");
@@ -634,7 +637,7 @@
           card.onclick = () => openModal(char);
         }
       
-        // Add long-press listeners if you wish to trigger selection mode by holding a card.
+        // Add long-press listeners (if still desired)
         card.addEventListener("mousedown", startPress);
         card.addEventListener("touchstart", startPress);
         card.addEventListener("mouseup", cancelPress);
