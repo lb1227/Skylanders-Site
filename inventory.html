@@ -741,8 +741,10 @@
     // these buttons scroll to the corresponding section.
     function populateGameSelect() {
       const select = document.getElementById("gameSelect");
-      // Start with a default option for "All Games"
-      select.innerHTML = '<option value="">All Games</option>';
+      // Remove the default "All Games" option.
+      select.innerHTML = ''; // Or use a placeholder if desired.
+      // Optionally, add a non-selectable placeholder:
+      // select.innerHTML = '<option value="" disabled selected>Select a Game</option>';
       
       Object.keys(window.games).forEach(game => {
         const option = document.createElement("option");
@@ -750,6 +752,13 @@
         option.textContent = game;
         select.appendChild(option);
       });
+      
+      // When a game is selected, re-render inventory for that game only.
+      select.addEventListener("change", () => {
+        const selectedGame = select.value;
+        renderInventory(false, selectedGame);
+      });
+    }
       
       // When a game is selected, re-render inventory for that game only.
       select.addEventListener("change", () => {
