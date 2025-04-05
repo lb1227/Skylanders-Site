@@ -515,8 +515,6 @@
   <div class="container">
     <!-- Bulk Action Controls -->
     <div id="bulkActions" style="display:none;">
-       <button onclick="bulkMarkAsOwnedSelected()">Mark Selected as Owned</button>
-       <button onclick="bulkRemoveSelected()">Remove Selected</button>
        <button onclick="toggleSelectionMode()">Cancel Selection</button>
     </div>
     <!-- Inventory Container -->
@@ -575,34 +573,29 @@
         const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
         const isOwned = !!found;
       
-        // Skip if owned filter is on and this item is not owned
         if (showOwnedOnly && !isOwned) return;
       
         const card = document.createElement("div");
         card.className = "card";
+        card.dataset.game = game; // Store game info on the card.
         if (isOwned) card.classList.add("owned");
       
-        // Append the Skylander image and name.
         card.innerHTML = `
           <img src="${char.image}" alt="${char.name}" />
           <div><strong>${char.name}</strong></div>
           ${!selectionMode && isOwned ? `<button onclick="removeFromInventory('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}')">Remove</button>` : ''}
         `;
       
-        // In selection mode, clicking toggles the selected state.
         if (selectionMode) {
           card.onclick = function(e) {
-            // Prevent the click from bubbling up to other handlers (like modal open)
             e.stopPropagation();
             card.classList.toggle("selected");
           };
         } else {
-          // Normal click opens the modal.
           card.onclick = () => openModal(char);
         }
       
-        // (Optional) Add your long-press listeners here if you still want to trigger selection mode via long-press.
-        // For example:
+        // Add long-press listeners if you wish to trigger selection mode by holding a card.
         card.addEventListener("mousedown", startPress);
         card.addEventListener("touchstart", startPress);
         card.addEventListener("mouseup", cancelPress);
@@ -614,25 +607,6 @@
         
         section.appendChild(cards);
         container.appendChild(section);
-      }
-    }
-
-    function updateQty(name, game, input) {
-      const val = parseInt(input.value);
-      if (isNaN(val) || val < 1) {
-        input.classList.add("invalid");
-        setTimeout(() => input.classList.remove("invalid"), 1000);
-        return;
-      }
-      const key = `sky_progress_${user}_${game}`;
-      const saved = localStorage.getItem(key);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        const found = parsed.collected?.find(x => x.name.trim().toLowerCase() === name.trim().toLowerCase());
-        if (found) {
-          found.quantity = val;
-          localStorage.setItem(key, JSON.stringify(parsed));
-        }
       }
     }
 
@@ -744,11 +718,25 @@
 
     function toggleSelectionMode() {
       selectionMode = !selectionMode;
-      // If selection mode is enabled, you might want to show the bulk actions container
-      document.getElementById("bulkActions").style.display = selectionMode ? "block" : "none";
-      // Re-render inventory so that the cards now either show checkboxes (if in selection mode) or the modal click (if not)
+      const container = document.getElementById("inventoryContainer");
+      
+      if (selectionMode) {
+        // Show bulk actions if desired.
+        document.getElementById("bulkActions").style.display = "block";
+        // Attach swipe listeners.
+        container.addEventListener("touchstart", onSelectionTouchStart);
+        container.addEventListener("touchmove", onSelectionTouchMove);
+        container.addEventListener("touchend", onSelectionTouchEnd);
+      } else {
+        document.getElementById("bulkActions").style.display = "none";
+        container.removeEventListener("touchstart", onSelectionTouchStart);
+        container.removeEventListener("touchmove", onSelectionTouchMove);
+        container.removeEventListener("touchend", onSelectionTouchEnd);
+      }
+      // Re-render the inventory to update card behavior.
       renderInventory();
     }
+    
     function bulkMarkAsOwnedSelected() {
       const checkboxes = document.querySelectorAll(".select-checkbox:checked");
       checkboxes.forEach(cb => {
@@ -819,6 +807,58 @@
     
     function cancelPress(e) {
       clearTimeout(pressTimer);
+    }
+
+    let selectionStartX = 0;
+    let selectionDeltaX = 0;
+    
+    function onSelectionTouchStart(e) {
+      selectionStartX = e.changedTouches[0].screenX;
+      selectionDeltaX = 0;
+    }
+    
+    function onSelectionTouchMove(e) {
+      const currentX = e.changedTouches[0].screenX;
+      selectionDeltaX = currentX - selectionStartX;
+    }
+    
+    function onSelectionTouchEnd(e) {
+      const threshold = 50; // Minimum swipe distance in pixels
+      if (selectionDeltaX > threshold) {
+        // Swipe right: confirm selection.
+        completeSelection();
+      } else if (selectionDeltaX < -threshold) {
+        // Swipe left: remove selection.
+        removeSelection();
+      }
+      selectionDeltaX = 0;
+    }
+    
+    function completeSelection() {
+      // Confirm: add each selected Skylander to inventory.
+      const selectedCards = document.querySelectorAll(".card.selected");
+      selectedCards.forEach(card => {
+        const name = card.querySelector("strong").textContent;
+        const game = card.dataset.game;
+        const skylander = window.games[game].find(item => item.name === name);
+        if (skylander) {
+          addToInventory(skylander, game);
+        }
+      });
+      // Exit selection mode.
+      toggleSelectionMode();
+    }
+    
+    function removeSelection() {
+      // Remove: for each selected card, remove it from inventory.
+      const selectedCards = document.querySelectorAll(".card.selected");
+      selectedCards.forEach(card => {
+        const name = card.querySelector("strong").textContent;
+        const game = card.dataset.game;
+        removeFromInventory(name, game);
+      });
+      // Exit selection mode.
+      toggleSelectionMode();
     }
   </script>
 </body>
