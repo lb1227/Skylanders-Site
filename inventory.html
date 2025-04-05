@@ -609,23 +609,17 @@
           queue = parsed.queue || [];
         }
         
-     characters.forEach(char => {
-      const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
-      const inQueue = queue.some(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
-      const isOwned = !!found;
+      characters.forEach(char => {
+        const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
+        const isOwned = !!found;
       
-      if (inQueue) return; // Do not render characters that have been removed.
-      if (showOwnedOnly && !isOwned) return;
+        // Skip if owned filter is on and this item is not owned
+        if (showOwnedOnly && !isOwned) return;
       
         const card = document.createElement("div");
         card.className = "card";
-        card.dataset.game = game; // store the game
-        if (isOwned) {
-          card.classList.add("owned");
-          card.dataset.owned = "true";
-        } else {
-          card.dataset.owned = "false";
-        }
+        card.dataset.game = game; // Store game for later use
+        if (isOwned) card.classList.add("owned");
       
         card.innerHTML = `
           <img src="${char.image}" alt="${char.name}" />
@@ -634,14 +628,11 @@
         `;
       
         if (selectionMode) {
+          // Toggling the selected class: if it's already selected (green),
+          // clicking again will remove the class (reverting to original color).
           card.onclick = function(e) {
             e.stopPropagation();
-            // For originally owned cards, toggle "removed" state.
-            if (card.dataset.owned === "true") {
-              card.classList.toggle("removed");
-            } else {
-              card.classList.toggle("selected");
-            }
+            card.classList.toggle("selected");
           };
         } else {
           card.onclick = () => openModal(char);
@@ -667,21 +658,13 @@
       const saved = localStorage.getItem(key);
       if (saved) {
         const parsed = JSON.parse(saved);
-        // Remove the character from the collected list
-        parsed.collected = (parsed.collected || []).filter(x => 
-          x.name.trim().toLowerCase() !== name.trim().toLowerCase()
-        );
-        // Add the character to the queue (if not already there)
-        const character = window.games[game].find(x => 
-          x.name.trim().toLowerCase() === name.trim().toLowerCase()
-        );
-        if (character && !parsed.queue.some(x => 
-          x.name.trim().toLowerCase() === name.trim().toLowerCase()
-        )) {
+        parsed.collected = (parsed.collected || []).filter(x => x.name.trim().toLowerCase() !== name.trim().toLowerCase());
+        const character = window.games[game].find(x => x.name.trim().toLowerCase() === name.trim().toLowerCase());
+        if (character && !parsed.queue.some(x => x.name.trim().toLowerCase() === name.trim().toLowerCase())) {
           parsed.queue.push(character);
         }
         localStorage.setItem(key, JSON.stringify(parsed));
-        // Do not call renderInventory() here; let completeSelection() re-render.
+        renderInventory();
       } else {
         console.warn(`No saved data found for key ${key}`);
       }
@@ -690,6 +673,7 @@
     // On page load, render both the mobile group navigation and inventory.
     window.onload = () => {
       populateGameSelect();
+      renderInventory();
       const logoutBtn = document.getElementById("logoutBtn");
       if (user && user !== "guest") {
         logoutBtn.style.display = "inline-block";
@@ -757,9 +741,11 @@
     // these buttons scroll to the corresponding section.
     function populateGameSelect() {
       const select = document.getElementById("gameSelect");
-      select.innerHTML = ''; // Clear any default content
+      // Remove the default "All Games" option.
+      select.innerHTML = ''; // Or use a placeholder if desired.
+      // Optionally, add a non-selectable placeholder:
+      // select.innerHTML = '<option value="" disabled selected>Select a Game</option>';
       
-      // Populate options based on window.games
       Object.keys(window.games).forEach(game => {
         const option = document.createElement("option");
         option.value = game;
@@ -767,16 +753,14 @@
         select.appendChild(option);
       });
       
-      // Set default selection to "Spyro's Adventure" if it exists
-      if (window.games["Spyro's Adventure"]) {
-        select.value = "Spyro's Adventure";
-        renderInventory(false, "Spyro's Adventure");
-      } else {
-        // Fallback: render all if that game isn’t available.
-        renderInventory();
-      }
+      // When a game is selected, re-render inventory for that game only.
+      select.addEventListener("change", () => {
+        const selectedGame = select.value;
+        renderInventory(false, selectedGame);
+      });
+    }
       
-      // Update inventory when the dropdown changes
+      // When a game is selected, re-render inventory for that game only.
       select.addEventListener("change", () => {
         const selectedGame = select.value;
         renderInventory(false, selectedGame);
@@ -786,38 +770,23 @@
 
     function toggleSelectionMode() {
       selectionMode = !selectionMode;
+      const container = document.getElementById("inventoryContainer");
       const body = document.body;
       
       if (selectionMode) {
+        document.getElementById("bulkActions").style.display = "block";
+        container.addEventListener("touchstart", onSelectionTouchStart);
+        container.addEventListener("touchmove", onSelectionTouchMove);
+        container.addEventListener("touchend", onSelectionTouchEnd);
         body.classList.add("selection-mode");
-        // Update each card’s event handler to toggle selection state:
-        document.querySelectorAll(".card").forEach(card => {
-          // Save current onclick if needed for later
-          card.dataset.originalOnclick = card.onclick;
-          card.onclick = function(e) {
-            e.stopPropagation();
-            if (card.dataset.owned === "true") {
-              card.classList.toggle("removed");
-            } else {
-              card.classList.toggle("selected");
-            }
-          };
-        });
       } else {
+        document.getElementById("bulkActions").style.display = "none";
+        container.removeEventListener("touchstart", onSelectionTouchStart);
+        container.removeEventListener("touchmove", onSelectionTouchMove);
+        container.removeEventListener("touchend", onSelectionTouchEnd);
         body.classList.remove("selection-mode");
-        // Restore the original onclick (or reassign the modal open handler)
-        document.querySelectorAll(".card").forEach(card => {
-          // Restore the original onclick if you saved it
-          if (card.dataset.originalOnclick) {
-            card.onclick = card.dataset.originalOnclick;
-          } else {
-            card.onclick = () => openModal(/* appropriate char data */);
-          }
-          // Also clear any selection states
-          card.classList.remove("selected", "removed");
-        });
       }
-      // Note: Do not call renderInventory() here.
+      renderInventory();
     }
     
     function bulkMarkAsOwnedSelected() {
@@ -918,30 +887,31 @@
     }
     
     function completeSelection() {
-      const selectedCards = document.querySelectorAll(".card.selected, .card.removed");
+      const selectedCards = document.querySelectorAll(".card.selected");
       selectedCards.forEach(card => {
         const name = card.querySelector("strong").textContent;
-        const game = card.dataset.game;
-        
-        // For originally owned cards that are marked "removed", remove them.
-        if (card.dataset.owned === "true" && card.classList.contains("removed")) {
-          removeFromInventory(name, game);
-        }
-        // For cards not originally owned that are marked "selected", add them.
-        else if (card.dataset.owned === "false" && card.classList.contains("selected")) {
+        const game = card.dataset.game; // Make sure you store game info on each card
+        if (card.classList.contains("owned")) {
+          // Add a "removed" class so the card turns grey.
+          card.classList.add("removed");
+          // Optionally, remove the "owned" class to update the appearance.
+          card.classList.remove("owned");
+          // After a short delay, remove from inventory.
+          setTimeout(() => {
+            removeFromInventory(name, game);
+          }, 500);
+        } else {
+          // If not already owned, add it.
           const skylander = window.games[game].find(item => item.name === name);
           if (skylander) {
             addToInventory(skylander, game);
           }
         }
       });
-      
-      // Delay exiting selection mode so the changes register.
+      // After processing all cards, exit selection mode after a delay
       setTimeout(() => {
-        selectionMode = false;
-        document.body.classList.remove("selection-mode");
-        renderInventory();
-      }, 800);
+        toggleSelectionMode();
+      }, 600);
     }
     
     function removeSelection() {
