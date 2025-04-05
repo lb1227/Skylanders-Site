@@ -630,18 +630,21 @@
         if (selectionMode) {
           card.onclick = function(e) {
             e.stopPropagation();
-            card.classList.toggle("selected");
-          };
-        } else {
-          card.onclick = function(e) {
-            e.stopPropagation();
-            if (card.classList.contains("owned")) {
-              // Remove the skylander from inventory, which also removes the green styling
-              removeFromInventory(char.name, game);
+            // If the card is owned, toggle the removal state (grey) immediately.
+            if (card.classList.contains("owned") && !card.classList.contains("removed")) {
+              card.classList.remove("owned");
+              card.classList.add("removed");
+            } else if (card.classList.contains("removed")) {
+              // If clicked again, revert back to owned.
+              card.classList.remove("removed");
+              card.classList.add("owned");
             } else {
-              openModal(char);
+              // For cards that are not owned, just toggle the selected state.
+              card.classList.toggle("selected");
             }
           };
+        } else {
+          card.onclick = () => openModal(char);
         }
               
         // Add long-press listeners (if still desired)
