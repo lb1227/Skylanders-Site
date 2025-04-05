@@ -775,11 +775,16 @@
     let selectionMode = false;
 
     function toggleSelectionMode() {
-       const scrollPosition = window.scrollY;
-        const collapseStates = {};
-        document.querySelectorAll('.group-section').forEach(section => {
-          collapseStates[section.id] = section.classList.contains('collapsed');
-        });
+      // Capture current scroll position
+      const scrollPosition = window.scrollY;
+      
+      // Capture current collapse states for each group
+      const collapseStates = {};
+      document.querySelectorAll('.group-section').forEach(section => {
+        collapseStates[section.id] = section.classList.contains('collapsed');
+      });
+      
+      // Toggle selection mode state
       selectionMode = !selectionMode;
       const container = document.getElementById("inventoryContainer");
       const body = document.body;
@@ -797,21 +802,25 @@
         container.removeEventListener("touchend", onSelectionTouchEnd);
         body.classList.remove("selection-mode");
       }
+      
+      // Re-render the inventory with the new selection mode
       renderInventory();
       
+      // Restore the collapse states for each group
       for (let id in collapseStates) {
-      const section = document.getElementById(id);
-      if (section) {
-        if (collapseStates[id]) {
-          section.classList.add('collapsed');
-        } else {
-          section.classList.remove('collapsed');
+        const section = document.getElementById(id);
+        if (section) {
+          if (collapseStates[id]) {
+            section.classList.add('collapsed');
+          } else {
+            section.classList.remove('collapsed');
+          }
         }
       }
+      
+      // Restore the scroll position
+      window.scrollTo(0, scrollPosition);
     }
-    window.scrollTo(0, scrollPosition);
-    }
-
     function addToInventory(skylander, game) {
       const key = `sky_progress_${user}_${game}`;
       let parsed = { collected: [], queue: [] };
