@@ -618,8 +618,13 @@
       
         const card = document.createElement("div");
         card.className = "card";
-        card.dataset.game = game; // Store game for later use
-        if (isOwned) card.classList.add("owned");
+        card.dataset.game = game; // Store the game for later use
+        if (isOwned) {
+          card.classList.add("owned");
+          card.dataset.owned = "true";
+        } else {
+          card.dataset.owned = "false";
+        }
       
         card.innerHTML = `
           <img src="${char.image}" alt="${char.name}" />
@@ -630,11 +635,11 @@
         if (selectionMode) {
           card.onclick = function(e) {
             e.stopPropagation();
-            // If the card is already owned, toggle the "removed" state.
-            if (card.classList.contains("owned")) {
+            if (card.dataset.owned === "true") {
+              // Toggle the "removed" class to indicate removal (grey background)
               card.classList.toggle("removed");
             } else {
-              // Otherwise, toggle the "selected" state.
+              // Toggle the "selected" class (green background) for addition
               card.classList.toggle("selected");
             }
           };
@@ -890,27 +895,25 @@
     }
     
     function completeSelection() {
-      const selectedCards = document.querySelectorAll(".card.selected");
+      const selectedCards = document.querySelectorAll(".card.selected, .card.removed");
       selectedCards.forEach(card => {
         const name = card.querySelector("strong").textContent;
-        const game = card.dataset.game; // Make sure this is set when creating the card
-        if (card.classList.contains("owned")) {
-          // Mark the card as removed (grey) and remove its "owned" class
-          card.classList.add("removed");
-          card.classList.remove("owned");
-          // After a short delay, call the removal function
-          setTimeout(() => {
-            removeFromInventory(name, game);
-          }, 500);
-        } else {
-          // If not already owned, add it.
+        const game = card.dataset.game;
+        
+        // If the card was originally owned and now is marked "removed", remove it.
+        if (card.dataset.owned === "true" && card.classList.contains("removed")) {
+          removeFromInventory(name, game);
+        }
+        // Otherwise, if it was not originally owned and is marked "selected", add it.
+        else if (card.dataset.owned === "false" && card.classList.contains("selected")) {
           const skylander = window.games[game].find(item => item.name === name);
           if (skylander) {
             addToInventory(skylander, game);
           }
         }
       });
-      // Delay exiting selection mode so that removal operations complete and the UI updates.
+      
+      // Delay exiting selection mode to allow changes to register
       setTimeout(() => {
         selectionMode = false;
         document.body.classList.remove("selection-mode");
