@@ -887,13 +887,12 @@
       const selectedCards = document.querySelectorAll(".card.selected");
       selectedCards.forEach(card => {
         const name = card.querySelector("strong").textContent;
-        const game = card.dataset.game; // Make sure you store game info on each card
+        const game = card.dataset.game; // Make sure this is set when creating the card
         if (card.classList.contains("owned")) {
-          // Add a "removed" class so the card turns grey.
+          // Mark the card as removed (grey) and remove its "owned" class
           card.classList.add("removed");
-          // Optionally, remove the "owned" class to update the appearance.
           card.classList.remove("owned");
-          // After a short delay, remove from inventory.
+          // After a short delay, call the removal function
           setTimeout(() => {
             removeFromInventory(name, game);
           }, 500);
@@ -905,10 +904,12 @@
           }
         }
       });
-      // After processing all cards, exit selection mode after a delay
+      // Delay exiting selection mode so that removal operations complete and the UI updates.
       setTimeout(() => {
-        toggleSelectionMode();
-      }, 600);
+        selectionMode = false;
+        document.body.classList.remove("selection-mode");
+        renderInventory();
+      }, 800);
     }
     
     function removeSelection() {
