@@ -618,7 +618,7 @@
       
         const card = document.createElement("div");
         card.className = "card";
-        card.dataset.game = game; // Store the game for later use
+        card.dataset.game = game; // store the game
         if (isOwned) {
           card.classList.add("owned");
           card.dataset.owned = "true";
@@ -635,11 +635,10 @@
         if (selectionMode) {
           card.onclick = function(e) {
             e.stopPropagation();
+            // For originally owned cards, toggle "removed" state.
             if (card.dataset.owned === "true") {
-              // Toggle the "removed" class to indicate removal (grey background)
               card.classList.toggle("removed");
             } else {
-              // Toggle the "selected" class (green background) for addition
               card.classList.toggle("selected");
             }
           };
@@ -667,13 +666,20 @@
       const saved = localStorage.getItem(key);
       if (saved) {
         const parsed = JSON.parse(saved);
-        parsed.collected = (parsed.collected || []).filter(x => x.name.trim().toLowerCase() !== name.trim().toLowerCase());
-        const character = window.games[game].find(x => x.name.trim().toLowerCase() === name.trim().toLowerCase());
-        if (character && !parsed.queue.some(x => x.name.trim().toLowerCase() === name.trim().toLowerCase())) {
+        parsed.collected = (parsed.collected || []).filter(x => 
+          x.name.trim().toLowerCase() !== name.trim().toLowerCase()
+        );
+        const character = window.games[game].find(x => 
+          x.name.trim().toLowerCase() === name.trim().toLowerCase()
+        );
+        if (character && !parsed.queue.some(x => 
+          x.name.trim().toLowerCase() === name.trim().toLowerCase()
+        )) {
           parsed.queue.push(character);
         }
         localStorage.setItem(key, JSON.stringify(parsed));
-        renderInventory();
+        // Do not re-render here; let completeSelection() handle it.
+        // renderInventory();
       } else {
         console.warn(`No saved data found for key ${key}`);
       }
@@ -915,11 +921,11 @@
         const name = card.querySelector("strong").textContent;
         const game = card.dataset.game;
         
-        // If the card was originally owned and now is marked "removed", remove it.
+        // If the card was originally owned and now marked "removed", remove it.
         if (card.dataset.owned === "true" && card.classList.contains("removed")) {
           removeFromInventory(name, game);
         }
-        // Otherwise, if it was not originally owned and is marked "selected", add it.
+        // Otherwise, if it was not originally owned and marked "selected", add it.
         else if (card.dataset.owned === "false" && card.classList.contains("selected")) {
           const skylander = window.games[game].find(item => item.name === name);
           if (skylander) {
@@ -928,7 +934,7 @@
         }
       });
       
-      // Delay exiting selection mode to allow changes to register
+      // Delay exiting selection mode so changes have time to register, then re-render.
       setTimeout(() => {
         selectionMode = false;
         document.body.classList.remove("selection-mode");
