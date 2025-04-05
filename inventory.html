@@ -677,7 +677,6 @@
     // On page load, render both the mobile group navigation and inventory.
     window.onload = () => {
       populateGameSelect();
-      renderInventory();
       const logoutBtn = document.getElementById("logoutBtn");
       if (user && user !== "guest") {
         logoutBtn.style.display = "inline-block";
@@ -745,11 +744,9 @@
     // these buttons scroll to the corresponding section.
     function populateGameSelect() {
       const select = document.getElementById("gameSelect");
-      // Remove the default "All Games" option.
-      select.innerHTML = ''; // Or use a placeholder if desired.
-      // Optionally, add a non-selectable placeholder:
-      // select.innerHTML = '<option value="" disabled selected>Select a Game</option>';
+      select.innerHTML = ''; // Clear any default content
       
+      // Populate options based on window.games
       Object.keys(window.games).forEach(game => {
         const option = document.createElement("option");
         option.value = game;
@@ -757,7 +754,16 @@
         select.appendChild(option);
       });
       
-      // When a game is selected, re-render inventory for that game only.
+      // Set default selection to "Spyro's Adventure" if it exists
+      if (window.games["Spyro's Adventure"]) {
+        select.value = "Spyro's Adventure";
+        renderInventory(false, "Spyro's Adventure");
+      } else {
+        // Fallback: render all if that game isn’t available.
+        renderInventory();
+      }
+      
+      // Update inventory when the dropdown changes
       select.addEventListener("change", () => {
         const selectedGame = select.value;
         renderInventory(false, selectedGame);
