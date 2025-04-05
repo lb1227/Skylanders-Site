@@ -628,16 +628,22 @@
         `;
       
         if (selectionMode) {
-          // Toggling the selected class: if it's already selected (green),
-          // clicking again will remove the class (reverting to original color).
           card.onclick = function(e) {
             e.stopPropagation();
             card.classList.toggle("selected");
           };
         } else {
-          card.onclick = () => openModal(char);
+          card.onclick = function(e) {
+            e.stopPropagation();
+            if (card.classList.contains("owned")) {
+              // Remove the skylander from inventory, which also removes the green styling
+              removeFromInventory(char.name, game);
+            } else {
+              openModal(char);
+            }
+          };
         }
-      
+              
         // Add long-press listeners (if still desired)
         card.addEventListener("mousedown", startPress);
         card.addEventListener("touchstart", startPress);
@@ -781,38 +787,6 @@
         container.removeEventListener("touchend", onSelectionTouchEnd);
         body.classList.remove("selection-mode");
       }
-      renderInventory();
-    }
-    
-    function bulkMarkAsOwnedSelected() {
-      const checkboxes = document.querySelectorAll(".select-checkbox:checked");
-      checkboxes.forEach(cb => {
-        const name = cb.dataset.name;
-        const game = cb.dataset.game;
-        // Locate the skylander object from window.games for the given game
-        const skylander = window.games[game].find(item => item.name === name);
-        if (skylander) {
-          addToInventory(skylander, game);
-        }
-      });
-      // Exit selection mode and re-render
-      selectionMode = false;
-      document.getElementById("toggleSelectMode").textContent = "Select Items";
-      document.getElementById("bulkActions").style.display = "none";
-      renderInventory();
-    }
-    
-    function bulkRemoveSelected() {
-      const checkboxes = document.querySelectorAll(".select-checkbox:checked");
-      checkboxes.forEach(cb => {
-        const name = cb.dataset.name;
-        const game = cb.dataset.game;
-        removeFromInventory(name, game);
-      });
-      // Exit selection mode and re-render
-      selectionMode = false;
-      document.getElementById("toggleSelectMode").textContent = "Select Items";
-      document.getElementById("bulkActions").style.display = "none";
       renderInventory();
     }
 
