@@ -627,25 +627,27 @@
           ${!selectionMode && isOwned ? `<button onclick="removeFromInventory('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}')">Remove</button>` : ''}
         `;
       
-        if (selectionMode) {
-          card.onclick = function(e) {
-            e.stopPropagation();
-            // If the card is owned, toggle the removal state (grey) immediately.
-            if (card.classList.contains("owned") && !card.classList.contains("removed")) {
-              card.classList.remove("owned");
-              card.classList.add("removed");
-            } else if (card.classList.contains("removed")) {
-              // If clicked again, revert back to owned.
-              card.classList.remove("removed");
-              card.classList.add("owned");
-            } else {
-              // For cards that are not owned, just toggle the selected state.
-              card.classList.toggle("selected");
-            }
-          };
-        } else {
-          card.onclick = () => openModal(char);
-        }
+       if (selectionMode) {
+        card.onclick = function(e) {
+          e.stopPropagation();
+          // For owned cards: toggle removal & mark as selected
+          if (card.classList.contains("owned")) {
+            card.classList.remove("owned");
+            card.classList.add("removed");
+            card.classList.add("selected");  // Add to selection list
+          } else if (card.classList.contains("removed")) {
+            // Toggle back: remove removed and selected, then restore ownership styling
+            card.classList.remove("removed");
+            card.classList.remove("selected");
+            card.classList.add("owned");
+          } else {
+            // For unowned cards, just toggle selection
+            card.classList.toggle("selected");
+          }
+        };
+      } else {
+        card.onclick = () => openModal(char);
+      }
               
         // Add long-press listeners (if still desired)
         card.addEventListener("mousedown", startPress);
@@ -862,25 +864,21 @@
       const selectedCards = document.querySelectorAll(".card.selected");
       selectedCards.forEach(card => {
         const name = card.querySelector("strong").textContent;
-        const game = card.dataset.game; // Make sure you store game info on each card
-        if (card.classList.contains("owned")) {
-          // Add a "removed" class so the card turns grey.
-          card.classList.add("removed");
-          // Optionally, remove the "owned" class to update the appearance.
-          card.classList.remove("owned");
-          // After a short delay, remove from inventory.
+        const game = card.dataset.game; 
+        if (card.classList.contains("removed")) {
+          // Remove from inventory if marked for removal
           setTimeout(() => {
             removeFromInventory(name, game);
           }, 500);
         } else {
-          // If not already owned, add it.
+          // If not removed, add the skylander to inventory
           const skylander = window.games[game].find(item => item.name === name);
           if (skylander) {
             addToInventory(skylander, game);
           }
         }
       });
-      // After processing all cards, exit selection mode after a delay
+      // Exit selection mode after a short delay
       setTimeout(() => {
         toggleSelectionMode();
       }, 600);
