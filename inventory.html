@@ -749,15 +749,12 @@
       modal.style.display = "none";
     }
 
-    // Updated mobile group navigation: Instead of toggling collapse,
-    // these buttons scroll to the corresponding section.
+    let currentGame = ""; // Global variable to store the current game filter
+
     function populateGameSelect() {
       const select = document.getElementById("gameSelect");
-      // Remove the default "All Games" option.
-      select.innerHTML = ''; // Or use a placeholder if desired.
-      // Optionally, add a non-selectable placeholder:
-      // select.innerHTML = '<option value="" disabled selected>Select a Game</option>';
-      
+      // Clear existing options, then populate the dropdown
+      select.innerHTML = '';
       Object.keys(window.games).forEach(game => {
         const option = document.createElement("option");
         option.value = game;
@@ -765,10 +762,10 @@
         select.appendChild(option);
       });
       
-      // When a game is selected, re-render inventory for that game only.
+      // When a game is selected, update the global variable and re-render
       select.addEventListener("change", () => {
-        const selectedGame = select.value;
-        renderInventory(false, selectedGame);
+        currentGame = select.value;
+        renderInventory(false, currentGame);
       });
     }
   
@@ -803,8 +800,8 @@
         body.classList.remove("selection-mode");
       }
       
-      // Re-render the inventory with the new selection mode
-      renderInventory();
+      // Re-render the inventory using the current game filter
+      renderInventory(false, currentGame);
       
       // Restore the collapse states for each group
       for (let id in collapseStates) {
@@ -821,6 +818,7 @@
       // Restore the scroll position
       window.scrollTo(0, scrollPosition);
     }
+    
     function addToInventory(skylander, game) {
       const key = `sky_progress_${user}_${game}`;
       let parsed = { collected: [], queue: [] };
