@@ -800,8 +800,11 @@
         body.classList.remove("selection-mode");
       }
       
-      // Re-render the inventory using the current game filter
-      renderInventory(false, currentGame);
+      // Use the current game filter (if any)
+      const selectedGame = document.getElementById("gameSelect").value;
+      
+      // Re-render the inventory with the new selection mode and current group filter
+      renderInventory(false, selectedGame);
       
       // Restore the collapse states for each group
       for (let id in collapseStates) {
@@ -817,6 +820,23 @@
       
       // Restore the scroll position
       window.scrollTo(0, scrollPosition);
+      
+      // After re-rendering, mark the preselected card as "selected" (if it exists)
+      if (preselectedCard) {
+        const cards = document.querySelectorAll(".card");
+        cards.forEach(card => {
+          const cardName = card.querySelector("strong").textContent;
+          // Compare both game and name (case-insensitive)
+          if (
+            card.dataset.game === preselectedCard.game &&
+            cardName.trim().toLowerCase() === preselectedCard.name.trim().toLowerCase()
+          ) {
+            card.classList.add("selected");
+          }
+        });
+        // Clear the preselected card so it isn't applied on subsequent mode toggles
+        preselectedCard = null;
+      }
     }
     
     function addToInventory(skylander, game) {
@@ -848,8 +868,16 @@
       card.addEventListener("touchend", cancelPress);
     }
     
+    // Global variable to store the card that triggered the long press
+    let preselectedCard = null;
+    
     function startPress(e) {
-      // Start a timer – if the press lasts 800ms, toggle selection mode
+      // Save the card's identity using e.currentTarget
+      const card = e.currentTarget;
+      preselectedCard = {
+        name: card.querySelector("strong").textContent,
+        game: card.dataset.game
+      };
       pressTimer = setTimeout(() => {
         toggleSelectionMode();
       }, 400);
