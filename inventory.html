@@ -778,23 +778,38 @@
 
     function toggleSelectionMode() {
       selectionMode = !selectionMode;
-      const container = document.getElementById("inventoryContainer");
       const body = document.body;
       
       if (selectionMode) {
-        document.getElementById("bulkActions").style.display = "block";
-        container.addEventListener("touchstart", onSelectionTouchStart);
-        container.addEventListener("touchmove", onSelectionTouchMove);
-        container.addEventListener("touchend", onSelectionTouchEnd);
         body.classList.add("selection-mode");
+        // Update each card’s event handler to toggle selection state:
+        document.querySelectorAll(".card").forEach(card => {
+          // Save current onclick if needed for later
+          card.dataset.originalOnclick = card.onclick;
+          card.onclick = function(e) {
+            e.stopPropagation();
+            if (card.dataset.owned === "true") {
+              card.classList.toggle("removed");
+            } else {
+              card.classList.toggle("selected");
+            }
+          };
+        });
       } else {
-        document.getElementById("bulkActions").style.display = "none";
-        container.removeEventListener("touchstart", onSelectionTouchStart);
-        container.removeEventListener("touchmove", onSelectionTouchMove);
-        container.removeEventListener("touchend", onSelectionTouchEnd);
         body.classList.remove("selection-mode");
+        // Restore the original onclick (or reassign the modal open handler)
+        document.querySelectorAll(".card").forEach(card => {
+          // Restore the original onclick if you saved it
+          if (card.dataset.originalOnclick) {
+            card.onclick = card.dataset.originalOnclick;
+          } else {
+            card.onclick = () => openModal(/* appropriate char data */);
+          }
+          // Also clear any selection states
+          card.classList.remove("selected", "removed");
+        });
       }
-      renderInventory();
+      // Note: Do not call renderInventory() here.
     }
     
     function bulkMarkAsOwnedSelected() {
