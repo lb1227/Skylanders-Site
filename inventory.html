@@ -893,7 +893,7 @@
           // Remove from inventory if marked for removal
           setTimeout(() => {
             removeFromInventory(name, game);
-          }, 500);
+          }, 100);
         } else {
           // If not removed, add the skylander to inventory
           const skylander = window.games[game].find(item => item.name === name);
@@ -905,7 +905,7 @@
       // Exit selection mode after a short delay
       setTimeout(() => {
         toggleSelectionMode();
-      }, 600);
+      }, 100);
     }
     
     function removeSelection() {
