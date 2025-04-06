@@ -106,10 +106,28 @@
       z-index: 1000;
       box-shadow: 0 -2px 6px rgba(0,0,0,0.3);
     }
-    .bottom-mobile-nav a {
-      color: white;
+    .bottom-mobile-nav a,
+    .bottom-mobile-nav button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;       /* Fixed height */
+      width: 40px;        /* Fixed width */
+    }
+
+    .bottom-mobile-nav a img,
+    .bottom-mobile-nav button img {
+      max-height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    
+    /* Optionally, if you're using emoji or text, you might want to set a line-height */
+    .bottom-mobile-nav a,
+    .bottom-mobile-nav button {
       font-size: 1.5rem;
-      text-decoration: none;
+      line-height: 40px; /* Same as the height */
     }
 
     @media (max-width: 768px) {
