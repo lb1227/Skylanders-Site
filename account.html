@@ -89,6 +89,46 @@
       font-size: 1.5rem;
       text-decoration: none;
     }
+
+    /* MOBILE MENU */
+    .hamburger {
+        display: block;
+        background-color: var(--nav-bg);
+        color: white;
+        border: none;
+        font-size: 1.5rem;
+        padding: 0.5rem;
+        cursor: pointer;
+      }
+      .mobile-menu {
+        position: fixed;
+        bottom: 60px;
+        right: 20px;
+        background-color: var(--nav-bg);
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+        padding: 1rem;
+        display: none;
+        flex-direction: column;
+        gap: 0.5rem;
+        z-index: 1001;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+      .mobile-menu.show {
+        display: flex;
+      }
+      .mobile-menu button {
+        background-color: var(--card-bg);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        cursor: pointer;
+      }
+      .mobile-menu button:hover {
+        background-color: var(--button-hover);
+      }
     /* Tablet Styles */
     @media (max-width: 768px) {
       .container {
@@ -141,13 +181,22 @@
   <nav id="mobileNav" class="bottom-mobile-nav">
     <a href="home.html" title="Home">🏠</a>
     <a href="inventory.html" title="Inventory">🃏</a>
-    <a href="account.html" title="Account">👤</a>
+    <button class="hamburger" onclick="toggleMobileMenu()">☰</button>
   </nav>
+
+  <div id="mobileMenu" class="mobile-menu">
+    <button onclick="goToAccount()">Account</button>
+    <button onclick="logout()">Logout</button>
+  </div>
 
   <script>
     function logout(){
       localStorage.removeItem("sky_user");
       window.location.href = "login.html";
+    }
+     function toggleMobileMenu() {
+      const menu = document.getElementById("mobileMenu");
+      menu.style.display = menu.style.display === "flex" ? "none" : "flex";
     }
 
     window.onload = function() {
