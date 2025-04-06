@@ -919,7 +919,7 @@
       let preselectedCard = null;
       let longPressTriggered = false;
       let ignoreNextTouchEnd = false;
-      let pressTimer; // Declared only once in this function scope
+      let pressTimer; // Declared only once in this scope
       
       let selectionStartX = 0;
       let selectionDeltaX = 0;
@@ -949,20 +949,21 @@
       function onSelectionTouchMove(e) {
         const currentX = e.changedTouches[0].screenX;
         selectionDeltaX = currentX - selectionStartX;
-        // Cancel long press if horizontal movement exceeds 20px
+        // Increase the threshold to 20px: if horizontal movement exceeds 20px, cancel the long press timer
         if (Math.abs(selectionDeltaX) > 20) {
           cancelPress(e);
         }
       }
       
       function onSelectionTouchEnd(e) {
+        // If the long press already triggered, ignore the swipe logic.
         if (ignoreNextTouchEnd) {
           ignoreNextTouchEnd = false;
           selectionDeltaX = 0;
           return;
         }
-      
-        const threshold = 50; // Minimum swipe distance
+        
+        const threshold = 50; // Minimum swipe distance in pixels for selection confirmation
         if (selectionDeltaX > threshold) {
           completeSelection();
         } else if (selectionDeltaX < -threshold) {
@@ -977,22 +978,25 @@
           const name = card.querySelector("strong").textContent;
           const game = card.dataset.game; 
           if (card.classList.contains("removed")) {
+            // Remove from inventory if marked for removal
             setTimeout(() => {
               removeFromInventory(name, game);
             }, 100);
           } else {
+            // If not removed, add the skylander to inventory
             const skylander = window.games[game].find(item => item.name === name);
             if (skylander) {
               addToInventory(skylander, game);
             }
           }
         });
+        // Exit selection mode after a short delay
         setTimeout(() => {
           toggleSelectionMode();
         }, 100);
       }
       
-      // Expose functions to the global scope if needed
+      // Expose these functions to the global scope
       window.startPress = startPress;
       window.cancelPress = cancelPress;
       window.onSelectionTouchStart = onSelectionTouchStart;
