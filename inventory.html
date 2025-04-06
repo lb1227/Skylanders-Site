@@ -704,8 +704,6 @@
     function openModal(skylander) {
       const modal = document.getElementById("skylanderModal");
       const detailsContainer = document.getElementById("skylanderDetails");
-      
-      // Check if the skylander is owned
       const userInventory = localStorage.getItem(`sky_progress_${user}_${skylander.game}`);
       let isOwned = false;
       if (userInventory) {
@@ -714,7 +712,7 @@
         isOwned = collected.some(item => item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase());
       }
       
-      // Build the modal content with both the Owned dropdown and the new Condition dropdown.
+      // Include a dropdown for "Owned:" with Yes/No options
       detailsContainer.innerHTML = `
         <h2>${skylander.name}</h2>
         <img src="${skylander.image}" alt="${skylander.name}" style="width: 200px; height: auto; margin-bottom: 1rem;" />
@@ -728,47 +726,36 @@
             <option value="no" ${!isOwned ? "selected" : ""}>No</option>
           </select>
         </p>
-        <p>
-          <strong>Condition:</strong>
-          <select id="conditionSelect">
-            <option value="in_box">In box</option>
-            <option value="good">Good</option>
-            <option value="poor">Poor</option>
-          </select>
-        </p>
       `;
       
       modal.style.display = "block";
       
-      // Attach change event listeners to update the inventory when values change.
+      // Attach a change event listener to update the inventory when the dropdown changes
       document.getElementById("ownedSelect").addEventListener("change", function() {
         updateInventoryFromModal(skylander);
       });
-      document.getElementById("conditionSelect").addEventListener("change", function() {
-        updateConditionForModal(skylander);
-      });
     }
-    
-    function updateConditionForModal(skylander) {
-      // Get the selected condition value
-      const condition = document.getElementById("conditionSelect").value;
-      
-      // For demonstration, we'll log the condition. In a real application, you'd update the skylander’s data in localStorage.
-      console.log(`New condition for ${skylander.name}:`, condition);
-      
-      // Example: update the inventory data (this assumes you have a structure for storing condition)
+
+    function updateInventoryFromModal(skylander) {
+      const ownedSelect = document.getElementById("ownedSelect");
+      const newValue = ownedSelect.value; // either "yes" or "no"
       const key = `sky_progress_${user}_${skylander.game}`;
       let saved = localStorage.getItem(key);
+      let parsed = { collected: [], queue: [] };
       if (saved) {
-        let parsed = JSON.parse(saved);
-        // Update condition for the skylander if it exists in the collected list
-        parsed.collected = parsed.collected.map(item => {
-          if (item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase()) {
-            return { ...item, condition }; // add or update the condition property
-          }
-          return item;
-        });
-        localStorage.setItem(key, JSON.stringify(parsed));
+        parsed = JSON.parse(saved);
+      }
+      // Determine if the character is already owned
+      const isOwned = parsed.collected.some(item => 
+        item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase()
+      );
+      
+      if (newValue === "yes" && !isOwned) {
+        // Add to inventory if not already owned
+        addToInventory(skylander, skylander.game);
+      } else if (newValue === "no" && isOwned) {
+        // Remove from inventory if currently owned
+        removeFromInventory(skylander.name, skylander.game);
       }
       
       // Optionally, re-render the inventory using the current game filter.
