@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skylanders Tracker - Account</title>
+  <style>
+    :root {
+      --bg: #121212;
+      --card-bg: #1e1e1e;
+      --text: #ffffff;
+      --accent: #4caf50;
+      --button: #e53935;
+      --button-hover: #d32f2f;
+      --nav-bg: #1a1a1a;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background-color: var(--bg);
+      color: var(--text);
+    }
+    nav {
+      background-color: var(--nav-bg);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    nav h2 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .nav-links a, .nav-links button {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .container {
+      max-width: 600px;
+      margin: 2rem auto;
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    label {
+      font-weight: bold;
+    }
+    input {
+      padding: 0.6rem;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+    }
+    button.submit {
+      background-color: var(--button);
+      color: white;
+      padding: 0.6rem;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button.submit:hover {
+      background-color: var(--button-hover);
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav id="desktopNav">
+    <h2>Skylanders Tracker</h2>
+    <div class="nav-links">
+      <a href="home.html">Home</a>
+      <a href="inventory.html">Inventory</a>
+      <a href="account.html" style="text-decoration: underline;">Account</a>
+      <button id="logoutBtn" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <!-- Account Container -->
+  <div class="container">
+    <h1>My Account</h1>
+    <form id="accountForm">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" placeholder="Enter your username" />
+      
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" />
+      
+      <label for="password">New Password:</label>
+      <input type="password" id="password" name="password" placeholder="Enter new password (optional)" />
+      
+      <button type="submit" class="submit">Update Account</button>
+    </form>
+  </div>
+
+  <script>
+    function logout(){
+      localStorage.removeItem("sky_user");
+      window.location.href = "login.html";
+    }
+
+    // When the page loads, populate the form with any saved account info.
+    window.onload = function() {
+      const username = localStorage.getItem("sky_username") || "";
+      const email = localStorage.getItem("sky_email") || "";
+      
+      document.getElementById("username").value = username;
+      document.getElementById("email").value = email;
+      
+      // Handle form submission
+      document.getElementById("accountForm").addEventListener("submit", function(e){
+        e.preventDefault();
+        // In a real application, you would send these details to your server.
+        // Here we just update localStorage as an example.
+        const newUsername = document.getElementById("username").value;
+        const newEmail = document.getElementById("email").value;
+        const newPassword = document.getElementById("password").value;
+        
+        localStorage.setItem("sky_username", newUsername);
+        localStorage.setItem("sky_email", newEmail);
+        // If needed, store the password or send it to the server securely.
+        
+        alert("Account updated successfully!");
+        // Optionally clear the password field
+        document.getElementById("password").value = "";
+      });
+    };
+  </script>
+</body>
+</html>
