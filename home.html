@@ -121,38 +121,24 @@
           overflow-x: auto;      /* Allow horizontal swipe */
           touch-action: pan-x;   /* Enable left/right swiping only */
         }
-      #mobileNav 
-      {
-        display: flex;
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        justify-content: space-around;
-        background-color: var(--nav-bg);
-        padding: 0.5rem 0;
-        box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.3);
-        z-index: 1000;
-      }
+      /* Bottom Mobile Navigation */
       .bottom-mobile-nav {
+        display: none;
         position: fixed;
         bottom: 0;
         left: 0;
         width: 100%;
         background-color: var(--nav-bg);
+        padding: 0.5rem 0;
         display: flex;
         justify-content: space-around;
         align-items: center;
-        padding: 0.5rem 0;
         z-index: 1000;
         box-shadow: 0 -2px 6px rgba(0,0,0,0.3);
       }
-      .bottom-mobile-nav a,
-      .bottom-mobile-nav button {
-        background: none;
-        border: none;
+      .bottom-mobile-nav a {
         color: white;
         font-size: 1.5rem;
-        padding: 0.5rem;
         text-decoration: none;
       }
     
