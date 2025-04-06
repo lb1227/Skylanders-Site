@@ -189,7 +189,6 @@
       console.log("Retrieved email: ", email); // Debug output
     
       // Populate the form fields
-      document.getElementById("username").value = username;
       document.getElementById("email").value = email;
       
       // Display the current user's email if available
@@ -202,12 +201,10 @@
       // Handle form submission
       document.getElementById("accountForm").addEventListener("submit", function(e){
         e.preventDefault();
-        const newUsername = document.getElementById("username").value;
         const newEmail = document.getElementById("email").value;
         const newPassword = document.getElementById("password").value;
         
         // Update account info in localStorage (or send to your backend)
-        localStorage.setItem("sky_username", newUsername);
         localStorage.setItem("sky_email", newEmail);
         // Optionally handle newPassword (securely, via your backend)
         
