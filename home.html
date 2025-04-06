@@ -102,16 +102,6 @@
       font-size: 1.5rem;
       text-decoration: none;
     }
-    #mobileMenu {
-      display: none;
-    }
-    .hamburger {
-      display: none;
-    }
-    .home-icon, .inventory-icon {
-      display: none;
-      background-image: none; /* Hide background images */
-    }
 
     @media (max-width: 768px) {
       #collectibleContainer {
@@ -191,25 +181,6 @@
       .hamburger {
         display: block;
       }
-      .home-icon {
-        display: block; /* Show the home icon on mobile */
-        background-image: url('icons/home.svg'); /* Use home icon image */
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
-        width: 40px; /* Adjust size */
-        height: 40px;
-      }
-
-      .inventory-icon {
-        display: block; /* Show the inventory icon on mobile */
-        background-image: url('icons/cards.svg'); /* Use inventory icon image */
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
-        width: 40px; /* Adjust size */
-        height: 40px;
-      }
 
       .mobile-menu {
         position: fixed;
@@ -240,15 +211,8 @@
         cursor: pointer;
       }
     
-    .mobile-menu button:hover {
-      background-color: var(--button-hover);
-    }
-    }
-    /* Hide icons by default (desktop) */
-    @media (min-width: 769px) {
-      .home-icon, .inventory-icon 
-      {
-        display: none !important; /* Force hide icons on desktop */
+      .mobile-menu button:hover {
+        background-color: var(--button-hover);
       }
     }
     @keyframes swipeNudge {
