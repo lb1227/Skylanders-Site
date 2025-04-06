@@ -192,8 +192,6 @@
     </div>
     <h1>My Account</h1>
     <form id="accountForm">
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username" placeholder="Enter your username" />
       
       <label for="email">Email:</label>
       <input type="email" id="email" name="email" placeholder="Enter your email" />
@@ -220,11 +218,9 @@
 
     window.onload = function() {
       // Retrieve saved account info from localStorage
-      const username = localStorage.getItem("sky_username") || "";
       const email = localStorage.getItem("sky_email") || "";
       
       // Populate the form fields
-      document.getElementById("username").value = username;
       document.getElementById("email").value = email;
       
       // Display the current user's email if available
@@ -237,12 +233,10 @@
       // Handle form submission
       document.getElementById("accountForm").addEventListener("submit", function(e){
         e.preventDefault();
-        const newUsername = document.getElementById("username").value;
         const newEmail = document.getElementById("email").value;
         const newPassword = document.getElementById("password").value;
         
         // Update localStorage or send data to your backend
-        localStorage.setItem("sky_username", newUsername);
         localStorage.setItem("sky_email", newEmail);
         // Optionally handle newPassword securely
         
