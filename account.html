@@ -57,6 +57,10 @@
       border-radius: 12px;
       box-shadow: 0 0 20px rgba(0,0,0,0.4);
     }
+    .account-info {
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
     form {
       display: flex;
       flex-direction: column;
@@ -99,17 +103,21 @@
 
   <!-- Account Container -->
   <div class="container">
+    <!-- Display current user's email if available -->
+    <div class="account-info">
+      <p id="currentEmailDisplay"></p>
+    </div>
     <h1>My Account</h1>
     <form id="accountForm">
       <label for="username">Username:</label>
       <input type="text" id="username" name="username" placeholder="Enter your username" />
-      
+
       <label for="email">Email:</label>
       <input type="email" id="email" name="email" placeholder="Enter your email" />
-      
+
       <label for="password">New Password:</label>
       <input type="password" id="password" name="password" placeholder="Enter new password (optional)" />
-      
+
       <button type="submit" class="submit">Update Account</button>
     </form>
   </div>
@@ -120,28 +128,38 @@
       window.location.href = "login.html";
     }
 
-    // When the page loads, populate the form with any saved account info.
     window.onload = function() {
+      // Retrieve saved values
       const username = localStorage.getItem("sky_username") || "";
       const email = localStorage.getItem("sky_email") || "";
       
+      // Populate the form fields
       document.getElementById("username").value = username;
       document.getElementById("email").value = email;
+      
+      // Display current user's email (if logged in)
+      if(email) {
+        document.getElementById("currentEmailDisplay").innerText = "Logged in as: " + email;
+      } else {
+        document.getElementById("currentEmailDisplay").innerText = "Not logged in";
+      }
       
       // Handle form submission
       document.getElementById("accountForm").addEventListener("submit", function(e){
         e.preventDefault();
-        // In a real application, you would send these details to your server.
-        // Here we just update localStorage as an example.
+        // Get updated details
         const newUsername = document.getElementById("username").value;
         const newEmail = document.getElementById("email").value;
         const newPassword = document.getElementById("password").value;
         
+        // Update localStorage (or send to server)
         localStorage.setItem("sky_username", newUsername);
         localStorage.setItem("sky_email", newEmail);
-        // If needed, store the password or send it to the server securely.
+        // Optionally, update password on the server
         
         alert("Account updated successfully!");
+        // Update the displayed email if it changed
+        document.getElementById("currentEmailDisplay").innerText = "Logged in as: " + newEmail;
         // Optionally clear the password field
         document.getElementById("password").value = "";
       });
