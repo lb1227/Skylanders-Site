@@ -915,85 +915,91 @@
       card.addEventListener("touchend", cancelPress);
     }
     
-    // Global variable to store the card that triggered the long press
-    let preselectedCard = null;
-    let longPressTriggered = false;
-    let ignoreNextTouchEnd = false;
-    
-    let selectionStartX = 0;
-    let selectionDeltaX = 0;
-    
-    function startPress(e) {
-      const card = e.currentTarget;
-      preselectedCard = {
-        name: card.querySelector("strong").textContent,
-        game: card.dataset.game
-      };
-      pressTimer = setTimeout(() => {
-        longPressTriggered = true;       // Mark that a long press occurred
-        ignoreNextTouchEnd = true;         // Prevent subsequent touchend swipe logic
-        toggleSelectionMode();
-      }, 400);
-    }
-    
-    function cancelPress(e) {
-      clearTimeout(pressTimer);
-    }
-    
-    function onSelectionTouchStart(e) {
-      selectionStartX = e.changedTouches[0].screenX;
-      selectionDeltaX = 0;
-    }
-    
-    function onSelectionTouchMove(e) {
-      const currentX = e.changedTouches[0].screenX;
-      selectionDeltaX = currentX - selectionStartX;
-      // Increase the threshold to 20px: if horizontal movement exceeds 20px, cancel the long press timer
-      if (Math.abs(selectionDeltaX) > 20) {
-        cancelPress(e);
-      }
-    }
-    
-    function onSelectionTouchEnd(e) {
-      // If the long press already triggered, ignore the swipe logic.
-      if (ignoreNextTouchEnd) {
-        ignoreNextTouchEnd = false;
-        selectionDeltaX = 0;
-        return;
+    (function() {
+      let preselectedCard = null;
+      let longPressTriggered = false;
+      let ignoreNextTouchEnd = false;
+      let pressTimer; // Declared only once in this function scope
+      
+      let selectionStartX = 0;
+      let selectionDeltaX = 0;
+      
+      function startPress(e) {
+        const card = e.currentTarget;
+        preselectedCard = {
+          name: card.querySelector("strong").textContent,
+          game: card.dataset.game
+        };
+        pressTimer = setTimeout(() => {
+          longPressTriggered = true;       // Mark that a long press occurred
+          ignoreNextTouchEnd = true;         // Prevent subsequent touchend swipe logic
+          toggleSelectionMode();
+        }, 400);
       }
       
-      const threshold = 50; // Minimum swipe distance in pixels for selection confirmation
-      if (selectionDeltaX > threshold) {
-        completeSelection();
-      } else if (selectionDeltaX < -threshold) {
-        cancelSelection();
+      function cancelPress(e) {
+        clearTimeout(pressTimer);
       }
-      selectionDeltaX = 0;
-    }
-    
-    function completeSelection() {
-      const selectedCards = document.querySelectorAll(".card.selected");
-      selectedCards.forEach(card => {
-        const name = card.querySelector("strong").textContent;
-        const game = card.dataset.game; 
-        if (card.classList.contains("removed")) {
-          // Remove from inventory if marked for removal
-          setTimeout(() => {
-            removeFromInventory(name, game);
-          }, 100);
-        } else {
-          // If not removed, add the skylander to inventory
-          const skylander = window.games[game].find(item => item.name === name);
-          if (skylander) {
-            addToInventory(skylander, game);
-          }
+      
+      function onSelectionTouchStart(e) {
+        selectionStartX = e.changedTouches[0].screenX;
+        selectionDeltaX = 0;
+      }
+      
+      function onSelectionTouchMove(e) {
+        const currentX = e.changedTouches[0].screenX;
+        selectionDeltaX = currentX - selectionStartX;
+        // Cancel long press if horizontal movement exceeds 20px
+        if (Math.abs(selectionDeltaX) > 20) {
+          cancelPress(e);
         }
-      });
-      // Exit selection mode after a short delay
-      setTimeout(() => {
-        toggleSelectionMode();
-      }, 100);
-    }
+      }
+      
+      function onSelectionTouchEnd(e) {
+        if (ignoreNextTouchEnd) {
+          ignoreNextTouchEnd = false;
+          selectionDeltaX = 0;
+          return;
+        }
+      
+        const threshold = 50; // Minimum swipe distance
+        if (selectionDeltaX > threshold) {
+          completeSelection();
+        } else if (selectionDeltaX < -threshold) {
+          cancelSelection();
+        }
+        selectionDeltaX = 0;
+      }
+      
+      function completeSelection() {
+        const selectedCards = document.querySelectorAll(".card.selected");
+        selectedCards.forEach(card => {
+          const name = card.querySelector("strong").textContent;
+          const game = card.dataset.game; 
+          if (card.classList.contains("removed")) {
+            setTimeout(() => {
+              removeFromInventory(name, game);
+            }, 100);
+          } else {
+            const skylander = window.games[game].find(item => item.name === name);
+            if (skylander) {
+              addToInventory(skylander, game);
+            }
+          }
+        });
+        setTimeout(() => {
+          toggleSelectionMode();
+        }, 100);
+      }
+      
+      // Expose functions to the global scope if needed
+      window.startPress = startPress;
+      window.cancelPress = cancelPress;
+      window.onSelectionTouchStart = onSelectionTouchStart;
+      window.onSelectionTouchMove = onSelectionTouchMove;
+      window.onSelectionTouchEnd = onSelectionTouchEnd;
+      window.completeSelection = completeSelection;
+    })();
     
     function removeSelection() {
       // Remove: for each selected card, remove it from inventory.
