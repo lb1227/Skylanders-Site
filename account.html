@@ -152,7 +152,7 @@
 
     window.onload = function() {
       // Retrieve saved account info from localStorage
-      const username = localStorage.getItem("sky_username") || "";
+      const username = localStorage.getItem("sky_user") || "";
       
       // Populate the username field in the form
       document.getElementById("username").value = username;
@@ -171,7 +171,7 @@
         const newPassword = document.getElementById("password").value;
         
         // Update localStorage (or send to your backend)
-        localStorage.setItem("sky_username", newUsername);
+        localStorage.setItem("sky_user", newUsername);
         // Optionally, handle password update via your backend
         
         alert("Account updated successfully!");
