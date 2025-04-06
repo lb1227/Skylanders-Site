@@ -833,9 +833,9 @@
       
       if (selectionMode) {
         document.getElementById("bulkActions").style.display = "block";
-        container.addEventListener("touchstart", onSelectionTouchStart);
-        container.addEventListener("touchmove", onSelectionTouchMove);
-        container.addEventListener("touchend", onSelectionTouchEnd);
+        container.addEventListener("touchstart", onSelectionTouchStart, { capture: true });
+        container.addEventListener("touchmove", onSelectionTouchMove, { capture: true });
+        container.addEventListener("touchend", onSelectionTouchEnd, { capture: true });
         body.classList.add("selection-mode");
       } else {
         document.getElementById("bulkActions").style.display = "none";
@@ -900,7 +900,9 @@
       localStorage.setItem(key, JSON.stringify(parsed));
     }
 
-    let pressTimer;
+    let pressTimer;container.addEventListener("touchstart", onSelectionTouchStart, { capture: true });
+container.addEventListener("touchmove", onSelectionTouchMove, { capture: true });
+container.addEventListener("touchend", onSelectionTouchEnd, { capture: true });
 
     function addLongPressListener(card) {
       // Start the timer on mousedown or touchstart
@@ -925,7 +927,7 @@
       };
       pressTimer = setTimeout(() => {
         toggleSelectionMode();
-      }, 400);
+      }, 600);
     }
     
     function cancelPress(e) {
