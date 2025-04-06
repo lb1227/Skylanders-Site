@@ -675,7 +675,10 @@
           parsed.queue.push(character);
         }
         localStorage.setItem(key, JSON.stringify(parsed));
-        renderInventory();
+        
+        // Retrieve the currently selected game from your dropdown (or use the global variable if you have one)
+        const selectedGame = document.getElementById("gameSelect").value;
+        renderInventory(false, selectedGame);
       } else {
         console.warn(`No saved data found for key ${key}`);
       }
