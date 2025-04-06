@@ -25,7 +25,7 @@
       color: var(--text);
       padding: 0 1rem;
     }
-    /* Top Navigation (desktop) */
+    /* Top Navigation (Desktop) */
     nav#desktopNav {
       background-color: var(--nav-bg);
       padding: 1rem 2rem;
@@ -173,7 +173,7 @@
   </style>
 </head>
 <body>
-  <!-- Desktop Navigation -->
+  <!-- Top Navigation (Desktop) -->
   <nav id="desktopNav">
     <h2>Skylanders Tracker</h2>
     <div class="nav-links">
@@ -184,17 +184,15 @@
     </div>
   </nav>
 
-  <!-- Account Container -->
+  <!-- Main Account Container -->
   <div class="container">
-    <!-- Display current user's email if available -->
     <div class="account-info">
-      <p id="currentEmailDisplay"></p>
+      <p id="currentUserDisplay"></p>
     </div>
     <h1>My Account</h1>
     <form id="accountForm">
-      
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email" placeholder="Enter your email" />
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" placeholder="Enter your username" />
       
       <label for="password">New Password:</label>
       <input type="password" id="password" name="password" placeholder="Enter new password (optional)" />
@@ -218,30 +216,30 @@
 
     window.onload = function() {
       // Retrieve saved account info from localStorage
-      const email = localStorage.getItem("sky_email") || "";
+      const username = localStorage.getItem("sky_username") || "";
       
-      // Populate the form fields
-      document.getElementById("email").value = email;
+      // Populate the username field in the form
+      document.getElementById("username").value = username;
       
-      // Display the current user's email if available
-      if(email) {
-        document.getElementById("currentEmailDisplay").innerText = "Logged in as: " + email;
+      // Display the current user's username
+      if(username) {
+        document.getElementById("currentUserDisplay").innerText = "Logged in as: " + username;
       } else {
-        document.getElementById("currentEmailDisplay").innerText = "Not logged in";
+        document.getElementById("currentUserDisplay").innerText = "Not logged in";
       }
       
       // Handle form submission
       document.getElementById("accountForm").addEventListener("submit", function(e){
         e.preventDefault();
-        const newEmail = document.getElementById("email").value;
+        const newUsername = document.getElementById("username").value;
         const newPassword = document.getElementById("password").value;
         
-        // Update localStorage or send data to your backend
-        localStorage.setItem("sky_email", newEmail);
-        // Optionally handle newPassword securely
+        // Update localStorage (or send to your backend)
+        localStorage.setItem("sky_username", newUsername);
+        // Optionally, handle password update via your backend
         
         alert("Account updated successfully!");
-        document.getElementById("currentEmailDisplay").innerText = "Logged in as: " + newEmail;
+        document.getElementById("currentUserDisplay").innerText = "Logged in as: " + newUsername;
         document.getElementById("password").value = "";
       });
     };
