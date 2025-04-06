@@ -736,15 +736,57 @@
         const collected = parsedInventory.collected || [];
         isOwned = collected.some(item => item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase());
       }
-      detailsContainer.innerHTML = ` 
+      
+      // Include a dropdown for "Owned:" with Yes/No options
+      detailsContainer.innerHTML = `
         <h2>${skylander.name}</h2>
         <img src="${skylander.image}" alt="${skylander.name}" style="width: 200px; height: auto; margin-bottom: 1rem;" />
         <p><strong>Game:</strong> ${skylander.game}</p>
         <p><strong>Price:</strong> ${skylander.price || "N/A"}</p>
         <p><strong>Retail Price:</strong> ${skylander.retail_price || "N/A"}</p>
-        <p><strong>Owned:</strong> ${isOwned ? "Yes" : "No"}</p>
+        <p>
+          <strong>Owned:</strong>
+          <select id="ownedSelect">
+            <option value="yes" ${isOwned ? "selected" : ""}>Yes</option>
+            <option value="no" ${!isOwned ? "selected" : ""}>No</option>
+          </select>
+        </p>
       `;
+      
       modal.style.display = "block";
+      
+      // Attach a change event listener to update the inventory when the dropdown changes
+      document.getElementById("ownedSelect").addEventListener("change", function() {
+        updateInventoryFromModal(skylander);
+      });
+    }
+
+    function updateInventoryFromModal(skylander) {
+      const ownedSelect = document.getElementById("ownedSelect");
+      const newValue = ownedSelect.value; // either "yes" or "no"
+      const key = `sky_progress_${user}_${skylander.game}`;
+      let saved = localStorage.getItem(key);
+      let parsed = { collected: [], queue: [] };
+      if (saved) {
+        parsed = JSON.parse(saved);
+      }
+      // Determine if the character is already owned
+      const isOwned = parsed.collected.some(item => 
+        item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase()
+      );
+      
+      if (newValue === "yes" && !isOwned) {
+        // Add to inventory if not already owned
+        addToInventory(skylander, skylander.game);
+      } else if (newValue === "no" && isOwned) {
+        // Remove from inventory if currently owned
+        removeFromInventory(skylander.name, skylander.game);
+      }
+      
+      // Optionally, re-render the inventory using the current game filter.
+      // For example, if you're using a dropdown to filter groups:
+      const selectedGame = document.getElementById("gameSelect").value;
+      renderInventory(false, selectedGame);
     }
 
     function closeModal() {
