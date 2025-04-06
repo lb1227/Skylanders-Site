@@ -25,37 +25,6 @@
       color: var(--text);
       padding: 0 1rem;
     }
-    /* Top Navigation (Desktop) */
-    nav#desktopNav {
-      background-color: var(--nav-bg);
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      flex-wrap: wrap;
-    }
-    nav#desktopNav h2 {
-      margin: 0;
-      font-size: 1.5rem;
-    }
-    .nav-links {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-    }
-    .nav-links a, .nav-links button {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 1rem;
-    }
     /* Main Container */
     .container {
       max-width: var(--max-container-width);
@@ -122,15 +91,6 @@
     }
     /* Tablet Styles */
     @media (max-width: 768px) {
-      nav#desktopNav {
-        padding: 1rem;
-      }
-      nav#desktopNav h2 {
-        font-size: 1.3rem;
-      }
-      .nav-links a, .nav-links button {
-        font-size: 0.9rem;
-      }
       .container {
         padding: 1.5rem;
       }
@@ -143,19 +103,6 @@
     }
     /* Mobile Styles */
     @media (max-width: 480px) {
-      nav#desktopNav {
-        padding: 0.8rem 1rem;
-      }
-      nav#desktopNav h2 {
-        font-size: 1.2rem;
-      }
-      .nav-links {
-        flex-direction: column;
-        gap: 0.5rem;
-        width: 100%;
-        text-align: center;
-        margin-top: 0.5rem;
-      }
       .container {
         padding: 1rem;
         margin: 1rem auto;
@@ -173,17 +120,6 @@
   </style>
 </head>
 <body>
-  <!-- Top Navigation (Desktop) -->
-  <nav id="desktopNav">
-    <h2>Skylanders Tracker</h2>
-    <div class="nav-links">
-      <a href="home.html">Home</a>
-      <a href="inventory.html">Inventory</a>
-      <a href="account.html" style="text-decoration: underline;">Account</a>
-      <button id="logoutBtn" onclick="logout()">Logout</button>
-    </div>
-  </nav>
-
   <!-- Main Account Container -->
   <div class="container">
     <div class="account-info">
