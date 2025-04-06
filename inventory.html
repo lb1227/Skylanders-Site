@@ -929,7 +929,6 @@
         name: card.querySelector("strong").textContent,
         game: card.dataset.game
       };
-      // Start the long press timer (400ms)
       pressTimer = setTimeout(() => {
         longPressTriggered = true;       // Mark that a long press occurred
         ignoreNextTouchEnd = true;         // Prevent subsequent touchend swipe logic
@@ -949,21 +948,21 @@
     function onSelectionTouchMove(e) {
       const currentX = e.changedTouches[0].screenX;
       selectionDeltaX = currentX - selectionStartX;
-      // If horizontal movement exceeds 10px, cancel the long press timer
-      if (Math.abs(selectionDeltaX) > 10) {
-        clearTimeout(pressTimer);
+      // Increase the threshold to 20px: if horizontal movement exceeds 20px, cancel the long press timer
+      if (Math.abs(selectionDeltaX) > 20) {
+        cancelPress(e);
       }
     }
     
     function onSelectionTouchEnd(e) {
-      // If the long press already triggered, ignore the swipe logic
+      // If the long press already triggered, ignore the swipe logic.
       if (ignoreNextTouchEnd) {
         ignoreNextTouchEnd = false;
         selectionDeltaX = 0;
         return;
       }
       
-      const threshold = 50; // Minimum swipe distance in pixels
+      const threshold = 50; // Minimum swipe distance in pixels for selection confirmation
       if (selectionDeltaX > threshold) {
         completeSelection();
       } else if (selectionDeltaX < -threshold) {
@@ -976,7 +975,7 @@
       const selectedCards = document.querySelectorAll(".card.selected");
       selectedCards.forEach(card => {
         const name = card.querySelector("strong").textContent;
-        const game = card.dataset.game;
+        const game = card.dataset.game; 
         if (card.classList.contains("removed")) {
           // Remove from inventory if marked for removal
           setTimeout(() => {
