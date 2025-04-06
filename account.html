@@ -131,7 +131,15 @@
       }
     /* Tablet Styles */
     @media (max-width: 768px) {
+      .page-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* Subtract the height of the bottom nav (e.g., 60px) if needed */
+        min-height: calc(100vh - 60px);
+      }
       .container {
+        margin: 0 auto;
         padding: 1.5rem;
       }
       input, button.submit {
@@ -161,20 +169,22 @@
 </head>
 <body>
   <!-- Main Account Container -->
-  <div class="container">
-    <div class="account-info">
-      <p id="currentUserDisplay"></p>
+  <div class="page-wrapper">
+    <div class="container">
+      <div class="account-info">
+        <p id="currentUserDisplay"></p>
+      </div>
+      <h1>My Account</h1>
+      <form id="accountForm">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" placeholder="Enter your username" />
+        
+        <label for="password">New Password:</label>
+        <input type="password" id="password" name="password" placeholder="Enter new password (optional)" />
+        
+        <button type="submit" class="submit">Update Account</button>
+      </form>
     </div>
-    <h1>My Account</h1>
-    <form id="accountForm">
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username" placeholder="Enter your username" />
-      
-      <label for="password">New Password:</label>
-      <input type="password" id="password" name="password" placeholder="Enter new password (optional)" />
-      
-      <button type="submit" class="submit">Update Account</button>
-    </form>
   </div>
 
   <!-- Bottom Mobile Navigation -->
