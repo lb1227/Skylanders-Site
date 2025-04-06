@@ -901,8 +901,8 @@
     }
 
     let pressTimer;container.addEventListener("touchstart", onSelectionTouchStart, { capture: true });
-container.addEventListener("touchmove", onSelectionTouchMove, { capture: true });
-container.addEventListener("touchend", onSelectionTouchEnd, { capture: true });
+    container.addEventListener("touchmove", onSelectionTouchMove, { capture: true });
+    container.addEventListener("touchend", onSelectionTouchEnd, { capture: true });
 
     function addLongPressListener(card) {
       // Start the timer on mousedown or touchstart
@@ -916,79 +916,81 @@ container.addEventListener("touchend", onSelectionTouchEnd, { capture: true });
     }
     
     // Global variable to store the card that triggered the long press
-    let preselectedCard = null;
-    
-    let longPressTriggered = false;
-
-    function startPress(e) {
-      const card = e.currentTarget;
-      preselectedCard = {
-        name: card.querySelector("strong").textContent,
-        game: card.dataset.game
-      };
-      pressTimer = setTimeout(() => {
-        longPressTriggered = true;  // Mark that a long press occurred
-        toggleSelectionMode();
-      }, 400);
+  let preselectedCard = null;
+  let longPressTriggered = false;
+  let ignoreNextTouchEnd = false;  // New flag
+  let pressTimer;
+  
+  let selectionStartX = 0;
+  let selectionDeltaX = 0;
+  
+  function startPress(e) {
+    const card = e.currentTarget;
+    preselectedCard = {
+      name: card.querySelector("strong").textContent,
+      game: card.dataset.game
+    };
+    pressTimer = setTimeout(() => {
+      longPressTriggered = true;  // Mark that a long press occurred
+      ignoreNextTouchEnd = true;  // Set flag to ignore the next touchend event
+      toggleSelectionMode();
+    }, 400);
+  }
+  
+  function cancelPress(e) {
+    clearTimeout(pressTimer);
+  }
+  
+  function onSelectionTouchStart(e) {
+    selectionStartX = e.changedTouches[0].screenX;
+    selectionDeltaX = 0;
+  }
+  
+  function onSelectionTouchMove(e) {
+    const currentX = e.changedTouches[0].screenX;
+    selectionDeltaX = currentX - selectionStartX;
+  }
+  
+  function onSelectionTouchEnd(e) {
+    // If the long press caused the toggle, ignore this touchend.
+    if (ignoreNextTouchEnd) {
+      ignoreNextTouchEnd = false; // Reset the flag
+      selectionDeltaX = 0;        // Reset delta and exit
+      return;
     }
     
-    function cancelPress(e) {
-      clearTimeout(pressTimer);
+    const threshold = 50; // Minimum swipe distance in pixels
+    if (selectionDeltaX > threshold) {
+      completeSelection();
+    } else if (selectionDeltaX < -threshold) {
+      cancelSelection();
     }
-
-    let selectionStartX = 0;
-    let selectionDeltaX = 0;
-    
-    function onSelectionTouchStart(e) {
-      selectionStartX = e.changedTouches[0].screenX;
-      selectionDeltaX = 0;
-    }
-    
-    function onSelectionTouchMove(e) {
-      const currentX = e.changedTouches[0].screenX;
-      selectionDeltaX = currentX - selectionStartX;
-    }
-    
-    function onSelectionTouchEnd(e) {
-      // If a long press was triggered, reset the flag and do nothing else.
-      if (longPressTriggered) {
-        longPressTriggered = false;
-        selectionDeltaX = 0;  // reset movement delta
-        return;
-      }
-    
-      const threshold = 50; // Minimum swipe distance in pixels
-      if (selectionDeltaX > threshold) {
-        completeSelection();
-      } else if (selectionDeltaX < -threshold) {
-        cancelSelection();
-      }
-      selectionDeltaX = 0;
-    }
-    
-    function completeSelection() {
-      const selectedCards = document.querySelectorAll(".card.selected");
-      selectedCards.forEach(card => {
-        const name = card.querySelector("strong").textContent;
-        const game = card.dataset.game; 
-        if (card.classList.contains("removed")) {
-          // Remove from inventory if marked for removal
-          setTimeout(() => {
-            removeFromInventory(name, game);
-          }, 100);
-        } else {
-          // If not removed, add the skylander to inventory
-          const skylander = window.games[game].find(item => item.name === name);
-          if (skylander) {
-            addToInventory(skylander, game);
-          }
+    selectionDeltaX = 0;
+  }
+  
+  function completeSelection() {
+    const selectedCards = document.querySelectorAll(".card.selected");
+    selectedCards.forEach(card => {
+      const name = card.querySelector("strong").textContent;
+      const game = card.dataset.game; 
+      if (card.classList.contains("removed")) {
+        // Remove from inventory if marked for removal
+        setTimeout(() => {
+          removeFromInventory(name, game);
+        }, 100);
+      } else {
+        // If not removed, add the skylander to inventory
+        const skylander = window.games[game].find(item => item.name === name);
+        if (skylander) {
+          addToInventory(skylander, game);
         }
-      });
-      // Exit selection mode after a short delay
-      setTimeout(() => {
-        toggleSelectionMode();
-      }, 100);
-    }
+      }
+    });
+    // Exit selection mode after a short delay
+    setTimeout(() => {
+      toggleSelectionMode();
+    }, 100);
+  }
     
     function removeSelection() {
       // Remove: for each selected card, remove it from inventory.
