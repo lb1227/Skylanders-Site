@@ -25,7 +25,8 @@
       color: var(--text);
       padding: 0 1rem;
     }
-    nav {
+    /* Top Navigation (desktop) */
+    nav#desktopNav {
       background-color: var(--nav-bg);
       padding: 1rem 2rem;
       display: flex;
@@ -37,7 +38,7 @@
       z-index: 1000;
       flex-wrap: wrap;
     }
-    nav h2 {
+    nav#desktopNav h2 {
       margin: 0;
       font-size: 1.5rem;
     }
@@ -55,6 +56,7 @@
       cursor: pointer;
       font-size: 1rem;
     }
+    /* Main Container */
     .container {
       max-width: var(--max-container-width);
       margin: 2rem auto;
@@ -98,14 +100,33 @@
     button.submit:hover {
       background-color: var(--button-hover);
     }
-
+    /* Bottom Mobile Navigation */
+    .bottom-mobile-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: var(--nav-bg);
+      padding: 0.5rem 0;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 1000;
+      box-shadow: 0 -2px 6px rgba(0,0,0,0.3);
+    }
+    .bottom-mobile-nav a {
+      color: white;
+      font-size: 1.5rem;
+      text-decoration: none;
+    }
     /* Tablet Styles */
     @media (max-width: 768px) {
-      nav {
+      nav#desktopNav {
         padding: 1rem;
       }
-      nav h2 {
-        display: none;
+      nav#desktopNav h2 {
+        font-size: 1.3rem;
       }
       .nav-links a, .nav-links button {
         font-size: 0.9rem;
@@ -116,14 +137,16 @@
       input, button.submit {
         font-size: 0.9rem;
       }
+      .bottom-mobile-nav {
+        display: flex;
+      }
     }
-
     /* Mobile Styles */
     @media (max-width: 480px) {
-      nav {
+      nav#desktopNav {
         padding: 0.8rem 1rem;
       }
-      nav h2 {
+      nav#desktopNav h2 {
         font-size: 1.2rem;
       }
       .nav-links {
@@ -143,11 +166,14 @@
       label, input, button.submit {
         font-size: 0.9rem;
       }
+      .bottom-mobile-nav {
+        display: flex;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Navigation Bar -->
+  <!-- Desktop Navigation -->
   <nav id="desktopNav">
     <h2>Skylanders Tracker</h2>
     <div class="nav-links">
@@ -166,6 +192,8 @@
     </div>
     <h1>My Account</h1>
     <form id="accountForm">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" placeholder="Enter your username" />
       
       <label for="email">Email:</label>
       <input type="email" id="email" name="email" placeholder="Enter your email" />
@@ -177,6 +205,13 @@
     </form>
   </div>
 
+  <!-- Bottom Mobile Navigation -->
+  <nav id="mobileNav" class="bottom-mobile-nav">
+    <a href="home.html" title="Home">🏠</a>
+    <a href="inventory.html" title="Inventory">🃏</a>
+    <a href="account.html" title="Account">👤</a>
+  </nav>
+
   <script>
     function logout(){
       localStorage.removeItem("sky_user");
@@ -185,10 +220,11 @@
 
     window.onload = function() {
       // Retrieve saved account info from localStorage
+      const username = localStorage.getItem("sky_username") || "";
       const email = localStorage.getItem("sky_email") || "";
-      console.log("Retrieved email: ", email); // Debug output
-    
+      
       // Populate the form fields
+      document.getElementById("username").value = username;
       document.getElementById("email").value = email;
       
       // Display the current user's email if available
@@ -201,12 +237,14 @@
       // Handle form submission
       document.getElementById("accountForm").addEventListener("submit", function(e){
         e.preventDefault();
+        const newUsername = document.getElementById("username").value;
         const newEmail = document.getElementById("email").value;
         const newPassword = document.getElementById("password").value;
         
-        // Update account info in localStorage (or send to your backend)
+        // Update localStorage or send data to your backend
+        localStorage.setItem("sky_username", newUsername);
         localStorage.setItem("sky_email", newEmail);
-        // Optionally handle newPassword (securely, via your backend)
+        // Optionally handle newPassword securely
         
         alert("Account updated successfully!");
         document.getElementById("currentEmailDisplay").innerText = "Logged in as: " + newEmail;
