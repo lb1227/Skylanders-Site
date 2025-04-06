@@ -918,16 +918,18 @@ container.addEventListener("touchend", onSelectionTouchEnd, { capture: true });
     // Global variable to store the card that triggered the long press
     let preselectedCard = null;
     
+    let longPressTriggered = false;
+
     function startPress(e) {
-      // Save the card's identity using e.currentTarget
       const card = e.currentTarget;
       preselectedCard = {
         name: card.querySelector("strong").textContent,
         game: card.dataset.game
       };
       pressTimer = setTimeout(() => {
+        longPressTriggered = true;  // Mark that a long press occurred
         toggleSelectionMode();
-      }, 600);
+      }, 400);
     }
     
     function cancelPress(e) {
@@ -948,12 +950,17 @@ container.addEventListener("touchend", onSelectionTouchEnd, { capture: true });
     }
     
     function onSelectionTouchEnd(e) {
+      // If a long press was triggered, reset the flag and do nothing else.
+      if (longPressTriggered) {
+        longPressTriggered = false;
+        selectionDeltaX = 0;  // reset movement delta
+        return;
+      }
+    
       const threshold = 50; // Minimum swipe distance in pixels
       if (selectionDeltaX > threshold) {
-        // Swipe right: complete the selection.
         completeSelection();
       } else if (selectionDeltaX < -threshold) {
-        // Swipe left: cancel selection mode.
         cancelSelection();
       }
       selectionDeltaX = 0;
