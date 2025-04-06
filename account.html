@@ -105,7 +105,7 @@
         padding: 1rem;
       }
       nav h2 {
-        font-size: 1.3rem;
+        display: none;
       }
       .nav-links a, .nav-links button {
         font-size: 0.9rem;
@@ -166,8 +166,6 @@
     </div>
     <h1>My Account</h1>
     <form id="accountForm">
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username" placeholder="Enter your username" />
       
       <label for="email">Email:</label>
       <input type="email" id="email" name="email" placeholder="Enter your email" />
@@ -187,14 +185,14 @@
 
     window.onload = function() {
       // Retrieve saved account info from localStorage
-      const username = localStorage.getItem("sky_username") || "";
       const email = localStorage.getItem("sky_email") || "";
-      
+      console.log("Retrieved email: ", email); // Debug output
+    
       // Populate the form fields
       document.getElementById("username").value = username;
       document.getElementById("email").value = email;
       
-      // Display the current user's email
+      // Display the current user's email if available
       if(email) {
         document.getElementById("currentEmailDisplay").innerText = "Logged in as: " + email;
       } else {
