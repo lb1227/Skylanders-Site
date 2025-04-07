@@ -455,6 +455,7 @@
         // For selection mode, we want to process only a true tap (with minimal movement)
         if (selectionMode) {
           // Mouse events
+          // Always add long press events
           card.addEventListener("mousedown", function(e) {
             this.startX = e.clientX;
             this.startY = e.clientY;
@@ -462,7 +463,7 @@
             startPress(e);
           });
           card.addEventListener("mousemove", function(e) {
-            const threshold = 10; // pixels threshold for movement
+            const threshold = 10;
             if (Math.abs(e.clientX - this.startX) > threshold || Math.abs(e.clientY - this.startY) > threshold) {
               this.hasMoved = true;
             }
@@ -470,13 +471,14 @@
           card.addEventListener("mouseup", function(e) {
             cancelPress(e);
             if (!this.hasMoved && !swipeConfirmed && !longPressTriggered) {
-              // Toggle selection state (green)
-              this.classList.toggle("selected");
+              // If not long pressing, do a normal tap action:
+              if (!selectionMode) openModal(char);
+              else this.classList.toggle("selected");
             }
             this.hasMoved = false;
           });
-        
-          // Touch events
+          
+          // Similarly for touch events:
           card.addEventListener("touchstart", function(e) {
             this.startX = e.touches[0].clientX;
             this.startY = e.touches[0].clientY;
@@ -484,25 +486,25 @@
             startPress(e);
           });
           card.addEventListener("touchmove", function(e) {
-            const threshold = 10; // pixels
+            const threshold = 10;
             const currentX = e.touches[0].clientX;
             const currentY = e.touches[0].clientY;
             if (Math.abs(currentX - this.startX) > threshold || Math.abs(currentY - this.startY) > threshold) {
               this.hasMoved = true;
-              cancelPress(e); // cancel long press if movement is detected
+              cancelPress(e);
             }
           });
           card.addEventListener("touchend", function(e) {
             cancelPress(e);
             if (!this.hasMoved && !swipeConfirmed && !longPressTriggered) {
-              this.classList.toggle("selected");
+              if (!selectionMode) {
+                openModal(char);
+              } else {
+                this.classList.toggle("selected");
+              }
             }
             this.hasMoved = false;
           });
-        } else {
-          // If not in selection mode, a tap opens the modal.
-          card.onclick = () => openModal(char);
-        }
         
         // Existing generic listeners (if you want to keep them for long-press behavior)
         card.addEventListener("mouseleave", cancelPress);
