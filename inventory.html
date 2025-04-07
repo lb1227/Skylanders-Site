@@ -75,7 +75,7 @@
     }
     /* Mobile Navigation & Header */
     .hamburger {
-      font-size: 2rem;
+      font-size: 1.5rem;
       cursor: pointer;
       color: white;
       background-color: var(--nav-bg);
@@ -377,7 +377,6 @@
     </label>
     <span style="font-size: 0.7rem;">Owned Only</span>
     <select id="gameSelect">
-      <option value="">Select a Game</option>
     </select>
   </header>
   <!-- Combined Inventory Container with Bulk Select Controls -->
@@ -577,17 +576,29 @@
     
     function populateGameSelect() {
       const select = document.getElementById("gameSelect");
-      select.innerHTML = '<option value="">Select a Game</option>';
-      Object.keys(window.games).forEach(game => {
+      select.innerHTML = ''; // Remove default placeholder
+    
+      // Retrieve last selected game; default to the first game if not set
+      const games = Object.keys(window.games);
+      const lastGame = localStorage.getItem("lastSelectedGame") || games[0];
+    
+      games.forEach(game => {
         const option = document.createElement("option");
         option.value = game;
         option.textContent = game;
+        if (game === lastGame) {
+          option.selected = true;
+        }
         select.appendChild(option);
       });
+    
+      // Save selection change and re-render inventory for that game
       select.addEventListener("change", () => {
+        localStorage.setItem("lastSelectedGame", select.value);
         renderInventory(getOwnedOnlyState(), select.value);
       });
     }
+
     
     function toggleSelectionMode() {
       const scrollPosition = window.scrollY;
