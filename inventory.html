@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="manifest" href="manifest.json" />
-  <link rel="icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAAAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAGAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////AP///wD///8A////AP///wD///8A" type="image/x-icon" />
-  <script src="data.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Skylanders Tracker</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAAAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAGAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////AP///wD///8A////AP///wD///8A" type="image/x-icon" />
+  <script src="data.js"></script>
   <style>
     :root {
       --bg: #121212;
@@ -23,22 +23,6 @@
       background-color: var(--bg);
       color: var(--text);
       overflow-x: hidden;
-    }
-    nav {
-      background-color: var(--nav-bg);
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      flex-wrap: wrap;
-    }
-    nav h2 {
-      margin: 0;
-      font-size: 1.5rem;
     }
     .container {
       max-width: 1200px;
@@ -89,13 +73,14 @@
     .card button {
       margin-top: 0.5rem;
     }
+    /* Mobile Navigation & Header */
     .hamburger {
-      display: none;
       font-size: 2rem;
       cursor: pointer;
       color: white;
-      position: relative;
-      top: -7px; /* Adjust the value as needed */
+      background-color: var(--nav-bg);
+      border: none;
+      padding: 0.5rem;
     }
     .nav-links {
       display: flex;
@@ -113,6 +98,7 @@
       font-size: 1rem;
       padding: 0.3rem 0.6rem;
     }
+    /* Logout button */
     #logoutBtn {
       padding: 0.3rem 0.6rem;
       margin: 0;
@@ -120,7 +106,6 @@
     .group-section {
       margin-bottom: 2rem;
     }
-    
     .cards-wrapper {
       display: flex;
       flex-wrap: wrap;
@@ -129,14 +114,14 @@
     }
     /* Modal styling */
     .modal {
-      display: none; /* Hidden by default */
+      display: none;
       position: fixed;
       z-index: 1;
       left: 0;
       top: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0,0,0,0.5); /* Black with opacity */
+      background-color: rgba(0,0,0,0.5);
       padding-top: 60px;
     }
     .modal-content {
@@ -144,12 +129,12 @@
       margin: 5% auto;
       padding: 20px;
       border: 1px solid #888;
-      width: 80%; /* Larger size */
+      width: 80%;
       border-radius: 12px;
       color: white;
     }
     .modal-content img {
-      width: 200px;  /* Larger image size */
+      width: 200px;
       height: auto;
       margin-bottom: 1rem;
     }
@@ -169,6 +154,7 @@
       font-size: 1rem;
       margin: 0.5rem 0;
     }
+    /* Vignette effects */
     #leftVignette,
     #rightVignette {
       display: none;
@@ -178,205 +164,173 @@
       width: 20%;
       pointer-events: none;
       animation: flash 2s ease-in-out infinite;
-      z-index: 9999; /* Ensure they appear above content */
+      z-index: 9999;
     }
-    
     #leftVignette {
       left: 0;
       background: linear-gradient(to right, rgba(229,57,53,0.5), transparent);
     }
-    
     #rightVignette {
       right: 0;
       background: linear-gradient(to left, rgba(76,175,80,0.5), transparent);
     }
-    
-    /* Show overlays when body has a class 'selection-mode' */
     body.selection-mode #leftVignette,
     body.selection-mode #rightVignette {
       display: block;
     }
-    
     @keyframes flash {
-      0%, 100% {
-        opacity: 0.5;
-      }
-      50% {
-        opacity: 0.8;
-      }
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 0.8; }
     }
-    /*COLLAPSIBLE BUTTONS*/
-     @media (max-width: 768px) {
-        .group-header {
-        font-size: 1rem;              /* Slightly smaller font on mobile */
-        padding: 0.5rem 0.75rem;        /* Reduced padding */
-        background: #222;             /* A bit darker for mobile contrast */
-        border-radius: 2px;           /* Subtle rounding */
-        margin-bottom: 0.5rem;        /* Space below header */
-      }
-     }
-    /* Toggle Switch Style */
-    @media (max-width: 768px) {
-      .switch {
-        position: relative;
-        display: inline-block;
-        width: 46px;
-        height: 24px;
-        margin-right: 8px;
-      }
-      .switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-      }
-      .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0; left: 0;
-        right: 0; bottom: 0;
-        background-color: #ccc;
-        transition: 0.4s;
-        border-radius: 24px;
-      }
-      .slider.round {
-        border-radius: 34px;
-      }
-      .slider:before {
-        position: absolute;
-        content: "";
-        height: 22px;
-        width: 22px;
-        left: 3px;
-        bottom: 3px;
-        background-color: white;
-        transition: 0.4s;
-        border-radius: 50%;
-      }
-      input:checked + .slider {
-        background-color: var(--accent);
-      }
-      input:checked + .slider:before {
-        transform: translateX(34px);
-      }
-      .top-mobile-nav {
-        display: none;
-        background-color: var(--nav-bg);
-        padding: 0.25rem 0.5rem;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-        position: fixed;
-        top: 0;
-        width: 100%;
-        z-index: 999;
-      }
-      .top-mobile-nav input,
-      .top-mobile-nav label {
-        margin-top: 0;
-        padding: 0.2rem 0.5rem;
-        font-size: 0.7rem;
-        max-width: 140px;
-      }
+    /* Mobile-specific Styles */
+    .top-mobile-nav {
+      background-color: var(--nav-bg);
+      padding: 0.25rem 0.5rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 999;
+      display: flex;
+      justify-content: center;
     }
-    @media (max-width: 768px) {
-      .card.selected {
-        background-color: #1f4d1f !important; /* Green background */
-      }
-      .card.removed {
-        background-color: #808080 !important; /* Grey background to indicate removal */
-      }
-      #desktopNav {
-        display: none; /* Hide desktop nav on mobile */
-      }
-      #navTopMobile {
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-      }
-      /* Target the container with the search and filter */
-      #navTopMobile .nav-links {
-        display: flex;
-        align-items: center;
-        gap: 0.4rem; /* Reduced gap */
-      }
-      #navTopMobile .nav-links span {
-        margin-left: 0.1rem !important; /* Reduce space between the switch and "Owned Only" text */
-        font-size: 0.65rem;   /* Optionally adjust the font size too */
-      }
-      /* Tighter styling for the search input */
-      #navTopMobile input {
-        max-width: 150px;
-        padding: 0.3rem 0.6rem;
-        margin: 0; /* Remove extra margin */
-      }
-      /* Adjust the switch label spacing */
-      #navTopMobile .nav-links label.switch {
-        margin-left: 0rem; /* Reduce margin before the switch */
-      }
-      /* Reduce the Owned Only text margin and font-size if needed */
-      #navTopMobile span {
-        font-size: 0.65rem;
-        margin-left: 0.2rem;
-      }
-      body {
-        padding-top: 40px; /* Prevent top nav overlap */
-      }
+    .top-mobile-nav input {
+      max-width: 200px;
+      padding: 0.4rem 0.8rem;
+      border: none;
+      border-radius: 6px;
+      background-color: #2a2a2a;
+      color: white;
     }
-    @media (max-width: 768px) {
-      #inventoryContainer {
-        width: 100%;
-        padding: 1rem;
-      }
-      .search-input-desktop {
-        display: none;
-      }
-      .cards-wrapper {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 4px;
-        padding: 0;
-      }
-      .card {
-        width: 100%;
-        margin: 0;
-        padding: 4px;
-        box-sizing: border-box;
-        border-radius: 12px;
-        text-align: center;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
-        transition: background-color 0.3s ease;
-        display: flex;
-        flex-direction: column;
-        height: auto;
-        width: 65px;
-      }
-      .card img {
-        width: 60px;
-        height: 60px;
-        border-radius: 8px;
-        object-fit: contain;
-        max-width: 100%;
-        max-height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-      .card strong {
-        font-size: 0.4rem;
-        margin: 0;
-        padding: 0;
-        line-height: 1;
-        display: inline-block;
-        vertical-align: top;
-      }
-      .card button {
-        padding: 0.25rem 0.5rem;
-        font-size: 0.4rem;
-        margin-top: 0;
-        line-height: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
-        width: 100%;
-      }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 46px;
+      height: 24px;
+      margin-left: 0.5rem;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: var(--accent);
+    }
+    input:checked + .slider:before {
+      transform: translateX(34px);
+    }
+    .bottom-mobile-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: var(--nav-bg);
+      padding: 0.5rem 0;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 1000;
+      box-shadow: 0 -2px 6px rgba(0,0,0,0.3);
+    }
+    .bottom-mobile-nav a {
+      color: white;
+      font-size: 1.5rem;
+      text-decoration: none;
+    }
+    .mobile-menu {
+      position: fixed;
+      bottom: 60px;
+      right: 20px;
+      background-color: var(--nav-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+      padding: 1rem;
+      display: none;
+      flex-direction: column;
+      gap: 0.5rem;
+      z-index: 1001;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .mobile-menu.show {
+      display: flex;
+    }
+    .mobile-menu button {
+      background-color: var(--card-bg);
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .mobile-menu button:hover {
+      background-color: var(--button-hover);
+    }
+    #inventoryContainer {
+      width: 100%;
+      padding: 1rem;
+    }
+    .cards-wrapper {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      padding: 0;
+    }
+    .card {
+      width: 65px;
+      margin: 0;
+      padding: 4px;
+      box-sizing: border-box;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.6);
+      transition: background-color 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      height: auto;
+    }
+    .card img {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      object-fit: contain;
+      margin: 0;
+      padding: 0;
+    }
+    .card strong {
+      font-size: 0.4rem;
+      margin: 0;
+      padding: 0;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: top;
+    }
+    .card button {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.4rem;
+      margin-top: 0;
+      line-height: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      width: 100%;
     }
     .collapsed {
       max-height: 0 !important;
@@ -390,148 +344,41 @@
       margin-right: 1rem;
       font-size: 0.9rem;
     }
-    @media (max-width: 768px) {
-      /* Mobile navbar styling */
-      .bottom-mobile-nav {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        background-color: var(--nav-bg);
-        padding: 0.5rem 0;
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        z-index: 1000;
-        box-shadow: 0 -2px 6px rgba(0,0,0,0.3);
-      }
-       .bottom-mobile-nav a {
-          color: white;
-          font-size: 1.5rem;
-          text-decoration: none;
-        }
-      .mobile-menu {
-        position: fixed;
-        bottom: 60px;
-        right: 20px;
-        background-color: var(--nav-bg);
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-        padding: 1rem;
-        display: none;
-        flex-direction: column;
-        gap: 0.5rem;
-        z-index: 1001;
-        transition: opacity 0.3s ease, transform 0.3s ease;
-      }
-       .hamburger {
-        display: block;
-        background-color: var(--nav-bg);
-        color: white;
-        border: none;
-        font-size: 1.5rem;
-        padding: 0.5rem;
-        cursor: pointer;
-      }
-      .mobile-menu.show {
-        display: flex;
-      }
-      .mobile-menu button {
-        background-color: var(--card-bg);
-        color: white;
-        border: none;
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        font-size: 0.9rem;
-        cursor: pointer;
-      }
-      .mobile-menu button:hover {
-        background-color: var(--button-hover);
-      }
-      nav {
-        position: fixed;
-        bottom: 0;
-        top: auto;
-        width: 100%;
-        padding: 0.5rem 1rem;
-        justify-content: space-around;
-      }
-      nav h2 {
-        display: none;
-      }
-      .nav-links {
-        display: flex;
-        width: 100%;
-        justify-content: space-around;
-      }
-      .nav-links a {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .nav-links a[href="home.html"]::before {
-        content: "\1F3E0";
-        font-size: 1.5rem;
-      }
-      .nav-links a[href="home.html"] {
-        font-size: 0;
-      }
-    }
   </style>
 </head>
 <body>
-  <!-- Desktop Navigation -->
-  <nav id="desktopNav">
-    <h2 style="margin: 0;">Skylanders Tracker</h2>
-    <div class="hamburger" onclick="toggleMenu()">☰</div>
-    <div id="navMenu" class="nav-links">
-      <input type="text" id="searchInputDesktop" placeholder="Search Skylanders..." class="search-input-desktop" style="margin-top: 0.5rem; max-width: 200px; background-color: #2a2a2a; color: white; border-radius: 6px; border: none; padding: 0.4rem 0.8rem;">
-      <a href="home.html">Home</a>
-      <a href="totals.html">Totals</a>
-      <button id="logoutBtn" onclick="logout()" style="background-color: var(--button); color: white; border-radius: 8px; font-weight: bold;">Logout</button>
-    </div>
-  </nav>
-
   <!-- Mobile Navigation -->
   <nav id="mobileNav" class="bottom-mobile-nav">
     <a href="home.html" title="Home">🏠</a>
     <a href="inventory.html" title="Inventory">🃏</a>
     <button class="hamburger" onclick="toggleMobileMenu()">☰</button>
   </nav>
-
   <div id="mobileMenu" class="mobile-menu">
     <button onclick="goToAccount()">Account</button>
     <button onclick="logout()">Logout</button>
   </div>
-
   <!-- Mobile Header with Search and Filter -->
   <header id="navTopMobile" class="top-mobile-nav">
     <div class="nav-links">
-      <input type="text" id="searchInputMobile" placeholder="Search Skylanders..." style="margin-top: 0.5rem; max-width: 200px; background-color: #2a2a2a; color: white; border-radius: 6px; border: none; padding: 0.4rem 0.8rem;">
+      <input type="text" id="searchInputMobile" placeholder="Search Skylanders...">
       <label class="switch">
-        <input type="checkbox" id="ownedFilterToggleMobile" onchange="applyOwnedFilterMobile()" />
-        <span class="slider round"></span>
+        <input type="checkbox" id="ownedFilterToggleMobile" onchange="applyOwnedFilter()">
+        <span class="slider"></span>
       </label>
       <span style="font-size: 0.7rem;">Owned Only</span>
     </div>
   </header>
-
   <!-- Group Categories Dropdown (Mobile) -->
   <select id="gameSelect" style="width: 80%; max-width: 300px; margin: 1rem auto; display: block; padding: 0.5rem;">
     <option value="">Select a Game</option>
   </select>
-
   <!-- Combined Inventory Container with Bulk Select Controls -->
   <div class="container">
-    <!-- Bulk Action Controls -->
-     <div id="bulkActions" style="display:none;"></div>
-    <!-- Vignette  -->
+    <div id="bulkActions" style="display:none;"></div>
     <div id="leftVignette"></div>
     <div id="rightVignette"></div>
-    <!-- Inventory Container -->
     <div id="inventoryContainer"></div>
   </div>
-
   <!-- Modal for Skylanders info -->
   <div id="skylanderModal" class="modal">
     <div class="modal-content">
@@ -539,106 +386,85 @@
       <div id="skylanderDetails"></div>
     </div>
   </div>
-  
   <script>
     const user = localStorage.getItem("sky_user") || "guest";
     const container = document.getElementById("inventoryContainer");
-
-    function toggleMenu() {
-      document.getElementById("navMenu").classList.toggle("show");
+    let selectionMode = false;
+    let preselectedCard = null;
+    let longPressTriggered = false;
+    let pressTimer;
+    
+    function toggleMobileMenu() {
+      const menu = document.getElementById("mobileMenu");
+      menu.style.display = menu.style.display === "flex" ? "none" : "flex";
     }
-
     function logout() {
       localStorage.removeItem("sky_user");
       location.href = "login.html";
     }
-
     function goToAccount() {
       window.location.href = "account.html";
     }
-
-    // Updated renderInventory: Removed header creation and always show cards
+    
     function renderInventory(showOwnedOnly = false, selectedGame = "") {
-      const container = document.getElementById("inventoryContainer");
-      container.innerHTML = '';  // Clear existing inventory
-      
-      for (const [game, characters] of Object.entries(window.games)) {
-        // If a specific game is selected, skip groups that don't match.
-        if (selectedGame && game !== selectedGame) continue;
-        
+      container.innerHTML = '';
+      Object.entries(window.games).forEach(([game, characters]) => {
+        if (selectedGame && game !== selectedGame) return;
         const section = document.createElement("div");
         section.className = "group-section";
         section.id = `section-${game}`;
-        
-        // Create the cards container (you can still keep it collapsed if desired)
         const cards = document.createElement("div");
-        cards.className = "cards-wrapper"; // Remove 'collapsed' if you want it always open after selection
-        
+        cards.className = "cards-wrapper";
         const key = `sky_progress_${user}_${game}`;
-        const saved = localStorage.getItem(key);
         let collected = [];
         let queue = [];
+        const saved = localStorage.getItem(key);
         if (saved) {
           const parsed = JSON.parse(saved);
           collected = parsed.collected || [];
           queue = parsed.queue || [];
         }
-        
-      characters.forEach(char => {
-        const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
-        const isOwned = !!found;
-      
-        // Skip if owned filter is on and this item is not owned
-        if (showOwnedOnly && !isOwned) return;
-      
-        const card = document.createElement("div");
-        card.className = "card";
-        card.dataset.game = game; // Store game for later use
-        if (isOwned) card.classList.add("owned");
-      
-        card.innerHTML = `
-          <img src="${char.image}" alt="${char.name}" />
-          <div><strong>${char.name}</strong></div>
-          ${!selectionMode && isOwned ? `<button onclick="event.stopPropagation(); removeFromInventory('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}')">Remove</button>` : ''}
-        `;
-      
-       if (selectionMode) {
-        card.onclick = function(e) {
-          e.stopPropagation();
-          // For owned cards: toggle removal & mark as selected
-          if (card.classList.contains("owned")) {
-            card.classList.remove("owned");
-            card.classList.add("removed");
-            card.classList.add("selected");  // Add to selection list
-          } else if (card.classList.contains("removed")) {
-            // Toggle back: remove removed and selected, then restore ownership styling
-            card.classList.remove("removed");
-            card.classList.remove("selected");
-            card.classList.add("owned");
+        characters.forEach(char => {
+          const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
+          const isOwned = !!found;
+          if (showOwnedOnly && !isOwned) return;
+          const card = document.createElement("div");
+          card.className = "card";
+          card.dataset.game = game;
+          if (isOwned) card.classList.add("owned");
+          card.innerHTML = `
+            <img src="${char.image}" alt="${char.name}">
+            <div><strong>${char.name}</strong></div>
+            ${!selectionMode && isOwned ? `<button onclick="event.stopPropagation(); removeFromInventory('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}')">Remove</button>` : ''}
+          `;
+          if (selectionMode) {
+            card.onclick = function(e) {
+              e.stopPropagation();
+              if (card.classList.contains("owned")) {
+                card.classList.remove("owned");
+                card.classList.add("removed", "selected");
+              } else if (card.classList.contains("removed")) {
+                card.classList.remove("removed", "selected");
+                card.classList.add("owned");
+              } else {
+                card.classList.toggle("selected");
+              }
+            };
           } else {
-            // For unowned cards, just toggle selection
-            card.classList.toggle("selected");
+            card.onclick = () => openModal(char);
           }
-        };
-      } else {
-        card.onclick = () => openModal(char);
-      }
-              
-        // Add long-press listeners (if still desired)
-        card.addEventListener("mousedown", startPress);
-        card.addEventListener("touchstart", startPress);
-        card.addEventListener("mouseup", cancelPress);
-        card.addEventListener("mouseleave", cancelPress);
-        card.addEventListener("touchend", cancelPress);
-      
-        cards.appendChild(card);
-      });
-        
+          card.addEventListener("mousedown", startPress);
+          card.addEventListener("touchstart", startPress);
+          card.addEventListener("mouseup", cancelPress);
+          card.addEventListener("mouseleave", cancelPress);
+          card.addEventListener("touchend", cancelPress);
+          cards.appendChild(card);
+        });
         section.appendChild(cards);
         container.appendChild(section);
-      }
+      });
     }
-
+    
     function removeFromInventory(name, game) {
       const key = `sky_progress_${user}_${game}`;
       const saved = localStorage.getItem(key);
@@ -650,28 +476,74 @@
           parsed.queue.push(character);
         }
         localStorage.setItem(key, JSON.stringify(parsed));
-        
-        // Retrieve the currently selected game from your dropdown (or use the global variable if you have one)
         const selectedGame = document.getElementById("gameSelect").value;
-        renderInventory(false, selectedGame);
+        renderInventory(getOwnedOnlyState(), selectedGame);
       } else {
         console.warn(`No saved data found for key ${key}`);
       }
     }
-
-    // On page load, render both the mobile group navigation and inventory.
-    window.onload = () => {
-      populateGameSelect();
-      const selectedGame = document.getElementById("gameSelect").value; // This should be "Spyros adventure" if it's the default
-      renderInventory(false, selectedGame);
-      const logoutBtn = document.getElementById("logoutBtn");
-      if (user && user !== "guest") {
-        logoutBtn.style.display = "inline-block";
-      } else {
-        logoutBtn.style.display = "none";
+    
+    function addToInventory(skylander, game) {
+      const key = `sky_progress_${user}_${game}`;
+      let parsed = { collected: [], queue: [] };
+      const saved = localStorage.getItem(key);
+      if (saved) parsed = JSON.parse(saved);
+      const exists = parsed.collected.find(item => item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase());
+      if (!exists) parsed.collected.push({ name: skylander.name, quantity: 1 });
+      localStorage.setItem(key, JSON.stringify(parsed));
+    }
+    
+    function openModal(skylander) {
+      const modal = document.getElementById("skylanderModal");
+      const detailsContainer = document.getElementById("skylanderDetails");
+      const userInventory = localStorage.getItem(`sky_progress_${user}_${skylander.game}`);
+      let isOwned = false;
+      if (userInventory) {
+        const parsedInventory = JSON.parse(userInventory);
+        const collected = parsedInventory.collected || [];
+        isOwned = collected.some(item => item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase());
       }
-    };
-
+      detailsContainer.innerHTML = `
+        <h2>${skylander.name}</h2>
+        <img src="${skylander.image}" alt="${skylander.name}" style="width: 200px; height: auto; margin-bottom: 1rem;">
+        <p><strong>Game:</strong> ${skylander.game}</p>
+        <p><strong>Price:</strong> ${skylander.price || "N/A"}</p>
+        <p><strong>Retail Price:</strong> ${skylander.retail_price || "N/A"}</p>
+        <p>
+          <strong>Owned:</strong>
+          <select id="ownedSelect">
+            <option value="yes" ${isOwned ? "selected" : ""}>Yes</option>
+            <option value="no" ${!isOwned ? "selected" : ""}>No</option>
+          </select>
+        </p>
+      `;
+      modal.style.display = "block";
+      document.getElementById("ownedSelect").addEventListener("change", function() {
+        updateInventoryFromModal(skylander);
+      });
+    }
+    
+    function updateInventoryFromModal(skylander) {
+      const ownedSelect = document.getElementById("ownedSelect");
+      const newValue = ownedSelect.value;
+      const key = `sky_progress_${user}_${skylander.game}`;
+      let parsed = { collected: [], queue: [] };
+      const saved = localStorage.getItem(key);
+      if (saved) parsed = JSON.parse(saved);
+      const isOwned = parsed.collected.some(item => item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase());
+      if (newValue === "yes" && !isOwned) {
+        addToInventory(skylander, skylander.game);
+      } else if (newValue === "no" && isOwned) {
+        removeFromInventory(skylander.name, skylander.game);
+      }
+      const selectedGame = document.getElementById("gameSelect").value;
+      renderInventory(getOwnedOnlyState(), selectedGame);
+    }
+    
+    function closeModal() {
+      document.getElementById("skylanderModal").style.display = "none";
+    }
+    
     function attachSearchHandler(id) {
       const input = document.getElementById(id);
       if (input) {
@@ -684,106 +556,19 @@
         });
       }
     }
-    attachSearchHandler("searchInputDesktop");
     attachSearchHandler("searchInputMobile");
-
+    
+    function getOwnedOnlyState() {
+      return document.getElementById("ownedFilterToggleMobile").checked;
+    }
     function applyOwnedFilter() {
-      const showOwnedOnly = document.getElementById("ownedFilterToggleMobile").checked;
+      const showOwnedOnly = getOwnedOnlyState();
       const selectedGame = document.getElementById("gameSelect").value;
       renderInventory(showOwnedOnly, selectedGame);
     }
-    function applyOwnedFilterMobile() {
-      const showOwnedOnly = document.getElementById("ownedFilterToggleMobile").checked;
-      renderInventory(showOwnedOnly);
-    }
-
-    function toggleMobileMenu() {
-      const menu = document.getElementById("mobileMenu");
-      menu.style.display = menu.style.display === "flex" ? "none" : "flex";
-    }
-
-    function openModal(skylander) {
-      const modal = document.getElementById("skylanderModal");
-      const detailsContainer = document.getElementById("skylanderDetails");
-      const userInventory = localStorage.getItem(`sky_progress_${user}_${skylander.game}`);
-      let isOwned = false;
-      if (userInventory) {
-        const parsedInventory = JSON.parse(userInventory);
-        const collected = parsedInventory.collected || [];
-        isOwned = collected.some(item => item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase());
-      }
-      
-      // Include a dropdown for "Owned:" with Yes/No options
-      detailsContainer.innerHTML = `
-        <h2>${skylander.name}</h2>
-        <img src="${skylander.image}" alt="${skylander.name}" style="width: 200px; height: auto; margin-bottom: 1rem;" />
-        <p><strong>Game:</strong> ${skylander.game}</p>
-        <p><strong>Price:</strong> ${skylander.price || "N/A"}</p>
-        <p><strong>Retail Price:</strong> ${skylander.retail_price || "N/A"}</p>
-        <p>
-          <strong>Owned:</strong>
-          <select id="ownedSelect">
-            <option value="yes" ${isOwned ? "selected" : ""}>Yes</option>
-            <option value="no" ${!isOwned ? "selected" : ""}>No</option>
-          </select>
-        </p>
-      `;
-      
-      modal.style.display = "block";
-      
-      // Attach a change event listener to update the inventory when the dropdown changes
-      document.getElementById("ownedSelect").addEventListener("change", function() {
-        updateInventoryFromModal(skylander);
-      });
-    }
-
-    function updateInventoryFromModal(skylander) {
-      const ownedSelect = document.getElementById("ownedSelect");
-      const newValue = ownedSelect.value; // either "yes" or "no"
-      const key = `sky_progress_${user}_${skylander.game}`;
-      let saved = localStorage.getItem(key);
-      let parsed = { collected: [], queue: [] };
-      if (saved) {
-        parsed = JSON.parse(saved);
-      }
-      // Determine if the character is already owned
-      const isOwned = parsed.collected.some(item => 
-        item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase()
-      );
-      
-      if (newValue === "yes" && !isOwned) {
-        // Add to inventory if not already owned
-        addToInventory(skylander, skylander.game);
-      } else if (newValue === "no" && isOwned) {
-        // Remove from inventory if currently owned
-        removeFromInventory(skylander.name, skylander.game);
-      }
-      
-      // Optionally, re-render the inventory using the current game filter.
-      // For example, if you're using a dropdown to filter groups:
-      let showOwnedOnly = false;
-      const mobileToggle = document.getElementById("ownedFilterToggleMobile");
-      const desktopToggle = document.getElementById("ownedFilterToggle");
-      if (mobileToggle) {
-        showOwnedOnly = mobileToggle.checked;
-      } else if (desktopToggle) {
-        showOwnedOnly = desktopToggle.checked;
-      }
-      
-      const selectedGame = document.getElementById("gameSelect").value;
-      renderInventory(showOwnedOnly, selectedGame);
-    }
-
-    function closeModal() {
-      const modal = document.getElementById("skylanderModal");
-      modal.style.display = "none";
-    }
-
-    let currentGame = ""; // Global variable to store the current game filter
-
+    
     function populateGameSelect() {
       const select = document.getElementById("gameSelect");
-      // Clear existing options, then populate the dropdown
       select.innerHTML = '';
       Object.keys(window.games).forEach(game => {
         const option = document.createElement("option");
@@ -791,120 +576,80 @@
         option.textContent = game;
         select.appendChild(option);
       });
-      
-      // When a game is selected, update the global variable and re-render
       select.addEventListener("change", () => {
-        currentGame = select.value;
-        renderInventory(false, currentGame);
+        renderInventory(getOwnedOnlyState(), select.value);
       });
     }
-  
-    let selectionMode = false;
-
+    
     function toggleSelectionMode() {
-      // Capture current scroll position
       const scrollPosition = window.scrollY;
-      
-      // Capture current collapse states for each group
       const collapseStates = {};
       document.querySelectorAll('.group-section').forEach(section => {
         collapseStates[section.id] = section.classList.contains('collapsed');
       });
-      
-      // Toggle selection mode state
       selectionMode = !selectionMode;
-      const container = document.getElementById("inventoryContainer");
       const body = document.body;
-      
+      const bulkActions = document.getElementById("bulkActions");
       if (selectionMode) {
-        document.getElementById("bulkActions").style.display = "block";
+        bulkActions.style.display = "block";
         container.addEventListener("touchstart", onSelectionTouchStart, { capture: true });
         container.addEventListener("touchmove", onSelectionTouchMove, { capture: true });
         container.addEventListener("touchend", onSelectionTouchEnd, { capture: true });
         body.classList.add("selection-mode");
       } else {
-        document.getElementById("bulkActions").style.display = "none";
+        bulkActions.style.display = "none";
         container.removeEventListener("touchstart", onSelectionTouchStart);
         container.removeEventListener("touchmove", onSelectionTouchMove);
         container.removeEventListener("touchend", onSelectionTouchEnd);
         body.classList.remove("selection-mode");
       }
-      
-      // Use the current game filter (if any)
       const selectedGame = document.getElementById("gameSelect").value;
-      
-      // Re-render the inventory with the new selection mode and current group filter
-      renderInventory(false, selectedGame);
-      
-      // Restore the collapse states for each group
+      renderInventory(getOwnedOnlyState(), selectedGame);
       for (let id in collapseStates) {
         const section = document.getElementById(id);
         if (section) {
-          if (collapseStates[id]) {
-            section.classList.add('collapsed');
-          } else {
-            section.classList.remove('collapsed');
-          }
+          section.classList.toggle('collapsed', collapseStates[id]);
         }
       }
-      
-      // Restore the scroll position
       window.scrollTo(0, scrollPosition);
-      
-      // After re-rendering, mark the preselected card as "selected" (if it exists)
       if (preselectedCard) {
-        const cards = document.querySelectorAll(".card");
-        cards.forEach(card => {
+        document.querySelectorAll(".card").forEach(card => {
           const cardName = card.querySelector("strong").textContent;
-          // Compare both game and name (case-insensitive)
-          if (
-            card.dataset.game === preselectedCard.game &&
-            cardName.trim().toLowerCase() === preselectedCard.name.trim().toLowerCase()
-          ) {
+          if (card.dataset.game === preselectedCard.game && cardName.trim().toLowerCase() === preselectedCard.name.trim().toLowerCase()) {
             card.classList.add("selected");
           }
         });
-        // Clear the preselected card so it isn't applied on subsequent mode toggles
         preselectedCard = null;
       }
     }
     
-    function addToInventory(skylander, game) {
-      const key = `sky_progress_${user}_${game}`;
-      let parsed = { collected: [], queue: [] };
-      const saved = localStorage.getItem(key);
-      if (saved) {
-        parsed = JSON.parse(saved);
-      }
-      // Check if the skylander is already owned
-      const exists = parsed.collected.find(item => item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase());
-      if (!exists) {
-        // You can adjust the object structure as needed (e.g., quantity, etc.)
-        parsed.collected.push({ name: skylander.name, quantity: 1 });
-      }
-      localStorage.setItem(key, JSON.stringify(parsed));
-    }
-
-    let pressTimer;container.addEventListener("touchstart", onSelectionTouchStart, { capture: true });
-container.addEventListener("touchmove", onSelectionTouchMove, { capture: true });
-container.addEventListener("touchend", onSelectionTouchEnd, { capture: true });
-
-    function addLongPressListener(card) {
-      // Start the timer on mousedown or touchstart
-      card.addEventListener("mousedown", startPress);
-      card.addEventListener("touchstart", startPress);
-    
-      // Clear the timer if the press is released early or the pointer leaves
-      card.addEventListener("mouseup", cancelPress);
-      card.addEventListener("mouseleave", cancelPress);
-      card.addEventListener("touchend", cancelPress);
+    function completeSelection() {
+      document.querySelectorAll(".card.selected").forEach(card => {
+        const name = card.querySelector("strong").textContent;
+        const game = card.dataset.game;
+        if (card.classList.contains("removed")) {
+          setTimeout(() => { removeFromInventory(name, game); }, 100);
+        } else {
+          const skylander = window.games[game].find(item => item.name === name);
+          if (skylander) addToInventory(skylander, game);
+        }
+      });
+      setTimeout(toggleSelectionMode, 100);
     }
     
-    // Global variable to store the card that triggered the long press
-    let preselectedCard = null;
+    function removeSelection() {
+      document.querySelectorAll(".card.selected").forEach(card => {
+        const name = card.querySelector("strong").textContent;
+        const game = card.dataset.game;
+        removeFromInventory(name, game);
+      });
+      toggleSelectionMode();
+    }
     
-    let longPressTriggered = false;
-
+    function cancelSelection() {
+      toggleSelectionMode();
+    }
+    
     function startPress(e) {
       const card = e.currentTarget;
       preselectedCard = {
@@ -912,85 +657,41 @@ container.addEventListener("touchend", onSelectionTouchEnd, { capture: true });
         game: card.dataset.game
       };
       pressTimer = setTimeout(() => {
-        longPressTriggered = true;  // Mark that a long press occurred
+        longPressTriggered = true;
         toggleSelectionMode();
       }, 400);
     }
     
-    function cancelPress(e) {
+    function cancelPress() {
       clearTimeout(pressTimer);
     }
-
-    let selectionStartX = 0;
-    let selectionDeltaX = 0;
     
+    let selectionStartX = 0, selectionDeltaX = 0;
     function onSelectionTouchStart(e) {
       selectionStartX = e.changedTouches[0].screenX;
       selectionDeltaX = 0;
     }
-    
     function onSelectionTouchMove(e) {
       const currentX = e.changedTouches[0].screenX;
       selectionDeltaX = currentX - selectionStartX;
     }
-    
     function onSelectionTouchEnd(e) {
-      // If a long press was triggered, reset the flag and do nothing else.
       if (longPressTriggered) {
         longPressTriggered = false;
-        selectionDeltaX = 0;  // reset movement delta
+        selectionDeltaX = 0;
         return;
       }
-    
-      const threshold = 50; // Minimum swipe distance in pixels
-      if (selectionDeltaX > threshold) {
-        completeSelection();
-      } else if (selectionDeltaX < -threshold) {
-        cancelSelection();
-      }
+      const threshold = 50;
+      if (selectionDeltaX > threshold) completeSelection();
+      else if (selectionDeltaX < -threshold) cancelSelection();
       selectionDeltaX = 0;
     }
     
-    function completeSelection() {
-      const selectedCards = document.querySelectorAll(".card.selected");
-      selectedCards.forEach(card => {
-        const name = card.querySelector("strong").textContent;
-        const game = card.dataset.game; 
-        if (card.classList.contains("removed")) {
-          // Remove from inventory if marked for removal
-          setTimeout(() => {
-            removeFromInventory(name, game);
-          }, 100);
-        } else {
-          // If not removed, add the skylander to inventory
-          const skylander = window.games[game].find(item => item.name === name);
-          if (skylander) {
-            addToInventory(skylander, game);
-          }
-        }
-      });
-      // Exit selection mode after a short delay
-      setTimeout(() => {
-        toggleSelectionMode();
-      }, 100);
-    }
-    
-    function removeSelection() {
-      // Remove: for each selected card, remove it from inventory.
-      const selectedCards = document.querySelectorAll(".card.selected");
-      selectedCards.forEach(card => {
-        const name = card.querySelector("strong").textContent;
-        const game = card.dataset.game;
-        removeFromInventory(name, game);
-      });
-      // Exit selection mode.
-      toggleSelectionMode();
-    }
-
-    function cancelSelection() {
-      // Simply exit selection mode (re-rendering will clear all "selected" states).
-      toggleSelectionMode();
-    }
+    window.onload = () => {
+      populateGameSelect();
+      const selectedGame = document.getElementById("gameSelect").value;
+      renderInventory(false, selectedGame);
+    };
   </script>
 </body>
 </html>
