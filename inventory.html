@@ -681,7 +681,10 @@
       };
       pressTimer = setTimeout(() => {
         longPressTriggered = true;
-        toggleSelectionMode();
+        // Only toggle selection mode if it's not already active
+        if (!selectionMode) {
+          toggleSelectionMode();
+        }
       }, 400);
     }
     
