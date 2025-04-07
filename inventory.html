@@ -434,6 +434,7 @@
           queue = parsed.queue || [];
         }
         characters.forEach(char => {
+          char.game = game; // Set the game property for the character
           const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
           const isOwned = !!found;
           if (showOwnedOnly && !isOwned) return;
