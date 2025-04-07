@@ -464,12 +464,37 @@
             card.onclick = () => openModal(char);
           }
 
+          card.addEventListener("touchstart", (e) => {
+            // Record initial coordinates for tap detection
+            card.startX = e.touches[0].clientX;
+            card.startY = e.touches[0].clientY;
+            startPress(e); // start long press timer
+          });
+          
+          card.addEventListener("touchmove", (e) => {
+            // Cancel long press if finger moves beyond threshold
+            const moveX = e.touches[0].clientX;
+            const moveY = e.touches[0].clientY;
+            const threshold = 10; // movement threshold in pixels
+            if (Math.abs(moveX - card.startX) > threshold || Math.abs(moveY - card.startY) > threshold) {
+              cancelPress(e);
+              card.hasMoved = true; // flag movement occurred
+            }
+          });
+          
+          card.addEventListener("touchend", (e) => {
+            cancelPress(e);
+            // Only toggle selection if no significant movement happened
+            if (selectionMode && !card.hasMoved && !longPressTriggered) {
+              card.classList.toggle("selected");
+            }
+            // Reset flag for next tap
+            card.hasMoved = false;
+          });
+
           card.addEventListener("mousedown", startPress);
-          card.addEventListener("touchstart", startPress);
           card.addEventListener("mouseup", cancelPress);
           card.addEventListener("mouseleave", cancelPress);
-          card.addEventListener("touchend", cancelPress);
-          card.addEventListener("touchmove", cancelPress);
           cards.appendChild(card);
         });
         section.appendChild(cards);
@@ -713,34 +738,6 @@
       else if (selectionDeltaX < -threshold) cancelSelection();
       selectionDeltaX = 0;
     }
-
-    card.addEventListener("touchstart", (e) => {
-      // Record initial coordinates for tap detection
-      card.startX = e.touches[0].clientX;
-      card.startY = e.touches[0].clientY;
-      startPress(e); // start long press timer
-    });
-    
-    card.addEventListener("touchmove", (e) => {
-      // Cancel long press if finger moves beyond threshold
-      const moveX = e.touches[0].clientX;
-      const moveY = e.touches[0].clientY;
-      const threshold = 10; // movement threshold in pixels
-      if (Math.abs(moveX - card.startX) > threshold || Math.abs(moveY - card.startY) > threshold) {
-        cancelPress(e);
-        card.hasMoved = true; // flag movement occurred
-      }
-    });
-    
-    card.addEventListener("touchend", (e) => {
-      cancelPress(e);
-      // Only toggle selection if no significant movement happened
-      if (selectionMode && !card.hasMoved && !longPressTriggered) {
-        card.classList.toggle("selected");
-      }
-      // Reset flag for next tap
-      card.hasMoved = false;
-    });
     
     window.onload = () => {
       populateGameSelect();
