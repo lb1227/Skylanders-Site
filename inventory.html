@@ -419,13 +419,14 @@
       window.location.href = "account.html";
     }
     
-    function renderInventory(showOwnedOnly = false, selectedGame = "") {
+   function renderInventory(showOwnedOnly = false, selectedGame = "") {
       container.innerHTML = '';
       Object.entries(window.games).forEach(([game, characters]) => {
         if (selectedGame && game !== selectedGame) return;
         const section = document.createElement("div");
         section.className = "group-section";
         section.id = `section-${game}`;
+    
         const cards = document.createElement("div");
         cards.className = "cards-wrapper";
         const key = `sky_progress_${user}_${game}`;
@@ -437,30 +438,30 @@
           collected = parsed.collected || [];
           queue = parsed.queue || [];
         }
-       characters.forEach(char => {
-        char.game = game; // Set the game property for the character
-        const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
-        const isOwned = !!found;
-        if (showOwnedOnly && !isOwned) return;
-        const card = document.createElement("div");
-        card.className = "card";
-        card.dataset.game = game;
-        if (isOwned) card.classList.add("owned");
-        card.innerHTML = `
-          <img src="${char.image}" alt="${char.name}">
-          <div><strong>${char.name}</strong></div>
-          ${!selectionMode && isOwned ? `<button onclick="event.stopPropagation(); removeFromInventory(${JSON.stringify(char.name)}, ${JSON.stringify(game)})">Remove</button>` : ''}
-        `;
-        
-        // For selection mode, we want to process only a true tap (with minimal movement)
-        if (selectionMode) {
-          // Mouse events
-          card.addEventListener("mousedown", function(e) {
-            this.startX = e.clientX;
-            this.startY = e.clientY;
-            this.hasMoved = false;
-            startPress(e);
-          });
+    
+        characters.forEach(char => {
+          char.game = game; // Set the game property for the character
+          const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
+          const isOwned = !!found;
+          if (showOwnedOnly && !isOwned) return;
+          const card = document.createElement("div");
+          card.className = "card";
+          card.dataset.game = game;
+          if (isOwned) card.classList.add("owned");
+          card.innerHTML = `
+            <img src="${char.image}" alt="${char.name}">
+            <div><strong>${char.name}</strong></div>
+            ${!selectionMode && isOwned ? `<button onclick="event.stopPropagation(); removeFromInventory(${JSON.stringify(char.name)}, ${JSON.stringify(game)})">Remove</button>` : ''}
+          `;
+    
+          if (selectionMode) {
+            // Selection mode events...
+            card.addEventListener("mousedown", function(e) {
+              this.startX = e.clientX;
+              this.startY = e.clientY;
+              this.hasMoved = false;
+              startPress(e);
+            });
           card.addEventListener("mousemove", function(e) {
             const threshold = 10; // pixels threshold for movement
             if (Math.abs(e.clientX - this.startX) > threshold || Math.abs(e.clientY - this.startY) > threshold) {
@@ -508,8 +509,10 @@
         card.addEventListener("mouseleave", cancelPress);
         
         cards.appendChild(card);
-        container.appendChild(section);
       });
+        // Append the cards to the section, then the section to the container
+        section.appendChild(cards);
+        container.appendChild(section);
      });
     }
     
