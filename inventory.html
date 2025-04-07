@@ -345,14 +345,8 @@
       height: 100%;
       width: 100%;
     }
-    .card.owned {
-      background-color: #1f4d1f !important; /* Green for owned */
-    }
-    .card.toRemove {
-      background-color: #808080 !important; /* Gray (or any color) to indicate removal */
-    }
     .card.selected {
-      background-color: #1f4d1f !important; /* Same as owned or a different color for unowned selections */
+      background-color: #1f4d1f !important; /* Green */
     }
     .collapsed {
       max-height: 0 !important;
@@ -470,46 +464,12 @@
             card.onclick = () => openModal(char);
           }
 
-          card.addEventListener("touchstart", function(e) {
-            this.startX = e.touches[0].clientX;
-            this.startY = e.touches[0].clientY;
-            startPress(e);
-          });
-          
-          card.addEventListener("touchmove", function(e) {
-            const moveX = e.touches[0].clientX;
-            const moveY = e.touches[0].clientY;
-            const threshold = 10; // small threshold for tap detection
-            if (Math.abs(moveX - this.startX) > threshold || Math.abs(moveY - this.startY) > threshold) {
-              cancelPress(e);
-              this.hasMoved = true;
-            }
-          });
-          
-          card.addEventListener("touchend", function(e) {
-            cancelPress(e);
-            // Only treat this as a tap if the finger hasn't moved much
-            if (selectionMode && !this.hasMoved && !longPressTriggered) {
-              // If the card is owned, toggle its removal state.
-              if (this.classList.contains("owned")) {
-                // Deselect the card: mark it for removal
-                this.classList.remove("owned");
-                this.classList.add("toRemove");
-              } else if (this.classList.contains("toRemove")) {
-                // If already marked for removal, tapping again reselects it as owned.
-                this.classList.remove("toRemove");
-                this.classList.add("owned");
-              } else {
-                // For cards that are not originally owned, simply toggle the "selected" state.
-                this.classList.toggle("selected");
-              }
-            }
-            this.hasMoved = false; // reset for the next tap
-          });
-
           card.addEventListener("mousedown", startPress);
+          card.addEventListener("touchstart", startPress);
           card.addEventListener("mouseup", cancelPress);
           card.addEventListener("mouseleave", cancelPress);
+          card.addEventListener("touchend", cancelPress);
+          card.addEventListener("touchmove", cancelPress);
           cards.appendChild(card);
         });
         section.appendChild(cards);
@@ -688,22 +648,16 @@
     }
     
     function completeSelection() {
-      document.querySelectorAll(".card.selected, .card.toRemove").forEach(card => {
+      document.querySelectorAll(".card.selected").forEach(card => {
         const name = card.querySelector("strong").textContent;
         const game = card.dataset.game;
-        // If the card is marked for removal (toRemove), remove it from inventory.
-        if (card.classList.contains("toRemove")) {
-          removeFromInventory(name, game);
-        } else if (card.classList.contains("selected")) {
-          // Otherwise, if it’s just selected (for an unowned card), add it.
-          // (Assuming that unowned cards being selected means adding them.)
+        if (card.classList.contains("removed")) {
+          setTimeout(() => { removeFromInventory(name, game); }, 100);
+        } else {
           const skylander = window.games[game].find(item => item.name === name);
-          if (skylander) {
-            addToInventory(skylander, game);
-          }
+          if (skylander) addToInventory(skylander, game);
         }
       });
-      // After processing, exit selection mode.
       setTimeout(toggleSelectionMode, 100);
     }
     
