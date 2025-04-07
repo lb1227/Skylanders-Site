@@ -345,6 +345,9 @@
       height: 100%;
       width: 100%;
     }
+    .card.selected {
+      background-color: #1f4d1f !important; /* Green */
+    }
     .collapsed {
       max-height: 0 !important;
       opacity: 0;
@@ -450,19 +453,17 @@
           if (selectionMode) {
             card.onclick = function(e) {
               e.stopPropagation();
-              if (card.classList.contains("owned")) {
-                card.classList.remove("owned");
-                card.classList.add("removed", "selected");
-              } else if (card.classList.contains("removed")) {
-                card.classList.remove("removed", "selected");
-                card.classList.add("owned");
-              } else {
-                card.classList.toggle("selected");
+              // Only process a tap if it wasn’t a long press
+              if (!longPressTriggered) {
+                card.classList.toggle("selected"); // "selected" can be styled with green
               }
+              // Reset flag for subsequent taps
+              longPressTriggered = false;
             };
           } else {
             card.onclick = () => openModal(char);
           }
+
           card.addEventListener("mousedown", startPress);
           card.addEventListener("touchstart", startPress);
           card.addEventListener("mouseup", cancelPress);
