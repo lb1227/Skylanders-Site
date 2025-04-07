@@ -192,13 +192,23 @@
       width: 100%;
       z-index: 999;
       display: flex;
+      flex-wrap: wrap;
+      align-items: center;
       justify-content: center;
+      gap: 0.5rem;
     }
     .top-mobile-nav input {
-      max-width: 200px;
+      max-width: 150px;
       padding: 0.4rem 0.8rem;
       border: none;
       border-radius: 6px;
+      background-color: #2a2a2a;
+      color: white;
+    }
+    .top-mobile-nav select {
+      padding: 0.3rem;
+      border-radius: 6px;
+      border: none;
       background-color: #2a2a2a;
       color: white;
     }
@@ -259,7 +269,7 @@
       right: 20px;
       background-color: var(--nav-bg);
       border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
       padding: 1rem;
       display: none;
       flex-direction: column;
@@ -285,6 +295,7 @@
     #inventoryContainer {
       width: 100%;
       padding: 1rem;
+      margin-top: 3rem;
     }
     .cards-wrapper {
       display: grid;
@@ -357,21 +368,18 @@
     <button onclick="goToAccount()">Account</button>
     <button onclick="logout()">Logout</button>
   </div>
-  <!-- Mobile Header with Search and Filter -->
+  <!-- Mobile Header with Search, Filter, and Game Select -->
   <header id="navTopMobile" class="top-mobile-nav">
-    <div class="nav-links">
-      <input type="text" id="searchInputMobile" placeholder="Search Skylanders...">
-      <label class="switch">
-        <input type="checkbox" id="ownedFilterToggleMobile" onchange="applyOwnedFilter()">
-        <span class="slider"></span>
-      </label>
-      <span style="font-size: 0.7rem;">Owned Only</span>
-    </div>
+    <input type="text" id="searchInputMobile" placeholder="Search Skylanders...">
+    <label class="switch">
+      <input type="checkbox" id="ownedFilterToggleMobile" onchange="applyOwnedFilter()">
+      <span class="slider"></span>
+    </label>
+    <span style="font-size: 0.7rem;">Owned Only</span>
+    <select id="gameSelect">
+      <option value="">Select a Game</option>
+    </select>
   </header>
-  <!-- Group Categories Dropdown (Mobile) -->
-  <select id="gameSelect" style="width: 80%; max-width: 300px; margin: 1rem auto; display: block; padding: 0.5rem;">
-    <option value="">Select a Game</option>
-  </select>
   <!-- Combined Inventory Container with Bulk Select Controls -->
   <div class="container">
     <div id="bulkActions" style="display:none;"></div>
@@ -569,7 +577,7 @@
     
     function populateGameSelect() {
       const select = document.getElementById("gameSelect");
-      select.innerHTML = '';
+      select.innerHTML = '<option value="">Select a Game</option>';
       Object.keys(window.games).forEach(game => {
         const option = document.createElement("option");
         option.value = game;
