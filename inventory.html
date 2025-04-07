@@ -688,8 +688,9 @@
     attachSearchHandler("searchInputMobile");
 
     function applyOwnedFilter() {
-      const showOwnedOnly = document.getElementById("ownedFilterToggle").checked;
-      renderInventory(showOwnedOnly);
+      const showOwnedOnly = document.getElementById("ownedFilterToggleMobile").checked;
+      const selectedGame = document.getElementById("gameSelect").value;
+      renderInventory(showOwnedOnly, selectedGame);
     }
     function applyOwnedFilterMobile() {
       const showOwnedOnly = document.getElementById("ownedFilterToggleMobile").checked;
@@ -760,8 +761,17 @@
       
       // Optionally, re-render the inventory using the current game filter.
       // For example, if you're using a dropdown to filter groups:
+      let showOwnedOnly = false;
+      const mobileToggle = document.getElementById("ownedFilterToggleMobile");
+      const desktopToggle = document.getElementById("ownedFilterToggle");
+      if (mobileToggle) {
+        showOwnedOnly = mobileToggle.checked;
+      } else if (desktopToggle) {
+        showOwnedOnly = desktopToggle.checked;
+      }
+      
       const selectedGame = document.getElementById("gameSelect").value;
-      renderInventory(false, selectedGame);
+      renderInventory(showOwnedOnly, selectedGame);
     }
 
     function closeModal() {
