@@ -453,12 +453,12 @@
           if (selectionMode) {
             card.onclick = function(e) {
               e.stopPropagation();
-              // Only process a tap if it wasn’t a long press
-              if (!longPressTriggered) {
-                card.classList.toggle("selected"); // "selected" can be styled with green
+              if (swipeConfirmed) {
+                // If this tap immediately follows a swipe, ignore it.
+                return;
               }
-              // Reset flag for subsequent taps
-              longPressTriggered = false;
+              // Otherwise, process the tap.
+              card.classList.toggle("selected");
             };
           } else {
             card.onclick = () => openModal(char);
@@ -709,9 +709,15 @@
         return;
       }
       const threshold = 50;
-      if (selectionDeltaX > threshold) completeSelection();
-      else if (selectionDeltaX < -threshold) cancelSelection();
+      if (selectionDeltaX > threshold) {
+        swipeConfirmed = true; // mark that a swipe confirmation occurred
+        completeSelection();
+      } else if (selectionDeltaX < -threshold) {
+        cancelSelection();
+      }
       selectionDeltaX = 0;
+      // Reset the flag shortly after to allow normal taps again.
+      setTimeout(() => swipeConfirmed = false, 100);
     }
     
     window.onload = () => {
