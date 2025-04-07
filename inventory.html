@@ -419,16 +419,16 @@
       window.location.href = "account.html";
     }
     
-   function renderInventory(showOwnedOnly = false, selectedGame = "") {
+    function renderInventory(showOwnedOnly = false, selectedGame = "") {
       container.innerHTML = '';
       Object.entries(window.games).forEach(([game, characters]) => {
         if (selectedGame && game !== selectedGame) return;
         const section = document.createElement("div");
         section.className = "group-section";
-        section.id = section-${game};
+        section.id = `section-${game}`;
         const cards = document.createElement("div");
         cards.className = "cards-wrapper";
-        const key = sky_progress_${user}_${game};
+        const key = `sky_progress_${user}_${game}`;
         let collected = [];
         let queue = [];
         const saved = localStorage.getItem(key);
@@ -446,11 +446,11 @@
         card.className = "card";
         card.dataset.game = game;
         if (isOwned) card.classList.add("owned");
-        card.innerHTML = 
+        card.innerHTML = `
           <img src="${char.image}" alt="${char.name}">
           <div><strong>${char.name}</strong></div>
-          ${!selectionMode && isOwned ? <button onclick="event.stopPropagation(); removeFromInventory(${JSON.stringify(char.name)}, ${JSON.stringify(game)})">Remove</button> : ''}
-        ;
+          ${!selectionMode && isOwned ? `<button onclick="event.stopPropagation(); removeFromInventory(${JSON.stringify(char.name)}, ${JSON.stringify(game)})">Remove</button>` : ''}
+        `;
         
         // For selection mode, we want to process only a true tap (with minimal movement)
         if (selectionMode) {
@@ -508,9 +508,8 @@
         card.addEventListener("mouseleave", cancelPress);
         
         cards.appendChild(card);
-      });
-        section.appendChild(cards);
         container.appendChild(section);
+      });
      });
     }
     
