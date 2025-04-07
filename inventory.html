@@ -469,6 +469,7 @@
           card.addEventListener("mouseup", cancelPress);
           card.addEventListener("mouseleave", cancelPress);
           card.addEventListener("touchend", cancelPress);
+          card.addEventListener("touchmove", cancelPress);
           cards.appendChild(card);
         });
         section.appendChild(cards);
