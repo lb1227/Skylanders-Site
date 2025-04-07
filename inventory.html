@@ -437,77 +437,44 @@
           collected = parsed.collected || [];
           queue = parsed.queue || [];
         }
-       characters.forEach(char => {
-        char.game = game; // Set the game property for the character
-        const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
-        const isOwned = !!found;
-        if (showOwnedOnly && !isOwned) return;
-        const card = document.createElement("div");
-        card.className = "card";
-        card.dataset.game = game;
-        if (isOwned) card.classList.add("owned");
-        card.innerHTML = `
-          <img src="${char.image}" alt="${char.name}">
-          <div><strong>${char.name}</strong></div>
-          ${!selectionMode && isOwned ? `<button onclick="event.stopPropagation(); removeFromInventory('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}')">Remove</button>` : ''}
-        `;
-      
-        // For selection mode, we want to process only a true tap (with minimal movement)
-        if (selectionMode) {
-          // Mouse events
-          card.addEventListener("mousedown", function(e) {
-            this.startX = e.clientX;
-            this.startY = e.clientY;
-            this.hasMoved = false;
-            startPress(e);
-          });
-          card.addEventListener("mousemove", function(e) {
-            const threshold = 10; // pixels threshold for movement
-            if (Math.abs(e.clientX - this.startX) > threshold || Math.abs(e.clientY - this.startY) > threshold) {
-              this.hasMoved = true;
-            }
-          });
-          card.addEventListener("mouseup", function(e) {
-            cancelPress(e);
-            if (!this.hasMoved && !swipeConfirmed && !longPressTriggered) {
-              // Toggle selection state (green)
-              this.classList.toggle("selected");
-            }
-            this.hasMoved = false;
-          });
-      
-          // Touch events
-          card.addEventListener("touchstart", function(e) {
-            this.startX = e.touches[0].clientX;
-            this.startY = e.touches[0].clientY;
-            this.hasMoved = false;
-            startPress(e);
-          });
-          card.addEventListener("touchmove", function(e) {
-            const threshold = 10; // pixels
-            const currentX = e.touches[0].clientX;
-            const currentY = e.touches[0].clientY;
-            if (Math.abs(currentX - this.startX) > threshold || Math.abs(currentY - this.startY) > threshold) {
-              this.hasMoved = true;
-              cancelPress(e); // cancel long press if movement is detected
-            }
-          });
-          card.addEventListener("touchend", function(e) {
-            cancelPress(e);
-            if (!this.hasMoved && !swipeConfirmed && !longPressTriggered) {
-              this.classList.toggle("selected");
-            }
-            this.hasMoved = false;
-          });
-        } else {
-          // If not in selection mode, a tap opens the modal.
-          card.onclick = () => openModal(char);
-        }
-      
-        // Existing generic listeners (if you want to keep them for long-press behavior)
-        card.addEventListener("mouseleave", cancelPress);
-      
-        cards.appendChild(card);
+        characters.forEach(char => {
+          char.game = game; // Set the game property for the character
+          const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
+          const isOwned = !!found;
+          if (showOwnedOnly && !isOwned) return;
+          const card = document.createElement("div");
+          card.className = "card";
+          card.dataset.game = game;
+          if (isOwned) card.classList.add("owned");
+          card.innerHTML = `
+            <img src="${char.image}" alt="${char.name}">
+            <div><strong>${char.name}</strong></div>
+            ${!selectionMode && isOwned ? `<button onclick="event.stopPropagation(); removeFromInventory('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}')">Remove</button>` : ''}
+          `;
+          if (selectionMode) {
+            card.onclick = function(e) {
+              e.stopPropagation();
+              if (swipeConfirmed) {
+                // If this tap immediately follows a swipe, ignore it.
+                return;
+              }
+              // Otherwise, process the tap.
+              card.classList.toggle("selected");
+            };
+          } else {
+            card.onclick = () => openModal(char);
+          }
+
+          card.addEventListener("mousedown", startPress);
+          card.addEventListener("touchstart", startPress);
+          card.addEventListener("mouseup", cancelPress);
+          card.addEventListener("mouseleave", cancelPress);
+          card.addEventListener("touchend", cancelPress);
+          card.addEventListener("touchmove", cancelPress);
+          cards.appendChild(card);
+        });
+        section.appendChild(cards);
+        container.appendChild(section);
       });
     }
     
