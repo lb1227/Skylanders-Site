@@ -642,6 +642,18 @@
       });
     }
 
+    document.getElementById('gameSelector').addEventListener('change', () => {
+      const selectedGame = document.getElementById('gameSelector').value;
+      localStorage.setItem('selectedGame', selectedGame);
+    });
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedGame = localStorage.getItem('selectedGame');
+      if (savedGame) {
+        document.getElementById('gameSelector').value = savedGame;
+      }
+    });
+
   </script>
 </body>
 </html>
