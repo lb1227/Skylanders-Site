@@ -432,13 +432,18 @@
 
     function swipeActionComplete(direction) {
       const img = document.getElementById("collectibleImage");
-      img.style.transition = "";
+      // Hide the swiped image immediately
+      img.style.opacity = 0;
+      
+      // Reset any transforms for the new image
+      img.style.transition = "transform 0.2s ease, opacity 0.2s ease";
       img.style.transform = "translateX(0) rotate(0)";
-
+      
+      // Remove the current collectible from the queue and update tracking
       const current = window.collectiblesQueue.shift();
       lastAction = direction === "right" ? "have" : "dont";
       lastCollectible = current;
-
+      
       if (direction === "right") {
         current.quantity = 1;
         const user = localStorage.getItem("sky_user") || "guest";
@@ -458,6 +463,8 @@
         saved.skipped.push(current);
         localStorage.setItem(key, JSON.stringify(saved));
       }
+      
+      // Rebuild the collectibles queue and update if it's empty
       rebuildCollectiblesQueue();
       if (window.collectiblesQueue.length === 0) {
         const user = localStorage.getItem("sky_user") || "guest";
@@ -474,7 +481,12 @@
           return !alreadyCollected && !alreadySkipped;
         });
       }
+      
+      // Immediately update the display to show the new collectible
       showCurrentCollectible();
+      
+      // Fade in the new collectible by restoring opacity
+      img.style.opacity = 1;
     }
 
     function rebuildCollectiblesQueue() {
