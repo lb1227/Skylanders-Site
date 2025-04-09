@@ -519,7 +519,6 @@
         console.log("Queue after shift:", collectiblesQueue.length);
         
         if (direction === "right") {
-          current.quantity = 1;
           const user = localStorage.getItem("sky_user") || "guest";
           const key = `sky_progress_${user}_${currentGame}`;
           const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], queue: [], skipped: [] };
@@ -554,7 +553,6 @@
       lastCollectible = current;
     
       if (direction === "right") {
-        current.quantity = 1;
         const user = localStorage.getItem("sky_user") || "guest";
         const key = `sky_progress_${user}_${currentGame}`;
         const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], skipped: [] };
