@@ -289,25 +289,25 @@
     // JavaScript remains unchanged
     let lastAction = null;       // "have" or "dont"
     let lastCollectible = null;  // The collectible that was last processed
+    const games = window.games; 
+    const elementMap = window.elementMap;
+    
     function initializeApp() {
-      // Collectibles & progress initialization
-      const user = localStorage.getItem("sky_user");
-      const key = `sky_progress_${user}_${currentGame}`;
+      // The initialization function for collectibles/progress
+      const user = localStorage.getItem("sky_user") || "guest";
+      const key = `sky_progress_${user}_${window.currentGame}`;
       const saved = localStorage.getItem(key);
       if (saved) {
         const parsed = JSON.parse(saved);
-        skippedQueue = parsed.skipped || [];
+        window.skippedQueue = parsed.skipped || [];
       } else {
-        skippedQueue = [];
+        window.skippedQueue = [];
       }
       rebuildCollectiblesQueue();
       showCurrentCollectible();
-      if (collectiblesQueue.length === collectibles.length) {
+      if (window.collectiblesQueue.length === window.collectibles.length) {
         startNudgeAnimationIfNeeded();
       }
-    
-      // Collapsible groups initialization (if applicable)
-      initCollapsibleGroups();
     }
   
     window.onload = initializeApp;
@@ -615,43 +615,58 @@
       });
     }
 
-    function initCollapsibleGroups() {
-      // Retrieve stored state for collapsible groups.
-      // This expects that you saved an object mapping group IDs to a boolean
-      // (true for open, false for collapsed).
-      let groupStates = JSON.parse(localStorage.getItem("collapseStates") || "{}");
-    
-      // Find all group sections (make sure your collapsible groups use a class like 'group-section')
-      document.querySelectorAll('.group-section').forEach(section => {
-        const id = section.id;
-        // If saved state for this group exists and indicates it's open, add an 'open' class.
-        if (groupStates[id]) {
-          section.classList.add('open');
-        }
-        
-        // Attach click listeners to the header elements inside the group
-        const header = section.querySelector('.group-header');
-        if (header) {
-          header.addEventListener('click', () => {
-            section.classList.toggle('open');
-            // Update the stored state: true if section is now open, false if closed.
-            groupStates[id] = section.classList.contains('open');
-            localStorage.setItem("collapseStates", JSON.stringify(groupStates));
-          });
-        }
-      });
-    }
-
-    document.getElementById('gameSelector').addEventListener('change', () => {
-      const selectedGame = document.getElementById('gameSelector').value;
-      localStorage.setItem('selectedGame', selectedGame);
-    });
-    
     document.addEventListener('DOMContentLoaded', () => {
-      const savedGame = localStorage.getItem('selectedGame');
+      const gameSelector = document.getElementById("gameSelector");
+  
+      // Get the saved game from localStorage (if it exists)
+      let savedGame = localStorage.getItem('selectedGame');
+      let currentGame;
       if (savedGame) {
-        document.getElementById('gameSelector').value = savedGame;
+        currentGame = savedGame;
+        gameSelector.value = savedGame;  // update dropdown to stored game
+      } else {
+        currentGame = gameSelector.value;
+        localStorage.setItem('selectedGame', currentGame);
       }
+  
+      // Initialize collectibles based on the selected game
+      let collectibles = games[currentGame];
+      let collectiblesQueue = [...collectibles];
+      let skippedQueue = [];
+  
+      // Ensure these globals are updated or encapsulated as needed:
+      window.currentGame = currentGame;
+      window.collectibles = collectibles;
+      window.collectiblesQueue = collectiblesQueue;
+      window.skippedQueue = skippedQueue;
+  
+      // Now call your initialization function
+      initializeApp();
+  
+      // Update selection change: save new selected game, update collectible arrays, and rebuild view
+      gameSelector.addEventListener('change', () => {
+        currentGame = gameSelector.value;
+        localStorage.setItem('selectedGame', currentGame);
+        // Update global variables accordingly:
+        window.currentGame = currentGame;
+        window.collectibles = games[currentGame];
+        window.collectiblesQueue = [...games[currentGame]];
+        // Optionally clear or update skippedQueue, or read progress for the new game
+        // For example:
+        const user = localStorage.getItem("sky_user") || "guest";
+        const key = `sky_progress_${user}_${currentGame}`;
+        const saved = localStorage.getItem(key);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          skippedQueue = parsed.skipped || [];
+        } else {
+          skippedQueue = [];
+        }
+        window.skippedQueue = skippedQueue;
+        
+        rebuildCollectiblesQueue();
+        showCurrentCollectible();
+      });
     });
 
   </script>
