@@ -614,46 +614,33 @@
     }
   
     document.addEventListener('DOMContentLoaded', () => {
-      console.log('DOM fully loaded. Attaching collapsible group handlers.');
-    
-      // Restore the saved open group (if any)
+      // Attempt to restore the last open collapsible group
       const savedGroupId = localStorage.getItem('lastOpenGroup');
-      console.log('Last open group from storage:', savedGroupId);
       if (savedGroupId) {
         const savedGroup = document.getElementById(savedGroupId);
         if (savedGroup) {
-          // Ensure the saved group is open (i.e. not collapsed)
           savedGroup.classList.remove('collapsed');
-          console.log('Opened group:', savedGroupId);
-        } else {
-          console.warn('No element found with id', savedGroupId);
         }
       }
-    
-      // Attach click handlers to collapsible groups
+      
+      // Attach event listeners to all collapsible groups
       const groupSections = document.querySelectorAll('.group-section');
       groupSections.forEach(group => {
         const header = group.querySelector('.group-header');
         if (header) {
           header.addEventListener('click', () => {
-            // Toggle the group's collapsed state
             group.classList.toggle('collapsed');
-            
             if (!group.classList.contains('collapsed')) {
-              // Group is now open: save its ID
+              // Group is now open—store its id
               localStorage.setItem('lastOpenGroup', group.id);
-              console.log('Group opened:', group.id);
             } else {
-              // Group is now closed: remove from storage if it was the saved one
+              // Group is now closed—remove the stored value if it matches this group
               const storedId = localStorage.getItem('lastOpenGroup');
               if (storedId === group.id) {
                 localStorage.removeItem('lastOpenGroup');
-                console.log('Group closed and removed from storage:', group.id);
               }
             }
           });
-        } else {
-          console.warn('No header found in group:', group);
         }
       });
     });
