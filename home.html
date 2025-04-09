@@ -309,9 +309,7 @@
         startNudgeAnimationIfNeeded();
       }
     }
-  
-    window.onload = initializeApp;
-  
+    
     function logout() {
       localStorage.removeItem("sky_user");
       window.location.href = "login.html";
@@ -329,7 +327,7 @@
     let skippedQueue = [];
   
     function showCurrentCollectible() {
-      const current = collectiblesQueue[0];
+      const current = window.collectiblesQueue[0];
       const img = document.getElementById("collectibleImage");
       const name = document.getElementById("collectibleName");
       const reviewBtn = document.getElementById("reviewSkippedBtn");
@@ -339,7 +337,7 @@
         name.textContent = current.name;
         reviewBtn.style.display = "none";
         img.style.display = "block";
-      } else if (skippedQueue.length > 0) {
+      } else if (window.skippedQueue.length > 0) {
         reviewBtn.style.display = "inline-block";
         img.src = "";
         name.textContent = "";
@@ -615,53 +613,46 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       const gameSelector = document.getElementById("gameSelector");
-  
-      // Get the saved game from localStorage (if it exists)
+    
+      // Read the saved game value from localStorage (if exists) and update dropdown
       let savedGame = localStorage.getItem('selectedGame');
       let currentGame;
       if (savedGame) {
         currentGame = savedGame;
-        gameSelector.value = savedGame;  // update dropdown to stored game
+        gameSelector.value = savedGame;  // Update dropdown with saved game
       } else {
         currentGame = gameSelector.value;
         localStorage.setItem('selectedGame', currentGame);
       }
-  
-      // Initialize collectibles based on the selected game
-      let collectibles = games[currentGame];
-      let collectiblesQueue = [...collectibles];
-      let skippedQueue = [];
-  
-      // Ensure these globals are updated or encapsulated as needed:
+    
+      // Initialize global variables based on the current game selection.
       window.currentGame = currentGame;
-      window.collectibles = collectibles;
-      window.collectiblesQueue = collectiblesQueue;
-      window.skippedQueue = skippedQueue;
-  
-      // Now call your initialization function
+      window.collectibles = games[currentGame];
+      window.collectiblesQueue = [...games[currentGame]];
+      window.skippedQueue = [];
+    
+      // Now that everything is set up, call initializeApp to build your cards.
       initializeApp();
-  
-      // Update selection change: save new selected game, update collectible arrays, and rebuild view
+    
+      // Attach onchange event to update globals and reload collectibles
       gameSelector.addEventListener('change', () => {
         currentGame = gameSelector.value;
         localStorage.setItem('selectedGame', currentGame);
-        // Update global variables accordingly:
         window.currentGame = currentGame;
         window.collectibles = games[currentGame];
         window.collectiblesQueue = [...games[currentGame]];
-        // Optionally clear or update skippedQueue, or read progress for the new game
-        // For example:
+    
+        // Optionally, load any saved progress for this game:
         const user = localStorage.getItem("sky_user") || "guest";
         const key = `sky_progress_${user}_${currentGame}`;
         const saved = localStorage.getItem(key);
         if (saved) {
           const parsed = JSON.parse(saved);
-          skippedQueue = parsed.skipped || [];
+          window.skippedQueue = parsed.skipped || [];
         } else {
-          skippedQueue = [];
+          window.skippedQueue = [];
         }
-        window.skippedQueue = skippedQueue;
-        
+    
         rebuildCollectiblesQueue();
         showCurrentCollectible();
       });
