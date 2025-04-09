@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="data.js"></script>
-  <!-- Removed desktop-specific icon link -->
   <meta charset="UTF-8" />
   <!-- Mobile-only meta tags -->
   <meta name="mobile-web-app-capable" content="yes">
@@ -10,6 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Skylanders Tracker</title>
+  <script src="data.js"></script>
   <style>
     :root {
       --bg: #121212;
@@ -237,8 +236,7 @@
   </style>
 </head>
 <body>
-  <!-- Removed desktop (top) navigation -->
-
+  <!-- Main Content -->
   <div class="wrapper">
     <div class="container">
       <!-- Welcome Section -->
@@ -255,11 +253,11 @@
         <option value="Imaginators Villains">Imaginators Villains</option>
         <option value="Creation Crystals">Creation Crystals</option>
       </select>
-  
+
       <!-- Undo Button and Swipe Overlay -->
       <button id="undoBtn" style="display: block; margin: 1rem auto; background-color: #555; color: white; border: 1px solid #ccc; padding: 0.5rem 1rem; border-radius: 6px; font-size: 1.2rem; cursor: pointer;">Undo</button>
       <div id="swipeOverlay"></div>
-  
+
       <!-- Collectibles Section -->
       <div id="collectibleContent">
         <img id="collectibleImage" alt="Collectible Image" />
@@ -285,15 +283,18 @@
     <button onclick="logout()">Logout</button>
   </div>
 
+  <!-- JavaScript: Functions and Event Handlers -->
   <script>
-    // JavaScript remains unchanged
+    // Global variables
     let lastAction = null;       // "have" or "dont"
     let lastCollectible = null;  // The collectible that was last processed
-    const games = window.games; 
-    const elementMap = window.elementMap;
-    
+
+    // *******************************
+    // Function Definitions
+    // *******************************
+
     function initializeApp() {
-      // The initialization function for collectibles/progress
+      // Initialization for collectibles/progress
       const user = localStorage.getItem("sky_user") || "guest";
       const key = `sky_progress_${user}_${window.currentGame}`;
       const saved = localStorage.getItem(key);
@@ -309,29 +310,27 @@
         startNudgeAnimationIfNeeded();
       }
     }
-    
+
     function logout() {
       localStorage.removeItem("sky_user");
       window.location.href = "login.html";
     }
+
     function toggleMobileMenu() {
       const menu = document.getElementById("mobileMenu");
       menu.style.display = menu.style.display === "flex" ? "none" : "flex";
     }
+
     function goToAccount() {
       window.location.href = "account.html";
     }
-    let currentGame = document.getElementById("gameSelector").value;
-    let collectibles = games[currentGame];
-    let collectiblesQueue = [...collectibles];
-    let skippedQueue = [];
-  
+
     function showCurrentCollectible() {
       const current = window.collectiblesQueue[0];
       const img = document.getElementById("collectibleImage");
       const name = document.getElementById("collectibleName");
       const reviewBtn = document.getElementById("reviewSkippedBtn");
-    
+
       if (current && current.image) {
         img.src = current.image;
         name.textContent = current.name;
@@ -349,109 +348,19 @@
         img.style.display = "none";
       }
     }
-  
+
     function saveProgress() {
       const user = localStorage.getItem("sky_user") || "guest";
-      const key = `sky_progress_${user}_${currentGame}`;
+      const key = `sky_progress_${user}_${window.currentGame}`;
       const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], skipped: [] };
       localStorage.setItem(key, JSON.stringify({
         collected: saved.collected,
         skipped: saved.skipped
       }));
     }
-  
-    document.getElementById("haveItBtn").onclick = () => {
-      swipeAction("right");
-    };
-    
-    document.getElementById("dontHaveItBtn").onclick = () => {
-      swipeAction("left");
-    };
-  
-    document.getElementById("reviewSkippedBtn").onclick = () => {
-      const user = localStorage.getItem("sky_user") || "guest";
-      const key = `sky_progress_${user}_${currentGame}`;
-      const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], skipped: [] };
-      if (saved.skipped.length > 0) {
-        collectiblesQueue = [...saved.skipped];
-        showCurrentCollectible();
-      }
-    };
-  
-    document.getElementById("gameSelector").onchange = () => {
-      currentGame = document.getElementById("gameSelector").value;
-      const user = localStorage.getItem("sky_user");
-      const key = `sky_progress_${user}_${currentGame}`;
-      const saved = localStorage.getItem(key);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        skippedQueue = parsed.skipped || [];
-      } else {
-        skippedQueue = [];
-      }
-      collectibles = games[currentGame];
-      rebuildCollectiblesQueue();
-      showCurrentCollectible();
-    };
-  
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let currentDeltaX = 0;
-    const image = document.getElementById("collectibleImage");
-  
-    image.addEventListener("touchstart", (e) => {
-      touchStartX = e.changedTouches[0].screenX;
-      touchStartY = e.changedTouches[0].screenY;
-      image.style.transition = "none";
-    });
-    const threshold = 50; 
-    image.addEventListener("touchmove", (e) => {
-      const touchCurrentX = e.changedTouches[0].screenX;
-      currentDeltaX = touchCurrentX - touchStartX;
-      if (currentDeltaX > threshold) {
-        currentDeltaX = threshold;
-      } else if (currentDeltaX < -threshold) {
-        currentDeltaX = -threshold;
-      }
-      const rotation = currentDeltaX * 0.05;
-      image.style.transform = `translateX(${currentDeltaX}px) rotate(${rotation}deg)`;
-    });
-    
-    image.addEventListener("touchend", (e) => {
-      image.style.transition = "transform 0.5s ease-out";
-      
-      const threshold = 50;
-      if (currentDeltaX >= threshold) {
-        triggerOverlay("overlay-green");
-      
-        const targetX = window.innerWidth;
-        const targetRotation = 20;
-        image.style.transform = `translateX(${targetX}px) rotate(${targetRotation}deg)`;
-        
-        image.addEventListener("transitionend", function handler() {
-          image.removeEventListener("transitionend", handler);
-          swipeActionComplete("right");
-        });
-      } else if (currentDeltaX <= -threshold) {
-        triggerOverlay("overlay-red");
-      
-        const targetX = -window.innerWidth;
-        const targetRotation = -20;
-        image.style.transform = `translateX(${targetX}px) rotate(${targetRotation}deg)`;
-        
-        image.addEventListener("transitionend", function handler() {
-          image.removeEventListener("transitionend", handler);
-          swipeActionComplete("left");
-        });
-      } else {
-        image.style.transition = "transform 0.3s ease";
-        image.style.transform = "translateX(0) rotate(0)";
-      }
-      currentDeltaX = 0;
-    });
-  
+
     function startNudgeAnimationIfNeeded() {
-      if (collectiblesQueue.length === collectibles.length) {
+      if (window.collectiblesQueue.length === window.collectibles.length) {
         const img = document.getElementById("collectibleImage");
         img.classList.add("nudge");
         function removeNudge() {
@@ -463,104 +372,77 @@
         img.addEventListener("click", removeNudge);
       }
     }
-    document.getElementById("undoBtn").onclick = () => {
-      if (!lastAction || !lastCollectible) return;
-      
-      const user = localStorage.getItem("sky_user") || "guest";
-      const key = `sky_progress_${user}_${currentGame}`;
-      let saved = JSON.parse(localStorage.getItem(key)) || { collected: [], queue: [], skipped: [] };
-    
-      if (lastAction === "have") {
-        saved.collected = saved.collected.filter(i => i.name !== lastCollectible.name);
-        collectiblesQueue.unshift(lastCollectible);
-      } else if (lastAction === "dont") {
-        const index = skippedQueue.findIndex(i => i.name === lastCollectible.name);
-        if (index !== -1) {
-          skippedQueue.splice(index, 1);
-        }
-        collectiblesQueue.unshift(lastCollectible);
-      }
-      localStorage.setItem(key, JSON.stringify({
-        collected: saved.collected,
-        queue: collectiblesQueue,
-        skipped: skippedQueue
-      }));
-      lastAction = null;
-      lastCollectible = null;
-      showCurrentCollectible();
-    };
+
     function triggerOverlay(className) {
       const overlay = document.getElementById("swipeOverlay");
       overlay.classList.remove("overlay-green", "overlay-red");
+      // Force reflow to restart the animation
       void overlay.offsetWidth;
       overlay.classList.add(className);
     }
+
     function swipeAction(direction) {
       const img = document.getElementById("collectibleImage");
       img.style.transform = "";
-      
-      const current = collectiblesQueue[0];
+
+      const current = window.collectiblesQueue[0];
       if (!current) return;
-      
+
       lastAction = direction === "right" ? "have" : "dont";
       lastCollectible = current;
-      
+
       triggerOverlay(direction === "right" ? "overlay-green" : "overlay-red");
-      
+
       const animationClass = direction === "right" ? "animate-right" : "animate-left";
       img.classList.add(animationClass);
-      
+
       const handler = () => {
         img.classList.remove(animationClass);
         img.style.transform = "translateX(0) rotate(0)";
         img.removeEventListener("animationend", handler);
-        
-        collectiblesQueue.shift();
-        console.log("Queue after shift:", collectiblesQueue.length);
-        
+
+        window.collectiblesQueue.shift();
+        console.log("Queue after shift:", window.collectiblesQueue.length);
+
         if (direction === "right") {
+          current.quantity = 1;
           const user = localStorage.getItem("sky_user") || "guest";
-          const key = `sky_progress_${user}_${currentGame}`;
+          const key = `sky_progress_${user}_${window.currentGame}`;
           const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], queue: [], skipped: [] };
           if (!saved.collected.find(i => i.name === current.name)) {
             saved.collected.push(current);
           }
           localStorage.setItem(key, JSON.stringify({
             collected: saved.collected,
-            queue: collectiblesQueue,
-            skipped: skippedQueue
+            queue: window.collectiblesQueue,
+            skipped: window.skippedQueue
           }));
         } else {
-          skippedQueue.push(current);
+          window.skippedQueue.push(current);
           saveProgress();
         }
-        if (collectiblesQueue.length === 0) {
+        if (window.collectiblesQueue.length === 0) {
           console.log("Queue empty, reinitializing...");
-          collectiblesQueue = [...games[currentGame]];
+          window.collectiblesQueue = [...games[window.currentGame]];
         }
         showCurrentCollectible();
       };
       img.addEventListener("animationend", handler);
     }
-  
+
     function swipeActionComplete(direction) {
       const img = document.getElementById("collectibleImage");
       img.style.transition = "";
       img.style.transform = "translateX(0) rotate(0)";
-    
-      const current = collectiblesQueue.shift();
 
-      if (!current) {
-        console.warn("No collectible available. Aborting swipeActionComplete.");
-        return;
-      }
-      
+      const current = window.collectiblesQueue.shift();
       lastAction = direction === "right" ? "have" : "dont";
       lastCollectible = current;
-    
+
       if (direction === "right") {
+        current.quantity = 1;
         const user = localStorage.getItem("sky_user") || "guest";
-        const key = `sky_progress_${user}_${currentGame}`;
+        const key = `sky_progress_${user}_${window.currentGame}`;
         const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], skipped: [] };
         if (!saved.collected.find(i => i.name === current.name)) {
           saved.collected.push(current);
@@ -571,17 +453,17 @@
         }));
       } else {
         const user = localStorage.getItem("sky_user") || "guest";
-        const key = `sky_progress_${user}_${currentGame}`;
+        const key = `sky_progress_${user}_${window.currentGame}`;
         let saved = JSON.parse(localStorage.getItem(key)) || { collected: [], skipped: [] };
         saved.skipped.push(current);
         localStorage.setItem(key, JSON.stringify(saved));
       }
       rebuildCollectiblesQueue();
-      if (collectiblesQueue.length === 0) {
+      if (window.collectiblesQueue.length === 0) {
         const user = localStorage.getItem("sky_user") || "guest";
-        const key = `sky_progress_${user}_${currentGame}`;
+        const key = `sky_progress_${user}_${window.currentGame}`;
         const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], skipped: [] };
-        collectiblesQueue = games[currentGame].filter(skylander => {
+        window.collectiblesQueue = games[window.currentGame].filter(skylander => {
           const nameCompare = skylander.name.trim().toLowerCase();
           const alreadyCollected = saved.collected.some(item =>
             item.name.trim().toLowerCase() === nameCompare
@@ -594,16 +476,16 @@
       }
       showCurrentCollectible();
     }
-  
+
     function rebuildCollectiblesQueue() {
       const user = localStorage.getItem("sky_user") || "guest";
-      const key = `sky_progress_${user}_${currentGame}`;
+      const key = `sky_progress_${user}_${window.currentGame}`;
       let parsed = { collected: [], skipped: [] };
       const saved = localStorage.getItem(key);
       if (saved) {
         parsed = JSON.parse(saved);
       }
-      collectiblesQueue = games[currentGame].filter(skylander => {
+      window.collectiblesQueue = games[window.currentGame].filter(skylander => {
         const nameCompare = skylander.name.trim().toLowerCase();
         const alreadyCollected = parsed.collected.some(item =>
           item.name.trim().toLowerCase() === nameCompare
@@ -615,38 +497,41 @@
       });
     }
 
+    // *******************************
+    // DOMContentLoaded & Event Bindings
+    // *******************************
+
     document.addEventListener('DOMContentLoaded', () => {
       const gameSelector = document.getElementById("gameSelector");
-    
-      // Read the saved game value from localStorage (if exists) and update dropdown
+
+      // Set the initial game based on saved value or default
       let savedGame = localStorage.getItem('selectedGame');
       let currentGame;
       if (savedGame) {
         currentGame = savedGame;
-        gameSelector.value = savedGame;  // Update dropdown with saved game
+        gameSelector.value = savedGame;
       } else {
         currentGame = gameSelector.value;
         localStorage.setItem('selectedGame', currentGame);
       }
-    
-      // Initialize global variables based on the current game selection.
+
+      // Initialize global variables on the window
       window.currentGame = currentGame;
       window.collectibles = games[currentGame];
       window.collectiblesQueue = [...games[currentGame]];
       window.skippedQueue = [];
-    
-      // Now that everything is set up, call initializeApp to build your cards.
+
+      // Initialize the app
       initializeApp();
-    
-      // Attach onchange event to update globals and reload collectibles
+
+      // Event bindings for game selector changes
       gameSelector.addEventListener('change', () => {
         currentGame = gameSelector.value;
         localStorage.setItem('selectedGame', currentGame);
         window.currentGame = currentGame;
         window.collectibles = games[currentGame];
         window.collectiblesQueue = [...games[currentGame]];
-    
-        // Optionally, load any saved progress for this game:
+
         const user = localStorage.getItem("sky_user") || "guest";
         const key = `sky_progress_${user}_${currentGame}`;
         const saved = localStorage.getItem(key);
@@ -656,12 +541,114 @@
         } else {
           window.skippedQueue = [];
         }
-    
+
         rebuildCollectiblesQueue();
         showCurrentCollectible();
       });
-    });
 
+      // Button click event bindings
+      document.getElementById("haveItBtn").onclick = () => {
+        swipeAction("right");
+      };
+
+      document.getElementById("dontHaveItBtn").onclick = () => {
+        swipeAction("left");
+      };
+
+      document.getElementById("reviewSkippedBtn").onclick = () => {
+        const user = localStorage.getItem("sky_user") || "guest";
+        const key = `sky_progress_${user}_${currentGame}`;
+        const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], skipped: [] };
+        if (saved.skipped.length > 0) {
+          window.collectiblesQueue = [...saved.skipped];
+          showCurrentCollectible();
+        }
+      };
+
+      document.getElementById("undoBtn").onclick = () => {
+        if (!lastAction || !lastCollectible) return;
+
+        const user = localStorage.getItem("sky_user") || "guest";
+        const key = `sky_progress_${user}_${currentGame}`;
+        let saved = JSON.parse(localStorage.getItem(key)) || { collected: [], queue: [], skipped: [] };
+
+        if (lastAction === "have") {
+          saved.collected = saved.collected.filter(i => i.name !== lastCollectible.name);
+          window.collectiblesQueue.unshift(lastCollectible);
+        } else if (lastAction === "dont") {
+          const index = window.skippedQueue.findIndex(i => i.name === lastCollectible.name);
+          if (index !== -1) {
+            window.skippedQueue.splice(index, 1);
+          }
+          window.collectiblesQueue.unshift(lastCollectible);
+        }
+        localStorage.setItem(key, JSON.stringify({
+          collected: saved.collected,
+          queue: window.collectiblesQueue,
+          skipped: window.skippedQueue
+        }));
+        lastAction = null;
+        lastCollectible = null;
+        showCurrentCollectible();
+      };
+
+      // Touch events for swipe functionality on the collectible image
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let currentDeltaX = 0;
+      const image = document.getElementById("collectibleImage");
+      const threshold = 50;
+
+      image.addEventListener("touchstart", (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+        image.style.transition = "none";
+      });
+
+      image.addEventListener("touchmove", (e) => {
+        const touchCurrentX = e.changedTouches[0].screenX;
+        currentDeltaX = touchCurrentX - touchStartX;
+        if (currentDeltaX > threshold) {
+          currentDeltaX = threshold;
+        } else if (currentDeltaX < -threshold) {
+          currentDeltaX = -threshold;
+        }
+        const rotation = currentDeltaX * 0.05;
+        image.style.transform = `translateX(${currentDeltaX}px) rotate(${rotation}deg)`;
+      });
+
+      image.addEventListener("touchend", (e) => {
+        image.style.transition = "transform 0.5s ease-out";
+
+        if (currentDeltaX >= threshold) {
+          triggerOverlay("overlay-green");
+
+          const targetX = window.innerWidth;
+          const targetRotation = 20;
+          image.style.transform = `translateX(${targetX}px) rotate(${targetRotation}deg)`;
+
+          image.addEventListener("transitionend", function handler() {
+            image.removeEventListener("transitionend", handler);
+            swipeActionComplete("right");
+          });
+        } else if (currentDeltaX <= -threshold) {
+          triggerOverlay("overlay-red");
+
+          const targetX = -window.innerWidth;
+          const targetRotation = -20;
+          image.style.transform = `translateX(${targetX}px) rotate(${targetRotation}deg)`;
+
+          image.addEventListener("transitionend", function handler() {
+            image.removeEventListener("transitionend", handler);
+            swipeActionComplete("left");
+          });
+        } else {
+          image.style.transition = "transform 0.3s ease";
+          image.style.transform = "translateX(0) rotate(0)";
+        }
+        currentDeltaX = 0;
+      });
+    });
   </script>
 </body>
 </html>
