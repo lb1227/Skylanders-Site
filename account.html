@@ -90,6 +90,12 @@
       font-size: 1.5rem;
       text-decoration: none;
     }
+    .bottom-mobile-nav a img {
+      width: 55px;    /* Adjust the size as needed */
+      height: auto;   /* Maintains aspect ratio */
+      vertical-align: middle; /* Optional: Aligns with text */
+      margin-top: 7px;
+    }
 
     /* MOBILE MENU */
     .hamburger {
@@ -192,7 +198,9 @@
   <!-- Bottom Mobile Navigation -->
   <nav id="mobileNav" class="bottom-mobile-nav">
     <a href="home.html" title="Home">🏠</a>
-    <a href="inventory.html" title="Inventory">🃏</a>
+    <a href="inventory.html" title="Inventory">
+      <img src="images/inventory.png" alt="Inventory Icon">
+    </a>
     <button class="hamburger" onclick="toggleMobileMenu()">☰</button>
   </nav>
 
