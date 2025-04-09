@@ -118,22 +118,24 @@
     }
     /* Modal styling */
     .modal {
-      display: none;
+      display: none;             /* (remains hidden until triggered) */
       position: fixed;
       z-index: 1;
+      top: 60px;                 /* Leaves room for top nav */
+      bottom: 60px;              /* Leaves room for bottom nav */
       left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
+      right: 0;
       background-color: rgba(0,0,0,0.5);
-      padding-top: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .modal-content {
       background-color: #292929;
-      margin: 5% auto;
       padding: 20px;
       border: 1px solid #888;
       width: 80%;
+      max-width: 500px;      /* Optional: caps the width */
       border-radius: 12px;
       color: white;
     }
