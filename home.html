@@ -614,26 +614,48 @@
     }
   
     document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.group-section').forEach(section => {
-        const header = section.querySelector('.group-header');
-        if (header) {
-          header.addEventListener('click', () => {
-            section.classList.toggle('collapsed');
-            if (!section.classList.contains('collapsed')) {
-              localStorage.setItem('lastOpenGroup', section.id);
-            } else {
-              localStorage.removeItem('lastOpenGroup');
-            }
-          });
-        }
-      });
-      const lastOpenGroup = localStorage.getItem('lastOpenGroup');
-      if (lastOpenGroup) {
-        const section = document.getElementById(lastOpenGroup);
-        if (section) {
-          section.classList.remove('collapsed');
+      console.log('DOM fully loaded. Attaching collapsible group handlers.');
+    
+      // Restore the saved open group (if any)
+      const savedGroupId = localStorage.getItem('lastOpenGroup');
+      console.log('Last open group from storage:', savedGroupId);
+      if (savedGroupId) {
+        const savedGroup = document.getElementById(savedGroupId);
+        if (savedGroup) {
+          // Ensure the saved group is open (i.e. not collapsed)
+          savedGroup.classList.remove('collapsed');
+          console.log('Opened group:', savedGroupId);
+        } else {
+          console.warn('No element found with id', savedGroupId);
         }
       }
+    
+      // Attach click handlers to collapsible groups
+      const groupSections = document.querySelectorAll('.group-section');
+      groupSections.forEach(group => {
+        const header = group.querySelector('.group-header');
+        if (header) {
+          header.addEventListener('click', () => {
+            // Toggle the group's collapsed state
+            group.classList.toggle('collapsed');
+            
+            if (!group.classList.contains('collapsed')) {
+              // Group is now open: save its ID
+              localStorage.setItem('lastOpenGroup', group.id);
+              console.log('Group opened:', group.id);
+            } else {
+              // Group is now closed: remove from storage if it was the saved one
+              const storedId = localStorage.getItem('lastOpenGroup');
+              if (storedId === group.id) {
+                localStorage.removeItem('lastOpenGroup');
+                console.log('Group closed and removed from storage:', group.id);
+              }
+            }
+          });
+        } else {
+          console.warn('No header found in group:', group);
+        }
+      });
     });
   </script>
 </body>
