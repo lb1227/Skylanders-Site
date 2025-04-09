@@ -468,10 +468,15 @@
           card.dataset.game = game;
           if (isOwned) {
             card.classList.add("owned");
-            if (found.condition === "in_box") {
-              card.classList.add("in_box");
-            } else if (found.condition === "poor") {
-              card.classList.add("poor");
+            // If the condition has changed and we're in selection mode, mark the card as removed (grey)
+            if (selectionMode && found.conditionChanged) {
+              card.classList.add("removed");
+            } else {
+              if (found.condition === "in_box") {
+                card.classList.add("in_box");
+              } else if (found.condition === "poor") {
+                card.classList.add("poor");
+              }
             }
           }
           card.innerHTML = `
@@ -479,23 +484,21 @@
             <div><strong>${char.name}</strong></div>
             ${!selectionMode && isOwned ? `<button class="remove-button" onclick="event.stopPropagation(); removeFromInventory('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}')">Remove</button>` : ''}
           `;
+          // Existing event-listener and click handling code ...
           if (selectionMode) {
             card.onclick = function(e) {
               e.stopPropagation();
               if (swipeConfirmed) return;
-    
-                // If the card is already owned, toggle its "removed" state.
-                if (card.classList.contains("owned")) {
-                  // If it’s already marked as removed, unmark it (i.e. keep as owned)
-                  if (card.classList.contains("removed")) {
-                    card.classList.remove("removed");
-                  } else {
-                    card.classList.add("removed");
-                  }
+              if (card.classList.contains("owned")) {
+                // Toggle "removed" state on click even for owned cards
+                if (card.classList.contains("removed")) {
+                  card.classList.remove("removed");
                 } else {
-                  // For cards that are not owned, toggle the "selected" state to mark them for adding.
-                  card.classList.toggle("selected");
+                  card.classList.add("removed");
                 }
+              } else {
+                card.classList.toggle("selected");
+              }
             };
           } else {
             card.onclick = () => openModal(char);
@@ -635,23 +638,26 @@
       const saved = localStorage.getItem(key);
       if (saved) parsed = JSON.parse(saved);
       
-      const isOwned = parsed.collected.some(item => item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase());
+      const isOwned = parsed.collected.some(item => 
+        item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase()
+      );
       
       if (newValue === "yes" && !isOwned) {
-        // Card is being set to owned; get the condition value or default to "good"
         const conditionSelect = document.getElementById("conditionSelect");
         const conditionValue = conditionSelect ? conditionSelect.value : "good";
         addToInventory(skylander, skylander.game, conditionValue);
       } else if (newValue === "no" && isOwned) {
-        // Card is being set to not-owned; remove it from the inventory
         removeFromInventory(skylander.name, skylander.game);
       } else if (newValue === "yes" && isOwned) {
-        // The card is already owned; update its condition if there has been any change
         const conditionSelect = document.getElementById("conditionSelect");
         if (conditionSelect) {
           parsed.collected = parsed.collected.map(item => {
             if (item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase()) {
-              return { ...item, condition: conditionSelect.value };
+              // If the condition has changed from what we already had, flag it.
+              if (item.condition !== conditionSelect.value) {
+                item.condition = conditionSelect.value;
+                item.conditionChanged = true;  // Flag condition change
+              }
             }
             return item;
           });
