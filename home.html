@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
   <script src="data.js"></script>
-  <link rel="icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAAAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAGAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////AP///wD///8A////AP///wD///8A" type="image/x-icon" />
+  <!-- Removed desktop-specific icon link -->
   <meta charset="UTF-8" />
+  <!-- Mobile-only meta tags -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -35,21 +36,16 @@
       background-color: var(--bg);
       color: var(--text);
     }
-    #logoutBtn {
-      padding: 0.3rem 0.6rem;
-      margin: 0;
-    }
-    /* Main container for everything */
-   .container {
-      width: 100%;             /* Use 95% of the viewport width by default */
-      margin: 0 auto;      
+    /* Container and wrapper for mobile */
+    .container {
+      width: 100%;
+      margin: 0 auto;
       background: var(--card-bg);
       padding: 1rem;
       border-radius: 12px;
       box-shadow: 0 0 20px rgba(0,0,0,0.4);
       text-align: center;
     }
-    /* The wrapper ensures all content is centered vertically and horizontally */
     .wrapper {
       display: flex;
       flex-direction: column;
@@ -84,21 +80,20 @@
       border-radius: 10px;
       margin-bottom: 0.5rem;
     }
-    /* Bottom Mobile Navigation */
+    /* Mobile Navigation Styles */
     .hamburger {
-        display: block;
-        background-color: var(--nav-bg);
-        color: white;
-        border: none;
-        font-size: 1.5rem;
-        padding: 0.5rem;
-        cursor: pointer;
-        position: relative;
-        top: -7px; /* Adjust the value as needed */
-      }
+      display: block;
+      background-color: var(--nav-bg);
+      color: white;
+      border: none;
+      font-size: 1.5rem;
+      padding: 0.5rem;
+      cursor: pointer;
+      position: relative;
+      top: -7px;
+    }
     .bottom-mobile-nav {
       text-decoration: none;
-      display: none;
       position: fixed;
       bottom: 0;
       left: 0;
@@ -117,30 +112,56 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 40px;       /* Fixed height */
-      width: 40px;        /* Fixed width */
-      line-height: 40px;  /* Ensures text is centered vertically */
+      height: 40px;
+      width: 40px;
+      line-height: 40px;
       background: none;
       border: none;
       cursor: pointer;
+      font-size: 1.5rem;
     }
-
     .bottom-mobile-nav a img,
     .bottom-mobile-nav button img {
-      text-decoration: none;
       max-height: 100%;
       max-width: 100%;
       object-fit: contain;
       display: block;
     }
-    
-    /* Optionally, if you're using emoji or text, you might want to set a line-height */
-    .bottom-mobile-nav a,
-    .bottom-mobile-nav button {
-      font-size: 1.5rem;
-      line-height: 40px; /* Same as the height */
+    /* Mobile menu for additional options */
+    .mobile-menu {
+      position: fixed;
+      bottom: 60px;
+      right: 20px;
+      background-color: var(--nav-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+      padding: 1rem;
+      display: none;
+      flex-direction: column;
+      gap: 0.5rem;
+      z-index: 1001;
+      transition: opacity 0.3s ease, transform 0.3s ease;
     }
-
+    .mobile-menu.show {
+      display: flex;
+    }
+    .mobile-menu button {
+      background-color: var(--card-bg);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .mobile-menu button:hover {
+      background-color: var(--button-hover);
+    }
+    /* Additional page elements */
+    #logoutBtn {
+      padding: 0.3rem 0.6rem;
+      margin: 0;
+    }
     @media (max-width: 768px) {
       #collectibleContainer {
         width: 100%;
@@ -153,7 +174,6 @@
         max-width: 100%;
         margin-bottom: 1rem;
       }
-      /* Adjust the button container to have a smaller gap */
       #collectibleContainer > div {
         display: flex;
         justify-content: center;
@@ -161,105 +181,21 @@
         margin: 1rem 0;
       }
       html, body {
-          height: 100%;
-          overflow-y: hidden;    /* Prevent vertical scroll */
-          overflow-x: auto;      /* Allow horizontal swipe */
-          touch-action: pan-x;   /* Enable left/right swiping only */
-        }
-      /* Bottom Mobile Navigation */
-      .bottom-mobile-nav {
-        display: flex;
-      }
-    
-      /* Hide top nav on mobile */
-      nav:not(.bottom-mobile-nav) {
-        display: none;
-      }
-      nav {
-        position: fixed;
-        bottom: 0;
-        top: auto;
-        width: 100%;
-        padding: 0.5rem 1rem;
-        background-color: var(--nav-bg);
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        z-index: 1000;
-      }
-
-      nav h2 {
-        display: none;
-      }
-      h2 {
-        display: none; /* Hide the welcome text on mobile */
-      }
-      .nav-links {
-        display: none;
-        flex-direction: column;
-        background-color: #000;
-        position: absolute;
-        top: 60px;
-        right: 0;
-        width: 100%;
-        padding: 1rem;
-        justify-content: space-around;
-      }
-      .nav-icon {
-        font-size: 0;
-        width: 40px;
-        height: 40px;
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
-      }
-      .nav-links.show {
-        display: flex;
-      }
-
-      .mobile-menu {
-        position: fixed;
-        bottom: 60px;
-        right: 20px;
-        background-color: var(--nav-bg);
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.6);
-        padding: 1rem;
-        display: none;
-        flex-direction: column;
-        gap: 0.5rem;
-        z-index: 1001;
-        transition: opacity 0.3s ease, transform 0.3s ease;
-      }
-      
-      .mobile-menu.show {
-        display: flex;
-      }
-      
-      .mobile-menu button {
-        background-color: var(--card-bg);
-        color: white;
-        border: none;
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        font-size: 0.9rem;
-        cursor: pointer;
-      }
-    
-      .mobile-menu button:hover {
-        background-color: var(--button-hover);
+        height: 100%;
+        overflow-y: hidden;
+        overflow-x: auto;
+        touch-action: pan-x;
       }
     }
+    /* Animations and overlay */
     @keyframes swipeNudge {
       0% { transform: translateX(0); }
       50% { transform: translateX(-20px); }
       100% { transform: translateX(0); }
     }
-    
     .nudge {
       animation: swipeNudge 1s ease-in-out infinite;
     }
-   
     #swipeOverlay {
       position: fixed;
       top: 0;
@@ -270,7 +206,6 @@
       z-index: 999;
       opacity: 0;
     }
-
     @keyframes swipeLeft {
       0% { transform: translateX(0) rotate(0); opacity: 1; }
       50% { transform: translateX(-50vw) rotate(-10deg); opacity: 0.5; }
@@ -287,35 +222,22 @@
     .animate-right {
       animation: swipeRight 0.5s ease forwards;
     }
-    
     .overlay-green {
-      background: rgba(76, 175, 80, 0.3); /* green tint */
+      background: rgba(76, 175, 80, 0.3);
       animation: fadeOverlay 0.5s ease-out forwards;
     }
-    
     .overlay-red {
-      background: rgba(229, 57, 53, 0.3); /* red tint */
+      background: rgba(229, 57, 53, 0.3);
       animation: fadeOverlay 0.5s ease-out forwards;
     }
-    
     @keyframes fadeOverlay {
-      0% {
-        opacity: 1;
-      }
-      100% {
-        opacity: 0;
-      }
+      0% { opacity: 1; }
+      100% { opacity: 0; }
     }
-      </style>
+  </style>
 </head>
 <body>
-  <nav>
-    <div id="navMenu" class="nav-links">
-      <a href="inventory.html" class="nav-button">Inventory</a>
-      <a href="totals.html" class="nav-button">Totals</a>
-      <button id="logoutBtn" onclick="logout()" style="background-color: var(--button); color: white; border-radius: 8px; font-weight: bold;">Logout</button>
-    </div>
-  </nav>
+  <!-- Removed desktop (top) navigation -->
 
   <div class="wrapper">
     <div class="container">
@@ -352,191 +274,168 @@
     </div>
   </div>
 
-    <nav id= "mobileNav"class="bottom-mobile-nav">
-      <a href="home.html" title="Home">🏠</a>
-      <a href="inventory.html" title="Inventory">🃏</a>
-      <button class="hamburger" onclick="toggleMobileMenu()">☰</button>
-    </nav>
+  <!-- Mobile Navigation -->
+  <nav id="mobileNav" class="bottom-mobile-nav">
+    <a href="home.html" title="Home">🏠</a>
+    <a href="inventory.html" title="Inventory">🃏</a>
+    <button class="hamburger" onclick="toggleMobileMenu()">☰</button>
+  </nav>
 
-    <div id="mobileMenu" class="mobile-menu">
-      <button onclick="goToAccount()">Account</button>
-      <button onclick="logout()">Logout</button>
-    </div>
+  <div id="mobileMenu" class="mobile-menu">
+    <button onclick="goToAccount()">Account</button>
+    <button onclick="logout()">Logout</button>
+  </div>
 
-    <script>
-      let lastAction = null;       // "have" or "dont"
-      let lastCollectible = null;  // The collectible that was last processed
-      function initializeApp() {
-        const user = localStorage.getItem("sky_user");
-        const logoutBtn = document.getElementById("logoutBtn");
+  <script>
+    // JavaScript remains unchanged
+    let lastAction = null;       // "have" or "dont"
+    let lastCollectible = null;  // The collectible that was last processed
+    function initializeApp() {
+      const user = localStorage.getItem("sky_user");
+      const logoutBtn = document.getElementById("logoutBtn");
+  
+      if (user && user !== "guest") {
+        logoutBtn.style.display = "inline-block";
+      } else {
+        logoutBtn.style.display = "none";
+      }
+  
+      // Load saved progress
+      const key = `sky_progress_${user}_${currentGame}`;
+      const saved = localStorage.getItem(key);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        skippedQueue = parsed.skipped || [];
+      } else {
+        skippedQueue = [];
+      }
+      rebuildCollectiblesQueue();
+      showCurrentCollectible();
+      if (collectiblesQueue.length === collectibles.length) {
+        startNudgeAnimationIfNeeded();
+      }
+    }
+  
+    window.onload = initializeApp;
+  
+    function logout() {
+      localStorage.removeItem("sky_user");
+      window.location.href = "login.html";
+    }
+    function toggleMobileMenu() {
+      const menu = document.getElementById("mobileMenu");
+      menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+    }
+    function goToAccount() {
+      window.location.href = "account.html";
+    }
+    const games = window.games;
+    const elementMap = window.elementMap;
+    let currentGame = document.getElementById("gameSelector").value;
+    let collectibles = games[currentGame];
+    let collectiblesQueue = [...collectibles];
+    let skippedQueue = [];
+  
+    function showCurrentCollectible() {
+      const current = collectiblesQueue[0];
+      const img = document.getElementById("collectibleImage");
+      const name = document.getElementById("collectibleName");
+      const reviewBtn = document.getElementById("reviewSkippedBtn");
     
-        if (user && user !== "guest") {
-          logoutBtn.style.display = "inline-block";
-        } else {
-          logoutBtn.style.display = "none";
-        }
+      if (current && current.image) {
+        img.src = current.image;
+        name.textContent = current.name;
+        reviewBtn.style.display = "none";
+        img.style.display = "block";
+      } else if (skippedQueue.length > 0) {
+        reviewBtn.style.display = "inline-block";
+        img.src = "";
+        name.textContent = "";
+        img.style.display = "none";
+      } else {
+        img.src = "";
+        name.textContent = "";
+        reviewBtn.style.display = "none";
+        img.style.display = "none";
+      }
+    }
+  
+    function saveProgress() {
+      const user = localStorage.getItem("sky_user") || "guest";
+      const key = `sky_progress_${user}_${currentGame}`;
+      const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], skipped: [] };
+      localStorage.setItem(key, JSON.stringify({
+        collected: saved.collected,
+        skipped: saved.skipped
+      }));
+    }
+  
+    document.getElementById("haveItBtn").onclick = () => {
+      swipeAction("right");
+    };
     
-        // Load saved progress
-        const key = `sky_progress_${user}_${currentGame}`;
-        const saved = localStorage.getItem(key);
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          // Keep any skipped data you might need
-          skippedQueue = parsed.skipped || [];
-        } else {
-          skippedQueue = [];
-        }
-        // Now rebuild the queue dynamically:
-        rebuildCollectiblesQueue();
-        
-        // Then display the current collectible.
+    document.getElementById("dontHaveItBtn").onclick = () => {
+      swipeAction("left");
+    };
+  
+    document.getElementById("reviewSkippedBtn").onclick = () => {
+      const user = localStorage.getItem("sky_user") || "guest";
+      const key = `sky_progress_${user}_${currentGame}`;
+      const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], skipped: [] };
+      if (saved.skipped.length > 0) {
+        collectiblesQueue = [...saved.skipped];
         showCurrentCollectible();
-    
-        // If no collectible has been chosen yet, start the nudge animation.
-        // (Assuming collectibles and collectiblesQueue are already defined)
-        if (collectiblesQueue.length === collectibles.length) {
-          startNudgeAnimationIfNeeded();
-        }
       }
-    
-      window.onload = initializeApp;
-
-      function logout() {
-        localStorage.removeItem("sky_user");
-        window.location.href = "login.html";
+    };
+  
+    document.getElementById("gameSelector").onchange = () => {
+      currentGame = document.getElementById("gameSelector").value;
+      const user = localStorage.getItem("sky_user");
+      const key = `sky_progress_${user}_${currentGame}`;
+      const saved = localStorage.getItem(key);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        skippedQueue = parsed.skipped || [];
+      } else {
+        skippedQueue = [];
       }
-      function toggleMobileMenu() {
-          const menu = document.getElementById("mobileMenu");
-          menu.style.display = menu.style.display === "flex" ? "none" : "flex";
-        }
-        
-        function goToAccount() {
-          window.location.href = "account.html";
-        }
-       const games = window.games;
-       const elementMap = window.elementMap;
-       let currentGame = document.getElementById("gameSelector").value;
-       let collectibles = games[currentGame];
-       let collectiblesQueue = [...collectibles];
-       let skippedQueue = [];
- 
-       function showCurrentCollectible() {
-        const current = collectiblesQueue[0];
-        const img = document.getElementById("collectibleImage");
-        const name = document.getElementById("collectibleName");
-        const reviewBtn = document.getElementById("reviewSkippedBtn");
+      collectibles = games[currentGame];
+      rebuildCollectiblesQueue();
+      showCurrentCollectible();
+    };
+  
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let currentDeltaX = 0;
+    const image = document.getElementById("collectibleImage");
+  
+    image.addEventListener("touchstart", (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+      touchStartY = e.changedTouches[0].screenY;
+      image.style.transition = "none";
+    });
+    const threshold = 50; 
+    image.addEventListener("touchmove", (e) => {
+      const touchCurrentX = e.changedTouches[0].screenX;
+      currentDeltaX = touchCurrentX - touchStartX;
+      if (currentDeltaX > threshold) {
+        currentDeltaX = threshold;
+      } else if (currentDeltaX < -threshold) {
+        currentDeltaX = -threshold;
+      }
+      const rotation = currentDeltaX * 0.05;
+      image.style.transform = `translateX(${currentDeltaX}px) rotate(${rotation}deg)`;
+    });
+    
+    image.addEventListener("touchend", (e) => {
+      image.style.transition = "transform 0.5s ease-out";
       
-        if (current && current.image) {
-          // Show the current collectible
-          img.src = current.image;
-          name.textContent = current.name;
-          reviewBtn.style.display = "none";
-          img.style.display = "block";
-        } else if (skippedQueue.length > 0) {
-          // Allow user to review skipped collectibles
-          reviewBtn.style.display = "inline-block";
-          img.src = "";
-          name.textContent = "";
-          img.style.display = "none";
-        } else {
-          // No collectible to show; clear image and text without showing a default
-          img.src = "";
-          name.textContent = "";
-          reviewBtn.style.display = "none";
-          img.style.display = "none";
-        }
-      }
-
- 
-       function saveProgress() {
-        const user = localStorage.getItem("sky_user") || "guest";
-        const key = `sky_progress_${user}_${currentGame}`;
-        // If there's already saved progress, keep collected and skipped; ignore queue.
-        const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], skipped: [] };
-        localStorage.setItem(key, JSON.stringify({
-          collected: saved.collected,
-          skipped: saved.skipped
-        }));
-      }
- 
-       document.getElementById("haveItBtn").onclick = () => {
-          swipeAction("right");
-        };
-        
-        document.getElementById("dontHaveItBtn").onclick = () => {
-          swipeAction("left");
-        };
- 
-       document.getElementById("reviewSkippedBtn").onclick = () => {
-        const user = localStorage.getItem("sky_user") || "guest";
-        const key = `sky_progress_${user}_${currentGame}`;
-        const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], skipped: [] };
-        if (saved.skipped.length > 0) {
-          // Instead of merging skippedQueue into the main queue,
-          // load them separately for review.
-          collectiblesQueue = [...saved.skipped];
-          showCurrentCollectible();
-        }
-      };
- 
-       document.getElementById("gameSelector").onchange = () => {
-        currentGame = document.getElementById("gameSelector").value;
-        const user = localStorage.getItem("sky_user");
-        const key = `sky_progress_${user}_${currentGame}`;
-        const saved = localStorage.getItem(key);
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          skippedQueue = parsed.skipped || [];
-        } else {
-          skippedQueue = [];
-        }
-        // Reinitialize the full set of collectibles for the new game.
-        collectibles = games[currentGame];
-        // Instead of loading a saved queue, recalc using our helper:
-        rebuildCollectiblesQueue();
-        showCurrentCollectible();
-      };
- 
-      let touchStartX = 0;
-      let touchStartY = 0;
-      let currentDeltaX = 0;
-      const image = document.getElementById("collectibleImage");
- 
-       // When touch starts, record the starting position
-        image.addEventListener("touchstart", (e) => {
-          touchStartX = e.changedTouches[0].screenX;
-          touchStartY = e.changedTouches[0].screenY;
-          // Remove any transition to follow finger immediately
-          image.style.transition = "none";
-        });
-        const threshold = 50; 
-        // Update the image position as the finger moves
-        image.addEventListener("touchmove", (e) => {
-          const touchCurrentX = e.changedTouches[0].screenX;
-          currentDeltaX = touchCurrentX - touchStartX;
-          // Clamp the value so it never goes beyond ±threshold
-          if (currentDeltaX > threshold) {
-            currentDeltaX = threshold;
-          } else if (currentDeltaX < -threshold) {
-            currentDeltaX = -threshold;
-          }
-          // Optionally add a slight rotation based on delta
-          const rotation = currentDeltaX * 0.05;
-          image.style.transform = `translateX(${currentDeltaX}px) rotate(${rotation}deg)`;
-        });
-        
-        // When touch ends, decide if swipe is far enough to trigger an action
-       image.addEventListener("touchend", (e) => {
-        // Re-enable transition for a smooth end animation
-        image.style.transition = "transform 0.5s ease-out";
-        
-        const threshold = 50;
-        if (currentDeltaX >= threshold) {
-        // Trigger green overlay before animating off-screen
+      const threshold = 50;
+      if (currentDeltaX >= threshold) {
         triggerOverlay("overlay-green");
       
-        const targetX = window.innerWidth; // Off-screen right position
-        const targetRotation = 20; // Adjust as needed
+        const targetX = window.innerWidth;
+        const targetRotation = 20;
         image.style.transform = `translateX(${targetX}px) rotate(${targetRotation}deg)`;
         
         image.addEventListener("transitionend", function handler() {
@@ -544,11 +443,10 @@
           swipeActionComplete("right");
         });
       } else if (currentDeltaX <= -threshold) {
-        // Trigger red overlay before animating off-screen
         triggerOverlay("overlay-red");
       
-        const targetX = -window.innerWidth; // Off-screen left position
-        const targetRotation = -20; // Adjust as needed
+        const targetX = -window.innerWidth;
+        const targetRotation = -20;
         image.style.transform = `translateX(${targetX}px) rotate(${targetRotation}deg)`;
         
         image.addEventListener("transitionend", function handler() {
@@ -556,252 +454,195 @@
           swipeActionComplete("left");
         });
       } else {
-        // Animate back to center if threshold not met
         image.style.transition = "transform 0.3s ease";
         image.style.transform = "translateX(0) rotate(0)";
       }
-        
-        // Reset for the next swipe
-        currentDeltaX = 0;
-      });
-
-      function startNudgeAnimationIfNeeded() {
-        // Assuming collectibles and collectiblesQueue are defined and represent the current game data
-        // If the queue hasn't been modified, it means no collectible has been chosen yet.
-        if (collectiblesQueue.length === collectibles.length) {
-          const img = document.getElementById("collectibleImage");
-          img.classList.add("nudge");
-          
-          // Remove the nudge when the user touches or clicks the image.
-          function removeNudge() {
-            img.classList.remove("nudge");
-            img.removeEventListener("touchstart", removeNudge);
-            img.removeEventListener("click", removeNudge);
-          }
-          
-          img.addEventListener("touchstart", removeNudge);
-          img.addEventListener("click", removeNudge);
+      currentDeltaX = 0;
+    });
+  
+    function startNudgeAnimationIfNeeded() {
+      if (collectiblesQueue.length === collectibles.length) {
+        const img = document.getElementById("collectibleImage");
+        img.classList.add("nudge");
+        function removeNudge() {
+          img.classList.remove("nudge");
+          img.removeEventListener("touchstart", removeNudge);
+          img.removeEventListener("click", removeNudge);
         }
+        img.addEventListener("touchstart", removeNudge);
+        img.addEventListener("click", removeNudge);
       }
-      document.getElementById("undoBtn").onclick = () => {
-        // If there is no last action, do nothing.
-        if (!lastAction || !lastCollectible) return;
-        
-        const user = localStorage.getItem("sky_user") || "guest";
-        const key = `sky_progress_${user}_${currentGame}`;
-        let saved = JSON.parse(localStorage.getItem(key)) || { collected: [], queue: [], skipped: [] };
+    }
+    document.getElementById("undoBtn").onclick = () => {
+      if (!lastAction || !lastCollectible) return;
       
-        if (lastAction === "have") {
-          // Remove the collectible from the "collected" array.
-          saved.collected = saved.collected.filter(i => i.name !== lastCollectible.name);
-          // Reinsert the collectible at the beginning of the queue.
-          collectiblesQueue.unshift(lastCollectible);
-        } else if (lastAction === "dont") {
-          // Remove the collectible from the skipped queue if present.
-          const index = skippedQueue.findIndex(i => i.name === lastCollectible.name);
-          if (index !== -1) {
-            skippedQueue.splice(index, 1);
-          }
-          // Reinsert the collectible at the beginning of the queue.
-          collectiblesQueue.unshift(lastCollectible);
+      const user = localStorage.getItem("sky_user") || "guest";
+      const key = `sky_progress_${user}_${currentGame}`;
+      let saved = JSON.parse(localStorage.getItem(key)) || { collected: [], queue: [], skipped: [] };
+    
+      if (lastAction === "have") {
+        saved.collected = saved.collected.filter(i => i.name !== lastCollectible.name);
+        collectiblesQueue.unshift(lastCollectible);
+      } else if (lastAction === "dont") {
+        const index = skippedQueue.findIndex(i => i.name === lastCollectible.name);
+        if (index !== -1) {
+          skippedQueue.splice(index, 1);
         }
-        
-        // Update localStorage with the reverted state.
-        localStorage.setItem(key, JSON.stringify({
-          collected: saved.collected,
-          queue: collectiblesQueue,
-          skipped: skippedQueue
-        }));
-        
-        // Clear lastAction so that undo only happens once.
-        lastAction = null;
-        lastCollectible = null;
-        
-        // Re-render the current collectible.
-        showCurrentCollectible();
-      };
-      // Helper function to trigger the overlay effect.
-      function triggerOverlay(className) {
-        const overlay = document.getElementById("swipeOverlay");
-        // Remove any existing overlay class
-        overlay.classList.remove("overlay-green", "overlay-red");
-        // Force reflow to restart the animation (if needed)
-        void overlay.offsetWidth;
-        // Add the new class to trigger animation
-        overlay.classList.add(className);
+        collectiblesQueue.unshift(lastCollectible);
       }
-      function swipeAction(direction) {
-        const img = document.getElementById("collectibleImage");
-        // Clear any inline transform from touchmove
-        img.style.transform = "";
-        
-        // Instead of shifting immediately, get the current collectible without removing it:
-        const current = collectiblesQueue[0];
-        if (!current) return;
-        
-        // Store the action for later use
-        lastAction = direction === "right" ? "have" : "dont";
-        lastCollectible = current;
-        
-        // Trigger overlay based on direction
-        triggerOverlay(direction === "right" ? "overlay-green" : "overlay-red");
-        
-        // Determine the appropriate animation class
-        const animationClass = direction === "right" ? "animate-right" : "animate-left";
-        img.classList.add(animationClass);
-        
-        // Set up the animationend handler:
-        const handler = () => {
-          img.classList.remove(animationClass);
-          // Reset the transform for the new image
-          img.style.transform = "translateX(0) rotate(0)";
-          img.removeEventListener("animationend", handler);
-          
-          // Now remove the current collectible from the queue:
-          collectiblesQueue.shift();
-          console.log("Queue after shift:", collectiblesQueue.length);
-          
-          // Update localStorage and/or skipped queue based on the swipe direction:
-          if (direction === "right") {
-            current.quantity = 1;
-            const user = localStorage.getItem("sky_user") || "guest";
-            const key = `sky_progress_${user}_${currentGame}`;
-            const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], queue: [], skipped: [] };
-            if (!saved.collected.find(i => i.name === current.name)) {
-              saved.collected.push(current);
-            }
-            localStorage.setItem(key, JSON.stringify({
-              collected: saved.collected,
-              queue: collectiblesQueue,
-              skipped: skippedQueue
-            }));
-          } else {
-            skippedQueue.push(current);
-            saveProgress();
-          }
-          
-          // If the queue is empty, consider reinitializing:
-          if (collectiblesQueue.length === 0) {
-            console.log("Queue empty, reinitializing...");
-            collectiblesQueue = [...games[currentGame]];
-          }
-          
-          showCurrentCollectible();
-        };
-        
-        img.addEventListener("animationend", handler);
-      }
-
-      function swipeActionComplete(direction) {
-        // Reset any image transitions
-        const img = document.getElementById("collectibleImage");
-        img.style.transition = "";
+      localStorage.setItem(key, JSON.stringify({
+        collected: saved.collected,
+        queue: collectiblesQueue,
+        skipped: skippedQueue
+      }));
+      lastAction = null;
+      lastCollectible = null;
+      showCurrentCollectible();
+    };
+    function triggerOverlay(className) {
+      const overlay = document.getElementById("swipeOverlay");
+      overlay.classList.remove("overlay-green", "overlay-red");
+      void overlay.offsetWidth;
+      overlay.classList.add(className);
+    }
+    function swipeAction(direction) {
+      const img = document.getElementById("collectibleImage");
+      img.style.transform = "";
+      
+      const current = collectiblesQueue[0];
+      if (!current) return;
+      
+      lastAction = direction === "right" ? "have" : "dont";
+      lastCollectible = current;
+      
+      triggerOverlay(direction === "right" ? "overlay-green" : "overlay-red");
+      
+      const animationClass = direction === "right" ? "animate-right" : "animate-left";
+      img.classList.add(animationClass);
+      
+      const handler = () => {
+        img.classList.remove(animationClass);
         img.style.transform = "translateX(0) rotate(0)";
-      
-        // Remove the current collectible from the dynamic queue.
-        const current = collectiblesQueue.shift();
-        lastAction = direction === "right" ? "have" : "dont";
-        lastCollectible = current;
-      
+        img.removeEventListener("animationend", handler);
+        
+        collectiblesQueue.shift();
+        console.log("Queue after shift:", collectiblesQueue.length);
+        
         if (direction === "right") {
-          // Process collecting the Skylander:
           current.quantity = 1;
           const user = localStorage.getItem("sky_user") || "guest";
           const key = `sky_progress_${user}_${currentGame}`;
-          const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], skipped: [] };
+          const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], queue: [], skipped: [] };
           if (!saved.collected.find(i => i.name === current.name)) {
             saved.collected.push(current);
           }
           localStorage.setItem(key, JSON.stringify({
             collected: saved.collected,
-            skipped: saved.skipped // keep skipped as-is
+            queue: collectiblesQueue,
+            skipped: skippedQueue
           }));
         } else {
-          // For left swipe, add the Skylander to skipped.
-          const user = localStorage.getItem("sky_user") || "guest";
-          const key = `sky_progress_${user}_${currentGame}`;
-          let saved = JSON.parse(localStorage.getItem(key)) || { collected: [], skipped: [] };
-          saved.skipped.push(current);
-          localStorage.setItem(key, JSON.stringify(saved));
+          skippedQueue.push(current);
+          saveProgress();
         }
-      
-        // Rebuild the dynamic queue now that we've updated the progress.
-        rebuildCollectiblesQueue();
-      
-        // If the queue becomes empty, you can choose to reset or handle it separately.
         if (collectiblesQueue.length === 0) {
-          // Rebuild the queue from scratch by filtering out collected and skipped Skylanders.
-          const user = localStorage.getItem("sky_user") || "guest";
-          const key = `sky_progress_${user}_${currentGame}`;
-          const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], skipped: [] };
-        
-          collectiblesQueue = games[currentGame].filter(skylander => {
-            const nameCompare = skylander.name.trim().toLowerCase();
-            const alreadyCollected = saved.collected.some(item =>
-              item.name.trim().toLowerCase() === nameCompare
-            );
-            const alreadySkipped = saved.skipped.some(item =>
-              item.name.trim().toLowerCase() === nameCompare
-            );
-            return !alreadyCollected && !alreadySkipped;
-          });
+          console.log("Queue empty, reinitializing...");
+          collectiblesQueue = [...games[currentGame]];
         }
-        
         showCurrentCollectible();
-      }
-
-      function rebuildCollectiblesQueue() {
+      };
+      img.addEventListener("animationend", handler);
+    }
+  
+    function swipeActionComplete(direction) {
+      const img = document.getElementById("collectibleImage");
+      img.style.transition = "";
+      img.style.transform = "translateX(0) rotate(0)";
+    
+      const current = collectiblesQueue.shift();
+      lastAction = direction === "right" ? "have" : "dont";
+      lastCollectible = current;
+    
+      if (direction === "right") {
+        current.quantity = 1;
         const user = localStorage.getItem("sky_user") || "guest";
         const key = `sky_progress_${user}_${currentGame}`;
-        let parsed = { collected: [], skipped: [] };
-        const saved = localStorage.getItem(key);
-        if (saved) {
-          parsed = JSON.parse(saved);
+        const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], skipped: [] };
+        if (!saved.collected.find(i => i.name === current.name)) {
+          saved.collected.push(current);
         }
-        // Rebuild the queue to include only those Skylanders that are not in collected or skipped.
+        localStorage.setItem(key, JSON.stringify({
+          collected: saved.collected,
+          skipped: saved.skipped
+        }));
+      } else {
+        const user = localStorage.getItem("sky_user") || "guest";
+        const key = `sky_progress_${user}_${currentGame}`;
+        let saved = JSON.parse(localStorage.getItem(key)) || { collected: [], skipped: [] };
+        saved.skipped.push(current);
+        localStorage.setItem(key, JSON.stringify(saved));
+      }
+      rebuildCollectiblesQueue();
+      if (collectiblesQueue.length === 0) {
+        const user = localStorage.getItem("sky_user") || "guest";
+        const key = `sky_progress_${user}_${currentGame}`;
+        const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], skipped: [] };
         collectiblesQueue = games[currentGame].filter(skylander => {
           const nameCompare = skylander.name.trim().toLowerCase();
-          const alreadyCollected = parsed.collected.some(item =>
+          const alreadyCollected = saved.collected.some(item =>
             item.name.trim().toLowerCase() === nameCompare
           );
-          const alreadySkipped = parsed.skipped.some(item =>
+          const alreadySkipped = saved.skipped.some(item =>
             item.name.trim().toLowerCase() === nameCompare
           );
           return !alreadyCollected && !alreadySkipped;
         });
       }
-
-      document.addEventListener('DOMContentLoaded', () => {
-        // Attach click listeners to group headers
-        document.querySelectorAll('.group-section').forEach(section => {
-          const header = section.querySelector('.group-header');
-          if (header) {
-            header.addEventListener('click', () => {
-              // Toggle the group's collapsed state
-              section.classList.toggle('collapsed');
-      
-              // If the section is now open, save its ID to localStorage.
-              // You might want only one group open at a time.
-              if (!section.classList.contains('collapsed')) {
-                localStorage.setItem('lastOpenGroup', section.id);
-              } else {
-                // Optionally, if the user closes it, clear the saved value.
-                localStorage.removeItem('lastOpenGroup');
-              }
-            });
-          }
-        });
-      
-        // Restore the last open group on page load
-        const lastOpenGroup = localStorage.getItem('lastOpenGroup');
-        if (lastOpenGroup) {
-          const section = document.getElementById(lastOpenGroup);
-          if (section) {
-            section.classList.remove('collapsed');
-          }
+      showCurrentCollectible();
+    }
+  
+    function rebuildCollectiblesQueue() {
+      const user = localStorage.getItem("sky_user") || "guest";
+      const key = `sky_progress_${user}_${currentGame}`;
+      let parsed = { collected: [], skipped: [] };
+      const saved = localStorage.getItem(key);
+      if (saved) {
+        parsed = JSON.parse(saved);
+      }
+      collectiblesQueue = games[currentGame].filter(skylander => {
+        const nameCompare = skylander.name.trim().toLowerCase();
+        const alreadyCollected = parsed.collected.some(item =>
+          item.name.trim().toLowerCase() === nameCompare
+        );
+        const alreadySkipped = parsed.skipped.some(item =>
+          item.name.trim().toLowerCase() === nameCompare
+        );
+        return !alreadyCollected && !alreadySkipped;
+      });
+    }
+  
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.group-section').forEach(section => {
+        const header = section.querySelector('.group-header');
+        if (header) {
+          header.addEventListener('click', () => {
+            section.classList.toggle('collapsed');
+            if (!section.classList.contains('collapsed')) {
+              localStorage.setItem('lastOpenGroup', section.id);
+            } else {
+              localStorage.removeItem('lastOpenGroup');
+            }
+          });
         }
       });
-    </script>
-  </div>
+      const lastOpenGroup = localStorage.getItem('lastOpenGroup');
+      if (lastOpenGroup) {
+        const section = document.getElementById(lastOpenGroup);
+        if (section) {
+          section.classList.remove('collapsed');
+        }
+      }
+    });
+  </script>
 </body>
 </html>
