@@ -414,6 +414,13 @@
     <select id="gameSelect">
     </select>
   </header>
+
+  <div id="progressWrapper" style="margin-top: 1rem;">
+    <div style="color: white; font-size: 0.9rem;" id="progressText">Progress: 0%</div>
+    <div style="background-color: #444; width: 100%; height: 20px; border-radius: 10px; overflow: hidden;">
+      <div id="progressBar" style="height: 100%; background-color: var(--accent); width: 0%; transition: width 0.3s ease;"></div>
+    </div>
+  </div>
   <!-- Combined Inventory Container with Bulk Select Controls -->
   <div class="container">
     <div id="bulkActions" style="display:none;"></div>
@@ -521,6 +528,28 @@
         });
         section.appendChild(cards);
         container.appendChild(section);
+
+        // Update progress bar
+        let total = 0;
+        let owned = 0;
+        Object.entries(window.games).forEach(([game, characters]) => {
+          if (selectedGame && game !== selectedGame) return;
+          total += characters.length;
+          const key = `sky_progress_${user}_${game}`;
+          const saved = localStorage.getItem(key);
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            owned += (parsed.collected || []).length;
+          }
+        });
+        
+        const percentage = total > 0 ? Math.round((owned / total) * 100) : 0;
+        const progressBar = document.getElementById("progressBar");
+        const progressText = document.getElementById("progressText");
+        if (progressBar && progressText) {
+          progressBar.style.width = `${percentage}%`;
+          progressText.textContent = `Progress: ${owned} / ${total} (${percentage}%)`;
+        }
       });
     }
     
