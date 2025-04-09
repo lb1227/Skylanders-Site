@@ -496,11 +496,11 @@
       const saved = localStorage.getItem(key);
       if (saved) {
         const parsed = JSON.parse(saved);
-        parsed.collected = (parsed.collected || []).filter(x => x.name.trim().toLowerCase() !== name.trim().toLowerCase());
-        const character = window.games[game].find(x => x.name.trim().toLowerCase() === name.trim().toLowerCase());
-        if (character && !parsed.queue.some(x => x.name.trim().toLowerCase() === name.trim().toLowerCase())) {
-          parsed.queue.push(character);
-        }
+        // Remove the item from the collected array.
+        parsed.collected = (parsed.collected || []).filter(
+          x => x.name.trim().toLowerCase() !== name.trim().toLowerCase()
+        );
+        // No need to update "queue" in localStorage, since our dynamic rebuild ignores collected.
         localStorage.setItem(key, JSON.stringify(parsed));
         const selectedGame = document.getElementById("gameSelect").value;
         renderInventory(getOwnedOnlyState(), selectedGame);
