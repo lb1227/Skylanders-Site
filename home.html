@@ -468,11 +468,16 @@
         };
  
        document.getElementById("reviewSkippedBtn").onclick = () => {
-         if (skippedQueue.length === 0) return;
-         collectiblesQueue = [...skippedQueue];
-         skippedQueue = [];
-         showCurrentCollectible();
-       };
+        const user = localStorage.getItem("sky_user") || "guest";
+        const key = `sky_progress_${user}_${currentGame}`;
+        const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], skipped: [] };
+        if (saved.skipped.length > 0) {
+          // Instead of merging skippedQueue into the main queue,
+          // load them separately for review.
+          collectiblesQueue = [...saved.skipped];
+          showCurrentCollectible();
+        }
+      };
  
        document.getElementById("gameSelector").onchange = () => {
         currentGame = document.getElementById("gameSelector").value;
@@ -688,65 +693,78 @@
       }
 
       function swipeActionComplete(direction) {
-        // Reset transition/transform for next character
+        // Reset any image transitions
         const img = document.getElementById("collectibleImage");
         img.style.transition = "";
         img.style.transform = "translateX(0) rotate(0)";
-        
-        // Get the current collectible (we assume the user swiped past threshold, so remove it)
+      
+        // Remove the current collectible from the dynamic queue.
         const current = collectiblesQueue.shift();
         lastAction = direction === "right" ? "have" : "dont";
         lastCollectible = current;
-        
-        // Update localStorage and/or queue
+      
         if (direction === "right") {
+          // Process collecting the Skylander:
           current.quantity = 1;
           const user = localStorage.getItem("sky_user") || "guest";
           const key = `sky_progress_${user}_${currentGame}`;
-          const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], queue: [], skipped: [] };
+          const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], skipped: [] };
           if (!saved.collected.find(i => i.name === current.name)) {
             saved.collected.push(current);
           }
           localStorage.setItem(key, JSON.stringify({
             collected: saved.collected,
-            queue: collectiblesQueue,
-            skipped: skippedQueue
+            skipped: saved.skipped // keep skipped as-is
           }));
         } else {
-          skippedQueue.push(current);
-          saveProgress();
+          // For left swipe, add the Skylander to skipped.
+          const user = localStorage.getItem("sky_user") || "guest";
+          const key = `sky_progress_${user}_${currentGame}`;
+          let saved = JSON.parse(localStorage.getItem(key)) || { collected: [], skipped: [] };
+          saved.skipped.push(current);
+          localStorage.setItem(key, JSON.stringify(saved));
         }
-        
-        // Optionally reinitialize the queue if empty
-        if (collectiblesQueue.length === 0) {
-          collectiblesQueue = [...games[currentGame]];
-        }
-        
+      
+        // Rebuild the dynamic queue now that we've updated the progress.
         rebuildCollectiblesQueue();
-
+      
+        // If the queue becomes empty, you can choose to reset or handle it separately.
+        if (collectiblesQueue.length === 0) {
+          // This can be your logic to reinitialize the queue from scratch
+          collectiblesQueue = games[currentGame].filter(skylander => {
+            const nameCompare = skylander.name.trim().toLowerCase();
+            const alreadyCollected = saved.collected.some(item =>
+              item.name.trim().toLowerCase() === nameCompare
+            );
+            const alreadySkipped = saved.skipped.some(item =>
+              item.name.trim().toLowerCase() === nameCompare
+            );
+            return !alreadyCollected && !alreadySkipped;
+          });
+        }
+        
         showCurrentCollectible();
       }
 
       function rebuildCollectiblesQueue() {
         const user = localStorage.getItem("sky_user") || "guest";
         const key = `sky_progress_${user}_${currentGame}`;
-        let parsed = { collected: [] };
+        let parsed = { collected: [], skipped: [] };
         const saved = localStorage.getItem(key);
         if (saved) {
           parsed = JSON.parse(saved);
         }
-        // If there are any skipped items waiting for review, prioritize those.
-        if (skippedQueue && skippedQueue.length > 0) {
-          collectiblesQueue = [...skippedQueue];
-        } else {
-          // Otherwise rebuild the queue by taking the full list from games and removing the collected items.
-          collectiblesQueue = games[currentGame].filter(
-            skylander =>
-              !parsed.collected.find(item =>
-                item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase()
-              )
+        // Rebuild the queue to include only those Skylanders that are not in collected or skipped.
+        collectiblesQueue = games[currentGame].filter(skylander => {
+          const nameCompare = skylander.name.trim().toLowerCase();
+          const alreadyCollected = parsed.collected.some(item =>
+            item.name.trim().toLowerCase() === nameCompare
           );
-        }
+          const alreadySkipped = parsed.skipped.some(item =>
+            item.name.trim().toLowerCase() === nameCompare
+          );
+          return !alreadyCollected && !alreadySkipped;
+        });
       }
     </script>
   </div>
