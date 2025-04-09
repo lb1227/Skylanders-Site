@@ -730,7 +730,11 @@
       
         // If the queue becomes empty, you can choose to reset or handle it separately.
         if (collectiblesQueue.length === 0) {
-          // This can be your logic to reinitialize the queue from scratch
+          // Rebuild the queue from scratch by filtering out collected and skipped Skylanders.
+          const user = localStorage.getItem("sky_user") || "guest";
+          const key = `sky_progress_${user}_${currentGame}`;
+          const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], skipped: [] };
+        
           collectiblesQueue = games[currentGame].filter(skylander => {
             const nameCompare = skylander.name.trim().toLowerCase();
             const alreadyCollected = saved.collected.some(item =>
