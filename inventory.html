@@ -537,11 +537,10 @@
         container.appendChild(section);
       });
     
-      // ✅ ✅ ✅ UPDATE PROGRESS BARS (at end, once)
-      // Update overall progress bar
+      // ✅ ✅ ✅ UPDATE PROGRESS BAR
       let total = 0;
       let owned = 0;
-      
+    
       Object.entries(window.games).forEach(([game, characters]) => {
         if (selectedGame && game !== selectedGame) return;
         total += characters.length;
@@ -552,13 +551,13 @@
           owned += (parsed.collected || []).length;
         }
       });
-      
+    
       const percentage = total > 0 ? Math.round((owned / total) * 100) : 0;
       const fill = document.getElementById("inventoryProgressFill");
-      
+    
       if (fill) {
         fill.style.width = `${percentage}%`;
-      
+    
         // Set color gradient (red → yellow → green)
         let color;
         if (percentage < 50) {
@@ -568,10 +567,9 @@
           const red = Math.floor(255 - ((percentage - 50) / 50) * 255);
           color = `rgb(${red}, 255, 0)`;
         }
-      
+    
         fill.style.backgroundColor = color;
       }
-      });
     }
     
     function removeFromInventory(name, game) {
