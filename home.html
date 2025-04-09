@@ -292,13 +292,6 @@
     let lastCollectible = null;  // The collectible that was last processed
     function initializeApp() {
       const user = localStorage.getItem("sky_user");
-      const logoutBtn = document.getElementById("logoutBtn");
-  
-      if (user && user !== "guest") {
-        logoutBtn.style.display = "inline-block";
-      } else {
-        logoutBtn.style.display = "none";
-      }
   
       // Load saved progress
       const key = `sky_progress_${user}_${currentGame}`;
