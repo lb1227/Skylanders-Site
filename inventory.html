@@ -511,21 +511,20 @@
     
     function addToInventory(skylander, game) {
       const key = `sky_progress_${user}_${game}`;
-      let parsed = { collected: [], queue: [] };
+      let parsed = { collected: [], skipped: [] };
       const saved = localStorage.getItem(key);
-      if (saved) parsed = JSON.parse(saved);
-    
-      // Only add if not already in collected
-      const exists = parsed.collected.find(
-        item => item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase()
+      if (saved) {
+        parsed = JSON.parse(saved);
+      }
+      
+      // Only add if it's not already in the collected array
+      const exists = parsed.collected.find(item =>
+        item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase()
       );
       if (!exists) {
         parsed.collected.push({ name: skylander.name, quantity: 1 });
-        // Remove the added skylander from the queue.
-        parsed.queue = parsed.queue.filter(
-          item => item.name.trim().toLowerCase() !== skylander.name.trim().toLowerCase()
-        );
       }
+    
       localStorage.setItem(key, JSON.stringify(parsed));
     }
     
