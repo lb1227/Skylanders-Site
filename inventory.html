@@ -636,9 +636,9 @@
         body.classList.add("selection-mode");
       } else {
         bulkActions.style.display = "none";
-        container.removeEventListener("touchstart", onSelectionTouchStart);
-        container.removeEventListener("touchmove", onSelectionTouchMove);
-        container.removeEventListener("touchend", onSelectionTouchEnd);
+        container.removeEventListener("touchstart", onSelectionTouchStart, { capture: true });
+        container.removeEventListener("touchmove", onSelectionTouchMove, { capture: true });
+        container.removeEventListener("touchend", onSelectionTouchEnd, { capture: true });
         body.classList.remove("selection-mode");
       }
       const selectedGame = document.getElementById("gameSelect").value;
