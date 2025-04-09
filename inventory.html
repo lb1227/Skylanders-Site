@@ -516,7 +516,8 @@
       }
     }
     
-    function addToInventory(skylander, game) {
+     // --- Modified addToInventory function to store the condition ---
+    function addToInventory(skylander, game, condition = "good") {
       const key = `sky_progress_${user}_${game}`;
       let parsed = { collected: [], skipped: [] };
       const saved = localStorage.getItem(key);
@@ -524,14 +525,14 @@
         parsed = JSON.parse(saved);
       }
       
-      // Only add if it's not already in the collected array
+      // Only add the skylander if it does not already exist
       const exists = parsed.collected.find(item =>
         item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase()
       );
       if (!exists) {
-        parsed.collected.push({ name: skylander.name, quantity: 1 });
+        parsed.collected.push({ name: skylander.name, quantity: 1, condition: condition });
       }
-    
+      
       localStorage.setItem(key, JSON.stringify(parsed));
     }
     
@@ -545,6 +546,8 @@
         const collected = parsedInventory.collected || [];
         isOwned = collected.some(item => item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase());
       }
+      
+      // Build the modal HTML; if owned, include the extra condition select
       detailsContainer.innerHTML = `
         <h2>${skylander.name}</h2>
         <img src="${skylander.image}" alt="${skylander.name}" style="width: 200px; height: auto; margin-bottom: 1rem;">
@@ -558,9 +561,46 @@
             <option value="no" ${!isOwned ? "selected" : ""}>No</option>
           </select>
         </p>
+        ${isOwned ? `
+        <p id="conditionField">
+          <strong>Condition:</strong>
+          <select id="conditionSelect">
+            <option value="good" selected>Good</option>
+            <option value="in_box">In Box</option>
+            <option value="poor">Poor</option>
+          </select>
+        </p>
+        ` : ''}
       `;
+      
       modal.style.display = "block";
+      
+      // Attach an event listener to dynamically update the condition field
       document.getElementById("ownedSelect").addEventListener("change", function() {
+        const ownedValue = this.value;
+        let conditionField = document.getElementById("conditionField");
+        
+        if (ownedValue === "yes") {
+          // If the user selects Yes and the condition field is not present, add it
+          if (!conditionField) {
+            this.parentElement.insertAdjacentHTML('afterend', `
+              <p id="conditionField">
+                <strong>Condition:</strong>
+                <select id="conditionSelect">
+                  <option value="good" selected>Good</option>
+                  <option value="in_box">In Box</option>
+                  <option value="poor">Poor</option>
+                </select>
+              </p>
+            `);
+          }
+        } else {
+          // If the selection is No, remove the condition field if it exists
+          if (conditionField) {
+            conditionField.remove();
+          }
+        }
+        
         updateInventoryFromModal(skylander);
       });
     }
@@ -572,12 +612,32 @@
       let parsed = { collected: [], queue: [] };
       const saved = localStorage.getItem(key);
       if (saved) parsed = JSON.parse(saved);
+      
       const isOwned = parsed.collected.some(item => item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase());
+      
       if (newValue === "yes" && !isOwned) {
-        addToInventory(skylander, skylander.game);
+        // Card is being set to owned; get the condition value or default to "good"
+        const conditionSelect = document.getElementById("conditionSelect");
+        const conditionValue = conditionSelect ? conditionSelect.value : "good";
+        addToInventory(skylander, skylander.game, conditionValue);
       } else if (newValue === "no" && isOwned) {
+        // Card is being set to not-owned; remove it from the inventory
         removeFromInventory(skylander.name, skylander.game);
+      } else if (newValue === "yes" && isOwned) {
+        // The card is already owned; update its condition if there has been any change
+        const conditionSelect = document.getElementById("conditionSelect");
+        if (conditionSelect) {
+          parsed.collected = parsed.collected.map(item => {
+            if (item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase()) {
+              return { ...item, condition: conditionSelect.value };
+            }
+            return item;
+          });
+          localStorage.setItem(key, JSON.stringify(parsed));
+        }
       }
+      
+      // Re-render the inventory to reflect changes
       const selectedGame = document.getElementById("gameSelect").value;
       renderInventory(getOwnedOnlyState(), selectedGame);
     }
