@@ -469,9 +469,7 @@
           if (isOwned) {
             card.classList.add("owned");
             // If the condition has changed and we're in selection mode, mark the card as removed (grey)
-            if (selectionMode && found.conditionChanged) {
-              card.classList.add("removed");
-            } else {
+            if (!selectionMode && isOwned) {
               if (found.condition === "in_box") {
                 card.classList.add("in_box");
               } else if (found.condition === "poor") {
