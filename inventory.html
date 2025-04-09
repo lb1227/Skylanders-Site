@@ -616,6 +616,12 @@
         
         updateInventoryFromModal(skylander);
       });
+      const conditionSelect = document.getElementById("conditionSelect");
+      if (conditionSelect) {
+        conditionSelect.addEventListener("change", function() {
+          updateInventoryFromModal(skylander);
+        });
+      }
     }
     
     function updateInventoryFromModal(skylander) {
