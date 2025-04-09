@@ -377,7 +377,6 @@
         }
     
         // Load saved progress
-        const user = localStorage.getItem("sky_user") || "guest";
         const key = `sky_progress_${user}_${currentGame}`;
         const saved = localStorage.getItem(key);
         if (saved) {
