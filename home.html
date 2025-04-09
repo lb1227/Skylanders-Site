@@ -770,6 +770,37 @@
           return !alreadyCollected && !alreadySkipped;
         });
       }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        // Attach click listeners to group headers
+        document.querySelectorAll('.group-section').forEach(section => {
+          const header = section.querySelector('.group-header');
+          if (header) {
+            header.addEventListener('click', () => {
+              // Toggle the group's collapsed state
+              section.classList.toggle('collapsed');
+      
+              // If the section is now open, save its ID to localStorage.
+              // You might want only one group open at a time.
+              if (!section.classList.contains('collapsed')) {
+                localStorage.setItem('lastOpenGroup', section.id);
+              } else {
+                // Optionally, if the user closes it, clear the saved value.
+                localStorage.removeItem('lastOpenGroup');
+              }
+            });
+          }
+        });
+      
+        // Restore the last open group on page load
+        const lastOpenGroup = localStorage.getItem('lastOpenGroup');
+        if (lastOpenGroup) {
+          const section = document.getElementById(lastOpenGroup);
+          if (section) {
+            section.classList.remove('collapsed');
+          }
+        }
+      });
     </script>
   </div>
 </body>
