@@ -538,42 +538,39 @@
       });
     
       // ✅ ✅ ✅ UPDATE PROGRESS BARS (at end, once)
-      const progressBarsContainer = document.getElementById("progressBarsContainer");
-      progressBarsContainer.innerHTML = ''; // Clear old bars
-    
+      // Update overall progress bar
+      let total = 0;
+      let owned = 0;
+      
       Object.entries(window.games).forEach(([game, characters]) => {
         if (selectedGame && game !== selectedGame) return;
-    
-        const total = characters.length;
+        total += characters.length;
         const key = `sky_progress_${user}_${game}`;
         const saved = localStorage.getItem(key);
-        const parsed = saved ? JSON.parse(saved) : { collected: [] };
-        const owned = parsed.collected.length;
-        const percentage = total > 0 ? Math.round((owned / total) * 100) : 0;
-    
-        // Color gradient logic
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          owned += (parsed.collected || []).length;
+        }
+      });
+      
+      const percentage = total > 0 ? Math.round((owned / total) * 100) : 0;
+      const fill = document.getElementById("inventoryProgressFill");
+      
+      if (fill) {
+        fill.style.width = `${percentage}%`;
+      
+        // Set color gradient (red → yellow → green)
         let color;
         if (percentage < 50) {
-          const red = 255;
           const green = Math.floor((percentage / 50) * 255);
-          color = `rgb(${red},${green},0)`;
+          color = `rgb(255, ${green}, 0)`;
         } else {
           const red = Math.floor(255 - ((percentage - 50) / 50) * 255);
-          const green = 255;
-          color = `rgb(${red},${green},0)`;
+          color = `rgb(${red}, 255, 0)`;
         }
-    
-        const barHTML = `
-          <div style="margin-bottom: 0.5rem;">
-            <div style="color: white; font-size: 0.85rem; margin-bottom: 0.25rem;">
-              ${game}: ${owned} / ${total} (${percentage}%)
-            </div>
-            <div style="background-color: #444; width: 100%; height: 18px; border-radius: 10px; overflow: hidden;">
-              <div style="height: 100%; width: ${percentage}%; background-color: ${color}; transition: width 0.3s ease;"></div>
-            </div>
-          </div>
-        `;
-        progressBarsContainer.insertAdjacentHTML('beforeend', barHTML);
+      
+        fill.style.backgroundColor = color;
+      }
       });
     }
     
