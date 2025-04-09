@@ -567,10 +567,17 @@
       const detailsContainer = document.getElementById("skylanderDetails");
       const userInventory = localStorage.getItem(`sky_progress_${user}_${skylander.game}`);
       let isOwned = false;
+      let currentCondition = "good"; // default value
       if (userInventory) {
         const parsedInventory = JSON.parse(userInventory);
         const collected = parsedInventory.collected || [];
-        isOwned = collected.some(item => item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase());
+        const storedItem = collected.find(item =>
+          item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase()
+        );
+        isOwned = !!storedItem;
+        if (storedItem && storedItem.condition) {
+          currentCondition = storedItem.condition;
+        }
       }
       
       // Build the modal HTML; if owned, include the extra condition select
@@ -591,9 +598,9 @@
         <p id="conditionField">
           <strong>Condition:</strong>
           <select id="conditionSelect">
-            <option value="good" selected>Good</option>
-            <option value="in_box">In Box</option>
-            <option value="poor">Poor</option>
+            <option value="good" ${currentCondition === 'good' ? 'selected' : ''}>Good</option>
+            <option value="in_box" ${currentCondition === 'in_box' ? 'selected' : ''}>In Box</option>
+            <option value="poor" ${currentCondition === 'poor' ? 'selected' : ''}>Poor</option>
           </select>
         </p>
         ` : ''}
