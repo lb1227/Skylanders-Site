@@ -476,6 +476,7 @@
  
        document.getElementById("gameSelector").onchange = () => {
         currentGame = document.getElementById("gameSelector").value;
+        const user = localStorage.getItem("sky_user");
         const key = `sky_progress_${user}_${currentGame}`;
         const saved = localStorage.getItem(key);
         if (saved) {
