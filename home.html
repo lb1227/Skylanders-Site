@@ -612,38 +612,6 @@
         return !alreadyCollected && !alreadySkipped;
       });
     }
-  
-    document.addEventListener('DOMContentLoaded', () => {
-      // Attempt to restore the last open collapsible group
-      const savedGroupId = localStorage.getItem('lastOpenGroup');
-      if (savedGroupId) {
-        const savedGroup = document.getElementById(savedGroupId);
-        if (savedGroup) {
-          savedGroup.classList.remove('collapsed');
-        }
-      }
-      
-      // Attach event listeners to all collapsible groups
-      const groupSections = document.querySelectorAll('.group-section');
-      groupSections.forEach(group => {
-        const header = group.querySelector('.group-header');
-        if (header) {
-          header.addEventListener('click', () => {
-            group.classList.toggle('collapsed');
-            if (!group.classList.contains('collapsed')) {
-              // Group is now open—store its id
-              localStorage.setItem('lastOpenGroup', group.id);
-            } else {
-              // Group is now closed—remove the stored value if it matches this group
-              const storedId = localStorage.getItem('lastOpenGroup');
-              if (storedId === group.id) {
-                localStorage.removeItem('lastOpenGroup');
-              }
-            }
-          });
-        }
-      });
-    });
   </script>
 </body>
 </html>
