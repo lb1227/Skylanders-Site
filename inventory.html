@@ -357,6 +357,12 @@
     .card.selected {
       background-color: #1f4d1f !important; /* Green */
     }
+    .card.owned.in_box {
+      background-color: purple !important;
+    }
+    .card.owned.poor {
+      background-color: #FFA500 !important;  /* This hex gives a yellow-orange shade */
+    }
     .card.removed {
       background-color: grey !important;
     }
@@ -457,7 +463,14 @@
           const card = document.createElement("div");
           card.className = "card";
           card.dataset.game = game;
-          if (isOwned) card.classList.add("owned");
+          if (isOwned) {
+            card.classList.add("owned");
+            if (found.condition === "in_box") {
+              card.classList.add("in_box");
+            } else if (found.condition === "poor") {
+              card.classList.add("poor");
+            }
+          }
           card.innerHTML = `
             <img src="${char.image}" alt="${char.name}">
             <div><strong>${char.name}</strong></div>
