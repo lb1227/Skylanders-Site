@@ -377,14 +377,20 @@
         }
     
         // Load saved progress
-        const key = `sky_progress_${user || "guest"}_${currentGame}`;
+        const user = localStorage.getItem("sky_user") || "guest";
+        const key = `sky_progress_${user}_${currentGame}`;
         const saved = localStorage.getItem(key);
         if (saved) {
           const parsed = JSON.parse(saved);
-          collectiblesQueue = parsed.queue || [...games[currentGame]];
+          // Keep any skipped data you might need
           skippedQueue = parsed.skipped || [];
+        } else {
+          skippedQueue = [];
         }
-    
+        // Now rebuild the queue dynamically:
+        rebuildCollectiblesQueue();
+        
+        // Then display the current collectible.
         showCurrentCollectible();
     
         // If no collectible has been chosen yet, start the nudge animation.
@@ -444,15 +450,15 @@
 
  
        function saveProgress() {
-         const user = localStorage.getItem("sky_user") || "guest";
-         const key = `sky_progress_${user}_${currentGame}`;
-         const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], queue: [], skipped: [] };
-         localStorage.setItem(key, JSON.stringify({
-           collected: saved.collected,
-           queue: collectiblesQueue,
-           skipped: skippedQueue
-         }));
-       }
+        const user = localStorage.getItem("sky_user") || "guest";
+        const key = `sky_progress_${user}_${currentGame}`;
+        // If there's already saved progress, keep collected and skipped; ignore queue.
+        const saved = JSON.parse(localStorage.getItem(key)) || { collected: [], skipped: [] };
+        localStorage.setItem(key, JSON.stringify({
+          collected: saved.collected,
+          skipped: saved.skipped
+        }));
+      }
  
        document.getElementById("haveItBtn").onclick = () => {
           swipeAction("right");
@@ -470,21 +476,22 @@
        };
  
        document.getElementById("gameSelector").onchange = () => {
-         const user = localStorage.getItem("sky_user") || "guest";
-         currentGame = document.getElementById("gameSelector").value;
-         const key = `sky_progress_${user}_${currentGame}`;
-         const saved = localStorage.getItem(key);
-         collectibles = games[currentGame];
-         if (saved) {
-           const parsed = JSON.parse(saved);
-           collectiblesQueue = parsed.queue || [...collectibles];
-           skippedQueue = parsed.skipped || [];
-         } else {
-           collectiblesQueue = [...collectibles];
-           skippedQueue = [];
-         }
-         showCurrentCollectible();
-       };
+        currentGame = document.getElementById("gameSelector").value;
+        const user = localStorage.getItem("sky_user") || "guest";
+        const key = `sky_progress_${user}_${currentGame}`;
+        const saved = localStorage.getItem(key);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          skippedQueue = parsed.skipped || [];
+        } else {
+          skippedQueue = [];
+        }
+        // Reinitialize the full set of collectibles for the new game.
+        collectibles = games[currentGame];
+        // Instead of loading a saved queue, recalc using our helper:
+        rebuildCollectiblesQueue();
+        showCurrentCollectible();
+      };
  
       let touchStartX = 0;
       let touchStartY = 0;
@@ -716,7 +723,31 @@
           collectiblesQueue = [...games[currentGame]];
         }
         
+        rebuildCollectiblesQueue();
+
         showCurrentCollectible();
+      }
+
+      function rebuildCollectiblesQueue() {
+        const user = localStorage.getItem("sky_user") || "guest";
+        const key = `sky_progress_${user}_${currentGame}`;
+        let parsed = { collected: [] };
+        const saved = localStorage.getItem(key);
+        if (saved) {
+          parsed = JSON.parse(saved);
+        }
+        // If there are any skipped items waiting for review, prioritize those.
+        if (skippedQueue && skippedQueue.length > 0) {
+          collectiblesQueue = [...skippedQueue];
+        } else {
+          // Otherwise rebuild the queue by taking the full list from games and removing the collected items.
+          collectiblesQueue = games[currentGame].filter(
+            skylander =>
+              !parsed.collected.find(item =>
+                item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase()
+              )
+          );
+        }
       }
     </script>
   </div>
