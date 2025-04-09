@@ -549,6 +549,12 @@
       img.style.transform = "translateX(0) rotate(0)";
     
       const current = collectiblesQueue.shift();
+
+      if (!current) {
+        console.warn("No collectible available. Aborting swipeActionComplete.");
+        return;
+      }
+      
       lastAction = direction === "right" ? "have" : "dont";
       lastCollectible = current;
     
