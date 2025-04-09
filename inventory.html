@@ -421,6 +421,7 @@
       <div id="progressBar" style="height: 100%; background-color: var(--accent); width: 0%; transition: width 0.3s ease;"></div>
     </div>
   </div>
+  <div id="progressBarsContainer" style="margin-bottom: 1.5rem;"></div>
   <!-- Combined Inventory Container with Bulk Select Controls -->
   <div class="container">
     <div id="bulkActions" style="display:none;"></div>
@@ -458,13 +459,17 @@
     
     function renderInventory(showOwnedOnly = false, selectedGame = "") {
       container.innerHTML = '';
+    
+      // Render game sections and cards
       Object.entries(window.games).forEach(([game, characters]) => {
         if (selectedGame && game !== selectedGame) return;
+    
         const section = document.createElement("div");
         section.className = "group-section";
         section.id = `section-${game}`;
         const cards = document.createElement("div");
         cards.className = "cards-wrapper";
+    
         const key = `sky_progress_${user}_${game}`;
         let collected = [];
         let queue = [];
@@ -474,18 +479,19 @@
           collected = parsed.collected || [];
           queue = parsed.queue || [];
         }
+    
         characters.forEach(char => {
-          char.game = game; // Set the game property for the character
+          char.game = game;
           const found = collected.find(x => x.name.trim().toLowerCase() === char.name.trim().toLowerCase());
           const isOwned = !!found;
           if (showOwnedOnly && !isOwned) return;
+    
           const card = document.createElement("div");
           card.className = "card";
           card.dataset.game = game;
           if (isOwned) {
             card.classList.add("owned");
-            // If the condition has changed and we're in selection mode, mark the card as removed (grey)
-            if (!selectionMode && isOwned) {
+            if (!selectionMode) {
               if (found.condition === "in_box") {
                 card.classList.add("in_box");
               } else if (found.condition === "poor") {
@@ -493,23 +499,20 @@
               }
             }
           }
+    
           card.innerHTML = `
             <img src="${char.image}" alt="${char.name}">
             <div><strong>${char.name}</strong></div>
             ${!selectionMode && isOwned ? `<button class="remove-button" onclick="event.stopPropagation(); removeFromInventory('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}')">Remove</button>` : ''}
           `;
-          // Existing event-listener and click handling code ...
+    
+          // Event handlers
           if (selectionMode) {
             card.onclick = function(e) {
               e.stopPropagation();
               if (swipeConfirmed) return;
               if (card.classList.contains("owned")) {
-                // Toggle "removed" state on click even for owned cards
-                if (card.classList.contains("removed")) {
-                  card.classList.remove("removed");
-                } else {
-                  card.classList.add("removed");
-                }
+                card.classList.toggle("removed");
               } else {
                 card.classList.toggle("selected");
               }
@@ -517,39 +520,58 @@
           } else {
             card.onclick = () => openModal(char);
           }
-
+    
           card.addEventListener("mousedown", startPress);
           card.addEventListener("touchstart", startPress);
           card.addEventListener("mouseup", cancelPress);
           card.addEventListener("mouseleave", cancelPress);
           card.addEventListener("touchend", cancelPress);
           card.addEventListener("touchmove", cancelPress);
+    
           cards.appendChild(card);
         });
+    
         section.appendChild(cards);
         container.appendChild(section);
-
-        // Update progress bar
-        let total = 0;
-        let owned = 0;
-        Object.entries(window.games).forEach(([game, characters]) => {
-          if (selectedGame && game !== selectedGame) return;
-          total += characters.length;
-          const key = `sky_progress_${user}_${game}`;
-          const saved = localStorage.getItem(key);
-          if (saved) {
-            const parsed = JSON.parse(saved);
-            owned += (parsed.collected || []).length;
-          }
-        });
-        
+      });
+    
+      // ✅ ✅ ✅ UPDATE PROGRESS BARS (at end, once)
+      const progressBarsContainer = document.getElementById("progressBarsContainer");
+      progressBarsContainer.innerHTML = ''; // Clear old bars
+    
+      Object.entries(window.games).forEach(([game, characters]) => {
+        if (selectedGame && game !== selectedGame) return;
+    
+        const total = characters.length;
+        const key = `sky_progress_${user}_${game}`;
+        const saved = localStorage.getItem(key);
+        const parsed = saved ? JSON.parse(saved) : { collected: [] };
+        const owned = parsed.collected.length;
         const percentage = total > 0 ? Math.round((owned / total) * 100) : 0;
-        const progressBar = document.getElementById("progressBar");
-        const progressText = document.getElementById("progressText");
-        if (progressBar && progressText) {
-          progressBar.style.width = `${percentage}%`;
-          progressText.textContent = `Progress: ${owned} / ${total} (${percentage}%)`;
+    
+        // Color gradient logic
+        let color;
+        if (percentage < 50) {
+          const red = 255;
+          const green = Math.floor((percentage / 50) * 255);
+          color = `rgb(${red},${green},0)`;
+        } else {
+          const red = Math.floor(255 - ((percentage - 50) / 50) * 255);
+          const green = 255;
+          color = `rgb(${red},${green},0)`;
         }
+    
+        const barHTML = `
+          <div style="margin-bottom: 0.5rem;">
+            <div style="color: white; font-size: 0.85rem; margin-bottom: 0.25rem;">
+              ${game}: ${owned} / ${total} (${percentage}%)
+            </div>
+            <div style="background-color: #444; width: 100%; height: 18px; border-radius: 10px; overflow: hidden;">
+              <div style="height: 100%; width: ${percentage}%; background-color: ${color}; transition: width 0.3s ease;"></div>
+            </div>
+          </div>
+        `;
+        progressBarsContainer.insertAdjacentHTML('beforeend', barHTML);
       });
     }
     
