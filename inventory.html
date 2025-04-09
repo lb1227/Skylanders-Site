@@ -17,7 +17,9 @@
       --button-hover: #d32f2f;
       --nav-bg: #1a1a1a;
     }
-    body {
+    body {.card.removed {
+  background-color: grey !important;
+}
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       background-color: var(--bg);
@@ -348,6 +350,9 @@
     .card.selected {
       background-color: #1f4d1f !important; /* Green */
     }
+    .card.removed {
+      background-color: grey !important;
+    }
     .collapsed {
       max-height: 0 !important;
       opacity: 0;
@@ -454,12 +459,20 @@
           if (selectionMode) {
             card.onclick = function(e) {
               e.stopPropagation();
-              if (swipeConfirmed) {
-                // If this tap immediately follows a swipe, ignore it.
-                return;
-              }
-              // Otherwise, process the tap.
-              card.classList.toggle("selected");
+              if (swipeConfirmed) return;
+    
+                // If the card is already owned, toggle its "removed" state.
+                if (card.classList.contains("owned")) {
+                  // If it’s already marked as removed, unmark it (i.e. keep as owned)
+                  if (card.classList.contains("removed")) {
+                    card.classList.remove("removed");
+                  } else {
+                    card.classList.add("removed");
+                  }
+                } else {
+                  // For cards that are not owned, toggle the "selected" state to mark them for adding.
+                  card.classList.toggle("selected");
+                }
             };
           } else {
             card.onclick = () => openModal(char);
@@ -649,12 +662,15 @@
     }
     
     function completeSelection() {
-      document.querySelectorAll(".card.selected").forEach(card => {
+      document.querySelectorAll(".card").forEach(card => {
         const name = card.querySelector("strong").textContent;
         const game = card.dataset.game;
+        
         if (card.classList.contains("removed")) {
+          // Remove from inventory if the card was owned but now marked as removed.
           setTimeout(() => { removeFromInventory(name, game); }, 100);
-        } else {
+        } else if (card.classList.contains("selected") && !card.classList.contains("owned")) {
+          // Add to inventory if the card was not owned and is marked as selected.
           const skylander = window.games[game].find(item => item.name === name);
           if (skylander) addToInventory(skylander, game);
         }
