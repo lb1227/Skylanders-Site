@@ -410,7 +410,6 @@
     let preselectedCard = null;
     let longPressTriggered = false;
     let swipeConfirmed = false;
-    let swipeStartCard = null;
     let pressTimer;
     
     function toggleMobileMenu() {
@@ -664,9 +663,6 @@
     
     function completeSelection() {
       document.querySelectorAll(".card").forEach(card => {
-        // Skip the card where the swipe started
-        if (card === swipeStartCard) return;
-        
         const name = card.querySelector("strong").textContent;
         const game = card.dataset.game;
         
@@ -681,7 +677,6 @@
       });
 
       // Reset the swipe start card so the next swipe starts fresh.
-      swipeStartCard = null;
       
       setTimeout(toggleSelectionMode, 100);
     }
@@ -696,7 +691,6 @@
     }
     
     function cancelSelection() {
-      swipeStartCard = null;  // Reset the reference so the card remains unchanged
       toggleSelectionMode();
     }
     
@@ -723,8 +717,6 @@
     function onSelectionTouchStart(e) {
       selectionStartX = e.changedTouches[0].screenX;
       selectionDeltaX = 0;
-
-      swipeStartCard = e.target.closest('.card');
     }
     function onSelectionTouchMove(e) {
       const currentX = e.changedTouches[0].screenX;
