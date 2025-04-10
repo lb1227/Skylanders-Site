@@ -71,7 +71,7 @@
       align-items: center;
     }
     .owned {
-      background-color: #1f4d1f;
+      background-color: #1f4d1f !important;
     }
     .card button {
       margin-top: 0.5rem;
@@ -339,29 +339,28 @@
       flex-direction: column;
       height: auto;
     }
-    .card.owned.swap-top {
-      /* Top half: green; bottom half: default card background */
-      background: linear-gradient(to bottom, #1f4d1f 50%, var(--card-bg) 50%);
-    }
-    .card.owned.swap-bottom {
-      /* Bottom half: green; top half: default card background */
-      background: linear-gradient(to top, #1f4d1f 50%, var(--card-bg) 50%);
-    }
-    
-    /* For SWAP Force items with "in_box" condition (purple) */
-    .card.owned.in_box.swap-top {
-      background: linear-gradient(to bottom, purple 50%, var(--card-bg) 50%);
-    }
-    .card.owned.in_box.swap-bottom {
-      background: linear-gradient(to top, purple 50%, var(--card-bg) 50%);
+    /* Badge for top half */
+    .swap-badge.top {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background: rgba(31, 77, 31, 0.8); /* semi-transparent green */
+      color: white;
+      padding: 2px 4px;
+      font-size: 10px;
+      border-radius: 4px;
     }
     
-    /* For SWAP Force items with "poor" condition (yellow/orange) */
-    .card.owned.poor.swap-top {
-      background: linear-gradient(to bottom, #FFA500 50%, var(--card-bg) 50%);
-    }
-    .card.owned.poor.swap-bottom {
-      background: linear-gradient(to top, #FFA500 50%, var(--card-bg) 50%);
+    /* Badge for bottom half */
+    .swap-badge.bottom {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      background: rgba(31, 77, 31, 0.8); /* same color or adjusted if needed */
+      color: white;
+      padding: 2px 4px;
+      font-size: 10px;
+      border-radius: 4px;
     }
     .card img {
       width: 60px;
@@ -555,8 +554,16 @@
                 item.name.trim().toLowerCase() === char.name.trim().toLowerCase()
               );
               if (swapData && swapData.swapOption && swapData.swapOption !== 'all') {
-                // This will add either "swap-top" or "swap-bottom" based on the stored option.
-                card.classList.add(`swap-${swapData.swapOption}`);
+                // Remove existing badge if any.
+                const existingBadge = card.querySelector('.swap-badge');
+                if (existingBadge) existingBadge.remove();
+              
+                // Create a new badge element.
+                const badge = document.createElement('div');
+                badge.classList.add('swap-badge');
+                badge.textContent = swapData.swapOption === 'top' ? 'Top' : 'Bottom';
+                badge.classList.add(swapData.swapOption); // adds either 'top' or 'bottom'
+                card.appendChild(badge);
               }
             }
           }
