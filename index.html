@@ -8,7 +8,7 @@
     }
   </script>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -33,6 +33,8 @@
       flex-direction: column;
       text-align: center;
       position: relative;
+      /* Add padding if you need to adjust content away from screen edges */
+      padding-top: env(safe-area-inset-top);
     }
     h1 {
       font-size: 2.5rem;
@@ -63,13 +65,13 @@
 
     /* Hamburger Menu Styling */
     .hamburger {
-      display: none;
+      position: absolute;
+      top: calc(20px + env(safe-area-inset-top)); /* Adjust for the safe area inset */
+      right: 20px;
       font-size: 2rem;
       cursor: pointer;
       color: white;
-      position: absolute;
-      top: 20px; /* Position it 20px from the top */
-      right: 20px; /* Position it 20px from the right */
+      display: none;
     }
 
     /* Initially, the menu is hidden */
