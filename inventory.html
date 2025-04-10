@@ -433,6 +433,10 @@
       <input type="checkbox" id="selectionToggle" onchange="toggleSelectionMode()" style="transform: scale(1.2); accent-color: var(--accent);">
       <label for="selectionToggle" style="cursor: pointer;">Select</label>
     </div>
+
+    <div id="collectionValueDisplay" style="margin-top: 1rem; font-size: 1rem; color: white;">
+      Collection Value: $0.00
+    </div>
     
     <div id="inventoryContainer"></div>
   </div>
@@ -541,7 +545,32 @@
         section.appendChild(cards);
         container.appendChild(section);
       });
-    
+
+      // --- CALCULATE COLLECTION VALUE ---
+      let totalValue = 0;
+      
+      Object.entries(window.games).forEach(([game, characters]) => {
+        if (selectedGame && game !== selectedGame) return;
+        const key = `sky_progress_${user}_${game}`;
+        const saved = localStorage.getItem(key);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          const ownedItems = parsed.collected || [];
+      
+          ownedItems.forEach(owned => {
+            const matching = characters.find(c => c.name.trim().toLowerCase() === owned.name.trim().toLowerCase());
+            if (matching && matching.price) {
+              totalValue += parseFloat(matching.price) || 0;
+            }
+          });
+        }
+      });
+      
+      const display = document.getElementById("collectionValueDisplay");
+      if (display) {
+        display.textContent = `Collection Value: $${totalValue.toFixed(2)}`;
+      }
+      
       // ✅ ✅ ✅ UPDATE PROGRESS BAR
       let total = 0;
       let owned = 0;
