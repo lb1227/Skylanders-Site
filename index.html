@@ -38,9 +38,10 @@
     /* Card Elements with Animation */
     .card {
       position: absolute;
-      width: 150px; /* adjust size as needed */
-      height: 210px;
-      background-size: cover;
+      width: 300px;  /* Matches the image width */
+      height: 300px; /* Matches the image height */
+      background-size: contain; /* or even cover if the container and image share the same aspect ratio */
+      background-repeat: no-repeat;
       background-position: center;
       opacity: 0.8;
       filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
@@ -74,11 +75,11 @@
     /* Keyframes for receding card effect */
     @keyframes moveBack {
       0% {
-        transform: translateZ(0) scale(1) rotate(0deg);
+        transform: translateZ(0) scale(.5);
         opacity: 0.8;
       }
       100% {
-        transform: translateZ(-300px) scale(0.7) rotate(15deg);
+        transform: translateZ(-300px) scale(0.3);
         opacity: 0;
       }
     }
