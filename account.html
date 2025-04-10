@@ -192,6 +192,8 @@
         
         <button type="submit" class="submit">Update Account</button>
       </form>
+      <hr style="margin: 2rem 0; border-color: #333;">
+      <button onclick="shareCollection()" class="submit" style="background-color: var(--accent);">📤 Share Your Collection</button>
     </div>
   </div>
 
@@ -248,6 +250,32 @@
         document.getElementById("password").value = "";
       });
     };
+
+    function shareCollection() {
+      const user = localStorage.getItem("sky_user") || "guest";
+      let output = "";
+    
+      Object.entries(window.games || {}).forEach(([game, characters]) => {
+        const key = `sky_progress_${user}_${game}`;
+        const saved = localStorage.getItem(key);
+        if (!saved) return;
+    
+        const parsed = JSON.parse(saved);
+        const names = (parsed.collected || []).map(x => x.name);
+        if (names.length > 0) {
+          output += `📦 ${game}:\n${names.join(", ")}\n\n`;
+        }
+      });
+    
+      if (!output) {
+        alert("You haven't added any Skylanders yet.");
+        return;
+      }
+    
+      navigator.clipboard.writeText(output)
+        .then(() => alert("✅ Your collection was copied to clipboard!"))
+        .catch(() => alert("⚠️ Could not copy. Please try again."));
+    }
   </script>
 </body>
 </html>
