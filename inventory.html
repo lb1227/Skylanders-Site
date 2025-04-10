@@ -340,6 +340,42 @@
       flex-direction: column;
       height: auto;
     }
+    /* Magnet button group styles */
+    .magnet-buttons {
+      display: flex;
+      flex-direction: column;
+    }
+    .magnet-button {
+      width: 40px;
+      height: 40px;
+      border: 1px solid white;
+      background-color: var(--card-bg);
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .magnet-button.top {
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      margin-bottom: 2px;
+    }
+    .magnet-button.bottom {
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+    /* Container for image + magnet group */
+    .swap-section {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .swap-section img {
+      width: 200px;
+      height: auto;
+      margin-right: 20px;
+    }
+    
    .swap-badge {
       position: absolute;
       width: 24px;          /* set fixed width */
@@ -721,10 +757,37 @@
         }
       }
       
-      // Build the modal HTML for the basic info and ownership selection.
-      detailsContainer.innerHTML = `
+      // Build the modal’s HTML for basic info.
+      let contentHTML = `
         <h2>${skylander.name}</h2>
-        <img src="${skylander.image}" alt="${skylander.name}" style="width: 200px; height: auto; margin-bottom: 1rem;">
+      `;
+      
+      // Only for SWAP FORCE items and for the first 16 swappable characters,
+      // we build a swap section that contains the image and the new magnet buttons.
+      if (
+        skylander.game.toUpperCase() === "SWAP FORCE" &&
+        window.games[skylander.game].findIndex(item =>
+          item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase()
+        ) < 16
+      ) {
+        contentHTML += `
+          <div class="swap-section">
+            <img src="${skylander.image}" alt="${skylander.name}">
+            <div class="magnet-buttons">
+              <button id="swapTopButton" class="magnet-button top" type="button"
+                onclick="toggleMagnetOption('top', '${skylander.name.replace(/'/g, "\\'")}', '${skylander.game.replace(/'/g, "\\'")}')">T</button>
+              <button id="swapBottomButton" class="magnet-button bottom" type="button"
+                onclick="toggleMagnetOption('bottom', '${skylander.name.replace(/'/g, "\\'")}', '${skylander.game.replace(/'/g, "\\'")}')">B</button>
+            </div>
+          </div>
+        `;
+      } else {
+        // If no magnet section, just display the image normally.
+        contentHTML += `<img src="${skylander.image}" alt="${skylander.name}" style="width:200px; height:auto; margin-bottom:1rem;">`;
+      }
+      
+      // Add the remaining details.
+      contentHTML += `
         <p><strong>Game:</strong> ${skylander.game}</p>
         <p><strong>Price:</strong> ${skylander.price || "N/A"}</p>
         <p><strong>Retail Price:</strong> ${skylander.retail_price || "N/A"}</p>
@@ -743,31 +806,12 @@
             <option value="in_box" ${currentCondition === 'in_box' ? 'selected' : ''}>In Box</option>
             <option value="poor" ${currentCondition === 'poor' ? 'selected' : ''}>Poor</option>
           </select>
-        </p>
-        ` : ''}
+        </p>` : ''}
       `;
-      
-      // Only for SWAP FORCE items AND only for the first 16 swappable characters:
-      if (skylander.game.toUpperCase() === "SWAP FORCE") {
-        const swapArray = window.games[skylander.game]; // Assumes the key is exactly "SWAP Force"
-        const index = swapArray.findIndex(item =>
-          item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase()
-        );
-        if (index >= 0 && index < 16) {
-          detailsContainer.innerHTML += `
-            <p id="swapOptionField">
-              <strong>Swap Option:</strong>
-              <button type="button" onclick="selectSwapOption('all', '${skylander.name}', '${skylander.game}')">All</button>
-              <button type="button" onclick="selectSwapOption('top', '${skylander.name}', '${skylander.game}')">Top Half</button>
-              <button type="button" onclick="selectSwapOption('bottom', '${skylander.name}', '${skylander.game}')">Bottom Half</button>
-            </p>
-          `;
-        }
-      }
-      
+      detailsContainer.innerHTML = contentHTML;
       modal.style.display = "block";
       
-      // Attach event listeners for ownership and condition changes.
+      // Attach listeners for ownership and condition changes.
       document.getElementById("ownedSelect").addEventListener("change", function() {
         updateInventoryFromModal(skylander);
       });
@@ -776,6 +820,23 @@
         conditionSelect.addEventListener("change", function() {
           updateInventoryFromModal(skylander);
         });
+      }
+      
+      // If a swap section was added, set its initial state.
+      if (skylander.game.toUpperCase() === "SWAP FORCE") {
+        const key = `sky_progress_${user}_${skylander.game}`;
+        let storedSwapOption = "";
+        const savedData = localStorage.getItem(key);
+        if (savedData) {
+          const parsed = JSON.parse(savedData);
+          const item = parsed.collected.find(x =>
+            x.name.trim().toLowerCase() === skylander.name.trim().toLowerCase()
+          );
+          if (item && item.swapOption) {
+            storedSwapOption = item.swapOption;
+          }
+        }
+        updateMagnetButtonUI(storedSwapOption);
       }
     }
 
@@ -802,6 +863,81 @@
       // Re-render the inventory to immediately reflect the swap option change.
       const selectedGame = document.getElementById("gameSelect").value;
       renderInventory(getOwnedOnlyState(), selectedGame);
+    }
+
+    // New functions to handle the magnet (swap) button toggling and UI updates
+    function toggleMagnetOption(option, skylanderName, game) {
+      const key = `sky_progress_${user}_${game}`;
+      let parsed = { collected: [], queue: [] };
+      const saved = localStorage.getItem(key);
+      if (saved) {
+        parsed = JSON.parse(saved);
+      }
+      // Look for the skylander in the collected array.
+      let index = parsed.collected.findIndex(item =>
+        item.name.trim().toLowerCase() === skylanderName.trim().toLowerCase()
+      );
+      let currentOption = "";
+      if (index >= 0) {
+        currentOption = parsed.collected[index].swapOption || "";
+      }
+      // Determine current selections.
+      // Interpret "top" as T selected, "bottom" as B selected, and "all" as both.
+      let topSelected = (currentOption === "top" || currentOption === "all");
+      let bottomSelected = (currentOption === "bottom" || currentOption === "all");
+      
+      // Toggle the clicked option.
+      if (option === "top") {
+        topSelected = !topSelected;
+      } else if (option === "bottom") {
+        bottomSelected = !bottomSelected;
+      }
+      
+      // Determine new swap option value.
+      let newSwapOption = "";
+      if (topSelected && bottomSelected) {
+        newSwapOption = "all";
+      } else if (topSelected) {
+        newSwapOption = "top";
+      } else if (bottomSelected) {
+        newSwapOption = "bottom";
+      } else {
+        newSwapOption = "";
+      }
+      
+      // Update localStorage.
+      if (index >= 0) {
+        parsed.collected[index].swapOption = newSwapOption;
+      } else {
+        parsed.collected.push({ name: skylanderName, swapOption: newSwapOption });
+      }
+      localStorage.setItem(key, JSON.stringify(parsed));
+      
+      // Update button visuals.
+      updateMagnetButtonUI(newSwapOption);
+      
+      // Optionally, re-render your inventory if needed.
+      const selectedGame = document.getElementById("gameSelect").value;
+      renderInventory(getOwnedOnlyState(), selectedGame);
+    }
+    
+    function updateMagnetButtonUI(swapOption) {
+      const topBtn = document.getElementById("swapTopButton");
+      const bottomBtn = document.getElementById("swapBottomButton");
+      if (topBtn) {
+        if (swapOption === "top" || swapOption === "all") {
+          topBtn.style.backgroundColor = "var(--accent)"; // Green when active.
+        } else {
+          topBtn.style.backgroundColor = "var(--card-bg)";
+        }
+      }
+      if (bottomBtn) {
+        if (swapOption === "bottom" || swapOption === "all") {
+          bottomBtn.style.backgroundColor = "var(--accent)"; // Green when active.
+        } else {
+          bottomBtn.style.backgroundColor = "var(--card-bg)";
+        }
+      }
     }
     
     function updateInventoryFromModal(skylander) {
