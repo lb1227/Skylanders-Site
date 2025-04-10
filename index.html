@@ -8,7 +8,8 @@
     }
   </script>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="viewport" 
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Skylanders Tracker - Start</title>
@@ -44,7 +45,7 @@
       width: 100%;
       height: 100%;
     }
-    /* Common island styling */
+    /* Common island styling – now with explicit height */
     .island {
       position: absolute;
       background-repeat: no-repeat;
@@ -58,12 +59,13 @@
       50%  { transform: translateY(-10px); }
       100% { transform: translateY(0); }
     }
-    /* Island positions for larger screens */
+    /* Island positions for larger screens with explicit height */
     .island.island1 {
       background-image: url("images/Island1.png");
       top: 5%;
       left: 10%;
       width: 200px;
+      height: 150px; /* Adjust as needed for your image aspect ratio */
       animation-delay: 0s;
     }
     .island.island2 {
@@ -71,6 +73,7 @@
       top: 20%;
       left: 70%;
       width: 250px;
+      height: 180px;
       animation-delay: 2s;
     }
     .island.island3 {
@@ -78,6 +81,7 @@
       top: 35%;
       left: 30%;
       width: 220px;
+      height: 160px;
       animation-delay: 1s;
     }
     .island.island4 {
@@ -85,6 +89,7 @@
       top: 50%;
       left: 50%;
       width: 300px;
+      height: 200px;
       animation-delay: 3s;
     }
     /* Foreground grass fixed to the bottom */
@@ -192,35 +197,40 @@
     
     /* ---------- MOBILE OVERRIDES ---------- */
     @media (max-width: 768px) {
-      /* Adjust island sizes and positions for mobile */
+      /* Scale down island sizes and adjust positions for mobile */
       .island {
+        /* Set smaller size for mobile islands */
         width: 150px;
       }
       .island.island1 {
         top: 10%;
         left: 5%;
+        height: 110px;  /* Adjusted height keeping similar ratio */
       }
       .island.island2 {
         top: 30%;
         left: 50%;
+        height: 130px;
       }
       .island.island3 {
         top: 50%;
         left: 20%;
+        height: 120px;
       }
       .island.island4 {
         top: 65%;
         left: 40%;
+        height: 140px;
       }
       
-      /* Adjust foreground grass if needed (usually remains full width) */
+      /* Ensure foreground grass remains full width */
       .foreground-grass {
         bottom: 0;
         left: 0;
         width: 100%;
       }
       
-      /* You might also need to adjust font sizes or margins for main content */
+      /* Adjust main content font sizes */
       h1 {
         font-size: 2rem;
       }
