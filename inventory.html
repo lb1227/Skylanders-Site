@@ -561,7 +561,8 @@
           ownedItems.forEach(owned => {
             const matching = characters.find(c => c.name.trim().toLowerCase() === owned.name.trim().toLowerCase());
             if (matching && matching.price) {
-              totalValue += parseFloat(matching.price) || 0;
+              const numericPrice = parseFloat(matching.price.replace(/[^0-9.]/g, ''));
+              totalValue += numericPrice || 0;
             }
           });
         }
