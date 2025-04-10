@@ -254,26 +254,60 @@
 
     function shareCollection() {
       const username = localStorage.getItem("sky_user") || "guest";
-      const summary = [];
-  
-      Object.entries(window.games || {}).forEach(([game, characters]) => {
-        const key = `sky_progress_${username}_${game}`;
-        const data = localStorage.getItem(key);
-        if (!data) return;
+      const games = Object.keys(window.games);
+      
+      // Prompt the user to choose one of the games.
+      const gamePrompt = `Enter the game you want to share:\n${games.join("\n")}`;
+      let selectedGame = prompt(gamePrompt, games[0]);
+      
+      // If the user cancels or enters an invalid game, exit.
+      if (!selectedGame || !games.includes(selectedGame)) {
+        alert("No valid game selected. Sharing cancelled.");
+        return;
+      }
+      
+      // Calculate summary and collection value for the selected game.
+      let summary = "";
+      let totalValue = 0;
+      const characters = window.games[selectedGame];
+      const key = `sky_progress_${username}_${selectedGame}`;
+      const data = localStorage.getItem(key);
+      let ownedCount = 0;
+      
+      if (data) {
         const parsed = JSON.parse(data);
-        const owned = parsed.collected?.length || 0;
-        const total = characters.length;
-        summary.push(`${game}: ${owned}/${total}`);
-      });
-  
-      const text = summary.length > 0
-        ? `Check out my Skylanders collection:\n\n${summary.join('\n')}`
-        : `I haven't added any Skylanders yet.`;
-  
+        const ownedItems = parsed.collected || [];
+        ownedCount = ownedItems.length;
+        
+        // Loop through owned items and add up their prices.
+        ownedItems.forEach(owned => {
+          const matching = characters.find(c =>
+            c.name.trim().toLowerCase() === owned.name.trim().toLowerCase()
+          );
+          if (matching && matching.price) {
+            // Remove any non-numeric characters (like $) before parsing.
+            const numericPrice = parseFloat(matching.price.replace(/[^0-9.]/g, ''));
+            totalValue += numericPrice || 0;
+          }
+        });
+      }
+      
+      summary = `${selectedGame}: ${ownedCount} out of ${characters.length} cards\n` +
+                `Collection Value: $${totalValue.toFixed(2)}`;
+      
+      // Include your GitHub start page link (replace the URL with your actual link)
+      const shareURL = "https://github.com/your-github-username"; // Update with your GitHub URL
+      
+      const shareText = summary.length > 0
+        ? `Check out my Skylanders collection:\n\n${summary}\n\nView more at: ${shareURL}`
+        : "I haven't added any Skylanders yet.";
+      
+      // Use the Web Share API if available.
       if (navigator.share) {
         navigator.share({
           title: "My Skylanders Collection",
-          text,
+          text: shareText,
+          url: shareURL
         }).catch(err => console.error("Share failed:", err));
       } else {
         alert("Sharing not supported on this device.");
