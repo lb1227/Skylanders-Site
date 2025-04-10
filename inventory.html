@@ -707,11 +707,10 @@
       const saved = localStorage.getItem(key);
       if (saved) {
         const parsed = JSON.parse(saved);
-        // Remove the item from the collected array.
+        // Remove from collected array and clear swapOption for the removed item.
         parsed.collected = (parsed.collected || []).filter(
           x => x.name.trim().toLowerCase() !== name.trim().toLowerCase()
         );
-        // No need to update "queue" in localStorage, since our dynamic rebuild ignores collected.
         localStorage.setItem(key, JSON.stringify(parsed));
         const selectedGame = document.getElementById("gameSelect").value;
         renderInventory(getOwnedOnlyState(), selectedGame);
@@ -746,7 +745,7 @@
       const userInventory = localStorage.getItem(`sky_progress_${user}_${skylander.game}`);
       let isOwned = false;
       let currentCondition = "good"; // default value
-      
+    
       if (userInventory) {
         const parsedInventory = JSON.parse(userInventory);
         const collected = parsedInventory.collected || [];
@@ -757,21 +756,20 @@
         if (storedItem && storedItem.condition) {
           currentCondition = storedItem.condition;
         }
+        // If owned and no swap option is set, default it to "all"
+        if (isOwned && storedItem && !storedItem.swapOption) {
+          storedItem.swapOption = "all";
+          localStorage.setItem(`sky_progress_${user}_${skylander.game}`, JSON.stringify(parsedInventory));
+        }
       }
-      
-      // Build the modal’s HTML for basic info.
+    
       let contentHTML = `
         <h2>${skylander.name}</h2>
       `;
-      
-      // Only for SWAP FORCE items and for the first 16 swappable characters,
-      // we build a swap section that contains the image and the new magnet buttons.
-      if (
-        skylander.game.toUpperCase() === "SWAP FORCE" &&
-        window.games[skylander.game].findIndex(item =>
-          item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase()
-        ) < 16
-      ) {
+      if (skylander.game.toUpperCase() === "SWAP FORCE" &&
+          window.games[skylander.game].findIndex(item =>
+            item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase()
+          ) < 16) {
         contentHTML += `
           <div class="swap-section">
             <img src="${skylander.image}" alt="${skylander.name}">
@@ -784,11 +782,10 @@
           </div>
         `;
       } else {
-        // If no magnet section, just display the image normally.
         contentHTML += `<img src="${skylander.image}" alt="${skylander.name}" style="width:200px; height:auto; margin-bottom:1rem;">`;
       }
-      
-      // Add the remaining details.
+    
+      // Remainder of the modal content
       contentHTML += `
         <p><strong>Game:</strong> ${skylander.game}</p>
         <p><strong>Price:</strong> ${skylander.price || "N/A"}</p>
@@ -812,8 +809,8 @@
       `;
       detailsContainer.innerHTML = contentHTML;
       modal.style.display = "block";
-      
-      // Attach listeners for ownership and condition changes.
+    
+      // Attach change listeners
       document.getElementById("ownedSelect").addEventListener("change", function() {
         updateInventoryFromModal(skylander);
       });
@@ -823,8 +820,8 @@
           updateInventoryFromModal(skylander);
         });
       }
-      
-      // If a swap section was added, set its initial state.
+    
+      // Update the magnet buttons based on stored swap option
       if (skylander.game.toUpperCase() === "SWAP FORCE") {
         const key = `sky_progress_${user}_${skylander.game}`;
         let storedSwapOption = "";
@@ -841,7 +838,6 @@
         updateMagnetButtonUI(storedSwapOption);
       }
     }
-
     function selectSwapOption(option, skylanderName, game) {
       const key = `sky_progress_${user}_${game}`;
       let parsed = { collected: [], queue: [] };
@@ -927,18 +923,14 @@
       const topBtn = document.getElementById("swapTopButton");
       const bottomBtn = document.getElementById("swapBottomButton");
       if (topBtn) {
-        if (swapOption === "top" || swapOption === "all") {
-          topBtn.style.backgroundColor = "var(--accent)"; // Green when active.
-        } else {
-          topBtn.style.backgroundColor = "var(--card-bg)";
-        }
+        topBtn.style.backgroundColor = (swapOption === "top" || swapOption === "all")
+          ? "var(--accent)" 
+          : "var(--card-bg)";
       }
       if (bottomBtn) {
-        if (swapOption === "bottom" || swapOption === "all") {
-          bottomBtn.style.backgroundColor = "var(--accent)"; // Green when active.
-        } else {
-          bottomBtn.style.backgroundColor = "var(--card-bg)";
-        }
+        bottomBtn.style.backgroundColor = (swapOption === "bottom" || swapOption === "all")
+          ? "var(--accent)" 
+          : "var(--card-bg)";
       }
     }
     
