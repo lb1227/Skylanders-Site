@@ -798,6 +798,10 @@
         parsed.collected.push({ name: skylanderName, swapOption: option });
       }
       localStorage.setItem(key, JSON.stringify(parsed));
+      
+      // Re-render the inventory to immediately reflect the swap option change.
+      const selectedGame = document.getElementById("gameSelect").value;
+      renderInventory(getOwnedOnlyState(), selectedGame);
     }
     
     function updateInventoryFromModal(skylander) {
