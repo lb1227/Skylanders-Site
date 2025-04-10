@@ -429,13 +429,14 @@
     </div>
 
     <!-- Select checkbox below the progress bar -->
-    <div style="margin-top: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.4rem; font-size: 0.9rem; color: white;">
-      <input type="checkbox" id="selectionToggle" onchange="toggleSelectionMode()" style="transform: scale(1.2); accent-color: var(--accent);">
-      <label for="selectionToggle" style="cursor: pointer;">Select</label>
-    </div>
-
-    <div id="collectionValueDisplay" style="margin-top: 1rem; font-size: 1rem; color: white;">
-      Collection Value: $0.00
+    <div style="margin-top: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; font-size: 0.9rem; color: white;">
+      <div style="display: flex; align-items: center; gap: 0.4rem;">
+        <input type="checkbox" id="selectionToggle" onchange="toggleSelectionMode()" style="transform: scale(1.2); accent-color: var(--accent);">
+        <label for="selectionToggle" style="cursor: pointer;">Select</label>
+      </div>
+      <div id="collectionValueDisplay" style="font-weight: bold;">
+        Collection Value: $0.00
+      </div>
     </div>
     
     <div id="inventoryContainer"></div>
