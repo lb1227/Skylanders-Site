@@ -660,6 +660,7 @@
       const userInventory = localStorage.getItem(`sky_progress_${user}_${skylander.game}`);
       let isOwned = false;
       let currentCondition = "good"; // default value
+      
       if (userInventory) {
         const parsedInventory = JSON.parse(userInventory);
         const collected = parsedInventory.collected || [];
@@ -672,7 +673,7 @@
         }
       }
       
-      // Build the modal HTML; if owned, include the extra condition select
+      // Build the modal HTML for the basic info and ownership selection.
       detailsContainer.innerHTML = `
         <h2>${skylander.name}</h2>
         <img src="${skylander.image}" alt="${skylander.name}" style="width: 200px; height: auto; margin-bottom: 1rem;">
@@ -698,34 +699,22 @@
         ` : ''}
       `;
       
+      // If the skylander is from SWAP Force, add our swap option buttons.
+      if (skylander.game.toUpperCase() === "SWAP FORCE") {
+        detailsContainer.innerHTML += `
+          <p id="swapOptionField">
+            <strong>Swap Option:</strong>
+            <button type="button" onclick="selectSwapOption('all', '${skylander.name}', '${skylander.game}')">All</button>
+            <button type="button" onclick="selectSwapOption('top', '${skylander.name}', '${skylander.game}')">Top Half</button>
+            <button type="button" onclick="selectSwapOption('bottom', '${skylander.name}', '${skylander.game}')">Bottom Half</button>
+          </p>
+        `;
+      }
+      
       modal.style.display = "block";
       
-      // Attach an event listener to dynamically update the condition field
+      // Attach an event listener to update inventory when the "Owned" select is changed.
       document.getElementById("ownedSelect").addEventListener("change", function() {
-        const ownedValue = this.value;
-        let conditionField = document.getElementById("conditionField");
-        
-        if (ownedValue === "yes") {
-          // If the user selects Yes and the condition field is not present, add it
-          if (!conditionField) {
-            this.parentElement.insertAdjacentHTML('afterend', `
-              <p id="conditionField">
-                <strong>Condition:</strong>
-                <select id="conditionSelect">
-                  <option value="good" selected>Good</option>
-                  <option value="in_box">In Box</option>
-                  <option value="poor">Poor</option>
-                </select>
-              </p>
-            `);
-          }
-        } else {
-          // If the selection is No, remove the condition field if it exists
-          if (conditionField) {
-            conditionField.remove();
-          }
-        }
-        
         updateInventoryFromModal(skylander);
       });
       const conditionSelect = document.getElementById("conditionSelect");
@@ -734,6 +723,29 @@
           updateInventoryFromModal(skylander);
         });
       }
+    }
+
+    function selectSwapOption(option, skylanderName, game) {
+      const key = `sky_progress_${user}_${game}`;
+      let parsed = { collected: [], queue: [] };
+      const saved = localStorage.getItem(key);
+      if (saved) {
+        parsed = JSON.parse(saved);
+      }
+      // Look for the skylander in the collected array.
+      const index = parsed.collected.findIndex(item => 
+        item.name.trim().toLowerCase() === skylanderName.trim().toLowerCase()
+      );
+      if (index >= 0) {
+        // Update the existing entry with the swap option.
+        parsed.collected[index].swapOption = option;
+      } else {
+        // If the skylander is not yet added, add it along with the swap option.
+        parsed.collected.push({ name: skylanderName, swapOption: option });
+      }
+      localStorage.setItem(key, JSON.stringify(parsed));
+      // Provide feedback (this could be replaced with any UI update code).
+      alert("Swap Option set to " + option);
     }
     
     function updateInventoryFromModal(skylander) {
