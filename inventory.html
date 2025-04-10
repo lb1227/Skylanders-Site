@@ -848,7 +848,7 @@
       });
 
       // Reset the swipe start card so the next swipe starts fresh.
-      
+      document.getElementById("selectionToggle").checked = false; // ✅ uncheck box
       setTimeout(toggleSelectionMode, 100);
     }
     
@@ -862,6 +862,7 @@
     }
     
     function cancelSelection() {
+      document.getElementById("selectionToggle").checked = false; // ✅ uncheck box
       toggleSelectionMode();
     }
     
