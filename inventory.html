@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Skylanders Tracker</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAAAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAGAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////AP///wD///8A////AP///wD///8A" type="image/x-icon" />
@@ -194,10 +194,17 @@
     /* Mobile-specific Styles */
     .top-mobile-nav {
       background-color: var(--nav-bg);
-      padding: 0.25rem 0.5rem;
+      /* Fallback for older iOS versions */
+      padding-top: constant(safe-area-inset-top);
+      /* New syntax for modern browsers */
+      padding-top: calc(0.25rem + env(safe-area-inset-top));
+      padding-right: 0.5rem;
+      padding-bottom: 0.25rem;
+      padding-left: 0.5rem;
       box-shadow: 0 2px 6px rgba(0,0,0,0.3);
       position: fixed;
       top: 0;
+      left: 0;
       width: 100%;
       z-index: 999;
       display: flex;
