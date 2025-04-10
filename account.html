@@ -253,56 +253,116 @@
     };
 
     function shareCollection() {
+      // Create an overlay for the modal.
+      const overlay = document.createElement('div');
+      overlay.style.position = 'fixed';
+      overlay.style.top = 0;
+      overlay.style.left = 0;
+      overlay.style.width = '100vw';
+      overlay.style.height = '100vh';
+      overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+      overlay.style.display = 'flex';
+      overlay.style.alignItems = 'center';
+      overlay.style.justifyContent = 'center';
+      overlay.style.zIndex = 10000;
+    
+      // Create a container for the modal contents.
+      const container = document.createElement('div');
+      // Style it using inline styles or attach a CSS class if desired.
+      container.style.backgroundColor = '#292929';
+      container.style.padding = '20px';
+      container.style.borderRadius = '8px';
+      container.style.maxWidth = '90%';
+      container.style.textAlign = 'center';
+      container.style.color = '#ffffff';
+    
+      // Modal Title
+      const title = document.createElement('h2');
+      title.innerText = 'Select a game to share';
+      container.appendChild(title);
+    
+      // Create the dropdown (select element)
+      const select = document.createElement('select');
+      const games = Object.keys(window.games || {});
+      games.forEach(game => {
+        const option = document.createElement('option');
+        option.value = game;
+        option.innerText = game;
+        select.appendChild(option);
+      });
+      container.appendChild(select);
+    
+      // Create Share button
+      const shareBtn = document.createElement('button');
+      shareBtn.innerText = 'Share';
+      shareBtn.style.marginTop = '10px';
+      shareBtn.style.padding = '10px 20px';
+      shareBtn.style.border = 'none';
+      shareBtn.style.borderRadius = '4px';
+      shareBtn.style.backgroundColor = 'var(--accent)';
+      shareBtn.style.color = 'white';
+      shareBtn.addEventListener('click', function () {
+        const selectedGame = select.value;
+        // Remove the modal
+        document.body.removeChild(overlay);
+        // Call another function to share the selected game’s collection.
+        shareSelectedGame(selectedGame);
+      });
+      container.appendChild(shareBtn);
+    
+      // Create Cancel button
+      const cancelBtn = document.createElement('button');
+      cancelBtn.innerText = 'Cancel';
+      cancelBtn.style.marginTop = '10px';
+      cancelBtn.style.marginLeft = '10px';
+      cancelBtn.style.padding = '10px 20px';
+      cancelBtn.style.border = 'none';
+      cancelBtn.style.borderRadius = '4px';
+      cancelBtn.style.backgroundColor = 'var(--button)';
+      cancelBtn.style.color = 'white';
+      cancelBtn.addEventListener('click', function () {
+        document.body.removeChild(overlay);
+      });
+      container.appendChild(cancelBtn);
+    
+      overlay.appendChild(container);
+      document.body.appendChild(overlay);
+    }
+    
+    // Separate function to calculate and share the collection for a given game.
+    function shareSelectedGame(selectedGame) {
       const username = localStorage.getItem("sky_user") || "guest";
-      const games = Object.keys(window.games);
-      
-      // Prompt the user to choose one of the games.
-      const gamePrompt = `Enter the game you want to share:\n${games.join("\n")}`;
-      let selectedGame = prompt(gamePrompt, games[0]);
-      
-      // If the user cancels or enters an invalid game, exit.
-      if (!selectedGame || !games.includes(selectedGame)) {
-        alert("No valid game selected. Sharing cancelled.");
-        return;
-      }
-      
-      // Calculate summary and collection value for the selected game.
-      let summary = "";
-      let totalValue = 0;
       const characters = window.games[selectedGame];
       const key = `sky_progress_${username}_${selectedGame}`;
       const data = localStorage.getItem(key);
       let ownedCount = 0;
-      
+      let totalValue = 0;
+    
       if (data) {
         const parsed = JSON.parse(data);
         const ownedItems = parsed.collected || [];
         ownedCount = ownedItems.length;
-        
-        // Loop through owned items and add up their prices.
+    
         ownedItems.forEach(owned => {
           const matching = characters.find(c =>
             c.name.trim().toLowerCase() === owned.name.trim().toLowerCase()
           );
           if (matching && matching.price) {
-            // Remove any non-numeric characters (like $) before parsing.
+            // Remove non-numeric characters (like $) then parse.
             const numericPrice = parseFloat(matching.price.replace(/[^0-9.]/g, ''));
             totalValue += numericPrice || 0;
           }
         });
       }
-      
-      summary = `${selectedGame}: ${ownedCount} out of ${characters.length} cards\n` +
-                `Collection Value: $${totalValue.toFixed(2)}`;
-      
-      // Include your GitHub start page link (replace the URL with your actual link)
-      const shareURL = "https://github.com/your-github-username"; // Update with your GitHub URL
-      
-      const shareText = summary.length > 0
-        ? `Check out my Skylanders collection:\n\n${summary}\n\nView more at: ${shareURL}`
-        : "I haven't added any Skylanders yet.";
-      
-      // Use the Web Share API if available.
+    
+      const summary = `${selectedGame}: ${ownedCount} out of ${characters.length} cards\n` +
+                      `Collection Value: $${totalValue.toFixed(2)}`;
+    
+      // Replace the URL below with the start page URL of your GitHub.
+      const shareURL = "https://lb1227.github.io/Skylanders-Site/";
+    
+      const shareText = `Check out my Skylanders collection:\n\n${summary}\n\nView more at: ${shareURL}`;
+    
       if (navigator.share) {
         navigator.share({
           title: "My Skylanders Collection",
@@ -310,7 +370,7 @@
           url: shareURL
         }).catch(err => console.error("Share failed:", err));
       } else {
-        alert("Sharing not supported on this device.");
+        alert(shareText);
       }
     }
   </script>
