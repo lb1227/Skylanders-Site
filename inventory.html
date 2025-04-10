@@ -25,10 +25,11 @@
       background-color: var(--bg);
       color: var(--text);
       overflow-x: hidden;
+      padding-top: calc(60px + env(safe-area-inset-top));
     }
     .container {
       max-width: 1200px;
-      margin: 2rem auto;
+      margin: calc(2rem + 60px) auto 2rem auto;
       background: var(--card-bg);
       padding: 2rem;
       border-radius: 12px;
@@ -192,7 +193,8 @@
       50% { opacity: 0.8; }
     }
     /* Mobile-specific Styles */
-    .top-mobile-nav {
+    .top-mobile-nav 
+    {
       background-color: var(--nav-bg);
       /* Fallback for older iOS versions */
       padding-top: constant(safe-area-inset-top);
