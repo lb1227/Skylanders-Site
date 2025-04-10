@@ -253,29 +253,31 @@
     };
 
     function shareCollection() {
-      const user = localStorage.getItem("sky_user") || "guest";
-      let output = "";
-    
+      const username = localStorage.getItem("sky_user") || "guest";
+      const summary = [];
+  
       Object.entries(window.games || {}).forEach(([game, characters]) => {
-        const key = `sky_progress_${user}_${game}`;
-        const saved = localStorage.getItem(key);
-        if (!saved) return;
-    
-        const parsed = JSON.parse(saved);
-        const names = (parsed.collected || []).map(x => x.name);
-        if (names.length > 0) {
-          output += `📦 ${game}:\n${names.join(", ")}\n\n`;
-        }
+        const key = `sky_progress_${username}_${game}`;
+        const data = localStorage.getItem(key);
+        if (!data) return;
+        const parsed = JSON.parse(data);
+        const owned = parsed.collected?.length || 0;
+        const total = characters.length;
+        summary.push(`${game}: ${owned}/${total}`);
       });
-    
-      if (!output) {
-        alert("You haven't added any Skylanders yet.");
-        return;
+  
+      const text = summary.length > 0
+        ? `Check out my Skylanders collection:\n\n${summary.join('\n')}`
+        : `I haven't added any Skylanders yet.`;
+  
+      if (navigator.share) {
+        navigator.share({
+          title: "My Skylanders Collection",
+          text,
+        }).catch(err => console.error("Share failed:", err));
+      } else {
+        alert("Sharing not supported on this device.");
       }
-    
-      navigator.clipboard.writeText(output)
-        .then(() => alert("✅ Your collection was copied to clipboard!"))
-        .catch(() => alert("⚠️ Could not copy. Please try again."));
     }
   </script>
 </body>
