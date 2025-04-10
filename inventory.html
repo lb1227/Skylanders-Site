@@ -740,21 +740,27 @@
         ` : ''}
       `;
       
-      // If the skylander is from SWAP Force, add our swap option buttons.
+      // Only for SWAP FORCE items AND only for the first 16 swappable characters:
       if (skylander.game.toUpperCase() === "SWAP FORCE") {
-        detailsContainer.innerHTML += `
-          <p id="swapOptionField">
-            <strong>Swap Option:</strong>
-            <button type="button" onclick="selectSwapOption('all', '${skylander.name}', '${skylander.game}')">All</button>
-            <button type="button" onclick="selectSwapOption('top', '${skylander.name}', '${skylander.game}')">Top Half</button>
-            <button type="button" onclick="selectSwapOption('bottom', '${skylander.name}', '${skylander.game}')">Bottom Half</button>
-          </p>
-        `;
+        const swapArray = window.games[skylander.game]; // Assumes the key is exactly "SWAP Force"
+        const index = swapArray.findIndex(item =>
+          item.name.trim().toLowerCase() === skylander.name.trim().toLowerCase()
+        );
+        if (index >= 0 && index < 16) {
+          detailsContainer.innerHTML += `
+            <p id="swapOptionField">
+              <strong>Swap Option:</strong>
+              <button type="button" onclick="selectSwapOption('all', '${skylander.name}', '${skylander.game}')">All</button>
+              <button type="button" onclick="selectSwapOption('top', '${skylander.name}', '${skylander.game}')">Top Half</button>
+              <button type="button" onclick="selectSwapOption('bottom', '${skylander.name}', '${skylander.game}')">Bottom Half</button>
+            </p>
+          `;
+        }
       }
       
       modal.style.display = "block";
       
-      // Attach an event listener to update inventory when the "Owned" select is changed.
+      // Attach event listeners for ownership and condition changes.
       document.getElementById("ownedSelect").addEventListener("change", function() {
         updateInventoryFromModal(skylander);
       });
