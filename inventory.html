@@ -339,6 +339,30 @@
       flex-direction: column;
       height: auto;
     }
+    .card.owned.swap-top {
+      /* Top half: green; bottom half: default card background */
+      background: linear-gradient(to bottom, #1f4d1f 50%, var(--card-bg) 50%);
+    }
+    .card.owned.swap-bottom {
+      /* Bottom half: green; top half: default card background */
+      background: linear-gradient(to top, #1f4d1f 50%, var(--card-bg) 50%);
+    }
+    
+    /* For SWAP Force items with "in_box" condition (purple) */
+    .card.owned.in_box.swap-top {
+      background: linear-gradient(to bottom, purple 50%, var(--card-bg) 50%);
+    }
+    .card.owned.in_box.swap-bottom {
+      background: linear-gradient(to top, purple 50%, var(--card-bg) 50%);
+    }
+    
+    /* For SWAP Force items with "poor" condition (yellow/orange) */
+    .card.owned.poor.swap-top {
+      background: linear-gradient(to bottom, #FFA500 50%, var(--card-bg) 50%);
+    }
+    .card.owned.poor.swap-bottom {
+      background: linear-gradient(to top, #FFA500 50%, var(--card-bg) 50%);
+    }
     .card img {
       width: 60px;
       height: 60px;
@@ -480,7 +504,6 @@
     function renderInventory(showOwnedOnly = false, selectedGame = "") {
       container.innerHTML = '';
     
-      // Render game sections and cards
       Object.entries(window.games).forEach(([game, characters]) => {
         if (selectedGame && game !== selectedGame) return;
     
@@ -506,9 +529,12 @@
           const isOwned = !!found;
           if (showOwnedOnly && !isOwned) return;
     
+          // Create the card element
           const card = document.createElement("div");
           card.className = "card";
           card.dataset.game = game;
+          
+          // Existing logic for owned conditions, etc.
           if (isOwned) {
             card.classList.add("owned");
             if (!selectionMode) {
@@ -519,14 +545,30 @@
               }
             }
           }
+          
+          // --- Step 1: Add SWAP FORCE swapOption class if applicable ---
+          if (game.toUpperCase() === "SWAP FORCE") {
+            const savedData = localStorage.getItem(key);
+            if (savedData) {
+              let parsed = JSON.parse(savedData);
+              const swapData = parsed.collected.find(item =>
+                item.name.trim().toLowerCase() === char.name.trim().toLowerCase()
+              );
+              if (swapData && swapData.swapOption && swapData.swapOption !== 'all') {
+                // This will add either "swap-top" or "swap-bottom" based on the stored option.
+                card.classList.add(`swap-${swapData.swapOption}`);
+              }
+            }
+          }
     
+          // Build the card inner HTML
           card.innerHTML = `
             <img src="${char.image}" alt="${char.name}">
             <div><strong>${char.name}</strong></div>
             ${!selectionMode && isOwned ? `<button class="remove-button" onclick="event.stopPropagation(); removeFromInventory('${char.name.replace(/'/g, "\\'")}', '${game.replace(/'/g, "\\'")}')">Remove</button>` : ''}
           `;
     
-          // Event handlers
+          // Attach event handlers…
           if (selectionMode) {
             card.onclick = function(e) {
               e.stopPropagation();
@@ -540,7 +582,6 @@
           } else {
             card.onclick = () => openModal(char);
           }
-    
           card.addEventListener("mousedown", startPress);
           card.addEventListener("touchstart", startPress);
           card.addEventListener("mouseup", cancelPress);
