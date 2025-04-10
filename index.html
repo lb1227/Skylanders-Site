@@ -70,7 +70,7 @@
     }
     .island.island2 {
       background-image: url("images/Island2.png");
-      top: 20%;
+      top: 0%;
       left: 70%;
       width: 250px;
       height: 180px;
@@ -189,25 +189,26 @@
     
     /* ---------- MOBILE OVERRIDES ---------- */
     @media (max-width: 768px) {
-      /* Scale down island sizes and adjust positions for mobile */
+      /* Make all islands bigger on mobile */
       .island {
-        /* Set smaller size for mobile islands */
-        width: 150px;
+        width: 200px;  /* increased width */
       }
+      /* Adjust Island 2 as an example */
+      .island.island2 {
+        top: 0%;  /* If you want Island 2 at the top on mobile too */
+        left: 50%;
+        height: 180px;  /* increased height */
+      }
+      /* You can update the other islands similarly */
       .island.island1 {
         top: 10%;
         left: 5%;
-        height: 110px;  /* Adjusted height keeping similar ratio */
-      }
-      .island.island2 {
-        top: 30%;
-        left: 50%;
-        height: 130px;
+        height: 140px;
       }
       .island.island4 {
         top: 65%;
         left: 40%;
-        height: 140px;
+        height: 180px;
       }
       
       /* Ensure foreground grass remains full width */
