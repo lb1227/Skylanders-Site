@@ -14,16 +14,77 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Skylanders Tracker - Start</title>
   <style>
+    /* Reset defaults and enable full height */
     html, body {
       overflow: hidden;
       touch-action: none;
-    }
-    body {
       margin: 0;
       padding: 0;
-      background: black;
-      background: url('https://i.redd.it/pg69v953nnn81.jpg') no-repeat center center fixed;  /* Add the background image */
-      background-size: cover; /* This will make sure the background covers the whole screen */
+      height: 100%;
+    }
+
+    /* Animated Background Container */
+    .animated-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      perspective: 1000px; /* enables 3D space for child elements */
+      overflow: hidden;
+      z-index: -1; /* places it behind other content */
+      background: #000; /* fallback background color */
+    }
+    /* Card Elements with Animation */
+    .card {
+      position: absolute;
+      width: 150px; /* adjust size as needed */
+      height: 210px;
+      background-size: cover;
+      background-position: center;
+      opacity: 0.8;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+      animation: moveBack 8s linear infinite;
+    }
+    /* Define individual card positions, background images, and animation delays */
+    .card:nth-child(1) {
+      background-image: url('https://via.placeholder.com/150x210?text=Card+1');
+      top: 10%;
+      left: 15%;
+      animation-delay: 0s;
+    }
+    .card:nth-child(2) {
+      background-image: url('https://via.placeholder.com/150x210?text=Card+2');
+      top: 40%;
+      left: 60%;
+      animation-delay: 2s;
+    }
+    .card:nth-child(3) {
+      background-image: url('https://via.placeholder.com/150x210?text=Card+3');
+      top: 70%;
+      left: 30%;
+      animation-delay: 4s;
+    }
+    .card:nth-child(4) {
+      background-image: url('https://via.placeholder.com/150x210?text=Card+4');
+      top: 20%;
+      left: 80%;
+      animation-delay: 1s;
+    }
+    /* Keyframes for receding card effect */
+    @keyframes moveBack {
+      0% {
+        transform: translateZ(0) scale(1) rotate(0deg);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateZ(-300px) scale(0.7) rotate(15deg);
+        opacity: 0;
+      }
+    }
+
+    /* Main Content Styling */
+    body {
       color: white;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
@@ -33,8 +94,7 @@
       flex-direction: column;
       text-align: center;
       position: relative;
-      /* Add padding if you need to adjust content away from screen edges */
-      padding-top: env(safe-area-inset-top);
+      padding-top: env(safe-area-inset-top); /* respects safe area insets */
     }
     h1 {
       font-size: 2.5rem;
@@ -47,18 +107,14 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      /* A subtle gradient background for a modern touch */
       background: linear-gradient(145deg, #4caf50, #45a049);
       color: #fff;
-      /* A subtle shadow for a slight 3D effect */
       box-shadow: 4px 4px 8px rgba(0,0,0,0.2),
                   -4px -4px 8px rgba(255,255,255,0.1);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-    
     button:hover {
       transform: scale(1.03);
-      /* Enhance the shadow on hover */
       box-shadow: 6px 6px 12px rgba(0,0,0,0.3),
                   -6px -6px 12px rgba(255,255,255,0.1);
     }
@@ -66,38 +122,34 @@
     /* Hamburger Menu Styling */
     .hamburger {
       position: absolute;
-      top: calc(20px + env(safe-area-inset-top)); /* Adjust for the safe area inset */
+      top: calc(20px + env(safe-area-inset-top));
       right: 20px;
       font-size: 2rem;
       cursor: pointer;
       color: white;
       display: none;
     }
-
-    /* Initially, the menu is hidden */
     /* Mobile Menu Container */
     .mobile-menu {
-      display: none; /* hidden by default */
+      display: none;
       position: absolute;
       top: 60px;
       right: 20px;
       width: 80%;
       max-width: 300px;
-      background-color: rgba(0, 0, 0, 0.95); /* almost solid dark background */
+      background-color: rgba(0, 0, 0, 0.95);
       border-radius: 8px;
       padding: 1rem;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
       z-index: 1000;
       transition: all 0.3s ease;
     }
-    
-    /* Mobile Menu Links */
     .mobile-menu a {
       display: block;
       text-decoration: none;
       color: #ffffff;
       font-size: 1.1rem;
-      background-color: #222;           /* A deep, clean background */
+      background-color: #222;
       padding: 0.75rem 1rem;
       margin-bottom: 0.5rem;
       border: 1px solid transparent;
@@ -105,54 +157,45 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.3);
       transition: background-color 0.3s ease, transform 0.2s ease, border 0.3s ease;
     }
-    
     .mobile-menu a:hover {
-      background-color: #4caf50;      /* change to your accent color or a hover color */
+      background-color: #4caf50;
       transform: scale(1.02);
     }
-    
     .mobile-menu a:last-child {
       margin-bottom: 0;
     }
-
     .mobile-menu.show {
-      display: flex; /* Show the menu when .show class is added */
+      display: flex;
     }
-
     .mobile-buttons {
       display: flex;
       flex-direction: column;
       align-items: center;
     }
-
     /* Media Queries */
     @media (max-width: 768px) {
       #touchToStartText {
-        -webkit-text-stroke: 1px black; /* works on WebKit browsers */
+        -webkit-text-stroke: 1px black;
         text-shadow: 
           -1px -1px 0 #000,
            1px -1px 0 #000,
           -1px  1px 0 #000,
-           1px  1px 0 #000; /* fallback for other browsers */
+           1px  1px 0 #000;
       }
       .desktop {
         display: none;
       }
-
       .hamburger {
-        display: block; /* Show hamburger on mobile */
+        display: block;
       }
-
       .mobile {
         display: block;
       }
     }
-
     @media (min-width: 769px) {
       .mobile {
         display: none;
       }
-
       .desktop {
         display: block;
       }
@@ -160,6 +203,14 @@
   </style>
 </head>
 <body>
+  <!-- Animated Background -->
+  <div class="animated-bg">
+    <div class="card"></div>
+    <div class="card"></div>
+    <div class="card"></div>
+    <div class="card"></div>
+  </div>
+
   <!-- Desktop Version -->
   <div class="desktop">
     <h1>Please Log In to Continue</h1>
@@ -220,29 +271,30 @@
         menu.style.display = "block";
       }
     }
-      // Close the mobile menu if clicked outside
+    
+    // Close the mobile menu if clicked outside
     window.addEventListener('click', function(event) {
       const menu = document.getElementById("mobileMenu");
       const hamburger = document.querySelector(".hamburger");
 
       // If the clicked element is not the menu or the hamburger, hide the menu
       if (!menu.contains(event.target) && !hamburger.contains(event.target)) {
-        menu.classList.remove("show"); // Hide the menu
+        menu.classList.remove("show");
       }
     });
 
     window.onload = checkLogin;
+    
     function logout() {
       localStorage.removeItem("sky_user");
       window.location.href = "index.html"; // or another appropriate location
     }
+    
     document.body.addEventListener("click", function(event) {
       // Only trigger start if the user is logged in.
       if (user && user !== "guest") {
-        // Check if the clicked element is inside the hamburger menu or mobile menu.
-        // Use closest() to check if any parent has the class "hamburger" or the id "mobileMenu".
+        // Check if the clicked element is inside the hamburger or mobile menu.
         if (!event.target.closest(".hamburger") && !event.target.closest("#mobileMenu")) {
-          // If the click is outside those areas, start.
           goToHome();
         }
       }
