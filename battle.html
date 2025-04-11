@@ -160,6 +160,21 @@
     </div>
   </div>
 
+  <!-- Bottom Mobile Navigation -->
+  <nav id="mobileNav" class="bottom-mobile-nav">
+    <a href="home.html" title="Home">🏠</a>
+    <a href="inventory.html" title="Inventory">
+      <img src="images/inventory.png" alt="Inventory Icon">
+    </a>
+    <a href="battle.html" title="Battle">⚔️</a>
+    <button class="hamburger" onclick="toggleMobileMenu()">☰</button>
+  </nav>
+
+  <div id="mobileMenu" class="mobile-menu">
+    <button onclick="goToAccount()">Account</button>
+    <button onclick="logout()">Logout</button>
+  </div>
+
   <script>
     // Demo data for player and opponent cards
     const demoPlayerCards = [
@@ -176,6 +191,15 @@
       { name: "Snorlax", power: 85 },
       { name: "Jigglypuff", power: 50 }
     ];
+
+    function logout(){
+      localStorage.removeItem("sky_user");
+      window.location.href = "login.html";
+    }
+     function toggleMobileMenu() {
+      const menu = document.getElementById("mobileMenu");
+      menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+    }
     
     // Render opponent cards as card backs
     function renderCards(cards, containerId, showBack = false) {
