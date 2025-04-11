@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-  <title>Dark Mode Mobile Card Battle</title>
+  <title>Dark Mode Mobile Card Battle – Touch Drag</title>
   <style>
     :root {
-      --bg: #121212;            /* Overall dark background */
-      --platform-bg: #1e1e1e;    /* Dark platform background */
-      --card-bg: #1e1e1e;        /* Dark gray for card fronts, but used only for your cards */
-      --card-back-bg: #333333;   /* Slightly lighter gray for card backs */
-      --card-border: #bb86fc;    /* Neon purple border accent */
+      --bg: #121212;             /* Overall dark background */
+      --platform-bg: #1e1e1e;     /* Dark platform background */
+      --card-bg: #1e1e1e;         /* Dark gray for your cards */
+      --card-back-bg: #333333;    /* Slightly lighter gray for card backs */
+      --card-border: #bb86fc;     /* Neon purple border accent */
       --card-shadow: rgba(0, 0, 0, 0.8);
-      --text-color: #e0e0e0;     /* Light text for readability */
-      --button-bg: #bb86fc;      /* Neon purple for buttons */
+      --text-color: #e0e0e0;      /* Light text for readability */
+      --button-bg: #bb86fc;       /* Neon purple for buttons */
       --button-hover: #9b67d3;
       --font-family: 'Arial', sans-serif;
     }
@@ -71,7 +71,6 @@
       padding: 4px;
     }
     .opponent-area .card span {
-      /* Indicate this is the back of a card */
       color: var(--text-color);
       font-weight: bold;
     }
@@ -90,16 +89,20 @@
       font-size: 0.7rem;
       text-align: center;
       padding: 4px;
+      position: relative;
+      /* Ensure the card has a smooth transition when resetting position */
+      transition: transform 0.2s ease;
     }
-    /* Battle Platform styling – made taller */
+    /* Battle Platform styling – taller */
     .platform {
       background: var(--platform-bg);
       border-radius: 12px;
-      padding: 2rem 1rem;  /* Increased vertical padding for a taller platform */
+      padding: 2rem 1rem;  /* Increased vertical padding */
       min-height: 400px;
       margin: 0.8rem 0;
       color: var(--text-color);
       box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
+      position: relative;
     }
     .platform .battle-button {
       margin-top: 1rem;
@@ -128,7 +131,7 @@
         <!-- Opponent cards will be rendered here as card backs -->
       </div>
     </div>
-    <!-- Battle Platform (Center) -->
+    <!-- Battle Platform (Center) – This is now our drop zone -->
     <div class="zone platform" id="battleDropZone" ondragover="allowDrop(event)" ondrop="drop(event)">
       <div class="header">Battle Platform</div>
       <div>Prepare for battle...</div>
@@ -138,7 +141,7 @@
     <div class="zone player-area">
       <div class="header">Your Cards</div>
       <div class="cards-row" id="playerCards">
-        <!-- Player cards with details will be rendered here -->
+        <!-- Player cards will be rendered here with touch handlers -->
       </div>
     </div>
   </div>
@@ -160,7 +163,7 @@
       { name: "Jigglypuff", power: 50 }
     ];
     
-    // Render cards into a given container
+    // Render opponent cards as card backs (using existing function)
     function renderCards(cards, containerId, showBack = false) {
       const container = document.getElementById(containerId);
       container.innerHTML = "";
@@ -168,21 +171,77 @@
         const cardElem = document.createElement("div");
         cardElem.classList.add("card");
         if (showBack) {
-          // For opponent cards, show a card back without details
           cardElem.innerHTML = `<span>Card Back</span>`;
         } else {
-          // For player's cards, display details
           cardElem.innerHTML = `<span>${card.name}<br>(${card.power})</span>`;
         }
         container.appendChild(cardElem);
       });
     }
-    
-    // Initialize the rendering for opponent and player cards
     renderCards(demoOpponentCards, "opponentCards", true);
-    renderCards(demoPlayerCards, "playerCards", false);
 
-    // Battle simulation when the button is tapped.
+    // Touch event handlers for drag-and-drop simulation
+    function handleTouchStart(e) {
+      e.preventDefault();
+      let touch = e.touches[0];
+      this.startX = touch.pageX;
+      this.startY = touch.pageY;
+      // Store original transform in case we need to revert.
+      this.origTransform = this.style.transform || '';
+    }
+
+    function handleTouchMove(e) {
+      e.preventDefault();
+      let touch = e.touches[0];
+      // Calculate movement delta
+      let deltaX = touch.pageX - this.startX;
+      let deltaY = touch.pageY - this.startY;
+      this.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+    }
+
+    function handleTouchEnd(e) {
+      e.preventDefault();
+      // Get drop zone boundaries
+      const dropZone = document.getElementById("battleDropZone");
+      const dzRect = dropZone.getBoundingClientRect();
+      // Get card position
+      const cardRect = this.getBoundingClientRect();
+      // Calculate card's center point
+      const cardCenterX = cardRect.left + cardRect.width / 2;
+      const cardCenterY = cardRect.top + cardRect.height / 2;
+      // Check if the card's center is inside the drop zone
+      if (cardCenterX >= dzRect.left && cardCenterX <= dzRect.right &&
+          cardCenterY >= dzRect.top && cardCenterY <= dzRect.bottom) {
+        // Append card to drop zone (battle platform)
+        dropZone.appendChild(this);
+        // Reset transform
+        this.style.transform = '';
+      } else {
+        // Not dropped in drop zone – reset position
+        this.style.transform = this.origTransform;
+      }
+    }
+
+    // Render player's cards with touch handlers
+    function renderPlayerCards(cards, containerId) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = "";
+      cards.forEach((card, index) => {
+        const cardElem = document.createElement("div");
+        cardElem.classList.add("card");
+        cardElem.id = `playerCard_${index}`;  // Unique id for the card
+        cardElem.setAttribute("draggable", "false"); // Disable native drag for touch
+        cardElem.innerHTML = `<span>${card.name}<br>(${card.power})</span>`;
+        // Add touch event listeners for dragging
+        cardElem.addEventListener("touchstart", handleTouchStart, false);
+        cardElem.addEventListener("touchmove", handleTouchMove, false);
+        cardElem.addEventListener("touchend", handleTouchEnd, false);
+        container.appendChild(cardElem);
+      });
+    }
+    renderPlayerCards(demoPlayerCards, "playerCards");
+
+    // Battle simulation when "Battle!" button is tapped.
     document.getElementById("battleButton").addEventListener("click", function() {
       const playerTotal = demoPlayerCards.reduce((sum, card) => sum + card.power, 0);
       const opponentTotal = demoOpponentCards.reduce((sum, card) => sum + card.power, 0);
@@ -194,42 +253,6 @@
       }
       alert(`Your Total Power: ${playerTotal}\nOpponent Total Power: ${opponentTotal}\n${outcome}`);
     });
-
-    // Example drag-and-drop event handlers:
-    function allowDrop(ev) {
-      ev.preventDefault();
-    }
-    
-    function drag(ev) {
-      // Use the card's id attribute to identify it during the drop event.
-      ev.dataTransfer.setData("text/plain", ev.target.id);
-    }
-    
-    function drop(ev) {
-      ev.preventDefault();
-      var cardId = ev.dataTransfer.getData("text/plain");
-      var cardElem = document.getElementById(cardId);
-      // Use ev.currentTarget to ensure you reference the drop zone element
-      ev.currentTarget.appendChild(cardElem);
-    }
-    
-    // Modify renderCards for player's hand (demo example):
-    function renderPlayerCards(cards, containerId) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = "";
-      cards.forEach((card, index) => {
-        const cardElem = document.createElement("div");
-        cardElem.classList.add("card");
-        cardElem.id = `playerCard_${index}`;  // Unique id for each card
-        cardElem.setAttribute("draggable", "true");
-        cardElem.addEventListener("dragstart", drag);
-        cardElem.innerHTML = `<span>${card.name}<br>(${card.power})</span>`;
-        container.appendChild(cardElem);
-      });
-    }
-    
-    // Use your existing demoPlayerCards data:
-    renderPlayerCards(demoPlayerCards, "playerCards");
   </script>
 </body>
 </html>
