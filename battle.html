@@ -263,10 +263,10 @@
         <div class="slot" id="opponentSlot2">Slot 2</div>
         <div class="slot" id="opponentSlot3">Slot 3</div>
       </div>
-      <div class="slots">
-        <div class="slot" id="slot1">Slot 1</div>
-        <div class="slot" id="slot2">Slot 2</div>
-        <div class="slot" id="slot3">Slot 3</div>
+      <div class="slots player-slots">
+        <div class="slot player-slot" id="playerSlot1">Slot 1</div>
+        <div class="slot player-slot" id="playerSlot2">Slot 2</div>
+        <div class="slot player-slot" id="playerSlot3">Slot 3</div>
       </div>
       <div>Prepare for battle...</div>
       <button class="battle-button" id="battleButton">Battle!</button>
@@ -503,20 +503,35 @@
         const slot = document.getElementById(`opponentSlot${i}`);
         const cardSpan = slot.querySelector("span");
         if (cardSpan) {
-          // Assumes the content format is something like: "CardName (Power)"
           const match = cardSpan.innerText.match(/\((\d+)\)/);
           if(match){
             opponentTotal += parseInt(match[1], 10);
           }
         }
       }
-      // For the player, you might either use all the cards or similar logic if you use battlefield slots.
-      const playerTotal = demoPlayerCards.reduce((sum, card) => sum + card.power, 0); // Adjust if needed
+      const playerTotal = getPlayerBattlePower();
       const outcome = playerTotal === opponentTotal 
         ? "It's a tie!" 
         : playerTotal > opponentTotal ? "You win!" : "Opponent wins!";
       alert(`Your Total Power: ${playerTotal}\nOpponent Total Power: ${opponentTotal}\n${outcome}`);
     });
+    
+    function getPlayerBattlePower() {
+      let total = 0;
+      const playerSlots = document.querySelectorAll(".player-slot");
+      playerSlots.forEach(slot => {
+        // If a card (i.e. a span) exists in the slot, then extract the power value.
+        const cardSpan = slot.querySelector("span");
+        if (cardSpan) {
+          // Assumes the card's inner text is in the format: "CardName (Power)"
+          const match = cardSpan.innerText.match(/\((\d+)\)/);
+          if (match) {
+            total += parseInt(match[1], 10);
+          }
+        }
+      });
+      return total;
+    }
   </script>
 </body>
 </html>
