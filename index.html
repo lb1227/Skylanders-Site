@@ -238,24 +238,26 @@
     
     /* ---------- HAMBURGER & MOBILE MENU ---------- */
     .hamburger {
-      position: relative; /* Needed so that the pseudo-element is positioned relative to this element */
+      position: relative; /* Set context for pseudo-element */
       font-size: 2rem;
       cursor: pointer;
       color: white;
       display: none;
       padding: 3px;
       border-radius: 4px;
-      /* Removed background-color and height to use the pseudo-element for background */
     }
     
+    /* Pseudo-element for the black background */
     .hamburger::before {
       content: "";
       position: absolute;
-      top: calc(20px + env(safe-area-inset-top));
-      right: 20px;
+      top: 0;      /* Aligns the top of the pseudo-element with the top of .hamburger */
+      right: 0;    /* Aligns the right edge with the right side of .hamburger */
+      width: 100%; /* Ensure the pseudo-element takes up the full width, or set a fixed value */
+      height: 100%; /* Same for height, adjust as needed */
       background-color: black;
       border-radius: 4px;
-      z-index: -1;    /* Ensures the background sits behind the icon content */
+      z-index: -1; /* Places the background behind the hamburger content */
     }
     .mobile-menu {
       display: none;
