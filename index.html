@@ -238,19 +238,26 @@
     
     /* ---------- HAMBURGER & MOBILE MENU ---------- */
     .hamburger {
-      position: absolute;
-      top: calc(20px + env(safe-area-inset-top));
-      right: 20px;
+      position: relative; /* Needed so that the pseudo-element is positioned relative to this element */
       font-size: 2rem;
       cursor: pointer;
       color: white;
       display: none;
-
-       /* New properties to add a black box background */
-      background-color: black; /* Gives the black box */
-      height: 30px;
-      padding: 3px;         /* Adds space around the icon */
-      border-radius: 4px;     /* Optional: rounds the corners */
+      padding: 3px;
+      border-radius: 4px;
+      /* Removed background-color and height to use the pseudo-element for background */
+    }
+    
+    .hamburger::before {
+      content: "";
+      position: absolute;
+      top: 10px;      /* Adjust this value to move the background down */
+      left: 0;
+      right: 0;
+      bottom: 0;      /* You could also adjust bottom if needed */
+      background-color: black;
+      border-radius: 4px;
+      z-index: -1;    /* Ensures the background sits behind the icon content */
     }
     .mobile-menu {
       display: none;
