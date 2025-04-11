@@ -151,7 +151,7 @@
     
     /* Individual positioning for each dark cloud */
     .dark-cloud.one {
-      top: -300px;       /* 20% down from the top */
+      top: -280px;       /* 20% down from the top */
       right: -150px;       /* 5% from the left */
       animation-delay: 0s;
     }
@@ -174,6 +174,31 @@
       100% {
         transform: translateX(0);
         opacity: 0.8;
+      }
+    }
+
+    /* Balloon element that floats upward slowly */
+    .balloon {
+      position: absolute;
+      bottom: 0;
+      left: 20%;   /* Adjust horizontal placement as needed */
+      width: 800px;  /* Desired width */
+      height: 500;
+      background-image: url("images/balloon.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      animation: floatBalloon 20s linear infinite;
+      z-index: 3;  /* Above dark clouds, below foreground */
+    }
+    @keyframes floatBalloon {
+      0% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-150vh);
+        opacity: 0;
       }
     }
     
@@ -325,6 +350,8 @@
     <!-- Three dark cloud elements -->
     <div class="dark-cloud one"></div>
     <div class="dark-cloud three"></div>
+    <!-- Balloon floating upward -->
+    <div class="balloon"></div>
     
     <div class="floating-islands">
       <div class="island island1"></div>
