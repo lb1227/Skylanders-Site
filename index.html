@@ -438,6 +438,19 @@
         }
       }
     });
+
+    document.body.addEventListener("click", function(event) {
+      // Check if the click is not on elements that should be ignored like the hamburger or mobile menu.
+      if (!event.target.closest(".hamburger") && !event.target.closest("#mobileMenu")) {
+        if (user && user !== "guest") {
+          // When logged in, go to home
+          goToHome();
+        } else {
+          // When not logged in, redirect to the login page.
+          window.location.href = "login.html";
+        }
+      }
+    });
   </script>
 </body>
 </html>
