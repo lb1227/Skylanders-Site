@@ -97,6 +97,28 @@
       width: 100%;
       display: block;
     }
+
+    .cloud-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none; /* So it doesn't interfere with interactivity */
+      
+      /* Use a combination of your cloud texture and a gradient */
+      background: 
+        /* Cloud image, adjust the URL to your cloud file */
+        url("images/cloud_overlay.png") center center / cover no-repeat,
+        /* Gradient for density effect (adjust direction and opacity stops as needed) */
+        linear-gradient(to bottom, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.8) 100%);
+      
+      /* Optional: use a blend mode so the overlay mixes with your background */
+      mix-blend-mode: screen;
+      
+      /* Adjust overall opacity to taste */
+      opacity: 0.6;
+    }
     
     /* ---------- MAIN CONTENT (Login/Signup) ---------- */
     body {
@@ -240,7 +262,10 @@
   <!-- SKYLANDERS-THEMED BACKGROUND -->
   <div class="sky-background">
     <div class="gradient"></div>
+    <!-- Cloud overlay element -->
+    <div class="cloud-overlay"></div>
     <div class="floating-islands">
+      <!-- Your island elements here -->
       <div class="island island1"></div>
       <div class="island island2"></div>
       <div class="island island4"></div>
