@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Battle Page</title>
+  <title>Deck Builder & Battle</title>
   <style>
     :root {
       --bg: #121212;
@@ -12,51 +12,16 @@
       --accent: #4caf50;
       --button: #e53935;
       --button-hover: #d32f2f;
+      --nav-bg: #1a1a1a;
     }
     body {
       margin: 0;
       background-color: var(--bg);
       color: var(--text);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       padding: 1rem;
     }
-    .container {
-      background-color: var(--card-bg);
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-      max-width: 600px;
-      width: 90%;
-      margin-top: 2rem;
-    }
-    select, button {
-      padding: 0.7rem;
-      font-size: 1rem;
-      border-radius: 8px;
-      border: none;
-      margin: 0.5rem 0;
-      cursor: pointer;
-    }
-    button {
-      background-color: var(--button);
-      color: white;
-      transition: background 0.3s ease;
-    }
-    .card {
-      background: #2a2a2a;
-      padding: 1rem;
-      margin: 0.5rem 0;
-      border-radius: 8px;
-    }
-    .result {
-      margin-top: 1.5rem;
-      font-size: 1.2rem;
-      font-weight: bold;
-    }
-
+    /* Mobile Navigation */
     .bottom-mobile-nav {
       position: fixed;
       bottom: 0;
@@ -76,10 +41,17 @@
       text-decoration: none;
     }
     .bottom-mobile-nav a img {
-      width: 55px;    /* Adjust the size as needed */
-      height: auto;   /* Maintains aspect ratio */
-      vertical-align: middle; /* Optional: Aligns with text */
+      width: 55px;
+      height: auto;
+      vertical-align: middle;
       margin-top: 7px;
+    }
+    .hamburger {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
     }
     .mobile-menu {
       position: fixed;
@@ -110,11 +82,92 @@
     .mobile-menu button:hover {
       background-color: var(--button-hover);
     }
+    /* Container & Tabs */
+    .container {
+      background-color: var(--card-bg);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      max-width: 700px;
+      margin: 2rem auto 4rem;
+    }
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .tabs button {
+      padding: 0.7rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      background-color: var(--button);
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .tabs button:hover {
+      background-color: var(--button-hover);
+    }
+    .section {
+      display: none;
+    }
+    .section.active {
+      display: block;
+    }
+    /* Common form and element styling */
+    select, button {
+      padding: 0.7rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: none;
+      margin: 0.5rem 0;
+      cursor: pointer;
+    }
+    button {
+      background-color: var(--button);
+      color: white;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background-color: var(--button-hover);
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 0.7rem;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background-color: #2a2a2a;
+      color: white;
+      margin: 0.5rem 0;
+    }
+    .card-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .card {
+      border: 1px solid #333;
+      padding: 0.5rem;
+      border-radius: 8px;
+      width: 120px;
+      text-align: center;
+    }
+    .result {
+      margin-top: 1.5rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-align: center;
+    }
+    .deck-display .card {
+      margin: 0.5rem 0;
+    }
   </style>
 </head>
 <body>
+  <!-- Mobile Navigation -->
   <nav id="mobileNav" class="bottom-mobile-nav">
-    <!-- Buttons -->
     <a href="home.html" title="Home">🏠</a>
     <a href="inventory.html" title="Inventory">
       <img src="images/inventory.png" alt="Inventory Icon">
@@ -126,117 +179,45 @@
     <button onclick="goToAccount()">Account</button>
     <button onclick="logout()">Logout</button>
   </div>
-  
+
+  <!-- Main Container -->
   <div class="container">
-    <h1>Battle Page</h1>
+    <h1>Deck Builder & Battle</h1>
     
-    <label for="gameSelect">Select a Game:</label>
-    <select id="gameSelect"></select>
+    <!-- Tabs to toggle between sections -->
+    <div class="tabs">
+      <button onclick="showSection('deckBuilderSection')">Deck Builder</button>
+      <button onclick="showSection('battleSection')">Battle</button>
+    </div>
     
-    <button id="loadCollection">Load My Collection</button>
-    <div id="collectionDisplay"></div>
+    <!-- Deck Builder Section -->
+    <div id="deckBuilderSection" class="section active">
+      <h2>Deck Builder</h2>
+      <label for="gameSelectBuilder">Select a Game:</label>
+      <select id="gameSelectBuilder"></select>
+      <button id="loadCollection">Load My Collection</button>
+      <div id="collectionContainer" class="card-list"></div>
+      
+      <form id="deckForm">
+        <input type="text" id="deckName" placeholder="Enter Deck Name" required />
+        <button type="submit">Save Deck</button>
+      </form>
+    </div>
     
-    <button id="startBattle">Start Battle</button>
-    <div id="battleResult" class="result"></div>
+    <!-- Battle Section -->
+    <div id="battleSection" class="section">
+      <h2>Deck Battle</h2>
+      <label for="deckSelect">Select Your Deck:</label>
+      <select id="deckSelect"></select>
+      <button id="loadDeck">Load Deck</button>
+      <div id="deckDisplay" class="deck-display"></div>
+      <button id="battleBtn">Battle!</button>
+      <div id="battleResult" class="result"></div>
+    </div>
   </div>
-  
+
   <script>
-    // Assume you already have your games defined (e.g., in data.js) as window.games
-    // For example, window.games = { "Skylanders": [...], "OtherGame": [...] };
-
-    // Populate the game dropdown if window.games exists
-    const gameSelect = document.getElementById("gameSelect");
-    if(window.games) {
-      Object.keys(window.games).forEach(game => {
-        const option = document.createElement("option");
-        option.value = game;
-        option.innerText = game;
-        gameSelect.appendChild(option);
-      });
-    } else {
-      // If no games exist, inform the user or add a default option.
-      const option = document.createElement("option");
-      option.value = "default";
-      option.innerText = "Default Game";
-      gameSelect.appendChild(option);
-    }
-
-    const username = localStorage.getItem("sky_user");
-    
-    // Load Collection Button Action
-    document.getElementById("loadCollection").addEventListener("click", function() {
-      const selectedGame = gameSelect.value;
-      const key = `sky_progress_${username}_${selectedGame}`;
-      const data = localStorage.getItem(key);
-      const collectionDisplay = document.getElementById("collectionDisplay");
-      collectionDisplay.innerHTML = ""; // Clear previous content
-      
-      if(data) {
-        const parsedData = JSON.parse(data);
-        const ownedItems = parsedData.collected || [];
-        if (ownedItems.length > 0) {
-          ownedItems.forEach(item => {
-            const card = document.createElement("div");
-            card.classList.add("card");
-            // Display the name; you can add more info (like an image or stats) if available.
-            card.innerText = item.name;
-            collectionDisplay.appendChild(card);
-          });
-        } else {
-          collectionDisplay.innerText = "You have no cards in your collection.";
-        }
-      } else {
-        collectionDisplay.innerText = "No collection data found for the selected game.";
-      }
-    });
-
-    // Start Battle Button Action
-    document.getElementById("startBattle").addEventListener("click", function() {
-      const selectedGame = gameSelect.value;
-      const key = `sky_progress_${username}_${selectedGame}`;
-      const data = localStorage.getItem(key);
-      const battleResult = document.getElementById("battleResult");
-      
-      if(data) {
-        const parsedData = JSON.parse(data);
-        const ownedItems = parsedData.collected || [];
-        
-        if (ownedItems.length === 0) {
-          battleResult.innerText = "You have no cards to battle with.";
-          return;
-        }
-        
-        // For simplicity, choose a random card from your collection
-        const myCard = ownedItems[Math.floor(Math.random() * ownedItems.length)];
-        
-        // Simulate a card "power" rating if not already present.
-        // For demo purposes, generate a random number between 0 and 100.
-        myCard.power = myCard.power || Math.floor(Math.random() * 100);
-        
-        // Create a simple opponent card with a random power value
-        const opponentCard = {
-          name: "Opponent Card",
-          power: Math.floor(Math.random() * 100)
-        };
-        
-        // Compare the power ratings to decide the winner
-        let winner;
-        if (myCard.power === opponentCard.power) {
-          winner = "It's a tie!";
-        } else {
-          winner = myCard.power > opponentCard.power ? username : "Opponent";
-        }
-        
-        battleResult.innerHTML = `
-          <p>Your Card: ${myCard.name} (Power: ${myCard.power})</p>
-          <p>Opponent Card: ${opponentCard.name} (Power: ${opponentCard.power})</p>
-          <h2>Winner: ${winner}</h2>
-        `;
-      } else {
-        battleResult.innerText = "No collection data found for the selected game.";
-      }
-    });
-
+    // Mobile nav helper functions
     function toggleMobileMenu() {
       const menu = document.getElementById("mobileMenu");
       menu.style.display = menu.style.display === "flex" ? "none" : "flex";
@@ -248,6 +229,189 @@
     function goToAccount() {
       window.location.href = "account.html";
     }
+    
+    // Function to show the appropriate section
+    function showSection(sectionID) {
+      const sections = document.querySelectorAll(".section");
+      sections.forEach(sec => sec.classList.remove("active"));
+      document.getElementById(sectionID).classList.add("active");
+      if(sectionID === "battleSection") {
+        populateDeckSelect(); // Refresh deck select when switching to battle view
+      }
+    }
+    
+    const username = localStorage.getItem("sky_user");
+    
+    // ----- Deck Builder Section Code -----
+    const gameSelectBuilder = document.getElementById("gameSelectBuilder");
+    // Populate game dropdown for deck builder; assumes global window.games is defined
+    if(window.games) {
+      Object.keys(window.games).forEach(game => {
+        const option = document.createElement("option");
+        option.value = game;
+        option.innerText = game;
+        gameSelectBuilder.appendChild(option);
+      });
+    } else {
+      const option = document.createElement("option");
+      option.value = "default";
+      option.innerText = "Default Game";
+      gameSelectBuilder.appendChild(option);
+    }
+    
+    // Load Collection Button Action (for deck builder)
+    document.getElementById("loadCollection").addEventListener("click", function() {
+      const selectedGame = gameSelectBuilder.value;
+      const key = `sky_progress_${username}_${selectedGame}`;
+      const data = localStorage.getItem(key);
+      const collectionContainer = document.getElementById("collectionContainer");
+      collectionContainer.innerHTML = "";
+      if(data) {
+        const parsedData = JSON.parse(data);
+        const ownedItems = parsedData.collected || [];
+        if (ownedItems.length > 0) {
+          ownedItems.forEach((item, index) => {
+            const cardDiv = document.createElement("div");
+            cardDiv.classList.add("card");
+            cardDiv.innerHTML = `
+              <input type="checkbox" id="card_${index}" data-card-index="${index}" />
+              <label for="card_${index}">${item.name}</label>
+            `;
+            collectionContainer.appendChild(cardDiv);
+          });
+        } else {
+          collectionContainer.innerText = "No cards in collection.";
+        }
+      } else {
+        collectionContainer.innerText = "No collection found for the selected game.";
+      }
+    });
+    
+    // Handle deck creation form submission
+    document.getElementById("deckForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const deckName = document.getElementById("deckName").value.trim();
+      if (!deckName) {
+        alert("Please enter a deck name.");
+        return;
+      }
+      // Get selected cards
+      const selectedCards = [];
+      const checkboxes = document.querySelectorAll("#collectionContainer input[type='checkbox']");
+      if (!checkboxes.length) {
+        alert("Load your collection first.");
+        return;
+      }
+      const selectedGame = gameSelectBuilder.value;
+      const key = `sky_progress_${username}_${selectedGame}`;
+      const data = localStorage.getItem(key);
+      if(data) {
+        const parsedData = JSON.parse(data);
+        const ownedItems = parsedData.collected || [];
+        checkboxes.forEach(checkbox => {
+          if (checkbox.checked) {
+            const cardIndex = parseInt(checkbox.getAttribute("data-card-index"));
+            selectedCards.push(ownedItems[cardIndex]);
+          }
+        });
+      }
+      if (selectedCards.length === 0) {
+        alert("Please select at least one card for your deck.");
+        return;
+      }
+      // Save deck to localStorage under "sky_decks"
+      const allDecks = JSON.parse(localStorage.getItem("sky_decks")) || {};
+      if (!allDecks[username]) {
+        allDecks[username] = {};
+      }
+      allDecks[username][deckName] = {
+        game: selectedGame,
+        cards: selectedCards
+      };
+      localStorage.setItem("sky_decks", JSON.stringify(allDecks));
+      alert(`Deck "${deckName}" saved successfully!`);
+      document.getElementById("deckName").value = "";
+      checkboxes.forEach(cb => cb.checked = false);
+      
+      // Refresh deck select dropdown in battle section
+      populateDeckSelect();
+    });
+    
+    // ----- Battle Section Code -----
+    const deckSelect = document.getElementById("deckSelect");
+    const deckDisplay = document.getElementById("deckDisplay");
+    const battleResult = document.getElementById("battleResult");
+    
+    // Function to populate the deck select dropdown from localStorage
+    function populateDeckSelect() {
+      deckSelect.innerHTML = "";
+      const allDecks = JSON.parse(localStorage.getItem("sky_decks")) || {};
+      const userDecks = allDecks[username] || {};
+      Object.keys(userDecks).forEach(deckName => {
+        const option = document.createElement("option");
+        option.value = deckName;
+        option.innerText = deckName;
+        deckSelect.appendChild(option);
+      });
+    }
+    
+    // Load deck details when "Load Deck" is clicked in battle section
+    document.getElementById("loadDeck").addEventListener("click", () => {
+      const allDecks = JSON.parse(localStorage.getItem("sky_decks")) || {};
+      const userDecks = allDecks[username] || {};
+      const selectedDeck = userDecks[deckSelect.value];
+      deckDisplay.innerHTML = "";
+      if (selectedDeck) {
+        deckDisplay.innerHTML = `<h3>${deckSelect.value}</h3>`;
+        selectedDeck.cards.forEach(card => {
+          // If no power attribute, assign a random one for demo purposes.
+          card.power = card.power || Math.floor(Math.random() * 100);
+          const cardDiv = document.createElement("div");
+          cardDiv.classList.add("card");
+          cardDiv.innerText = `${card.name} (Power: ${card.power})`;
+          deckDisplay.appendChild(cardDiv);
+        });
+      } else {
+        deckDisplay.innerText = "Deck not found.";
+      }
+    });
+    
+    // Battle Button Action: Calculates deck total power and compares with a random opponent deck
+    document.getElementById("battleBtn").addEventListener("click", () => {
+      const allDecks = JSON.parse(localStorage.getItem("sky_decks")) || {};
+      const userDecks = allDecks[username] || {};
+      const selectedDeck = userDecks[deckSelect.value];
+      if (!selectedDeck || selectedDeck.cards.length === 0) {
+        battleResult.innerText = "Deck is empty or not found!";
+        return;
+      }
+      // Sum the power values for your deck
+      const deckTotalPower = selectedDeck.cards.reduce((sum, card) => {
+        card.power = card.power || Math.floor(Math.random() * 100);
+        return sum + card.power;
+      }, 0);
+      // Simulate an opponent deck total power (for example, with 5 cards)
+      let opponentTotalPower = 0;
+      for(let i = 0; i < 5; i++){
+        opponentTotalPower += Math.floor(Math.random() * 100);
+      }
+      // Decide the winner based on total power
+      let resultText = "";
+      if(deckTotalPower === opponentTotalPower) {
+        resultText = "It's a tie!";
+      } else {
+        resultText = deckTotalPower > opponentTotalPower ? "You win!" : "Opponent wins!";
+      }
+      battleResult.innerHTML = `
+        <p>Your Deck Power: ${deckTotalPower}</p>
+        <p>Opponent Deck Power: ${opponentTotalPower}</p>
+        <h2>${resultText}</h2>
+      `;
+    });
+    
+    // Initialize deck select when page loads
+    populateDeckSelect();
+    
   </script>
 </body>
 </html>
