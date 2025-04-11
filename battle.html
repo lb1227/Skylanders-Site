@@ -6,9 +6,10 @@
   <title>Dark Mode Mobile Card Battle</title>
   <style>
     :root {
-      --bg: #121212;            /* Dark background for the overall screen */
-      --platform-bg: #1e1e1e;    /* Slightly lighter dark tone for the platform */
-      --card-bg: #1e1e1e;        /* Card face uses dark gray */
+      --bg: #121212;            /* Overall dark background */
+      --platform-bg: #1e1e1e;    /* Dark platform background */
+      --card-bg: #1e1e1e;        /* Dark gray for card fronts, but used only for your cards */
+      --card-back-bg: #333333;   /* Slightly lighter gray for card backs */
       --card-border: #bb86fc;    /* Neon purple border accent */
       --card-shadow: rgba(0, 0, 0, 0.8);
       --text-color: #e0e0e0;     /* Light text for readability */
@@ -53,19 +54,32 @@
       overflow-x: auto;
       padding: 0 0.5rem;
     }
-    /* Opponent cards – a bit larger */
+    /* Opponent cards – show only the back */
     .opponent-area .card {
       width: 80px;
       height: 110px;
       margin: 0 4px;
+      background: var(--card-back-bg);
+      border: 2px solid var(--card-border);
+      border-radius: 8px;
+      box-shadow: 0 2px 6px var(--card-shadow);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 0.7rem;
+      text-align: center;
+      padding: 4px;
     }
-    /* Player cards – slightly smaller for a hand view */
+    .opponent-area .card span {
+      /* Indicate this is the back of a card */
+      color: var(--text-color);
+      font-weight: bold;
+    }
+    /* Player cards – show card details */
     .player-area .card {
       width: 60px;
       height: 85px;
       margin: 0 3px;
-    }
-    .card {
       background: var(--card-bg);
       border: 2px solid var(--card-border);
       border-radius: 8px;
@@ -77,18 +91,18 @@
       text-align: center;
       padding: 4px;
     }
-    /* Battle Platform styling */
+    /* Battle Platform styling – made taller */
     .platform {
       background: var(--platform-bg);
       border-radius: 12px;
-      padding: 0.8rem;
+      padding: 2rem 1rem;  /* Increased vertical padding for a taller platform */
       margin: 0.8rem 0;
       color: var(--text-color);
       box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
     }
     .platform .battle-button {
-      margin-top: 0.6rem;
-      padding: 0.6rem;
+      margin-top: 1rem;
+      padding: 0.8rem;
       background: var(--button-bg);
       color: #000;
       border: none;
@@ -110,26 +124,26 @@
     <div class="zone opponent-area">
       <div class="header">Opponent's Cards</div>
       <div class="cards-row" id="opponentCards">
-        <!-- Opponent cards will be rendered here -->
+        <!-- Opponent cards will be rendered here as card backs -->
       </div>
     </div>
     <!-- Battle Platform (Center) -->
     <div class="zone platform">
       <div class="header">Battle Platform</div>
-      <div>Ready your strategy...</div>
+      <div>Prepare for battle...</div>
       <button class="battle-button" id="battleButton">Battle!</button>
     </div>
     <!-- Player Area (Bottom row) -->
     <div class="zone player-area">
       <div class="header">Your Cards</div>
       <div class="cards-row" id="playerCards">
-        <!-- Player cards will be rendered here -->
+        <!-- Player cards with details will be rendered here -->
       </div>
     </div>
   </div>
 
   <script>
-    // Demo data for player and opponent cards (replace with your real data or collection retrieval)
+    // Demo data for player and opponent cards
     const demoPlayerCards = [
       { name: "Pikachu", power: 80 },
       { name: "Charizard", power: 95 },
@@ -145,23 +159,29 @@
       { name: "Jigglypuff", power: 50 }
     ];
     
-    // Render cards into a given container for mobile (scrollable row)
-    function renderCards(cards, containerId) {
+    // Render cards into a given container
+    function renderCards(cards, containerId, showBack = false) {
       const container = document.getElementById(containerId);
       container.innerHTML = "";
       cards.forEach(card => {
         const cardElem = document.createElement("div");
         cardElem.classList.add("card");
-        cardElem.innerHTML = `<span>${card.name}<br>(${card.power})</span>`;
+        if (showBack) {
+          // For opponent cards, show a card back without details
+          cardElem.innerHTML = `<span>Card Back</span>`;
+        } else {
+          // For player's cards, display details
+          cardElem.innerHTML = `<span>${card.name}<br>(${card.power})</span>`;
+        }
         container.appendChild(cardElem);
       });
     }
     
-    // Initialize rendering of opponent and player cards
-    renderCards(demoOpponentCards, "opponentCards");
-    renderCards(demoPlayerCards, "playerCards");
+    // Initialize the rendering for opponent and player cards
+    renderCards(demoOpponentCards, "opponentCards", true);
+    renderCards(demoPlayerCards, "playerCards", false);
 
-    // Simulate battle outcome when the button is tapped.
+    // Battle simulation when the button is tapped.
     document.getElementById("battleButton").addEventListener("click", function() {
       const playerTotal = demoPlayerCards.reduce((sum, card) => sum + card.power, 0);
       const opponentTotal = demoOpponentCards.reduce((sum, card) => sum + card.power, 0);
