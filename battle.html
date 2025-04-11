@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Battle Page</title>
+  <style>
+    :root {
+      --bg: #121212;
+      --card-bg: #1e1a1e;
+      --text: #ffffff;
+      --accent: #4caf50;
+      --button: #e53935;
+      --button-hover: #d32f2f;
+    }
+    body {
+      margin: 0;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
+    }
+    .container {
+      background-color: var(--card-bg);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      max-width: 600px;
+      width: 90%;
+      margin-top: 2rem;
+    }
+    select, button {
+      padding: 0.7rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: none;
+      margin: 0.5rem 0;
+      cursor: pointer;
+    }
+    button {
+      background-color: var(--button);
+      color: white;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background-color: var(--button-hover);
+    }
+    .card {
+      background: #2a2a2a;
+      padding: 1rem;
+      margin: 0.5rem 0;
+      border-radius: 8px;
+    }
+    .result {
+      margin-top: 1.5rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Battle Page</h1>
+    
+    <label for="gameSelect">Select a Game:</label>
+    <select id="gameSelect"></select>
+    
+    <button id="loadCollection">Load My Collection</button>
+    <div id="collectionDisplay"></div>
+    
+    <button id="startBattle">Start Battle</button>
+    <div id="battleResult" class="result"></div>
+  </div>
+  
+  <script>
+    // Assume you already have your games defined (e.g., in data.js) as window.games
+    // For example, window.games = { "Skylanders": [...], "OtherGame": [...] };
+
+    // Populate the game dropdown if window.games exists
+    const gameSelect = document.getElementById("gameSelect");
+    if(window.games) {
+      Object.keys(window.games).forEach(game => {
+        const option = document.createElement("option");
+        option.value = game;
+        option.innerText = game;
+        gameSelect.appendChild(option);
+      });
+    } else {
+      // If no games exist, inform the user or add a default option.
+      const option = document.createElement("option");
+      option.value = "default";
+      option.innerText = "Default Game";
+      gameSelect.appendChild(option);
+    }
+
+    const username = localStorage.getItem("sky_user");
+    
+    // Load Collection Button Action
+    document.getElementById("loadCollection").addEventListener("click", function() {
+      const selectedGame = gameSelect.value;
+      const key = `sky_progress_${username}_${selectedGame}`;
+      const data = localStorage.getItem(key);
+      const collectionDisplay = document.getElementById("collectionDisplay");
+      collectionDisplay.innerHTML = ""; // Clear previous content
+      
+      if(data) {
+        const parsedData = JSON.parse(data);
+        const ownedItems = parsedData.collected || [];
+        if (ownedItems.length > 0) {
+          ownedItems.forEach(item => {
+            const card = document.createElement("div");
+            card.classList.add("card");
+            // Display the name; you can add more info (like an image or stats) if available.
+            card.innerText = item.name;
+            collectionDisplay.appendChild(card);
+          });
+        } else {
+          collectionDisplay.innerText = "You have no cards in your collection.";
+        }
+      } else {
+        collectionDisplay.innerText = "No collection data found for the selected game.";
+      }
+    });
+
+    // Start Battle Button Action
+    document.getElementById("startBattle").addEventListener("click", function() {
+      const selectedGame = gameSelect.value;
+      const key = `sky_progress_${username}_${selectedGame}`;
+      const data = localStorage.getItem(key);
+      const battleResult = document.getElementById("battleResult");
+      
+      if(data) {
+        const parsedData = JSON.parse(data);
+        const ownedItems = parsedData.collected || [];
+        
+        if (ownedItems.length === 0) {
+          battleResult.innerText = "You have no cards to battle with.";
+          return;
+        }
+        
+        // For simplicity, choose a random card from your collection
+        const myCard = ownedItems[Math.floor(Math.random() * ownedItems.length)];
+        
+        // Simulate a card "power" rating if not already present.
+        // For demo purposes, generate a random number between 0 and 100.
+        myCard.power = myCard.power || Math.floor(Math.random() * 100);
+        
+        // Create a simple opponent card with a random power value
+        const opponentCard = {
+          name: "Opponent Card",
+          power: Math.floor(Math.random() * 100)
+        };
+        
+        // Compare the power ratings to decide the winner
+        let winner;
+        if (myCard.power === opponentCard.power) {
+          winner = "It's a tie!";
+        } else {
+          winner = myCard.power > opponentCard.power ? username : "Opponent";
+        }
+        
+        battleResult.innerHTML = `
+          <p>Your Card: ${myCard.name} (Power: ${myCard.power})</p>
+          <p>Opponent Card: ${opponentCard.name} (Power: ${opponentCard.power})</p>
+          <h2>Winner: ${winner}</h2>
+        `;
+      } else {
+        battleResult.innerText = "No collection data found for the selected game.";
+      }
+    });
+  </script>
+</body>
+</html>
