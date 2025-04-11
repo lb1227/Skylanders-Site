@@ -207,11 +207,10 @@
     
     function drop(ev) {
       ev.preventDefault();
-      // Get the ID of the card being dragged.
       var cardId = ev.dataTransfer.getData("text/plain");
       var cardElem = document.getElementById(cardId);
-      // Append the card element to the drop zone (the battlefield)
-      ev.target.appendChild(cardElem);
+      // Use ev.currentTarget to ensure you reference the drop zone element
+      ev.currentTarget.appendChild(cardElem);
     }
     
     // Modify renderCards for player's hand (demo example):
