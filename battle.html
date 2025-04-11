@@ -194,6 +194,45 @@
       }
       alert(`Your Total Power: ${playerTotal}\nOpponent Total Power: ${opponentTotal}\n${outcome}`);
     });
+
+    // Example drag-and-drop event handlers:
+    function allowDrop(ev) {
+      ev.preventDefault();
+    }
+    
+    function drag(ev) {
+      // Use the card's id attribute to identify it during the drop event.
+      ev.dataTransfer.setData("text/plain", ev.target.id);
+    }
+    
+    function drop(ev) {
+      ev.preventDefault();
+      // Get the ID of the card being dragged.
+      var cardId = ev.dataTransfer.getData("text/plain");
+      var cardElem = document.getElementById(cardId);
+      // Append the card element to the drop zone (the battlefield)
+      ev.target.appendChild(cardElem);
+    }
+    
+    // Modify renderCards for player's hand (demo example):
+    function renderPlayerCards(cards, containerId) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = "";
+      cards.forEach((card, index) => {
+        const cardElem = document.createElement("div");
+        cardElem.classList.add("card");
+        // Assign an id so we can reference it later in drag events
+        cardElem.id = `playerCard_${index}`;
+        cardElem.setAttribute("draggable", "true");
+        // Add drag event listener
+        cardElem.addEventListener("dragstart", drag);
+        cardElem.innerHTML = `<span>${card.name}<br>(${card.power})</span>`;
+        container.appendChild(cardElem);
+      });
+    }
+    
+    // Use your existing demoPlayerCards data:
+    renderPlayerCards(demoPlayerCards, "playerCards");
   </script>
 </body>
 </html>
