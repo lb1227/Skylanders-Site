@@ -90,10 +90,9 @@
       text-align: center;
       padding: 4px;
       position: relative;
-      /* Ensure the card has a smooth transition when resetting position */
       transition: transform 0.2s ease;
     }
-    /* Battle Platform styling – taller */
+    /* Battle Platform styling – made taller */
     .platform {
       background: var(--platform-bg);
       border-radius: 12px;
@@ -141,7 +140,7 @@
     <div class="zone player-area">
       <div class="header">Your Cards</div>
       <div class="cards-row" id="playerCards">
-        <!-- Player cards will be rendered here with touch handlers -->
+        <!-- Player cards with details will be rendered here with touch handlers -->
       </div>
     </div>
   </div>
@@ -163,7 +162,7 @@
       { name: "Jigglypuff", power: 50 }
     ];
     
-    // Render opponent cards as card backs (using existing function)
+    // Render opponent cards as card backs
     function renderCards(cards, containerId, showBack = false) {
       const container = document.getElementById(containerId);
       container.innerHTML = "";
@@ -201,21 +200,25 @@
 
     function handleTouchEnd(e) {
       e.preventDefault();
-      // Get drop zone boundaries
       const dropZone = document.getElementById("battleDropZone");
       const dzRect = dropZone.getBoundingClientRect();
-      // Get card position
       const cardRect = this.getBoundingClientRect();
-      // Calculate card's center point
+      // Calculate the card's center point
       const cardCenterX = cardRect.left + cardRect.width / 2;
       const cardCenterY = cardRect.top + cardRect.height / 2;
       // Check if the card's center is inside the drop zone
       if (cardCenterX >= dzRect.left && cardCenterX <= dzRect.right &&
           cardCenterY >= dzRect.top && cardCenterY <= dzRect.bottom) {
-        // Append card to drop zone (battle platform)
-        dropZone.appendChild(this);
-        // Reset transform
-        this.style.transform = '';
+        // Append card to drop zone, insert at beginning so it overlays
+        dropZone.insertBefore(this, dropZone.firstChild);
+        // Set the card's position to absolute relative to dropZone:
+        this.style.position = "absolute";
+        // Calculate the offset relative to dropZone
+        const offsetX = cardRect.left - dzRect.left;
+        const offsetY = cardRect.top - dzRect.top;
+        this.style.left = offsetX + "px";
+        this.style.top = offsetY + "px";
+        this.style.transform = "";
       } else {
         // Not dropped in drop zone – reset position
         this.style.transform = this.origTransform;
