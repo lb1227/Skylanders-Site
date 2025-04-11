@@ -119,6 +119,36 @@
       /* Adjust overall opacity to taste */
       opacity: 0.6;
     }
+
+    .dark-cloud {
+      position: absolute;
+      top: 30%;               /* Adjust this value to place it vertically */
+      left: 10%;              /* Adjust horizontally */
+      width: 300px;           /* Set desired width */
+      height: auto;           /* Maintain aspect ratio */
+      background-image: url("images/dark_cloud.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      opacity: 0.8;           /* Starting opacity */
+      pointer-events: none;   /* Prevent the cloud from interfering with clicks */
+      animation: driftFade 15s ease-in-out infinite;
+    }
+    
+    @keyframes driftFade {
+      0% {
+        transform: translateX(0);
+        opacity: 0.8;
+      }
+      50% {
+        transform: translateX(20px);  /* Drifts 20px to the right */
+        opacity: 0.4;                 /* Fades down a bit */
+      }
+      100% {
+        transform: translateX(0);
+        opacity: 0.8;
+      }
+    }
     
     /* ---------- MAIN CONTENT (Login/Signup) ---------- */
     body {
@@ -235,7 +265,7 @@
       
       /* Ensure foreground grass remains full width */
       .foreground-grass {
-        bottom: -100px;
+        bottom: -300px;
         left: 0;
         width: 800px;
       }
@@ -264,6 +294,7 @@
     <div class="gradient"></div>
     <!-- Cloud overlay element -->
     <div class="cloud-overlay"></div>
+    <div class="dark-cloud"></div>
     <div class="floating-islands">
       <!-- Your island elements here -->
       <div class="island island1"></div>
