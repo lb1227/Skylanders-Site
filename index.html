@@ -251,10 +251,8 @@
     .hamburger::before {
       content: "";
       position: absolute;
-      top: 10px;      /* Adjust this value to move the background down */
-      left: 0;
-      right: 0;
-      bottom: 0;      /* You could also adjust bottom if needed */
+      top: calc(20px + env(safe-area-inset-top));
+      right: 20px;
       background-color: black;
       border-radius: 4px;
       z-index: -1;    /* Ensures the background sits behind the icon content */
