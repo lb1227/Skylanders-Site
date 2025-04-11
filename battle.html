@@ -92,7 +92,7 @@
       position: relative;
       transition: transform 0.2s ease;
     }
-    /* New styling for the Deck element */
+    /* Deck styling */
     .deck {
       width: 60px;
       height: 85px;
@@ -107,12 +107,11 @@
       font-size: 0.7rem;
       text-align: center;
     }
-    /* Battle Platform styling – made taller */
+    /* Battle Platform styling – now with slots */
     .platform {
       background: var(--platform-bg);
       border-radius: 12px;
       padding: 2rem 1rem;
-      height: auto;
       margin: 0.8rem 0;
       color: var(--text-color);
       box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
@@ -133,6 +132,24 @@
     .platform .battle-button:active,
     .platform .battle-button:hover {
       background: var(--button-hover);
+    }
+    /* Slot styling for the battlefield */
+    .slots {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 1rem;
+    }
+    .slot {
+      width: 60px;
+      height: 85px;
+      border: 2px dashed var(--card-border);
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: var(--platform-bg);
+      font-size: 0.7rem;
+      color: var(--text-color);
     }
     /* Bottom Mobile Navigation */
     .bottom-mobile-nav {
@@ -155,48 +172,46 @@
       text-decoration: none;
     }
     .bottom-mobile-nav a img {
-      width: 55px;    /* Adjust the size as needed */
-      height: auto;   /* Maintains aspect ratio */
-      vertical-align: middle; /* Optional: Aligns with text */
+      width: 55px;
+      height: auto;
+      vertical-align: middle;
       margin-top: 7px;
     }
-
-    /* MOBILE MENU */
     .hamburger {
-        display: block;
-        background-color: var(--nav-bg);
-        color: white;
-        border: none;
-        font-size: 1.5rem;
-        padding: 0.5rem;
-        cursor: pointer;
-      }
-      .mobile-menu {
-        position: fixed;
-        bottom: 60px;
-        right: 20px;
-        background-color: var(--nav-bg);
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-        padding: 1rem;
-        display: none;
-        flex-direction: column;
-        gap: 0.5rem;
-        z-index: 1001;
-        transition: opacity 0.3s ease, transform 0.3s ease;
-      }
-      .mobile-menu.show {
-        display: flex;
-      }
-      .mobile-menu button {
-        background-color: var(--card-bg);
-        color: white;
-        border: none;
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        font-size: 0.9rem;
-        cursor: pointer;
-      }
+      display: block;
+      background-color: var(--nav-bg);
+      color: white;
+      border: none;
+      font-size: 1.5rem;
+      padding: 0.5rem;
+      cursor: pointer;
+    }
+    .mobile-menu {
+      position: fixed;
+      bottom: 60px;
+      right: 20px;
+      background-color: var(--nav-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+      padding: 1rem;
+      display: none;
+      flex-direction: column;
+      gap: 0.5rem;
+      z-index: 1001;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .mobile-menu.show {
+      display: flex;
+    }
+    .mobile-menu button {
+      background-color: var(--card-bg);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -208,9 +223,14 @@
         <!-- Opponent cards will be rendered here as card backs -->
       </div>
     </div>
-    <!-- Battle Platform (Center) – This is now our drop zone -->
-    <div class="zone platform" id="battleDropZone" ondragover="allowDrop(event)" ondrop="drop(event)">
+    <!-- Battle Platform (Center) – Contains 3 slots for card placement -->
+    <div class="zone platform" id="battleDropZone">
       <div class="header">Battle Platform</div>
+      <div class="slots">
+        <div class="slot" id="slot1">Slot 1</div>
+        <div class="slot" id="slot2">Slot 2</div>
+        <div class="slot" id="slot3">Slot 3</div>
+      </div>
       <div>Prepare for battle...</div>
       <button class="battle-button" id="battleButton">Battle!</button>
     </div>
@@ -259,11 +279,11 @@
       localStorage.removeItem("sky_user");
       window.location.href = "login.html";
     }
-     function toggleMobileMenu() {
+    function toggleMobileMenu() {
       const menu = document.getElementById("mobileMenu");
       menu.style.display = menu.style.display === "flex" ? "none" : "flex";
     }
-    
+
     // Render opponent cards as card backs
     function renderCards(cards, containerId, showBack = false) {
       const container = document.getElementById(containerId);
@@ -271,11 +291,9 @@
       cards.forEach(card => {
         const cardElem = document.createElement("div");
         cardElem.classList.add("card");
-        if (showBack) {
-          cardElem.innerHTML = `<span>Card Back</span>`;
-        } else {
-          cardElem.innerHTML = `<span>${card.name}<br>(${card.power})</span>`;
-        }
+        cardElem.innerHTML = showBack 
+          ? `<span>Card Back</span>` 
+          : `<span>${card.name}<br>(${card.power})</span>`;
         container.appendChild(cardElem);
       });
     }
@@ -284,48 +302,48 @@
     // Touch event handlers for drag-and-drop simulation
     function handleTouchStart(e) {
       e.preventDefault();
-      let touch = e.touches[0];
+      const touch = e.touches[0];
       this.startX = touch.pageX;
       this.startY = touch.pageY;
-      // Store original transform in case we need to revert.
       this.origTransform = this.style.transform || '';
     }
 
     function handleTouchMove(e) {
       e.preventDefault();
-      let touch = e.touches[0];
-      // Calculate movement delta
-      let deltaX = touch.pageX - this.startX;
-      let deltaY = touch.pageY - this.startY;
+      const touch = e.touches[0];
+      const deltaX = touch.pageX - this.startX;
+      const deltaY = touch.pageY - this.startY;
       this.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
     }
 
     function handleTouchEnd(e) {
       e.preventDefault();
-      const dropZone = document.getElementById("battleDropZone");
-      const dzRect = dropZone.getBoundingClientRect();
+      const slots = document.querySelectorAll(".slot");
+      let placed = false;
       const cardRect = this.getBoundingClientRect();
-      // Calculate the card's center point
       const cardCenterX = cardRect.left + cardRect.width / 2;
       const cardCenterY = cardRect.top + cardRect.height / 2;
-      // Check if the card's center is inside the drop zone
-      if (cardCenterX >= dzRect.left && cardCenterX <= dzRect.right &&
-          cardCenterY >= dzRect.top && cardCenterY <= dzRect.bottom) {
-        // Insert the card into the drop zone at the beginning
-        dropZone.insertBefore(this, dropZone.firstChild);
-        // Set the card's position to absolute relative to the drop zone:
-        this.style.position = "absolute";
-        // Calculate the offset relative to dropZone
-        const offsetX = cardRect.left - dzRect.left;
-        const offsetY = cardRect.top - dzRect.top;
-        this.style.left = offsetX + "px";
-        this.style.top = offsetY + "px";
-        // Set a high z-index so it appears on top
-        this.style.zIndex = "1000";
-        // Reset any transform applied during dragging
-        this.style.transform = "";
-      } else {
-        // Not dropped in drop zone – reset position
+      
+      slots.forEach(slot => {
+        const slotRect = slot.getBoundingClientRect();
+        // Check if card center lies within slot and the slot is empty
+        if (
+          cardCenterX >= slotRect.left && 
+          cardCenterX <= slotRect.right &&
+          cardCenterY >= slotRect.top && 
+          cardCenterY <= slotRect.bottom &&
+          slot.childElementCount === 0
+        ) {
+          // Drop the card into the slot and reset its position
+          slot.appendChild(this);
+          this.style.position = "relative";
+          this.style.left = 0;
+          this.style.top = 0;
+          placed = true;
+        }
+      });
+      if (!placed) {
+        // If not dropped into any slot, revert its position.
         this.style.transform = this.origTransform;
       }
     }
@@ -334,20 +352,18 @@
     function renderPlayerCards(cards, containerId) {
       const container = document.getElementById(containerId);
       container.innerHTML = "";
-      // Render only the first 4 cards
       cards.slice(0, 4).forEach((card, index) => {
         const cardElem = document.createElement("div");
         cardElem.classList.add("card");
-        cardElem.id = `playerCard_${index}`;  // Unique id for the card
-        cardElem.setAttribute("draggable", "false"); // Disable native drag for touch
+        cardElem.id = `playerCard_${index}`;
+        cardElem.setAttribute("draggable", "false");
         cardElem.innerHTML = `<span>${card.name}<br>(${card.power})</span>`;
-        // Add touch event listeners for dragging
         cardElem.addEventListener("touchstart", handleTouchStart, false);
         cardElem.addEventListener("touchmove", handleTouchMove, false);
         cardElem.addEventListener("touchend", handleTouchEnd, false);
         container.appendChild(cardElem);
       });
-      // Append the deck element to the right of the cards
+      // Append the deck element after the cards.
       const deckElem = document.createElement("div");
       deckElem.classList.add("deck");
       deckElem.innerHTML = `<span>Deck</span>`;
@@ -359,12 +375,9 @@
     document.getElementById("battleButton").addEventListener("click", function() {
       const playerTotal = demoPlayerCards.reduce((sum, card) => sum + card.power, 0);
       const opponentTotal = demoOpponentCards.reduce((sum, card) => sum + card.power, 0);
-      let outcome = "";
-      if (playerTotal === opponentTotal) {
-        outcome = "It's a tie!";
-      } else {
-        outcome = playerTotal > opponentTotal ? "You win!" : "Opponent wins!";
-      }
+      const outcome = playerTotal === opponentTotal 
+        ? "It's a tie!" 
+        : playerTotal > opponentTotal ? "You win!" : "Opponent wins!";
       alert(`Your Total Power: ${playerTotal}\nOpponent Total Power: ${opponentTotal}\n${outcome}`);
     });
   </script>
