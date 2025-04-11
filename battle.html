@@ -454,16 +454,6 @@
     }
     renderPlayerCards(demoPlayerCards, "playerCards");
 
-    // Battle simulation button
-    document.getElementById("battleButton").addEventListener("click", function() {
-      const playerTotal = demoPlayerCards.reduce((sum, card) => sum + card.power, 0);
-      const opponentTotal = demoOpponentCards.reduce((sum, card) => sum + card.power, 0);
-      const outcome = playerTotal === opponentTotal 
-        ? "It's a tie!" 
-        : playerTotal > opponentTotal ? "You win!" : "Opponent wins!";
-      alert(`Your Total Power: ${playerTotal}\nOpponent Total Power: ${opponentTotal}\n${outcome}`);
-    });
-
     function showDeck() {
       // Populate deck modal with all current cards from demoPlayerCards
       const deckContent = document.getElementById("deckContent");
@@ -506,6 +496,27 @@
         slot.appendChild(cardElem);
       });
     }
+
+    document.getElementById("battleButton").addEventListener("click", function() {
+      let opponentTotal = 0;
+      for (let i = 1; i <= 3; i++){
+        const slot = document.getElementById(`opponentSlot${i}`);
+        const cardSpan = slot.querySelector("span");
+        if (cardSpan) {
+          // Assumes the content format is something like: "CardName (Power)"
+          const match = cardSpan.innerText.match(/\((\d+)\)/);
+          if(match){
+            opponentTotal += parseInt(match[1], 10);
+          }
+        }
+      }
+      // For the player, you might either use all the cards or similar logic if you use battlefield slots.
+      const playerTotal = demoPlayerCards.reduce((sum, card) => sum + card.power, 0); // Adjust if needed
+      const outcome = playerTotal === opponentTotal 
+        ? "It's a tie!" 
+        : playerTotal > opponentTotal ? "You win!" : "Opponent wins!";
+      alert(`Your Total Power: ${playerTotal}\nOpponent Total Power: ${opponentTotal}\n${outcome}`);
+    });
   </script>
 </body>
 </html>
