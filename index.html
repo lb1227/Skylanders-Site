@@ -122,17 +122,50 @@
 
     .dark-cloud {
       position: absolute;
-      top: 30%;               /* Adjust this value to place it vertically */
-      left: 10%;              /* Adjust horizontally */
-      width: 1200px;           /* Set desired width */
-      height: 720px;           /* Maintain aspect ratio */
+      width: 1200px;           /* Fixed width */
+      height: 720px;          /* Fixed height to prevent collapsing */
       background-image: url("images/dark_cloud.png");
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
-      opacity: 0.8;           /* Starting opacity */
-      pointer-events: none;   /* Prevent the cloud from interfering with clicks */
+      opacity: 0.8;
+      pointer-events: none;
       animation: driftFade 15s ease-in-out infinite;
+      z-index: 10;            /* Ensure they show above other layers */
+    }
+    
+    @keyframes driftFade {
+      0% {
+        transform: translateX(0);
+        opacity: 0.8;
+      }
+      50% {
+        transform: translateX(20px);  /* Drifts right */
+        opacity: 0.4;
+      }
+      100% {
+        transform: translateX(0);
+        opacity: 0.8;
+      }
+    }
+    
+    /* Individual positioning for each dark cloud */
+    .dark-cloud.one {
+      top: 20%;       /* 20% down from the top */
+      left: 5%;       /* 5% from the left */
+      animation-delay: 0s;
+    }
+    
+    .dark-cloud.two {
+      top: 40%;       /* Further down */
+      left: 30%;      /* Shifted more to the right */
+      animation-delay: 5s;
+    }
+    
+    .dark-cloud.three {
+      top: 25%;       /* Somewhere between the other two vertically */
+      left: 60%;      /* Nearer to the right side */
+      animation-delay: 10s;
     }
     
     @keyframes driftFade {
@@ -292,11 +325,15 @@
   <!-- SKYLANDERS-THEMED BACKGROUND -->
   <div class="sky-background">
     <div class="gradient"></div>
-    <!-- Cloud overlay element -->
+    <!-- Optional cloud overlay, if you already use one -->
     <div class="cloud-overlay"></div>
-    <div class="dark-cloud"></div>
+    
+    <!-- Three dark cloud elements -->
+    <div class="dark-cloud one"></div>
+    <div class="dark-cloud two"></div>
+    <div class="dark-cloud three"></div>
+    
     <div class="floating-islands">
-      <!-- Your island elements here -->
       <div class="island island1"></div>
       <div class="island island2"></div>
       <div class="island island4"></div>
