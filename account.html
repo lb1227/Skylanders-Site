@@ -373,6 +373,23 @@
         alert(shareText);
       }
     }
+    document.getElementById("accountForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      const newUsername = document.getElementById("username").value;
+      const newPassword = document.getElementById("password").value;
+      
+      // Update username in localStorage
+      localStorage.setItem("sky_user", newUsername);
+      
+      // Store the new password (WARNING: This is not secure and should only be used for prototypes)
+      if(newPassword) {
+        localStorage.setItem("sky_password", newPassword);
+      }
+      
+      alert("Account updated successfully!");
+      document.getElementById("currentUserDisplay").innerText = "Logged in as: " + newUsername;
+      document.getElementById("password").value = "";
+    });
   </script>
 </body>
 </html>
