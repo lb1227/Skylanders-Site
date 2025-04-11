@@ -92,11 +92,26 @@
       position: relative;
       transition: transform 0.2s ease;
     }
+    /* New styling for the Deck element */
+    .deck {
+      width: 60px;
+      height: 85px;
+      margin: 0 3px;
+      background: var(--card-back-bg);
+      border: 2px solid var(--card-border);
+      border-radius: 8px;
+      box-shadow: 0 2px 6px var(--card-shadow);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 0.7rem;
+      text-align: center;
+    }
     /* Battle Platform styling – made taller */
     .platform {
       background: var(--platform-bg);
       border-radius: 12px;
-      padding: 2rem 1rem;  /* Increased vertical padding */
+      padding: 2rem 1rem;
       min-height: 400px;
       margin: 0.8rem 0;
       color: var(--text-color);
@@ -140,7 +155,7 @@
     <div class="zone player-area">
       <div class="header">Your Cards</div>
       <div class="cards-row" id="playerCards">
-        <!-- Player cards with details will be rendered here with touch handlers -->
+        <!-- Player cards and deck will be rendered here -->
       </div>
     </div>
   </div>
@@ -228,11 +243,12 @@
       }
     }
 
-    // Render player's cards with touch handlers
+    // Render player's cards with touch handlers and add the deck element.
     function renderPlayerCards(cards, containerId) {
       const container = document.getElementById(containerId);
       container.innerHTML = "";
-      cards.forEach((card, index) => {
+      // Render only the first 4 cards
+      cards.slice(0, 4).forEach((card, index) => {
         const cardElem = document.createElement("div");
         cardElem.classList.add("card");
         cardElem.id = `playerCard_${index}`;  // Unique id for the card
@@ -244,6 +260,11 @@
         cardElem.addEventListener("touchend", handleTouchEnd, false);
         container.appendChild(cardElem);
       });
+      // Append the deck element to the right of the cards
+      const deckElem = document.createElement("div");
+      deckElem.classList.add("deck");
+      deckElem.innerHTML = `<span>Deck</span>`;
+      container.appendChild(deckElem);
     }
     renderPlayerCards(demoPlayerCards, "playerCards");
 
