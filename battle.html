@@ -129,7 +129,7 @@
       </div>
     </div>
     <!-- Battle Platform (Center) -->
-    <div class="zone platform">
+    <div class="zone platform" id="battleDropZone" ondragover="allowDrop(event)" ondrop="drop(event)">
       <div class="header">Battle Platform</div>
       <div>Prepare for battle...</div>
       <button class="battle-button" id="battleButton">Battle!</button>
@@ -221,10 +221,8 @@
       cards.forEach((card, index) => {
         const cardElem = document.createElement("div");
         cardElem.classList.add("card");
-        // Assign an id so we can reference it later in drag events
-        cardElem.id = `playerCard_${index}`;
+        cardElem.id = `playerCard_${index}`;  // Unique id for each card
         cardElem.setAttribute("draggable", "true");
-        // Add drag event listener
         cardElem.addEventListener("dragstart", drag);
         cardElem.innerHTML = `<span>${card.name}<br>(${card.power})</span>`;
         container.appendChild(cardElem);
