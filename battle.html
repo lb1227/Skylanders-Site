@@ -3,18 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TCG Battle Style</title>
+  <title>TCG Battle Field</title>
   <style>
-    /* Base styling for a card table feel */
     :root {
-      --bg: #0b3d91;          /* Deep blue table background */
-      --card-bg: #fff;         /* White card background */
-      --card-border: #ffc107;  /* Gold border for cards */
+      --bg: #0b3d91;            /* Deep blue background for a card table feel */
+      --card-bg: #fff;           /* White card face */
+      --card-border: #ffc107;    /* Gold border */
       --card-shadow: rgba(0, 0, 0, 0.5);
       --text-color: #212121;
-      --selected-overlay: rgba(255, 193, 7, 0.7);
-      --button-bg: #e53935;
-      --button-hover: #d32f2f;
+      --deck-bg: #424242;        /* Dark gray for deck back */
+      --deck-text: #fff;
       --font-family: 'Arial', sans-serif;
     }
     body {
@@ -28,148 +26,118 @@
       align-items: center;
       min-height: 100vh;
     }
-    /* Main container simulating a battle arena */
-    .battle-container {
-      width: 90%;
-      max-width: 800px;
+    /* Main battlefield container */
+    .battlefield {
       background: rgba(255,255,255,0.95);
       border-radius: 12px;
-      padding: 1.5rem;
+      padding: 2rem;
       box-shadow: 0 8px 20px var(--card-shadow);
+      max-width: 900px;
+      width: 95%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       position: relative;
-      overflow: hidden;
     }
     .header {
-      text-align: center;
+      font-size: 2rem;
       margin-bottom: 1rem;
-      font-size: 1.8rem;
-      font-weight: bold;
       text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
     }
-    /* Cards grid */
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      grid-gap: 0.75rem;
-      margin-bottom: 1.5rem;
+    /* Hand (5 cards) layout */
+    .hand-container {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
     }
     .card {
       background: var(--card-bg);
       border: 2px solid var(--card-border);
       border-radius: 8px;
       box-shadow: 0 4px 8px var(--card-shadow);
+      width: 120px;
       height: 160px;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       position: relative;
-      cursor: pointer;
-      user-select: none;
+      font-weight: bold;
+      text-align: center;
       transition: transform 0.2s;
     }
     .card:hover {
       transform: scale(1.05);
     }
-    .card.selected::after {
-      content: "";
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: var(--selected-overlay);
-      border-radius: 6px;
+    /* Deck pile area */
+    .deck-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-    .card span {
+    .deck {
+      width: 120px;
+      height: 160px;
+      background: var(--deck-bg);
+      border-radius: 8px;
+      box-shadow: inset 0 4px 8px rgba(0,0,0,0.7);
       position: relative;
-      z-index: 2;
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .deck::after {
+      content: "Deck";
+      color: var(--deck-text);
+      position: absolute;
       font-weight: bold;
+      font-size: 1.1rem;
+    }
+    .deck-count {
+      font-size: 1.1rem;
+      color: var(--deck-text);
     }
     /* Battle button */
     .battle-button {
-      width: 100%;
-      text-align: center;
-      padding: 1rem;
-      background: var(--button-bg);
+      margin-top: 2rem;
+      padding: 1rem 2rem;
+      background: #e53935;
       color: #fff;
+      border: none;
       border-radius: 8px;
-      cursor: pointer;
       font-size: 1.2rem;
-      display: none; /* Hidden until at least one card is selected */
+      cursor: pointer;
       transition: background 0.3s;
     }
     .battle-button:hover {
-      background: var(--button-hover);
-    }
-    /* Overlay for battle result */
-    .battle-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.8);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      color: #fff;
-      text-align: center;
-      padding: 1rem;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.5s ease;
-      z-index: 10;
-    }
-    .battle-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-    .battle-overlay h2 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-    }
-    .battle-overlay p {
-      font-size: 1.2rem;
-      margin: 0.5rem 0;
-    }
-    .close-overlay {
-      margin-top: 2rem;
-      padding: 0.75rem 1.5rem;
-      background: var(--button-bg);
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .close-overlay:hover {
-      background: var(--button-hover);
+      background: #d32f2f;
     }
   </style>
 </head>
 <body>
-  <div class="battle-container">
-    <div class="header">Select Your Cards</div>
-    <div class="cards-grid" id="cardsGrid">
-      <!-- Cards will be loaded here -->
-    </div>
-    <div class="battle-button" id="battleButton">Battle!</div>
+  <div class="battlefield">
+    <div class="header">Your Battle Field</div>
     
-    <!-- Battle Result Overlay -->
-    <div class="battle-overlay" id="battleOverlay">
-      <h2 id="battleOutcome"></h2>
-      <p id="playerPower"></p>
-      <p id="opponentPower"></p>
-      <button class="close-overlay" id="closeOverlay">Close</button>
+    <!-- Hand: 5 cards visible -->
+    <div class="hand-container" id="handContainer">
+      <!-- 5 Card elements will be inserted here -->
     </div>
+    
+    <!-- Deck pile: shows the rest of the deck -->
+    <div class="deck-container">
+      <div class="deck" id="deckPile"></div>
+      <div class="deck-count" id="deckCount"></div>
+    </div>
+    
+    <!-- Battle Button -->
+    <button class="battle-button" id="battleButton">Battle!</button>
   </div>
 
   <script>
-    // For demo purposes, we'll assume localStorage contains a collection
-    // using the key 'sky_progress_{username}_{game}'
-    // Here, we simulate the loading of a collection.
-    // In your app, replace this demoCollection with your actual data.
-    
-    const username = localStorage.getItem("sky_user") || "DemoUser";
+    // Demo collection data – replace this with your actual data or collection loaded from localStorage.
+    // Assume a collection with at least 8 cards for example purposes.
     const demoCollection = {
       collected: [
         { name: "Pikachu", power: 80 },
@@ -179,99 +147,67 @@
         { name: "Jigglypuff", power: 50 },
         { name: "Gengar", power: 90 },
         { name: "Mewtwo", power: 100 },
-        { name: "Eevee", power: 70 }
+        { name: "Eevee", power: 70 },
+        { name: "Snorlax", power: 85 },
+        { name: "Lapras", power: 75 }
       ]
     };
 
-    // If you already store data in localStorage, you would load it like so:
-    // const key = `sky_progress_${username}_<GAME>`;
-    // const collectionData = JSON.parse(localStorage.getItem(key)) || demoCollection;
-    const collectionData = demoCollection; // Using demo collection for now.
-    
-    const cardsGrid = document.getElementById("cardsGrid");
-    const battleButton = document.getElementById("battleButton");
-    const battleOverlay = document.getElementById("battleOverlay");
-    const battleOutcome = document.getElementById("battleOutcome");
-    const playerPowerElem = document.getElementById("playerPower");
-    const opponentPowerElem = document.getElementById("opponentPower");
-    const closeOverlay = document.getElementById("closeOverlay");
+    // For demonstration, simulate that your full deck is the entire collection.
+    // We'll randomly choose 5 cards for the hand and consider the rest as the deck.
+    const fullDeck = demoCollection.collected;
+    let hand = [];
+    let deck = [];
 
-    let selectedCards = [];
+    function setupBattlefield() {
+      // Shuffle full deck copy
+      const deckCopy = [...fullDeck].sort(() => Math.random() - 0.5);
 
-    // Render cards from the collection
-    function renderCards() {
-      cardsGrid.innerHTML = "";
-      const ownedItems = collectionData.collected || [];
-      ownedItems.forEach((item, index) => {
+      // Take the first 5 cards as the hand
+      hand = deckCopy.slice(0, 5);
+      // The rest become the deck pile
+      deck = deckCopy.slice(5);
+      renderHand();
+      renderDeck();
+    }
+
+    function renderHand() {
+      const handContainer = document.getElementById("handContainer");
+      handContainer.innerHTML = "";
+      hand.forEach(card => {
         const cardElem = document.createElement("div");
         cardElem.classList.add("card");
-        cardElem.innerHTML = `<span>${item.name}</span>`;
-        // Store the index or data on the element for later use.
-        cardElem.dataset.index = index;
-        cardElem.addEventListener("click", () => {
-          // Toggle selection
-          if (cardElem.classList.contains("selected")) {
-            cardElem.classList.remove("selected");
-            selectedCards = selectedCards.filter(i => i !== index);
-          } else {
-            cardElem.classList.add("selected");
-            selectedCards.push(index);
-          }
-          updateBattleButton();
-        });
-        cardsGrid.appendChild(cardElem);
+        cardElem.innerHTML = `<span>${card.name}<br>(Power: ${card.power})</span>`;
+        handContainer.appendChild(cardElem);
       });
     }
 
-    // Update the battle button visibility based on selection
-    function updateBattleButton() {
-      if (selectedCards.length > 0) {
-        battleButton.style.display = "block";
-      } else {
-        battleButton.style.display = "none";
-      }
+    function renderDeck() {
+      const deckCountElem = document.getElementById("deckCount");
+      // For a deck pile, we only show the count of cards left
+      deckCountElem.innerText = `${deck.length} card${deck.length !== 1 ? "s" : ""} remaining`;
     }
 
-    // Simulate battle
+    // Battle simulation: calculate hand's total power and simulate an opponent's random power score.
     function performBattle() {
-      const ownedItems = collectionData.collected || [];
-      // Calculate player's deck total power using the selected cards
-      let playerTotal = selectedCards.reduce((sum, index) => {
-        return sum + (ownedItems[index].power || 0);
-      }, 0);
-      // Generate opponent total power (for demo, 3 to 5 random cards)
-      let numOpponentCards = Math.floor(Math.random() * 3) + 3;
-      let opponentTotal = 0;
-      for (let i = 0; i < numOpponentCards; i++) {
-        opponentTotal += Math.floor(Math.random() * 100);
-      }
-      // Decide outcome
+      const playerTotal = hand.reduce((sum, card) => sum + card.power, 0);
+      // Simulate opponent total power randomly between a plausible range.
+      const opponentTotal = Math.floor(Math.random() * 400) + 150;
+      
       let outcome = "";
       if (playerTotal === opponentTotal) {
         outcome = "It's a tie!";
       } else {
         outcome = playerTotal > opponentTotal ? "You win!" : "Opponent wins!";
       }
-      // Show battle overlay with results
-      battleOutcome.innerText = outcome;
-      playerPowerElem.innerText = `Your Deck Power: ${playerTotal}`;
-      opponentPowerElem.innerText = `Opponent Deck Power: ${opponentTotal}`;
-      battleOverlay.classList.add("active");
+      
+      alert(`Your Total Power: ${playerTotal}\nOpponent Total Power: ${opponentTotal}\n${outcome}`);
     }
 
-    // Event listeners
-    battleButton.addEventListener("click", performBattle);
-    closeOverlay.addEventListener("click", () => {
-      battleOverlay.classList.remove("active");
-      // Optionally, deselect all cards to restart
-      document.querySelectorAll(".card.selected").forEach(card => card.classList.remove("selected"));
-      selectedCards = [];
-      updateBattleButton();
-    });
+    document.getElementById("battleButton").addEventListener("click", performBattle);
 
-    // Initialize
-    renderCards();
-    updateBattleButton();
+    // Initialize the battlefield
+    setupBattlefield();
   </script>
 </body>
 </html>
