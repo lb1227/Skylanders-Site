@@ -209,15 +209,18 @@
       // Check if the card's center is inside the drop zone
       if (cardCenterX >= dzRect.left && cardCenterX <= dzRect.right &&
           cardCenterY >= dzRect.top && cardCenterY <= dzRect.bottom) {
-        // Append card to drop zone, insert at beginning so it overlays
+        // Insert the card into the drop zone at the beginning
         dropZone.insertBefore(this, dropZone.firstChild);
-        // Set the card's position to absolute relative to dropZone:
+        // Set the card's position to absolute relative to the drop zone:
         this.style.position = "absolute";
         // Calculate the offset relative to dropZone
         const offsetX = cardRect.left - dzRect.left;
         const offsetY = cardRect.top - dzRect.top;
         this.style.left = offsetX + "px";
         this.style.top = offsetY + "px";
+        // Set a high z-index so it appears on top
+        this.style.zIndex = "1000";
+        // Reset any transform applied during dragging
         this.style.transform = "";
       } else {
         // Not dropped in drop zone – reset position
