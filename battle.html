@@ -414,22 +414,29 @@
         }
       });
       
-      // Check if the card is dropped over the inventory container
+      // Check if the card is dropped over the inventory container,
+      // but only if it's not dropped over the deck element.
       if (!placed) {
-        const inventory = document.getElementById("playerCards");
-        const invRect = inventory.getBoundingClientRect();
-        if (
-          cardCenterX >= invRect.left &&
-          cardCenterX <= invRect.right &&
-          cardCenterY >= invRect.top &&
-          cardCenterY <= invRect.bottom
-        ) {
-          inventory.appendChild(this);
-          this.style.position = "relative";
-          this.style.left = "0";
-          this.style.top = "0";
-          this.style.zIndex = "initial";
-          placed = true;
+        const elementAtCenter = document.elementFromPoint(cardCenterX, cardCenterY);
+        // If the element at the center (or one of its ancestors) is the deck, ignore the drop.
+        if (!elementAtCenter || elementAtCenter.closest(".deck")) {
+          // If dropped over the deck, do nothing (or revert later).
+        } else {
+          const inventory = document.getElementById("playerCards");
+          const invRect = inventory.getBoundingClientRect();
+          if (
+            cardCenterX >= invRect.left &&
+            cardCenterX <= invRect.right &&
+            cardCenterY >= invRect.top &&
+            cardCenterY <= invRect.bottom
+          ) {
+            inventory.appendChild(this);
+            this.style.position = "relative";
+            this.style.left = "0";
+            this.style.top = "0";
+            this.style.zIndex = "initial";
+            placed = true;
+          }
         }
       }
       
