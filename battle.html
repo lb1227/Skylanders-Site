@@ -211,6 +211,34 @@
       font-size: 0.9rem;
       cursor: pointer;
     }
+
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 3000;
+    }
+    
+    .modal-content {
+      background-color: var(--platform-bg);
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 90%;
+      color: var(--text-color);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
+    }
+    
+    .close {
+      float: right;
+      cursor: pointer;
+      font-size: 1.5rem;
+    }
   </style>
 </head>
 <body>
@@ -254,6 +282,15 @@
   <div id="mobileMenu" class="mobile-menu">
     <button onclick="goToAccount()">Account</button>
     <button onclick="logout()">Logout</button>
+  </div>
+
+  <!-- Deck Modal -->
+  <div id="deckModal" class="modal">
+    <div class="modal-content">
+      <span id="closeModal" class="close">&times;</span>
+      <h2>Your Deck</h2>
+      <div id="deckContent"></div>
+    </div>
   </div>
 
   <script>
@@ -381,6 +418,7 @@
       // Append deck element after cards.
       const deckElem = document.createElement("div");
       deckElem.classList.add("deck");
+      deckElem.addEventListener("click", showDeck);
       deckElem.innerHTML = `<span>Deck</span>`;
       container.appendChild(deckElem);
     }
@@ -394,6 +432,29 @@
         ? "It's a tie!" 
         : playerTotal > opponentTotal ? "You win!" : "Opponent wins!";
       alert(`Your Total Power: ${playerTotal}\nOpponent Total Power: ${opponentTotal}\n${outcome}`);
+    });
+
+    function showDeck() {
+      // Populate deck modal with all current cards from demoPlayerCards
+      const deckContent = document.getElementById("deckContent");
+      // Clear previous contents
+      deckContent.innerHTML = "";
+      demoPlayerCards.forEach(card => {
+        const cardDiv = document.createElement("div");
+        // Customize the display of each card as needed.
+        cardDiv.style.border = "1px solid var(--card-border)";
+        cardDiv.style.padding = "10px";
+        cardDiv.style.marginBottom = "10px";
+        cardDiv.style.borderRadius = "8px";
+        cardDiv.textContent = `${card.name} (${card.power})`;
+        deckContent.appendChild(cardDiv);
+      });
+      // Show the modal by switching to flex layout.
+      document.getElementById("deckModal").style.display = "flex";
+    }
+
+    document.getElementById("closeModal").addEventListener("click", function() {
+      document.getElementById("deckModal").style.display = "none";
     });
   </script>
 </body>
