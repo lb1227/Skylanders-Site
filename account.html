@@ -378,13 +378,17 @@
       const newUsername = document.getElementById("username").value;
       const newPassword = document.getElementById("password").value;
       
-      // Update username in localStorage
-      localStorage.setItem("sky_user", newUsername);
+      // Retrieve current user data or create a new object
+      const userData = JSON.parse(localStorage.getItem("sky_users")) || {};
       
-      // Store the new password (WARNING: This is not secure and should only be used for prototypes)
-      if(newPassword) {
-        localStorage.setItem("sky_password", newPassword);
-      }
+      // Update the user's credentials (adding or updating the password)
+      userData[newUsername] = newPassword;
+      
+      // Save the updated object back to localStorage
+      localStorage.setItem("sky_users", JSON.stringify(userData));
+      
+      // Optionally, update the current user indicator
+      localStorage.setItem("sky_user", newUsername);
       
       alert("Account updated successfully!");
       document.getElementById("currentUserDisplay").innerText = "Logged in as: " + newUsername;
