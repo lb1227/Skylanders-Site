@@ -181,24 +181,22 @@
     .balloon {
       position: absolute;
       bottom: 0;
-      left: 20%;   /* Adjust horizontal placement as needed */
+      right: -100px;   /* Adjust horizontal placement as needed */
       width: 800px;  /* Desired width */
       height: 500px;
       background-image: url("images/balloon.png");
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
-      animation: floatBalloon 20s linear infinite;
+      animation: floatBalloon 30s linear infinite;
       z-index: 3;  /* Above dark clouds, below foreground */
     }
     @keyframes floatBalloon {
       0% {
         transform: translateY(0);
-        opacity: 1;
       }
       100% {
         transform: translateY(-150vh);
-        opacity: 0;
       }
     }
     
