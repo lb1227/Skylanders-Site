@@ -240,6 +240,13 @@
       const menu = document.getElementById("mobileMenu");
       menu.style.display = menu.style.display === "flex" ? "none" : "flex";
     }
+    function logout() {
+      localStorage.removeItem("sky_user");
+      location.href = "login.html";
+    }
+    function goToAccount() {
+      window.location.href = "account.html";
+    }
   </script>
 </body>
 </html>
