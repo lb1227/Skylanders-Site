@@ -1,27 +1,25 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Deck Builder & Battle - TCG Style</title>
+  <title>Deck Builder & Battle</title>
   <style>
-    /* TCG-inspired styling */
     :root {
-      --bg: #f0f5f9; /* Light background similar to a card table */
-      --container-bg: #fff;
-      --card-bg: linear-gradient(135deg, #ffea00, #ffab00); /* Vivid gradient for cards */
-      --text: #212121;
-      --accent: #d32f2f;
-      --button: #ff6f00;
-      --button-hover: #e65100;
-      --nav-bg: #0d47a1;
-      --font-family: 'Arial', sans-serif;
+      --bg: #121212;
+      --card-bg: #1e1a1e;
+      --text: #ffffff;
+      --accent: #4caf50;
+      --button: #e53935;
+      --button-hover: #d32f2f;
+      --nav-bg: #1a1a1a;
     }
     body {
       margin: 0;
       background-color: var(--bg);
       color: var(--text);
-      font-family: var(--font-family);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       padding: 1rem;
     }
     /* Mobile Navigation */
@@ -36,10 +34,10 @@
       justify-content: space-around;
       align-items: center;
       z-index: 1000;
-      box-shadow: 0 -2px 6px rgba(0,0,0,0.5);
+      box-shadow: 0 -2px 6px rgba(0,0,0,0.3);
     }
     .bottom-mobile-nav a {
-      color: #fff;
+      color: white;
       font-size: 1.5rem;
       text-decoration: none;
     }
@@ -62,19 +60,20 @@
       right: 20px;
       background-color: var(--nav-bg);
       border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.7);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
       padding: 1rem;
       display: none;
       flex-direction: column;
       gap: 0.5rem;
       z-index: 1001;
+      transition: opacity 0.3s ease, transform 0.3s ease;
     }
     .mobile-menu.show {
       display: flex;
     }
     .mobile-menu button {
-      background-color: var(--container-bg);
-      color: var(--text);
+      background-color: var(--card-bg);
+      color: white;
       padding: 0.5rem 1rem;
       border: none;
       border-radius: 8px;
@@ -84,21 +83,15 @@
     .mobile-menu button:hover {
       background-color: var(--button-hover);
     }
-    /* Main Container */
+    /* Container & Tabs */
     .container {
-      background-color: var(--container-bg);
-      border: 2px solid #ccc;
-      border-radius: 16px;
+      background-color: var(--card-bg);
       padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
       max-width: 700px;
-      margin: 2rem auto 6rem;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      margin: 2rem auto 4rem;
     }
-    h1, h2 {
-      text-align: center;
-      text-shadow: 1px 1px 2px #999;
-    }
-    /* Tabs */
     .tabs {
       display: flex;
       justify-content: center;
@@ -110,11 +103,8 @@
       border: none;
       border-radius: 8px;
       background-color: var(--button);
-      color: #fff;
+      color: white;
       cursor: pointer;
-      text-transform: uppercase;
-      font-weight: bold;
-      box-shadow: 1px 1px 4px rgba(0,0,0,0.4);
       transition: background 0.3s ease;
     }
     .tabs button:hover {
@@ -126,7 +116,7 @@
     .section.active {
       display: block;
     }
-    /* Common form elements */
+    /* Common form and element styling */
     select, button {
       padding: 0.7rem;
       font-size: 1rem;
@@ -137,7 +127,7 @@
     }
     button {
       background-color: var(--button);
-      color: #fff;
+      color: white;
       transition: background 0.3s ease;
     }
     button:hover {
@@ -147,44 +137,29 @@
       width: 100%;
       padding: 0.7rem;
       border-radius: 8px;
-      border: 1px solid #999;
+      border: 1px solid #444;
+      background-color: #2a2a2a;
+      color: white;
       margin: 0.5rem 0;
     }
-    /* Card list styling */
     .card-list {
       display: flex;
       flex-wrap: wrap;
       gap: 1rem;
       margin: 1rem 0;
-      justify-content: center;
     }
     .card {
-      background: var(--card-bg);
-      border: 2px solid #ff9800;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-      width: 120px;
+      border: 1px solid #333;
       padding: 0.5rem;
+      border-radius: 8px;
+      width: 120px;
       text-align: center;
-      font-weight: bold;
-      position: relative;
     }
-    .card input[type="checkbox"] {
-      position: absolute;
-      top: 4px;
-      left: 4px;
-    }
-    /* Battle result styling */
     .result {
       margin-top: 1.5rem;
       font-size: 1.2rem;
       font-weight: bold;
       text-align: center;
-      padding: 1rem;
-      background-color: #ffeb3b;
-      border: 2px solid #f57c00;
-      border-radius: 12px;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
     }
     .deck-display .card {
       margin: 0.5rem 0;
@@ -243,7 +218,7 @@
   </div>
 
   <script>
-    // Mobile navigation helper functions
+    // Mobile nav helper functions
     function toggleMobileMenu() {
       const menu = document.getElementById("mobileMenu");
       menu.style.display = menu.style.display === "flex" ? "none" : "flex";
@@ -261,8 +236,8 @@
       const sections = document.querySelectorAll(".section");
       sections.forEach(sec => sec.classList.remove("active"));
       document.getElementById(sectionID).classList.add("active");
-      if (sectionID === "battleSection") {
-        populateDeckSelect();
+      if(sectionID === "battleSection") {
+        populateDeckSelect(); // Refresh deck select when switching to battle view
       }
     }
     
@@ -270,8 +245,8 @@
     
     // ----- Deck Builder Section Code -----
     const gameSelectBuilder = document.getElementById("gameSelectBuilder");
-    // Populate game dropdown
-    if (window.games) {
+    // Populate game dropdown for deck builder; assumes global window.games is defined
+    if(window.games) {
       Object.keys(window.games).forEach(game => {
         const option = document.createElement("option");
         option.value = game;
@@ -285,14 +260,14 @@
       gameSelectBuilder.appendChild(option);
     }
     
-    // Load Collection Button Action
+    // Load Collection Button Action (for deck builder)
     document.getElementById("loadCollection").addEventListener("click", function() {
       const selectedGame = gameSelectBuilder.value;
       const key = `sky_progress_${username}_${selectedGame}`;
       const data = localStorage.getItem(key);
       const collectionContainer = document.getElementById("collectionContainer");
       collectionContainer.innerHTML = "";
-      if (data) {
+      if(data) {
         const parsedData = JSON.parse(data);
         const ownedItems = parsedData.collected || [];
         if (ownedItems.length > 0) {
@@ -321,6 +296,7 @@
         alert("Please enter a deck name.");
         return;
       }
+      // Get selected cards
       const selectedCards = [];
       const checkboxes = document.querySelectorAll("#collectionContainer input[type='checkbox']");
       if (!checkboxes.length) {
@@ -330,7 +306,7 @@
       const selectedGame = gameSelectBuilder.value;
       const key = `sky_progress_${username}_${selectedGame}`;
       const data = localStorage.getItem(key);
-      if (data) {
+      if(data) {
         const parsedData = JSON.parse(data);
         const ownedItems = parsedData.collected || [];
         checkboxes.forEach(checkbox => {
@@ -344,6 +320,7 @@
         alert("Please select at least one card for your deck.");
         return;
       }
+      // Save deck to localStorage under "sky_decks"
       const allDecks = JSON.parse(localStorage.getItem("sky_decks")) || {};
       if (!allDecks[username]) {
         allDecks[username] = {};
@@ -356,6 +333,8 @@
       alert(`Deck "${deckName}" saved successfully!`);
       document.getElementById("deckName").value = "";
       checkboxes.forEach(cb => cb.checked = false);
+      
+      // Refresh deck select dropdown in battle section
       populateDeckSelect();
     });
     
@@ -364,7 +343,7 @@
     const deckDisplay = document.getElementById("deckDisplay");
     const battleResult = document.getElementById("battleResult");
     
-    // Populate deck select dropdown
+    // Function to populate the deck select dropdown from localStorage
     function populateDeckSelect() {
       deckSelect.innerHTML = "";
       const allDecks = JSON.parse(localStorage.getItem("sky_decks")) || {};
@@ -377,7 +356,7 @@
       });
     }
     
-    // Load deck details
+    // Load deck details when "Load Deck" is clicked in battle section
     document.getElementById("loadDeck").addEventListener("click", () => {
       const allDecks = JSON.parse(localStorage.getItem("sky_decks")) || {};
       const userDecks = allDecks[username] || {};
@@ -386,6 +365,7 @@
       if (selectedDeck) {
         deckDisplay.innerHTML = `<h3>${deckSelect.value}</h3>`;
         selectedDeck.cards.forEach(card => {
+          // If no power attribute, assign a random one for demo purposes.
           card.power = card.power || Math.floor(Math.random() * 100);
           const cardDiv = document.createElement("div");
           cardDiv.classList.add("card");
@@ -397,7 +377,7 @@
       }
     });
     
-    // Battle Button Action
+    // Battle Button Action: Calculates deck total power and compares with a random opponent deck
     document.getElementById("battleBtn").addEventListener("click", () => {
       const allDecks = JSON.parse(localStorage.getItem("sky_decks")) || {};
       const userDecks = allDecks[username] || {};
@@ -406,16 +386,19 @@
         battleResult.innerText = "Deck is empty or not found!";
         return;
       }
+      // Sum the power values for your deck
       const deckTotalPower = selectedDeck.cards.reduce((sum, card) => {
         card.power = card.power || Math.floor(Math.random() * 100);
         return sum + card.power;
       }, 0);
+      // Simulate an opponent deck total power (for example, with 5 cards)
       let opponentTotalPower = 0;
-      for (let i = 0; i < 5; i++) {
+      for(let i = 0; i < 5; i++){
         opponentTotalPower += Math.floor(Math.random() * 100);
       }
+      // Decide the winner based on total power
       let resultText = "";
-      if (deckTotalPower === opponentTotalPower) {
+      if(deckTotalPower === opponentTotalPower) {
         resultText = "It's a tie!";
       } else {
         resultText = deckTotalPower > opponentTotalPower ? "You win!" : "Opponent wins!";
@@ -427,7 +410,7 @@
       `;
     });
     
-    // Initialize deck select on page load
+    // Initialize deck select when page loads
     populateDeckSelect();
     
   </script>
