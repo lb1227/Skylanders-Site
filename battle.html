@@ -89,7 +89,6 @@
       font-size: 0.7rem;
       text-align: center;
       padding: 4px;
-      position: relative;
       transition: transform 0.2s ease;
     }
     /* Deck styling */
@@ -151,7 +150,7 @@
       font-size: 0.7rem;
       color: var(--text-color);
     }
-    /* Bottom Mobile Navigation */
+    /* Bottom Mobile Navigation (not modified) */
     .bottom-mobile-nav {
       display: none;
       position: fixed;
@@ -216,14 +215,14 @@
 </head>
 <body>
   <div class="battlefield">
-    <!-- Opponent Area (Top row) -->
+    <!-- Opponent Area -->
     <div class="zone opponent-area">
       <div class="header">Opponent's Cards</div>
       <div class="cards-row" id="opponentCards">
-        <!-- Opponent cards will be rendered here as card backs -->
+        <!-- Opponent cards rendered here -->
       </div>
     </div>
-    <!-- Battle Platform (Center) – Contains 3 slots for card placement -->
+    <!-- Battle Platform with Slots -->
     <div class="zone platform" id="battleDropZone">
       <div class="header">Battle Platform</div>
       <div class="slots">
@@ -234,16 +233,16 @@
       <div>Prepare for battle...</div>
       <button class="battle-button" id="battleButton">Battle!</button>
     </div>
-    <!-- Player Area (Bottom row) -->
+    <!-- Player Area -->
     <div class="zone player-area">
       <div class="header">Your Cards</div>
       <div class="cards-row" id="playerCards">
-        <!-- Player cards and deck will be rendered here -->
+        <!-- Player cards and deck rendered here -->
       </div>
     </div>
   </div>
 
-  <!-- Bottom Mobile Navigation -->
+  <!-- Bottom Mobile Navigation (omitted for brevity) -->
   <nav id="mobileNav" class="bottom-mobile-nav">
     <a href="home.html" title="Home">🏠</a>
     <a href="inventory.html" title="Inventory">
@@ -252,7 +251,6 @@
     <a href="battle.html" title="Battle">⚔️</a>
     <button class="hamburger" onclick="toggleMobileMenu()">☰</button>
   </nav>
-
   <div id="mobileMenu" class="mobile-menu">
     <button onclick="goToAccount()">Account</button>
     <button onclick="logout()">Logout</button>
@@ -284,7 +282,7 @@
       menu.style.display = menu.style.display === "flex" ? "none" : "flex";
     }
 
-    // Render opponent cards as card backs
+    // Render opponent cards
     function renderCards(cards, containerId, showBack = false) {
       const container = document.getElementById(containerId);
       container.innerHTML = "";
@@ -299,15 +297,23 @@
     }
     renderCards(demoOpponentCards, "opponentCards", true);
 
-    // Touch event handlers for drag-and-drop simulation
+    // --- Drag-and-Drop using fixed positioning ---
     function handleTouchStart(e) {
       e.preventDefault();
       const touch = e.touches[0];
+      // Save original parent's reference and coordinates.
+      this.origParent = this.parentElement;
+      const rect = this.getBoundingClientRect();
+      this.origX = rect.left;
+      this.origY = rect.top;
       this.startX = touch.pageX;
       this.startY = touch.pageY;
-      // Save the original transform and set a high z-index so the card is visible on top.
-      this.origTransform = this.style.transform || '';
+      // Move the card to document.body so it appears above all.
+      this.style.position = 'fixed';
+      this.style.left = rect.left + 'px';
+      this.style.top = rect.top + 'px';
       this.style.zIndex = "2000";
+      document.body.appendChild(this);
     }
 
     function handleTouchMove(e) {
@@ -315,7 +321,8 @@
       const touch = e.touches[0];
       const deltaX = touch.pageX - this.startX;
       const deltaY = touch.pageY - this.startY;
-      this.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+      this.style.left = (this.origX + deltaX) + 'px';
+      this.style.top = (this.origY + deltaY) + 'px';
     }
 
     function handleTouchEnd(e) {
@@ -325,10 +332,10 @@
       const cardRect = this.getBoundingClientRect();
       const cardCenterX = cardRect.left + cardRect.width / 2;
       const cardCenterY = cardRect.top + cardRect.height / 2;
-      
+
       slots.forEach(slot => {
         const slotRect = slot.getBoundingClientRect();
-        // Check if card center lies within slot and the slot is empty
+        // Check if card center is within slot and slot is empty.
         if (
           cardCenterX >= slotRect.left && 
           cardCenterX <= slotRect.right &&
@@ -336,25 +343,27 @@
           cardCenterY <= slotRect.bottom &&
           slot.childElementCount === 0
         ) {
-          // Clear the slot text so your card's text shows through.
-          slot.textContent = "";
-          // Drop the card into the slot and reset its position/style.
+          slot.textContent = ""; // Clear slot placeholder text.
           slot.appendChild(this);
+          // Reset styling after drop.
           this.style.position = "relative";
-          this.style.left = 0;
-          this.style.top = 0;
+          this.style.left = "0";
+          this.style.top = "0";
           this.style.zIndex = "initial";
           placed = true;
         }
       });
       if (!placed) {
-        // If not dropped into any slot, revert its position.
-        this.style.transform = this.origTransform;
+        // If no valid drop, return the card to its original parent.
+        this.origParent.appendChild(this);
+        this.style.position = "relative";
+        this.style.left = "0";
+        this.style.top = "0";
         this.style.zIndex = "initial";
       }
     }
 
-    // Render player's cards with touch handlers and add the deck element.
+    // Render player's cards and deck
     function renderPlayerCards(cards, containerId) {
       const container = document.getElementById(containerId);
       container.innerHTML = "";
@@ -369,7 +378,7 @@
         cardElem.addEventListener("touchend", handleTouchEnd, false);
         container.appendChild(cardElem);
       });
-      // Append the deck element after the cards.
+      // Append deck element after cards.
       const deckElem = document.createElement("div");
       deckElem.classList.add("deck");
       deckElem.innerHTML = `<span>Deck</span>`;
@@ -377,7 +386,7 @@
     }
     renderPlayerCards(demoPlayerCards, "playerCards");
 
-    // Battle simulation when "Battle!" button is tapped.
+    // Battle simulation button
     document.getElementById("battleButton").addEventListener("click", function() {
       const playerTotal = demoPlayerCards.reduce((sum, card) => sum + card.power, 0);
       const opponentTotal = demoOpponentCards.reduce((sum, card) => sum + card.power, 0);
