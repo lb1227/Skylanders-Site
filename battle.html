@@ -369,10 +369,10 @@
       const cardRect = this.getBoundingClientRect();
       const cardCenterX = cardRect.left + cardRect.width / 2;
       const cardCenterY = cardRect.top + cardRect.height / 2;
-
+      
+      // Check for valid slot drops
       slots.forEach(slot => {
         const slotRect = slot.getBoundingClientRect();
-        // Check if card center is within slot and slot is empty.
         if (
           cardCenterX >= slotRect.left && 
           cardCenterX <= slotRect.right &&
@@ -380,9 +380,8 @@
           cardCenterY <= slotRect.bottom &&
           slot.childElementCount === 0
         ) {
-          slot.textContent = ""; // Clear slot placeholder text.
+          slot.textContent = ""; // Clear any placeholder text.
           slot.appendChild(this);
-          // Reset styling after drop.
           this.style.position = "relative";
           this.style.left = "0";
           this.style.top = "0";
@@ -390,8 +389,28 @@
           placed = true;
         }
       });
+      
+      // Check if the card is dropped over the inventory container
       if (!placed) {
-        // If no valid drop, return the card to its original parent.
+        const inventory = document.getElementById("playerCards");
+        const invRect = inventory.getBoundingClientRect();
+        if (
+          cardCenterX >= invRect.left &&
+          cardCenterX <= invRect.right &&
+          cardCenterY >= invRect.top &&
+          cardCenterY <= invRect.bottom
+        ) {
+          inventory.appendChild(this);
+          this.style.position = "relative";
+          this.style.left = "0";
+          this.style.top = "0";
+          this.style.zIndex = "initial";
+          placed = true;
+        }
+      }
+      
+      // If not placed in either a slot or inventory, revert to original parent.
+      if (!placed) {
         this.origParent.appendChild(this);
         this.style.position = "relative";
         this.style.left = "0";
