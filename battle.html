@@ -150,6 +150,11 @@
       font-size: 0.7rem;
       color: var(--text-color);
     }
+
+    .opponent-slots .slot {
+      /* Optionally add custom styles, e.g.: */
+      opacity: 0.9;
+    }
     /* Bottom Mobile Navigation (not modified) */
     .bottom-mobile-nav {
       display: none;
@@ -258,6 +263,11 @@
         <div class="slot" id="slot2">Slot 2</div>
         <div class="slot" id="slot3">Slot 3</div>
       </div>
+      <div class="slots opponent-slots">
+        <div class="slot" id="opponentSlot1">Slot 1</div>
+        <div class="slot" id="opponentSlot2">Slot 2</div>
+        <div class="slot" id="opponentSlot3">Slot 3</div>
+      </div>
       <div>Prepare for battle...</div>
       <button class="battle-button" id="battleButton">Battle!</button>
     </div>
@@ -333,6 +343,7 @@
       });
     }
     renderCards(demoOpponentCards, "opponentCards", true);
+    assignOpponentBattleSlots();
 
     // --- Drag-and-Drop using fixed positioning ---
     function handleTouchStart(e) {
@@ -475,6 +486,26 @@
     document.getElementById("closeModal").addEventListener("click", function() {
       document.getElementById("deckModal").style.display = "none";
     });
+
+    function assignOpponentBattleSlots() {
+      const slots = [
+        document.getElementById("opponentSlot1"),
+        document.getElementById("opponentSlot2"),
+        document.getElementById("opponentSlot3")
+      ];
+      
+      // Select the first 3 cards; adjust if you prefer random selection.
+      const selectedCards = demoOpponentCards.slice(0, 3);
+      
+      slots.forEach((slot, index) => {
+        slot.textContent = ""; // Clear placeholder text.
+        const cardElem = document.createElement("div");
+        cardElem.classList.add("card");
+        // Use the opponent card details (or a card back image/text if you want to hide details)
+        cardElem.innerHTML = `<span>${selectedCards[index].name}<br>(${selectedCards[index].power})</span>`;
+        slot.appendChild(cardElem);
+      });
+    }
   </script>
 </body>
 </html>
