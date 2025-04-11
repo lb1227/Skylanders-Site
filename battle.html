@@ -134,6 +134,69 @@
     .platform .battle-button:hover {
       background: var(--button-hover);
     }
+    /* Bottom Mobile Navigation */
+    .bottom-mobile-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: var(--nav-bg);
+      padding: 0.5rem 0;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 1000;
+      box-shadow: 0 -2px 6px rgba(0,0,0,0.3);
+    }
+    .bottom-mobile-nav a {
+      color: white;
+      font-size: 1.5rem;
+      text-decoration: none;
+    }
+    .bottom-mobile-nav a img {
+      width: 55px;    /* Adjust the size as needed */
+      height: auto;   /* Maintains aspect ratio */
+      vertical-align: middle; /* Optional: Aligns with text */
+      margin-top: 7px;
+    }
+
+    /* MOBILE MENU */
+    .hamburger {
+        display: block;
+        background-color: var(--nav-bg);
+        color: white;
+        border: none;
+        font-size: 1.5rem;
+        padding: 0.5rem;
+        cursor: pointer;
+      }
+      .mobile-menu {
+        position: fixed;
+        bottom: 60px;
+        right: 20px;
+        background-color: var(--nav-bg);
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+        padding: 1rem;
+        display: none;
+        flex-direction: column;
+        gap: 0.5rem;
+        z-index: 1001;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+      .mobile-menu.show {
+        display: flex;
+      }
+      .mobile-menu button {
+        background-color: var(--card-bg);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        cursor: pointer;
+      }
   </style>
 </head>
 <body>
