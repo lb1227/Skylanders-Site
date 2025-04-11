@@ -7,13 +7,13 @@
   <style>
     :root {
       --bg: #121212;             /* Overall dark background */
-      --platform-bg: #1e1e1e;     /* Dark platform background */
-      --card-bg: #1e1e1e;         /* Dark gray for your cards */
-      --card-back-bg: #333333;    /* Slightly lighter gray for card backs */
-      --card-border: #bb86fc;     /* Neon purple border accent */
+      --platform-bg: #1e1e1e;      /* Dark platform background */
+      --card-bg: #1e1e1e;          /* Dark gray for your cards */
+      --card-back-bg: #333333;     /* Slightly lighter gray for card backs */
+      --card-border: #bb86fc;      /* Neon purple border accent */
       --card-shadow: rgba(0, 0, 0, 0.8);
-      --text-color: #e0e0e0;      /* Light text for readability */
-      --button-bg: #bb86fc;       /* Neon purple for buttons */
+      --text-color: #e0e0e0;       /* Light text for readability */
+      --button-bg: #bb86fc;        /* Neon purple for buttons */
       --button-hover: #9b67d3;
       --font-family: 'Arial', sans-serif;
     }
@@ -305,7 +305,9 @@
       const touch = e.touches[0];
       this.startX = touch.pageX;
       this.startY = touch.pageY;
+      // Save the original transform and set a high z-index so the card is visible on top.
       this.origTransform = this.style.transform || '';
+      this.style.zIndex = "2000";
     }
 
     function handleTouchMove(e) {
@@ -334,17 +336,21 @@
           cardCenterY <= slotRect.bottom &&
           slot.childElementCount === 0
         ) {
-          // Drop the card into the slot and reset its position
+          // Clear the slot text so your card's text shows through.
+          slot.textContent = "";
+          // Drop the card into the slot and reset its position/style.
           slot.appendChild(this);
           this.style.position = "relative";
           this.style.left = 0;
           this.style.top = 0;
+          this.style.zIndex = "initial";
           placed = true;
         }
       });
       if (!placed) {
         // If not dropped into any slot, revert its position.
         this.style.transform = this.origTransform;
+        this.style.zIndex = "initial";
       }
     }
 
