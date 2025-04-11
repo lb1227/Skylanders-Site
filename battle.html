@@ -45,9 +45,6 @@
       color: white;
       transition: background 0.3s ease;
     }
-    button:hover {
-      background-color: var(--button-hover);
-    }
     .card {
       background: #2a2a2a;
       padding: 1rem;
@@ -238,6 +235,11 @@
         battleResult.innerText = "No collection data found for the selected game.";
       }
     });
+
+    function toggleMobileMenu() {
+      const menu = document.getElementById("mobileMenu");
+      menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+    }
   </script>
 </body>
 </html>
