@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-  <title>Dark Mode Mobile Card Battle – Touch Drag</title>
+  <title>SkyStone Battle – Inspired by Skylanders SuperChargers</title>
   <style>
     :root {
-      --bg: #121212;             /* Overall dark background */
-      --platform-bg: #1e1e1e;      /* Dark platform background */
-      --card-bg: #1e1e1e;          /* Dark gray for your cards */
-      --card-back-bg: #333333;     /* Slightly lighter gray for card backs */
-      --card-border: #bb86fc;      /* Neon purple border accent */
-      --card-shadow: rgba(0, 0, 0, 0.8);
-      --text-color: #e0e0e0;       /* Light text for readability */
-      --button-bg: #bb86fc;        /* Neon purple for buttons */
-      --button-hover: #9b67d3;
+      /* Base Colors */
+      --bg: #121212;                   /* Overall dark background */
+      --platform-bg: #1a1a1a;            /* Dark platform background */
+      --text-color: #e0e0e0;             /* Light text for readability */
+      /* Skystone-inspired gradients */
+      --stone-gradient: radial-gradient(circle at 30% 30%, #8e44ad, #1e1e1e);
+      --glow-gradient: linear-gradient(45deg, #bb86fc, #9b67d3);
+      /* Optional accent glow color */
+      --glow-color: rgba(187, 134, 252, 0.7);
       --font-family: 'Arial', sans-serif;
     }
     body {
@@ -35,7 +35,7 @@
       background: #181818;
       border-radius: 12px;
       padding: 1rem 0.5rem;
-      box-shadow: 0 4px 12px var(--card-shadow);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
       margin: 1rem;
     }
     .zone {
@@ -54,15 +54,16 @@
       overflow-x: auto;
       padding: 0 0.5rem;
     }
-    /* Opponent cards – show only the back */
+    /* Styling for opponent cards (using a card-back style) */
     .opponent-area .card {
       width: 80px;
       height: 110px;
       margin: 0 4px;
-      background: var(--card-back-bg);
-      border: 2px solid var(--card-border);
+      background: var(--stone-gradient);
+      border: 2px solid transparent;
+      border-image: var(--glow-gradient) 1;
       border-radius: 8px;
-      box-shadow: 0 2px 6px var(--card-shadow);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.8);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -74,39 +75,47 @@
       color: var(--text-color);
       font-weight: bold;
     }
-    /* Player cards – show card details */
+    /* Skystone-inspired styling for player cards */
     .player-area .card {
       width: 60px;
       height: 85px;
       margin: 0 3px;
-      background: var(--card-bg);
-      border: 2px solid var(--card-border);
+      background: var(--stone-gradient);
+      border: 2px solid transparent;
+      border-image: var(--glow-gradient) 1;
       border-radius: 8px;
-      box-shadow: 0 2px 6px var(--card-shadow);
+      /* Multiple shadows to create a glowing gem effect */
+      box-shadow: 0 0 8px var(--glow-color), 0 2px 6px rgba(0, 0, 0, 0.8);
       display: flex;
       justify-content: center;
       align-items: center;
       font-size: 0.7rem;
       text-align: center;
       padding: 4px;
-      transition: transform 0.2s ease;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-    /* Deck styling */
+    .player-area .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 12px var(--glow-color), 0 4px 8px rgba(0, 0, 0, 0.9);
+    }
+    /* Styling for the deck element; similar to player cards but distinct */
     .deck {
       width: 60px;
       height: 85px;
       margin: 0 3px;
-      background: var(--card-back-bg);
-      border: 2px solid var(--card-border);
+      background: var(--stone-gradient);
+      border: 2px solid transparent;
+      border-image: var(--glow-gradient) 1;
       border-radius: 8px;
-      box-shadow: 0 2px 6px var(--card-shadow);
+      box-shadow: 0 0 8px var(--glow-color), 0 2px 6px rgba(0, 0, 0, 0.8);
       display: flex;
       justify-content: center;
       align-items: center;
       font-size: 0.7rem;
       text-align: center;
+      cursor: pointer;
     }
-    /* Battle Platform styling – now with slots */
+    /* Battle Platform styling – keep the dark mood with subtle glow */
     .platform {
       background: var(--platform-bg);
       border-radius: 12px;
@@ -119,7 +128,7 @@
     .platform .battle-button {
       margin-top: 1rem;
       padding: 0.8rem;
-      background: var(--button-bg);
+      background: var(--glow-gradient);
       color: #000;
       border: none;
       border-radius: 8px;
@@ -130,7 +139,7 @@
     }
     .platform .battle-button:active,
     .platform .battle-button:hover {
-      background: var(--button-hover);
+      background: var(--card-border);
     }
     /* Slot styling for the battlefield */
     .slots {
@@ -141,7 +150,7 @@
     .slot {
       width: 60px;
       height: 85px;
-      border: 2px dashed var(--card-border);
+      border: 2px dashed var(--glow-gradient);
       border-radius: 8px;
       display: flex;
       justify-content: center;
@@ -150,9 +159,7 @@
       font-size: 0.7rem;
       color: var(--text-color);
     }
-
     .opponent-slots .slot {
-      /* Optionally add custom styles, e.g.: */
       opacity: 0.9;
     }
     /* Bottom Mobile Navigation (not modified) */
@@ -162,7 +169,7 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      background-color: var(--nav-bg);
+      background-color: #1e1e1e;
       padding: 0.5rem 0;
       display: flex;
       justify-content: space-around;
@@ -183,7 +190,7 @@
     }
     .hamburger {
       display: block;
-      background-color: var(--nav-bg);
+      background-color: #1e1e1e;
       color: white;
       border: none;
       font-size: 1.5rem;
@@ -194,7 +201,7 @@
       position: fixed;
       bottom: 60px;
       right: 20px;
-      background-color: var(--nav-bg);
+      background-color: #1e1e1e;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
       padding: 1rem;
@@ -208,7 +215,7 @@
       display: flex;
     }
     .mobile-menu button {
-      background-color: var(--card-bg);
+      background-color: var(--platform-bg);
       color: white;
       border: none;
       padding: 0.5rem 1rem;
@@ -216,7 +223,6 @@
       font-size: 0.9rem;
       cursor: pointer;
     }
-
     .modal {
       display: none; /* Hidden by default */
       position: fixed;
@@ -229,7 +235,6 @@
       align-items: center;
       z-index: 3000;
     }
-    
     .modal-content {
       background-color: var(--platform-bg);
       padding: 20px;
@@ -238,21 +243,18 @@
       color: var(--text-color);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
     }
-    
     .close {
       float: right;
       cursor: pointer;
       font-size: 1.5rem;
     }
-
     /* For the player's cards container, override justify-content */
     #playerCards {
       display: flex;
-      justify-content: flex-start;  /* Items will align to the left */
+      justify-content: flex-start;
       align-items: center;
-      gap: 10px;                   /* Optional: set spacing between items */
+      gap: 10px;
     }
-    
     /* For the deck element, force it to the right */
     #playerCards .deck {
       margin-left: auto;
@@ -362,14 +364,12 @@
     function handleTouchStart(e) {
       e.preventDefault();
       const touch = e.touches[0];
-      // Save original parent's reference and coordinates.
       this.origParent = this.parentElement;
       const rect = this.getBoundingClientRect();
       this.origX = rect.left;
       this.origY = rect.top;
       this.startX = touch.pageX;
       this.startY = touch.pageY;
-      // Move the card to document.body so it appears above all.
       this.style.position = 'fixed';
       this.style.left = rect.left + 'px';
       this.style.top = rect.top + 'px';
@@ -394,7 +394,6 @@
       const cardCenterX = cardRect.left + cardRect.width / 2;
       const cardCenterY = cardRect.top + cardRect.height / 2;
       
-      // Check for valid slot drops
       slots.forEach(slot => {
         const slotRect = slot.getBoundingClientRect();
         if (
@@ -404,7 +403,7 @@
           cardCenterY <= slotRect.bottom &&
           slot.childElementCount === 0
         ) {
-          slot.textContent = ""; // Clear any placeholder text.
+          slot.textContent = "";
           slot.appendChild(this);
           this.style.position = "relative";
           this.style.left = "0";
@@ -414,13 +413,9 @@
         }
       });
       
-      // Check if the card is dropped over the inventory container,
-      // but only if it's not dropped over the deck element.
       if (!placed) {
         const elementAtCenter = document.elementFromPoint(cardCenterX, cardCenterY);
-        // If the element at the center (or one of its ancestors) is the deck, ignore the drop.
         if (!elementAtCenter || elementAtCenter.closest(".deck")) {
-          // If dropped over the deck, do nothing (or revert later).
         } else {
           const inventory = document.getElementById("playerCards");
           const invRect = inventory.getBoundingClientRect();
@@ -440,7 +435,6 @@
         }
       }
       
-      // If not placed in either a slot or inventory, revert to original parent.
       if (!placed) {
         this.origParent.appendChild(this);
         this.style.position = "relative";
@@ -465,7 +459,6 @@
         cardElem.addEventListener("touchend", handleTouchEnd, false);
         container.appendChild(cardElem);
       });
-      // Append deck element after cards.
       const deckElem = document.createElement("div");
       deckElem.classList.add("deck");
       deckElem.addEventListener("click", showDeck);
@@ -475,21 +468,17 @@
     renderPlayerCards(demoPlayerCards, "playerCards");
 
     function showDeck() {
-      // Populate deck modal with all current cards from demoPlayerCards
       const deckContent = document.getElementById("deckContent");
-      // Clear previous contents
       deckContent.innerHTML = "";
       demoPlayerCards.forEach(card => {
         const cardDiv = document.createElement("div");
-        // Customize the display of each card as needed.
-        cardDiv.style.border = "1px solid var(--card-border)";
+        cardDiv.style.border = "1px solid var(--glow-gradient)";
         cardDiv.style.padding = "10px";
         cardDiv.style.marginBottom = "10px";
         cardDiv.style.borderRadius = "8px";
         cardDiv.textContent = `${card.name} (${card.power})`;
         deckContent.appendChild(cardDiv);
       });
-      // Show the modal by switching to flex layout.
       document.getElementById("deckModal").style.display = "flex";
     }
 
@@ -503,15 +492,11 @@
         document.getElementById("opponentSlot2"),
         document.getElementById("opponentSlot3")
       ];
-      
-      // Select the first 3 cards; adjust if you prefer random selection.
       const selectedCards = demoOpponentCards.slice(0, 3);
-      
       slots.forEach((slot, index) => {
-        slot.textContent = ""; // Clear placeholder text.
+        slot.textContent = "";
         const cardElem = document.createElement("div");
         cardElem.classList.add("card");
-        // Use the opponent card details (or a card back image/text if you want to hide details)
         cardElem.innerHTML = `<span>${selectedCards[index].name}<br>(${selectedCards[index].power})</span>`;
         slot.appendChild(cardElem);
       });
@@ -540,10 +525,8 @@
       let total = 0;
       const playerSlots = document.querySelectorAll(".player-slot");
       playerSlots.forEach(slot => {
-        // If a card (i.e. a span) exists in the slot, then extract the power value.
         const cardSpan = slot.querySelector("span");
         if (cardSpan) {
-          // Assumes the card's inner text is in the format: "CardName (Power)"
           const match = cardSpan.innerText.match(/\((\d+)\)/);
           if (match) {
             total += parseInt(match[1], 10);
