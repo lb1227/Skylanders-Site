@@ -3,20 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Skystone Battle – Felt Background</title>
+  <title>Skystone Battle – Drag and Drop Demo</title>
   <style>
-    /* -------------------------------------------
-       CSS VARIABLES & GLOBAL STYLES
-    ------------------------------------------- */
+    /* CSS VARIABLES & GLOBAL STYLES */
     :root {
-      --player-bg: #b33a3a;        /* Your side background overlay (if needed) */
-      --opponent-bg: #334fa3;      /* Opponent side background overlay (if needed) */
-      --panel-bg: #a0522d;         /* Background for cards and slots */
-      --highlight: #f6cd2f;        /* Accent/gold color */
+      --player-bg: #b33a3a;
+      --opponent-bg: #334fa3;
+      --panel-bg: #a0522d;
+      --highlight: #f6cd2f;
       --text-color: #f0f0f0;
       --font-family: 'Arial', sans-serif;
     }
-    
+
     html, body {
       margin: 0;
       padding: 0;
@@ -26,10 +24,8 @@
       color: var(--text-color);
       overflow-y: hidden;
     }
-    
-    /* -------------------------------------------
-       HORIZONTAL SCROLL CONTAINER (2 Pages)
-    ------------------------------------------- */
+
+    /* HORIZONTAL SCROLL CONTAINER (2 Pages) */
     .horizontal-wrapper {
       display: flex;
       width: 200vw;
@@ -49,41 +45,28 @@
       padding: 1rem;
       box-sizing: border-box;
     }
-    
-    /* -------------------------------------------
-       COMMON CONTAINER LAYOUT FOR BOTH PAGES
-    ------------------------------------------- */
+
+    /* COMMON CONTAINER LAYOUT FOR BOTH PAGES */
     .player-content,
     .opponent-content {
       width: 100%;
-      height: 100%; /* makes it span the parent's height */
+      height: 100%;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
       gap: 1rem;
     }
-    
-    /* New combined container for cards (and health) on the left side */
+
     .cards-health-container {
       width: 48%;
       display: flex;
       flex-direction: column;
       gap: 1rem;
     }
-    
-    /* -------------------------------------------
-       LEFT PAGE – PLAYER SIDE
-       Updated Layout: Two columns in a row:
-         • Left column: Your Arena drop zone with 3 placeholder slots (stacked vertically)
-         • Right column: Your Cards (stacked vertically) and Health display below
-    ------------------------------------------- */
-    .player-page {
-      /* Optionally add an overlay:
-         background-color: rgba(179, 58, 58, 0.5);
-      */
-    }
-    /* Arena container stays much as before */
+
+    /* PLAYER SIDE */
+    .player-page { }
     .arena-container {
       width: 48%;
       display: flex;
@@ -106,7 +89,6 @@
       font-size: 0.9rem;
       color: #aaa;
     }
-    /* Player Cards (remains similar) */
     .player-cards {
       display: flex;
       flex-direction: column;
@@ -145,7 +127,6 @@
       right: 0;
       border-top-left-radius: 50%;
     }
-    /* Health display style (same as used in opponent side) */
     .health-display {
       text-align: center;
       background: var(--panel-bg);
@@ -154,15 +135,9 @@
       font-size: 0.8rem;
       font-weight: bold;
     }
-    
-    /* -------------------------------------------
-       RIGHT PAGE – OPPONENT SIDE (Unchanged)
-    ------------------------------------------- */
-    .opponent-page {
-      /* Optionally add an overlay:
-         background-color: rgba(51, 79, 163, 0.5);
-      */
-    }
+
+    /* OPPONENT SIDE – Unchanged */
+    .opponent-page { }
     .arena-container-opponent {
       width: 48%;
       display: flex;
@@ -225,10 +200,8 @@
     .health-display.opponent {
       margin-top: 2rem;
     }
-    
-    /* -------------------------------------------
-       Optional Drag-and-Drop Feedback
-    ------------------------------------------- */
+
+    /* Drag-and-Drop Feedback */
     .dragging {
       opacity: 0.5;
     }
@@ -239,7 +212,7 @@
     <!-- LEFT PAGE: Player Side -->
     <section class="page player-page">
       <div class="player-content">
-        <!-- Left Column: Your Cards and Health Display -->
+        <!-- Left Column: Cards and Health -->
         <div class="cards-health-container" id="playerCardsHealth">
           <div class="player-cards" id="playerCards">
             <div class="card" id="card1" draggable="true">Fire<br>(3)</div>
@@ -250,7 +223,7 @@
             <p>Health: <strong>30</strong></p>
           </div>
         </div>
-        <!-- Right Column: Your Arena Drop Zone -->
+        <!-- Right Column: Arena Drop Zone -->
         <div class="arena-container" id="playerArena">
           <div class="slot" id="slot1">Drop here</div>
           <div class="slot" id="slot2">Drop here</div>
@@ -268,7 +241,7 @@
           <div class="slot" id="oSlot2">Drop here</div>
           <div class="slot" id="oSlot3">Drop here</div>
         </div>
-        <!-- Right Column: Opponent Cards and Health -->
+        <!-- Right Column: Cards and Health -->
         <div class="cards-health-container">
           <div class="opponent-cards" id="opponentCards">
             <div class="card">Air<br>(3)</div>
@@ -284,47 +257,63 @@
   </div>
   
   <script>
-    // Drag-and-drop for player's cards onto individual placeholder slots.
+    // Obtain references to the player's cards container (hand), arena slots, and cards.
     const cards = document.querySelectorAll('.player-cards .card');
-    const slots = document.querySelectorAll('.arena-container .slot');
-    
+    const arenaSlots = document.querySelectorAll('.arena-container .slot');
+    const playerHand = document.getElementById('playerCards');
+
+    // Add the same drag event listeners to all cards.
     cards.forEach(card => {
       card.addEventListener('dragstart', handleDragStart);
       card.addEventListener('dragend', handleDragEnd);
     });
-    
-    slots.forEach(slot => {
-      slot.addEventListener('dragover', handleDragOver);
-      slot.addEventListener('drop', handleDrop);
-    });
-    
-     const card = document.getElementById('card1');
 
-    // For touch devices
-    card.addEventListener('touchstart', function(e) {
-      // Prevent default touch behavior (scrolling, etc.)
+    // Add drop event listeners for each arena slot.
+    arenaSlots.forEach(slot => {
+      slot.addEventListener('dragover', handleDragOver);
+      slot.addEventListener('drop', handleDropToArena);
+    });
+
+    // Also add drop event listeners for the player's hand container.
+    playerHand.addEventListener('dragover', handleDragOver);
+    playerHand.addEventListener('drop', handleDropToHand);
+
+    function handleDragStart(e) {
+      e.dataTransfer.setData('text/plain', e.target.id);
+      // Visual feedback for dragging.
+      e.target.classList.add('dragging');
+    }
+
+    function handleDragEnd(e) {
+      e.target.classList.remove('dragging');
+    }
+
+    function handleDragOver(e) {
       e.preventDefault();
-  
-      // Change style for immediate dragging (if necessary)
-      card.style.position = 'absolute';
-    });
-  
-    card.addEventListener('touchmove', function(e) {
+    }
+
+    // When dropped into an arena slot.
+    function handleDropToArena(e) {
       e.preventDefault();
+      const id = e.dataTransfer.getData('text/plain');
+      const card = document.getElementById(id);
       
-      // Get the touch coordinates
-      let touch = e.touches[0];
-      
-      // Update the card's position to the touch position
-      // Adjust for the card's width/height if needed
-      card.style.left = touch.pageX - (card.offsetWidth / 2) + 'px';
-      card.style.top = touch.pageY - (card.offsetHeight / 2) + 'px';
-    });
-  
-    card.addEventListener('touchend', function(e) {
-      // Optionally handle drop logic here
-      // For example, check if it's within a drop zone
-    });
+      // Only allow drop if the slot is empty. You could add more logic here if desired.
+      if (e.target.classList.contains('slot') && e.target.textContent.trim() === "Drop here") {
+        // Clear any placeholder text and append the card.
+        e.target.textContent = "";
+        e.target.appendChild(card);
+      }
+    }
+
+    // When dropped into the player's hand.
+    function handleDropToHand(e) {
+      e.preventDefault();
+      const id = e.dataTransfer.getData('text/plain');
+      const card = document.getElementById(id);
+      // Append card back to the player's hand container.
+      playerHand.appendChild(card);
+    }
   </script>
 </body>
 </html>
