@@ -38,7 +38,6 @@ const characterNames = [
   "Ghost Swords",
   "Healing Elixir",
   "Hidden Treasure",
-  "Ice Cave",
   "Pirate Ship",
   "Sky-Iron Shield",
   "Sparx Dragonfly",
