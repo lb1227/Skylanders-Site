@@ -252,33 +252,6 @@
     </div>
   </div>
   <script>
-    // This script is just a placeholder for hooking up battle logic or
-    // drag-and-drop. For now, we’ll illustrate how you might set up a
-    // simple “Battle!” button update.
-
-    const battleBtn = document.getElementById('battleBtn');
-    const playerScoreBox = document.getElementById('playerScoreBox');
-    const opponentScoreBox = document.getElementById('opponentScoreBox');
-
-    let playerScore = 0;
-    let opponentScore = 0;
-
-    battleBtn.addEventListener('click', () => {
-      // Example “battle” logic: random results
-      playerScore = Math.floor(Math.random() * 10) + 20;   // e.g. 20-29
-      opponentScore = Math.floor(Math.random() * 10) + 20; // e.g. 20-29
-
-      playerScoreBox.textContent = `You: ${playerScore}`;
-      opponentScoreBox.textContent = `Enemy: ${opponentScore}`;
-
-      if (playerScore > opponentScore) {
-        alert('You win!');
-      } else if (opponentScore > playerScore) {
-        alert('Opponent wins!');
-      } else {
-        alert('It\'s a tie!');
-      }
-    });
   </script>
 </body>
 </html>
