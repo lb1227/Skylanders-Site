@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Skystone Battle – Connected Arena Layout</title>
+  <title>Skystone Battle – Felt Background</title>
   <style>
     /* -------------------------------------------
        CSS VARIABLES & GLOBAL STYLES
     ------------------------------------------- */
     :root {
-      --bg-color: #121212;           /* Overall dark background */
-      --player-bg: #b33a3a;            /* Your side background */
-      --opponent-bg: #334fa3;          /* Opponent side background */
-      --panel-bg: #a0522d;            /* Background for cards and slots */
-      --highlight: #f6cd2f;           /* Accent/gold color */
+      /* Removed the old dark background variable, replaced with image-based styling below */
+      --player-bg: #b33a3a;        /* Your side background color overlay (if needed) */
+      --opponent-bg: #334fa3;      /* Opponent side background color overlay (if needed) */
+      --panel-bg: #a0522d;         /* Background for cards and slots */
+      --highlight: #f6cd2f;        /* Accent/gold color */
       --text-color: #f0f0f0;
       --font-family: 'Arial', sans-serif;
     }
@@ -21,10 +21,13 @@
     html, body {
       margin: 0;
       padding: 0;
-      overflow-y: hidden;            /* Disable vertical scrolling */
-      background: var(--bg-color);
+      /* Instead of a solid color, use the felt image for the entire page background */
+      background: url("pictures/green_felt.jpg") center center no-repeat;
+      background-size: cover;
       font-family: var(--font-family);
       color: var(--text-color);
+      /* If you still want to disable vertical scrolling: */
+      overflow-y: hidden;
     }
     
     /* -------------------------------------------
@@ -32,9 +35,9 @@
     ------------------------------------------- */
     .horizontal-wrapper {
       display: flex;
-      width: 200vw;                  /* Two full-viewport pages side-by-side */
+      width: 200vw;             /* Two full-viewport pages side-by-side */
       height: 100vh;
-      overflow-x: auto;              /* Enable horizontal scroll */
+      overflow-x: auto;         /* Enable horizontal scroll */
       overflow-y: hidden;
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
@@ -49,17 +52,24 @@
       scroll-snap-align: start;
       padding: 1rem;
       box-sizing: border-box;
+      /* Optionally use a semi-transparent overlay if you want distinct backgrounds for each page 
+         For example:
+         background-color: rgba(179, 58, 58, 0.7);
+         Or just leave it transparent if you want the felt to show through fully.
+      */
     }
     
     /* -------------------------------------------
        LEFT PAGE – PLAYER SIDE
        Layout: Two columns in a row.
          • Left column: Your Cards (stacked vertically)
-         • Right column: Your Arena drop zone with 3 dotted placeholder slots (stacked vertically)
+         • Right column: Your Arena drop zone with 3 placeholder slots (stacked vertically)
          • Below the row: Your Health display
     ------------------------------------------- */
     .player-page {
-      background: var(--player-bg);
+      /* If you want a slight overlay color on the player side, uncomment below:
+         background-color: rgba(179, 58, 58, 0.5);
+      */
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -149,28 +159,31 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: 1rem;
+      margin-top: 2rem; /* push health further down */
     }
     .health-container h2 {
       margin-bottom: 0.5rem;
       text-align: center;
+      font-size: 0.9rem;
     }
     .health-display {
       background: var(--panel-bg);
-      padding: 0.8rem;
+      padding: 0.5rem;
       border-radius: 10px;
-      font-size: 1rem;
+      font-size: 0.8rem;
       font-weight: bold;
     }
     
     /* -------------------------------------------
        RIGHT PAGE – OPPONENT SIDE
        Layout: Two columns in a row.
-         • Left column: Opponent's Arena with 3 vertical placeholder slots
+         • Left column: Opponent's Arena with 3 placeholder slots (stacked vertically)
          • Right column: Opponent's Cards (stacked vertically) & Health
     ------------------------------------------- */
     .opponent-page {
-      background: var(--opponent-bg);
+      /* If you want a slight overlay color, uncomment:
+         background-color: rgba(51, 79, 163, 0.5);
+      */
       display: flex;
       flex-direction: row;
       justify-content: space-between;
@@ -256,11 +269,11 @@
     .health-display.opponent {
       text-align: center;
       background: var(--panel-bg);
-      padding: 0.8rem;
+      padding: 0.5rem;
       border-radius: 10px;
-      font-size: 1rem;
+      font-size: 0.8rem;
       font-weight: bold;
-      margin-top: 1rem;
+      margin-top: 2rem;
     }
     
     /* Styling for dragging (optional) */
@@ -327,7 +340,7 @@
   </div>
   
   <script>
-    // Drag-and-drop for player's cards to drop into individual slots.
+    // Drag-and-drop for player's cards onto individual placeholder slots.
     const cards = document.querySelectorAll('.player-cards .card');
     const slots = document.querySelectorAll('.arena-container .slot');
     
