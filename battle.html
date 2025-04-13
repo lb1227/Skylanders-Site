@@ -298,28 +298,33 @@
       slot.addEventListener('drop', handleDrop);
     });
     
-    function handleDragStart(e) {
-      e.dataTransfer.setData('text/plain', e.target.id);
-      e.target.classList.add('dragging');
-    }
-    
-    function handleDragEnd(e) {
-      e.target.classList.remove('dragging');
-    }
-    
-    function handleDragOver(e) {
+     const card = document.getElementById('card1');
+
+    // For touch devices
+    card.addEventListener('touchstart', function(e) {
+      // Prevent default touch behavior (scrolling, etc.)
       e.preventDefault();
-    }
-    
-    function handleDrop(e) {
+  
+      // Change style for immediate dragging (if necessary)
+      card.style.position = 'absolute';
+    });
+  
+    card.addEventListener('touchmove', function(e) {
       e.preventDefault();
-      const id = e.dataTransfer.getData('text/plain');
-      const card = document.getElementById(id);
-      if (e.target.textContent.trim() === "Drop here") {
-        e.target.textContent = "";
-        e.target.appendChild(card);
-      }
-    }
+      
+      // Get the touch coordinates
+      let touch = e.touches[0];
+      
+      // Update the card's position to the touch position
+      // Adjust for the card's width/height if needed
+      card.style.left = touch.pageX - (card.offsetWidth / 2) + 'px';
+      card.style.top = touch.pageY - (card.offsetHeight / 2) + 'px';
+    });
+  
+    card.addEventListener('touchend', function(e) {
+      // Optionally handle drop logic here
+      // For example, check if it's within a drop zone
+    });
   </script>
 </body>
 </html>
