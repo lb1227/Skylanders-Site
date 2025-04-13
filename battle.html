@@ -93,10 +93,6 @@
       border: 2px dashed var(--highlight);
       min-height: 300px;
     }
-    .arena-container h2 {
-      text-align: center;
-      margin-bottom: 0.5rem;
-    }
     .arena-container .slot {
       width: 90px;
       height: 90px;
@@ -176,10 +172,6 @@
       border: 2px dashed var(--highlight);
       min-height: 300px;
     }
-    .arena-container-opponent h2 {
-      text-align: center;
-      margin-bottom: 0.5rem;
-    }
     .arena-container-opponent .slot {
       width: 90px;
       height: 90px;
@@ -249,7 +241,6 @@
       <div class="player-content">
         <!-- Left Column: Your Cards and Health Display -->
         <div class="cards-health-container" id="playerCardsHealth">
-          <h2>Your Cards</h2>
           <div class="player-cards" id="playerCards">
             <div class="card" id="card1" draggable="true">Fire<br>(3)</div>
             <div class="card" id="card2" draggable="true">Water<br>(2)</div>
@@ -261,7 +252,6 @@
         </div>
         <!-- Right Column: Your Arena Drop Zone -->
         <div class="arena-container" id="playerArena">
-          <h2>Your Arena</h2>
           <div class="slot" id="slot1">Drop here</div>
           <div class="slot" id="slot2">Drop here</div>
           <div class="slot" id="slot3">Drop here</div>
@@ -274,14 +264,12 @@
       <div class="opponent-content">
         <!-- Left Column: Opponent Arena -->
         <div class="arena-container-opponent" id="opponentArena">
-          <h2>Opponent Arena</h2>
           <div class="slot" id="oSlot1">Drop here</div>
           <div class="slot" id="oSlot2">Drop here</div>
           <div class="slot" id="oSlot3">Drop here</div>
         </div>
         <!-- Right Column: Opponent Cards and Health -->
         <div class="cards-health-container">
-          <h2>Opponent Cards</h2>
           <div class="opponent-cards" id="opponentCards">
             <div class="card">Air<br>(3)</div>
             <div class="card">Dark<br>(5)</div>
