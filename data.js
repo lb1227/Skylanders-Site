@@ -38,6 +38,7 @@ const characterNames = [
   "Ghost Swords",
   "Healing Elixir",
   "Hidden Treasure",
+  "Empire of Ice", 
   "Pirate Ship",
   "Sky-Iron Shield",
   "Sparx Dragonfly",
@@ -60,7 +61,6 @@ const characterNames = [
   "Red Drill Sergeant",
   "Silver Eruptor",
   "Red Camo",
-  "Empire of Ice",
   "Silver Dino-Rang",
   "Silver Boomer",
   "Pearl Hex",
@@ -69,6 +69,7 @@ const characterNames = [
   "Gold Drill Sergeant",
   "Glow In The Dark Zap",
   "Glow In The Dark Wrecking Ball",
+  "Crystal Clear Wham-Shell",
   "Crystal Clear Whirlwind",
   "Crystal Clear Stealth Elf",
   "Crystal Cynder"
