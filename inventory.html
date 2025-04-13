@@ -820,8 +820,17 @@
     
       // Insert the eBay link from your mapping (if available)
       // If no specific URL is available, you can optionally fallback to a generated URL
-      let ebayUrl = window.ebayLinks[skylander.name] || generateEbayLink(skylander.name, skylander.game);
-      contentHTML += `<p><a href="${ebayUrl}" target="_blank" class="ebay-link">Buy on eBay</a></p>`;
+      // Attempt to retrieve the eBay URL from your mapping or generate one
+      let ebayUrl = (window.ebayLinks && window.ebayLinks[skylander.name]) || generateEbayLink(skylander.name, skylander.game);
+      
+      // Check if the eBay URL is valid (non-empty)
+      // If it exists, display the "Buy on eBay" link,
+      // otherwise add a button that says "Sell Your Own"
+      if (ebayUrl && ebayUrl.trim().length > 0) {
+          contentHTML += `<p><a href="${ebayUrl}" target="_blank" class="ebay-link">Buy on eBay</a></p>`;
+      } else {
+          contentHTML += `<p><button class="sell-your-own" onclick="sellYourOwn('${skylander.name}', '${skylander.game}')">Sell Your Own</button></p>`;
+      }
     
       detailsContainer.innerHTML = contentHTML;
       modal.style.display = "block";
@@ -1169,6 +1178,13 @@
       const selectedGame = document.getElementById("gameSelect").value;
       renderInventory(false, selectedGame);
     };
+
+    function sellYourOwn(itemName, game) {
+        // You can customize this function.
+        // For example, redirect the user to a custom selling page.
+        // Optionally, pass the item name and game as query parameters for further processing.
+        window.location.href = "sell.html?item=" + encodeURIComponent(itemName) + "&game=" + encodeURIComponent(game);
+    }
   </script>
 </body>
 </html>
