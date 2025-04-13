@@ -56,13 +56,14 @@
        Layout: Two columns in a row.
          • Left column: Your Cards (stacked vertically)
          • Right column: Your Arena drop zone with 3 dotted placeholder slots (stacked vertically)
+         • Below the row: Your Health display
     ------------------------------------------- */
     .player-page {
       background: var(--player-bg);
       display: flex;
-      flex-direction: row;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
+      justify-content: flex-start;
     }
     .player-content {
       width: 100%;
@@ -120,12 +121,11 @@
       right: 0;
       border-top-left-radius: 50%;
     }
-    /* --- Player Arena: Drop Zone with 3 placeholder slots --- */
+    /* --- Player Arena: Drop Zone with 3 placeholder slots (stacked vertically) --- */
     .arena-container {
       display: flex;
       flex-direction: column;
       gap: 1rem;
-      /* Visual drop zone styling */
       padding: 0.5rem;
       border: 2px dashed var(--highlight);
       min-height: 300px;
@@ -143,10 +143,30 @@
       font-size: 0.9rem;
       color: #aaa;
     }
+    /* --- Player Health Display below the row --- */
+    .health-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 1rem;
+    }
+    .health-container h2 {
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    .health-display {
+      background: var(--panel-bg);
+      padding: 0.8rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: bold;
+    }
+    
     /* -------------------------------------------
        RIGHT PAGE – OPPONENT SIDE
        Layout: Two columns in a row.
-         • Left column: Opponent's Arena with 3 placeholder slots (stacked vertically)
+         • Left column: Opponent's Arena with 3 vertical placeholder slots
          • Right column: Opponent's Cards (stacked vertically) & Health
     ------------------------------------------- */
     .opponent-page {
@@ -233,7 +253,7 @@
       right: 0;
       border-top-left-radius: 50%;
     }
-    .health-display {
+    .health-display.opponent {
       text-align: center;
       background: var(--panel-bg);
       padding: 0.8rem;
@@ -271,6 +291,13 @@
           <div class="slot" id="slot3">Drop here</div>
         </div>
       </div>
+      <!-- Player Health Display -->
+      <div class="health-container">
+        <h2>Your Health</h2>
+        <div class="health-display" id="playerHealth">
+          <p>Health: <strong>30</strong></p>
+        </div>
+      </div>
     </section>
     
     <!-- RIGHT PAGE: Opponent Side -->
@@ -291,7 +318,7 @@
             <div class="card">Dark<br>(5)</div>
             <div class="card">Life<br>(2)</div>
           </div>
-          <div class="health-display" id="opponentHealth">
+          <div class="health-display opponent" id="opponentHealth">
             <p>Health: <strong>26</strong></p>
           </div>
         </div>
@@ -300,7 +327,7 @@
   </div>
   
   <script>
-    // Enable drag-and-drop for player's cards onto the placeholder slots.
+    // Drag-and-drop for player's cards to drop into individual slots.
     const cards = document.querySelectorAll('.player-cards .card');
     const slots = document.querySelectorAll('.arena-container .slot');
     
@@ -309,7 +336,6 @@
       card.addEventListener('dragend', handleDragEnd);
     });
     
-    // Attach drag events to each drop slot.
     slots.forEach(slot => {
       slot.addEventListener('dragover', handleDragOver);
       slot.addEventListener('drop', handleDrop);
@@ -332,9 +358,8 @@
       e.preventDefault();
       const id = e.dataTransfer.getData('text/plain');
       const card = document.getElementById(id);
-      // Only drop if the target slot is still a placeholder (i.e. contains "Drop here")
+      // Only drop if the slot still has the placeholder text "Drop here"
       if (e.target.textContent.trim() === "Drop here") {
-        // Remove placeholder text and append the card
         e.target.textContent = "";
         e.target.appendChild(card);
       }
