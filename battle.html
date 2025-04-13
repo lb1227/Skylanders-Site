@@ -1,304 +1,291 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SuperChargers Skystone Battle Arena</title>
+  <title>SuperChargers-Style Skystones (Horizontal Layout)</title>
   <style>
-    /* Base colors and variables */
+    /* -------------------------------------------
+       CSS VARIABLES & GLOBAL STYLES
+    ------------------------------------------- */
     :root {
-      --bg: #121212;
-      --arena-bg: #1a1a1a;
-      --stone-bg-start: #8e44ad;
-      --stone-bg-end: #1e1e1e;
-      --glow-color: rgba(187, 134, 252, 0.7);
-      --border-gradient: linear-gradient(45deg, #bb86fc, #9b67d3);
-      --text-color: #e0e0e0;
+      --bg-color: #121212;         /* overall dark background */
+      --wood-bg: #6b3e1e;          /* placeholder "wood" color */
+      --panel-bg: #a0522d;         /* a lighter wood panel */
+      --red-panel: #b33a3a;        /* player's area color */
+      --blue-panel: #334fa3;       /* opponent's area color */
+      --highlight-color: #f6cd2f;  /* gold-like accent */
+      --text-color: #f0f0f0;
       --font-family: 'Arial', sans-serif;
     }
-    /* Global styles */
-    body {
-      margin: 0;
+
+    * {
+      margin: 0; 
       padding: 0;
-      background: var(--bg);
-      color: var(--text-color);
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg-color);
       font-family: var(--font-family);
+      color: var(--text-color);
+      overflow-x: hidden; /* hide any accidental horizontal scrollbars */
+    }
+
+    /* -------------------------------------------
+       HORIZONTAL LAYOUT CONTAINER
+    ------------------------------------------- */
+    .horizontal-wrapper {
+      display: flex;                     /* Place sections side-by-side */
+      width: 300%;                       /* 3 'pages' wide: Player / Board / Opponent */
+      height: 100vh;                     /* Full viewport height */
+      overflow-x: auto;                  /* Allow horizontal scroll */
+      scroll-snap-type: x mandatory;     /* Snap feature (optional) */
+    }
+
+    /* Each "page" (left, center, right) is 100% viewport width */
+    .page-section {
+      flex: 0 0 100vw;
+      height: 100vh;
+      scroll-snap-align: center;         /* Snap each page to the center on scroll */
+      position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 100vh;
+      justify-content: center;
+      padding: 1rem;
     }
-    h1 {
-      margin-top: 20px;
+
+    /* -------------------------------------------
+       PLAYER SIDE (LEFT PAGE)
+    ------------------------------------------- */
+    .player-side {
+      background: var(--red-panel);
     }
-    /* Battle arena container */
-    .battle-arena {
-      width: 100%;
-      max-width: 600px;
-      background: var(--arena-bg);
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
-      margin-top: 20px;
-      position: relative;
+    .player-side h2 {
+      margin-bottom: 1rem;
     }
-    /* Zones in the arena (opponent, platform, player) */
-    .zone {
-      margin-bottom: 20px;
-      text-align: center;
+    .player-cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      max-width: 90%;
     }
-    .zone h2 {
-      margin-bottom: 10px;
-    }
-    /* Skystone element styling */
-    .skystone {
-      width: 100px;
-      height: 100px;
-      background: radial-gradient(circle at 30% 30%, var(--stone-bg-start), var(--stone-bg-end));
-      border-radius: 12px;
-      position: relative;
-      margin: 10px;
-      box-shadow: 0 0 15px var(--glow-color);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      animation: pulse 2s infinite;
-      display: inline-flex;
+
+    /* Example Card Style */
+    .card {
+      width: 80px;
+      height: 80px;
+      background: var(--panel-bg);
+      border: 4px solid var(--highlight-color);
+      border-radius: 10px;
+      display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
+      text-align: center;
+      font-weight: bold;
+      color: var(--text-color);
+      position: relative;
     }
-    /* Activated state: turns off pulsing and amplifies glow */
-    .skystone.active {
-      animation: none;
-      box-shadow: 0 0 40px var(--glow-color), inset 0 0 10px var(--glow-color);
-    }
-    .skystone:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 25px var(--glow-color);
-    }
-    /* Pseudo-element for gradient border mimicking facets */
-    .skystone::after {
+    /* Let’s add corners to mimic “framed” look */
+    .card::before,
+    .card::after {
       content: "";
       position: absolute;
-      top: -5px;
-      left: -5px;
-      right: -5px;
-      bottom: -5px;
-      border-radius: inherit;
-      border: 3px solid;
-      border-image: var(--border-gradient) 1;
-      pointer-events: none;
+      width: 15px;
+      height: 15px;
+      background: var(--highlight-color);
     }
-    .skystone span {
-      color: var(--text-color);
-      font-weight: bold;
-      z-index: 2;
-      text-align: center;
-      font-size: 0.9rem;
+    /* Top-left corner */
+    .card::before {
+      top: 0;
+      left: 0;
+      border-bottom-right-radius: 50%;
     }
-    /* Pulsing animation for the glow */
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 15px var(--glow-color); }
-      50% { box-shadow: 0 0 30px var(--glow-color); }
+    /* Bottom-right corner */
+    .card::after {
+      bottom: 0;
+      right: 0;
+      border-top-left-radius: 50%;
     }
-    /* Styles for dragging effects */
-    .dragging {
-      opacity: 0.8;
-      transform: scale(1.1);
-      z-index: 1000;
+
+    /* -------------------------------------------
+       BOARD (CENTER PAGE)
+    ------------------------------------------- */
+    .board-center {
+      background: var(--wood-bg);
+      /* Could use a wood texture image for a more authentic look: 
+         background: url('wood_texture.jpg') center/cover; 
+       */
+      padding: 2rem;
     }
-    /* Arena drop slots for placing skystones */
+    .board-center h2 {
+      margin-bottom: 1rem;
+    }
+
+    /* The center "board" might have 6 total slots (3 for each side) */
+    .board-slots {
+      display: grid;
+      grid-template-columns: repeat(3, 80px);
+      grid-gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    /* Each slot for a Skystone */
     .slot {
-      width: 110px;
-      height: 110px;
-      border: 2px dashed var(--glow-color);
-      border-radius: 12px;
-      display: inline-flex;
+      width: 80px;
+      height: 80px;
+      background: var(--panel-bg);
+      border: 4px dashed var(--highlight-color);
+      border-radius: 10px;
+      display: flex;
       align-items: center;
       justify-content: center;
-      margin: 5px;
-    }
-    .slot.active {
-      border: 2px solid var(--glow-color);
-    }
-    /* Controls below the arena */
-    .controls {
       text-align: center;
-      margin: 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
     }
+
+    /* Example scoreboard at the bottom of center page */
+    .scoreboard {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    .scoreboard .score-box {
+      background: var(--highlight-color);
+      color: #000;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+    }
+
+    /* -------------------------------------------
+       OPPONENT SIDE (RIGHT PAGE)
+    ------------------------------------------- */
+    .opponent-side {
+      background: var(--blue-panel);
+    }
+    .opponent-side h2 {
+      margin-bottom: 1rem;
+    }
+    .opponent-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+    .opponent-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    /* -------------------------------------------
+       BUTTONS & CONTROLS
+    ------------------------------------------- */
     button {
-      padding: 10px 20px;
-      background: var(--border-gradient);
+      padding: 0.8rem 1.2rem;
       border: none;
       border-radius: 8px;
-      font-size: 1rem;
-      color: #000;
       cursor: pointer;
-      transition: background 0.3s ease;
-      margin: 5px;
+      font-size: 1rem;
+      background: var(--highlight-color);
+      color: #000;
+      font-weight: bold;
+      margin: 0.5rem;
     }
     button:hover {
-      background: var(--glow-color);
+      opacity: 0.8;
+    }
+
+    /* Optional: remove scrollbars on WebKit-based browsers for a slick look */
+    .horizontal-wrapper::-webkit-scrollbar {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <h1>SuperChargers Skystone Battle Arena</h1>
-  <div class="battle-arena">
-    <!-- Opponent Zone -->
-    <div class="zone" id="opponent-zone">
-      <h2>Opponent's Skystones</h2>
-      <div id="opponent-stones">
-        <!-- Opponent skystones will render here -->
+  <div class="horizontal-wrapper">
+    <!-- LEFT PAGE: Player Side -->
+    <section class="page-section player-side">
+      <h2>Your Side</h2>
+      <div class="player-cards" id="playerCards">
+        <!-- Example "skystone" cards for the player -->
+        <div class="card">Fire (3)</div>
+        <div class="card">Water (2)</div>
+        <div class="card">Earth (4)</div>
+        <!-- Add more as needed -->
       </div>
-    </div>
-    <!-- Battle Platform with Slots -->
-    <div class="zone" id="battle-platform">
-      <h2>Battle Platform</h2>
-      <div id="platform-slots">
-        <div class="slot" id="slot1">Slot 1</div>
-        <div class="slot" id="slot2">Slot 2</div>
-        <div class="slot" id="slot3">Slot 3</div>
+    </section>
+
+    <!-- CENTER PAGE: Board -->
+    <section class="page-section board-center">
+      <h2>Battle Board</h2>
+      <div class="board-slots" id="boardSlots">
+        <!-- 3 slots for Player side: top row, 3 slots for Opponent side: bottom row, for example -->
+        <div class="slot">P1</div>
+        <div class="slot">P2</div>
+        <div class="slot">P3</div>
+
+        <div class="slot">O1</div>
+        <div class="slot">O2</div>
+        <div class="slot">O3</div>
       </div>
-      <p>Drag your skystones into the slots!</p>
-      <button id="battleButton">Battle!</button>
-    </div>
-    <!-- Player Zone -->
-    <div class="zone" id="player-zone">
-      <h2>Your Skystones</h2>
-      <div id="player-stones">
-        <!-- Player skystones will render here -->
+      <div class="scoreboard">
+        <div class="score-box" id="playerScoreBox">You: 0</div>
+        <button id="battleBtn">Battle!</button>
+        <div class="score-box" id="opponentScoreBox">Enemy: 0</div>
       </div>
-    </div>
-  </div>
-  <!-- Control buttons for resetting or additional actions -->
-  <div class="controls">
-    <button id="resetBattle">Reset Battle</button>
+    </section>
+
+    <!-- RIGHT PAGE: Opponent Side -->
+    <section class="page-section opponent-side">
+      <h2>Opponent Side</h2>
+      <div class="opponent-area">
+        <div class="opponent-cards" id="opponentCards">
+          <!-- Example "skystone" cards for the opponent -->
+          <div class="card">Air (3)</div>
+          <div class="card">Dark (5)</div>
+          <div class="card">Life (2)</div>
+        </div>
+        <!-- Example placeholder for "health" or special resource -->
+        <div style="background: var(--panel-bg); padding: 1rem; border-radius: 10px;">
+          <p>Opponent Health: <strong>26</strong></p>
+        </div>
+      </div>
+    </section>
   </div>
 
   <script>
-    /******************************************************************
-     * DATA & ELEMENT CREATION
-     ******************************************************************/
-    // Mock data for player and opponent skystones
-    const playerSkystonesData = [
-      { id: 'ps1', name: 'Stone A', power: 80 },
-      { id: 'ps2', name: 'Stone B', power: 95 },
-      { id: 'ps3', name: 'Stone C', power: 60 },
-    ];
-    const opponentSkystonesData = [
-      { id: 'os1', name: 'Enemy X', power: 100 },
-      { id: 'os2', name: 'Enemy Y', power: 90 },
-      { id: 'os3', name: 'Enemy Z', power: 75 },
-    ];
+    // This script is just a placeholder for hooking up battle logic or
+    // drag-and-drop. For now, we’ll illustrate how you might set up a
+    // simple “Battle!” button update.
 
-    // Utility: create a skystone element.
-    function createSkystone(stone, isPlayer = true) {
-      const stoneElem = document.createElement('div');
-      stoneElem.classList.add('skystone');
-      stoneElem.id = stone.id;
-      stoneElem.innerHTML = `<span>${stone.name}<br>(${stone.power})</span>`;
-      // For player skystones, enable drag-and-drop and click toggling.
-      if (isPlayer) {
-        stoneElem.setAttribute('draggable', 'true');
-        stoneElem.addEventListener('dragstart', handleDragStart);
-        stoneElem.addEventListener('dragend', handleDragEnd);
-        stoneElem.addEventListener('click', () => {
-          stoneElem.classList.toggle('active');
-        });
-      }
-      return stoneElem;
-    }
+    const battleBtn = document.getElementById('battleBtn');
+    const playerScoreBox = document.getElementById('playerScoreBox');
+    const opponentScoreBox = document.getElementById('opponentScoreBox');
 
-    // Render the player's skystones.
-    const playerContainer = document.getElementById('player-stones');
-    playerSkystonesData.forEach(stone => {
-      playerContainer.appendChild(createSkystone(stone, true));
-    });
-    // Render the opponent's skystones.
-    const opponentContainer = document.getElementById('opponent-stones');
-    opponentSkystonesData.forEach(stone => {
-      // Opponent stones are shown similarly but are not draggable.
-      opponentContainer.appendChild(createSkystone(stone, false));
-    });
+    let playerScore = 0;
+    let opponentScore = 0;
 
-    /******************************************************************
-     * DRAG & DROP FUNCTIONALITY
-     ******************************************************************/
-    let draggedStone = null;
+    battleBtn.addEventListener('click', () => {
+      // Example “battle” logic: random results
+      playerScore = Math.floor(Math.random() * 10) + 20;   // e.g. 20-29
+      opponentScore = Math.floor(Math.random() * 10) + 20; // e.g. 20-29
 
-    function handleDragStart(e) {
-      draggedStone = this;
-      this.classList.add('dragging');
-      e.dataTransfer.setData('text/plain', this.id);
-    }
-    function handleDragEnd() {
-      this.classList.remove('dragging');
-      draggedStone = null;
-    }
+      playerScoreBox.textContent = `You: ${playerScore}`;
+      opponentScoreBox.textContent = `Enemy: ${opponentScore}`;
 
-    // Set up drop slots on the battle platform.
-    const slots = document.querySelectorAll('.slot');
-    slots.forEach(slot => {
-      slot.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        slot.classList.add('active');
-      });
-      slot.addEventListener('dragleave', () => {
-        slot.classList.remove('active');
-      });
-      slot.addEventListener('drop', (e) => {
-        e.preventDefault();
-        slot.classList.remove('active');
-        const stoneId = e.dataTransfer.getData('text/plain');
-        const stoneElem = document.getElementById(stoneId);
-        // Drop the stone only if the slot is empty.
-        if (slot.childElementCount === 0) {
-          slot.appendChild(stoneElem);
-          // Reset stone positioning.
-          stoneElem.style.position = 'relative';
-          stoneElem.style.left = '0';
-          stoneElem.style.top = '0';
-        }
-      });
-    });
-
-    /******************************************************************
-     * BATTLE LOGIC & CONTROLS
-     ******************************************************************/
-    // Compute and display the battle outcome.
-    document.getElementById('battleButton').addEventListener('click', () => {
-      // Sum power of player skystones in slots.
-      let playerPower = 0;
-      slots.forEach(slot => {
-        if (slot.firstElementChild) {
-          const text = slot.firstElementChild.textContent;
-          const match = text.match(/\((\d+)\)/);
-          if (match) {
-            playerPower += parseInt(match[1], 10);
-          }
-        }
-      });
-      // Sum power of opponent's stones (from our data).
-      let opponentPower = opponentSkystonesData.reduce((sum, stone) => sum + stone.power, 0);
-      let result = '';
-      if (playerPower > opponentPower) {
-        result = 'You win!';
-      } else if (playerPower < opponentPower) {
-        result = 'Opponent wins!';
+      if (playerScore > opponentScore) {
+        alert('You win!');
+      } else if (opponentScore > playerScore) {
+        alert('Opponent wins!');
       } else {
-        result = "It's a tie!";
+        alert('It\'s a tie!');
       }
-      alert(`Battle Result:\nYour Power: ${playerPower}\nOpponent Power: ${opponentPower}\n${result}`);
-    });
-
-    // Reset battle: move player's stones back to the player zone.
-    document.getElementById('resetBattle').addEventListener('click', () => {
-      const playerZone = document.getElementById('player-stones');
-      slots.forEach(slot => {
-        if (slot.firstElementChild && !playerZone.contains(slot.firstElementChild)) {
-          playerZone.appendChild(slot.firstElementChild);
-        }
-      });
     });
   </script>
 </body>
