@@ -3,88 +3,109 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Skystone Battle – Two Page Horizontal Layout</title>
+  <title>Skystone Battle – Book Layout</title>
   <style>
     /* -------------------------------------------
        CSS VARIABLES & GLOBAL STYLES
     ------------------------------------------- */
     :root {
-      --bg-color: #121212;          /* overall dark background */
-      --wood-bg: #6b3e1e;           /* placeholder wood color */
-      --panel-bg: #a0522d;          /* lighter wood panel */
-      --player-panel: #b33a3a;       /* player's area color */
-      --opponent-panel: #334fa3;     /* opponent's area color */
-      --highlight-color: #f6cd2f;    /* gold-like accent */
+      --bg-color: #121212;             /* Overall background */
+      --player-bg: #b33a3a;              /* Left page (player) background */
+      --opponent-bg: #334fa3;            /* Right page (opponent) background */
+      --arena-bg: #6b3e1e;               /* Arena board background (wood-like) */
+      --panel-bg: #a0522d;              /* Panel for cards/slots */
+      --highlight: #f6cd2f;             /* Accent color */
       --text-color: #f0f0f0;
       --font-family: 'Arial', sans-serif;
     }
 
-    /* Disable any vertical scrolling */
+    /* Remove any default scrollbars */
     html, body {
       margin: 0;
       padding: 0;
-      overflow-y: hidden;
+      overflow: hidden;
       background: var(--bg-color);
       font-family: var(--font-family);
       color: var(--text-color);
     }
 
     /* -------------------------------------------
-       HORIZONTAL WRAPPER FOR SIDE-PAGES
+       BOOK (Two Page) Layout
+       The container simulates an open book spread.
     ------------------------------------------- */
-    .horizontal-wrapper {
-      display: flex;
-      width: 200vw;               /* Two pages wide */
+    .book-wrapper {
+      display: grid;
+      grid-template-columns: 50vw 50vw;
       height: 100vh;
-      overflow-x: auto;
-      overflow-y: hidden;         /* Prevent vertical scrolling */
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
+      position: relative;  /* For central overlay */
     }
-    /* Hide scrollbars if desired (Webkit only) */
-    .horizontal-wrapper::-webkit-scrollbar {
-      display: none;
-    }
-    .page-section {
-      flex: 0 0 100vw;
-      height: 100vh;
-      scroll-snap-align: start;
+    .page {
       padding: 1rem;
-      display: flex;
-      flex-direction: column;
       overflow: hidden;
+      height: 100vh;
+      box-sizing: border-box;
+    }
+    .player-page {
+      background: var(--player-bg);
+      /* Optionally add a background image or texture */
+    }
+    .opponent-page {
+      background: var(--opponent-bg);
+      /* Optionally add a background image or texture */
     }
 
     /* -------------------------------------------
-       PLAYER SIDE (LEFT PAGE)
+       Central Arena – Overlaid in the center 
+       It overlaps both pages.
     ------------------------------------------- */
-    .player-side {
-      background: var(--player-panel);
+    .arena-board {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 40vw;
+      height: 60vh;
+      background: var(--arena-bg);
+      transform: translate(-50%, -50%);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.8);
+      border: 4px solid var(--highlight);
+      border-radius: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
     }
-    .player-side .arena-container,
-    .player-side .cards-container {
+    .arena-board h2 {
       margin-bottom: 1rem;
-    }
-    .player-side h2 {
-      text-align: center;
-      margin-bottom: 0.5rem;
     }
     .arena-slots {
       display: flex;
-      justify-content: center;
+      justify-content: space-around;
+      flex-wrap: wrap;
       gap: 1rem;
+      width: 100%;
     }
     .arena-slots .slot {
-      width: 90px;
-      height: 90px;
+      width: 80px;
+      height: 80px;
       background: var(--panel-bg);
-      border: 3px dashed var(--highlight-color);
+      border: 3px dashed var(--highlight);
       border-radius: 10px;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       font-weight: bold;
       font-size: 0.9rem;
+    }
+
+    /* -------------------------------------------
+       Player Cards – Left Page
+    ------------------------------------------- */
+    .cards-container {
+      margin-top: auto;  /* Stick cards near the bottom, if desired */
+    }
+    .cards-container h2 {
+      text-align: center;
+      margin-bottom: 0.5rem;
     }
     .player-cards {
       display: flex;
@@ -96,7 +117,7 @@
       width: 80px;
       height: 80px;
       background: var(--panel-bg);
-      border: 4px solid var(--highlight-color);
+      border: 4px solid var(--highlight);
       border-radius: 10px;
       display: flex;
       align-items: center;
@@ -105,13 +126,14 @@
       font-size: 0.8rem;
       position: relative;
     }
+    /* Decorative corners for cards */
     .player-cards .card::before,
     .player-cards .card::after {
       content: "";
       position: absolute;
       width: 15px;
       height: 15px;
-      background: var(--highlight-color);
+      background: var(--highlight);
     }
     .player-cards .card::before {
       top: 0;
@@ -125,30 +147,26 @@
     }
 
     /* -------------------------------------------
-       OPPONENT SIDE (RIGHT PAGE)
+       Opponent Cards & Health – Right Page
     ------------------------------------------- */
-    .opponent-side {
-      background: var(--opponent-panel);
-    }
-    .opponent-side .arena-container,
-    .opponent-side .opponent-container {
-      margin-bottom: 1rem;
-    }
-    .opponent-side h2 {
-      text-align: center;
-      margin-bottom: 0.5rem;
+    .opponent-section {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;  /* Stick at bottom */
+      height: 100%;
     }
     .opponent-cards {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 1rem;
+      margin-bottom: 1rem;
     }
     .opponent-cards .card {
       width: 80px;
       height: 80px;
       background: var(--panel-bg);
-      border: 4px solid var(--highlight-color);
+      border: 4px solid var(--highlight);
       border-radius: 10px;
       display: flex;
       align-items: center;
@@ -163,7 +181,7 @@
       position: absolute;
       width: 15px;
       height: 15px;
-      background: var(--highlight-color);
+      background: var(--highlight);
     }
     .opponent-cards .card::before {
       top: 0;
@@ -182,61 +200,57 @@
       border-radius: 10px;
       font-size: 1rem;
       font-weight: bold;
+      margin-bottom: 1rem;
     }
   </style>
 </head>
 <body>
-  <div class="horizontal-wrapper">
-    <!-- PLAYER SIDE: Left Page -->
-    <section class="page-section player-side">
-      <!-- Player Arena: 3 slots for your skystones -->
-      <div class="arena-container">
-        <h2>Your Arena</h2>
-        <div class="arena-slots" id="playerArena">
-          <div class="slot">P1</div>
-          <div class="slot">P2</div>
-          <div class="slot">P3</div>
-        </div>
-      </div>
-      <!-- Player Cards -->
+  <div class="book-wrapper">
+    <!-- LEFT PAGE: Player Side -->
+    <div class="page player-page">
+      <h2>Your Side</h2>
+      <!-- You can display additional stats above if desired -->
       <div class="cards-container">
         <h2>Your Cards</h2>
         <div class="player-cards" id="playerCards">
           <div class="card">Fire<br>(3)</div>
           <div class="card">Water<br>(2)</div>
           <div class="card">Earth<br>(4)</div>
-          <!-- Add more cards as needed -->
+          <!-- More cards as needed -->
         </div>
       </div>
-    </section>
+    </div>
 
-    <!-- OPPONENT SIDE: Right Page -->
-    <section class="page-section opponent-side">
-      <!-- Opponent Arena: 3 slots for their skystones -->
-      <div class="arena-container">
-        <h2>Opponent Arena</h2>
-        <div class="arena-slots" id="opponentArena">
-          <div class="slot">O1</div>
-          <div class="slot">O2</div>
-          <div class="slot">O3</div>
+    <!-- RIGHT PAGE: Opponent Side -->
+    <div class="page opponent-page">
+      <div class="opponent-section">
+        <div class="health-display" id="opponentHealth">
+          <p>Health: <strong>26</strong></p>
         </div>
-      </div>
-      <!-- Opponent Cards & Health -->
-      <div class="opponent-container">
-        <h2>Opponent Cards & Health</h2>
+        <h2>Opponent Cards</h2>
         <div class="opponent-cards" id="opponentCards">
           <div class="card">Air<br>(3)</div>
           <div class="card">Dark<br>(5)</div>
           <div class="card">Life<br>(2)</div>
-          <!-- Add more opponent cards if desired -->
-        </div>
-        <div class="health-display" id="opponentHealth">
-          <p>Health: <strong>26</strong></p>
+          <!-- More cards as needed -->
         </div>
       </div>
-    </section>
+    </div>
   </div>
 
+  <!-- Central Arena Board Overlaid Across the Center -->
+  <div class="arena-board">
+    <h2>Arena Board</h2>
+    <div class="arena-slots" id="arenaSlots">
+      <!-- 3 slots for each side, arranged in two rows or one row each -->
+      <div class="slot">P1</div>
+      <div class="slot">P2</div>
+      <div class="slot">P3</div>
+      <div class="slot">O1</div>
+      <div class="slot">O2</div>
+      <div class="slot">O3</div>
+    </div>
+  </div>
   <script>
     // This script is just a placeholder for hooking up battle logic or
     // drag-and-drop. For now, we’ll illustrate how you might set up a
