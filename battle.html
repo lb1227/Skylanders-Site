@@ -1,540 +1,305 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-  <title>SkyStone Battle – Inspired by Skylanders SuperChargers</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SuperChargers Skystone Battle Arena</title>
   <style>
+    /* Base colors and variables */
     :root {
-      /* Base Colors */
-      --bg: #121212;                   /* Overall dark background */
-      --platform-bg: #1a1a1a;            /* Dark platform background */
-      --text-color: #e0e0e0;             /* Light text for readability */
-      /* Skystone-inspired gradients */
-      --stone-gradient: radial-gradient(circle at 30% 30%, #8e44ad, #1e1e1e);
-      --glow-gradient: linear-gradient(45deg, #bb86fc, #9b67d3);
-      /* Optional accent glow color */
+      --bg: #121212;
+      --arena-bg: #1a1a1a;
+      --stone-bg-start: #8e44ad;
+      --stone-bg-end: #1e1e1e;
       --glow-color: rgba(187, 134, 252, 0.7);
+      --border-gradient: linear-gradient(45deg, #bb86fc, #9b67d3);
+      --text-color: #e0e0e0;
       --font-family: 'Arial', sans-serif;
     }
+    /* Global styles */
     body {
       margin: 0;
       padding: 0;
       background: var(--bg);
-      font-family: var(--font-family);
       color: var(--text-color);
+      font-family: var(--font-family);
       display: flex;
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
     }
-    /* Main container for the mobile battlefield */
-    .battlefield {
+    h1 {
+      margin-top: 20px;
+    }
+    /* Battle arena container */
+    .battle-arena {
       width: 100%;
-      max-width: 480px;
-      background: #181818;
+      max-width: 600px;
+      background: var(--arena-bg);
       border-radius: 12px;
-      padding: 1rem 0.5rem;
+      padding: 20px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
-      margin: 1rem;
-    }
-    .zone {
-      margin-bottom: 1rem;
-      text-align: center;
-    }
-    .header {
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-    }
-    .cards-row {
-      display: flex;
-      justify-content: space-evenly;
-      align-items: center;
-      overflow-x: auto;
-      padding: 0 0.5rem;
-    }
-    /* Styling for opponent cards (using a card-back style) */
-    .opponent-area .card {
-      width: 80px;
-      height: 110px;
-      margin: 0 4px;
-      background: var(--stone-gradient);
-      border: 2px solid transparent;
-      border-image: var(--glow-gradient) 1;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.8);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 0.7rem;
-      text-align: center;
-      padding: 4px;
-    }
-    .opponent-area .card span {
-      color: var(--text-color);
-      font-weight: bold;
-    }
-    /* Skystone-inspired styling for player cards */
-    .player-area .card {
-      width: 60px;
-      height: 85px;
-      margin: 0 3px;
-      background: var(--stone-gradient);
-      border: 2px solid transparent;
-      border-image: var(--glow-gradient) 1;
-      border-radius: 8px;
-      /* Multiple shadows to create a glowing gem effect */
-      box-shadow: 0 0 8px var(--glow-color), 0 2px 6px rgba(0, 0, 0, 0.8);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 0.7rem;
-      text-align: center;
-      padding: 4px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .player-area .card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 12px var(--glow-color), 0 4px 8px rgba(0, 0, 0, 0.9);
-    }
-    /* Styling for the deck element; similar to player cards but distinct */
-    .deck {
-      width: 60px;
-      height: 85px;
-      margin: 0 3px;
-      background: var(--stone-gradient);
-      border: 2px solid transparent;
-      border-image: var(--glow-gradient) 1;
-      border-radius: 8px;
-      box-shadow: 0 0 8px var(--glow-color), 0 2px 6px rgba(0, 0, 0, 0.8);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 0.7rem;
-      text-align: center;
-      cursor: pointer;
-    }
-    /* Battle Platform styling – keep the dark mood with subtle glow */
-    .platform {
-      background: var(--platform-bg);
-      border-radius: 12px;
-      padding: 2rem 1rem;
-      margin: 0.8rem 0;
-      color: var(--text-color);
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
+      margin-top: 20px;
       position: relative;
     }
-    .platform .battle-button {
-      margin-top: 1rem;
-      padding: 0.8rem;
-      background: var(--glow-gradient);
-      color: #000;
+    /* Zones in the arena (opponent, platform, player) */
+    .zone {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .zone h2 {
+      margin-bottom: 10px;
+    }
+    /* Skystone element styling */
+    .skystone {
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle at 30% 30%, var(--stone-bg-start), var(--stone-bg-end));
+      border-radius: 12px;
+      position: relative;
+      margin: 10px;
+      box-shadow: 0 0 15px var(--glow-color);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      animation: pulse 2s infinite;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    /* Activated state: turns off pulsing and amplifies glow */
+    .skystone.active {
+      animation: none;
+      box-shadow: 0 0 40px var(--glow-color), inset 0 0 10px var(--glow-color);
+    }
+    .skystone:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px var(--glow-color);
+    }
+    /* Pseudo-element for gradient border mimicking facets */
+    .skystone::after {
+      content: "";
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
+      border-radius: inherit;
+      border: 3px solid;
+      border-image: var(--border-gradient) 1;
+      pointer-events: none;
+    }
+    .skystone span {
+      color: var(--text-color);
+      font-weight: bold;
+      z-index: 2;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    /* Pulsing animation for the glow */
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 15px var(--glow-color); }
+      50% { box-shadow: 0 0 30px var(--glow-color); }
+    }
+    /* Styles for dragging effects */
+    .dragging {
+      opacity: 0.8;
+      transform: scale(1.1);
+      z-index: 1000;
+    }
+    /* Arena drop slots for placing skystones */
+    .slot {
+      width: 110px;
+      height: 110px;
+      border: 2px dashed var(--glow-color);
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin: 5px;
+    }
+    .slot.active {
+      border: 2px solid var(--glow-color);
+    }
+    /* Controls below the arena */
+    .controls {
+      text-align: center;
+      margin: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      background: var(--border-gradient);
       border: none;
       border-radius: 8px;
-      width: 90%;
       font-size: 1rem;
+      color: #000;
       cursor: pointer;
       transition: background 0.3s ease;
+      margin: 5px;
     }
-    .platform .battle-button:active,
-    .platform .battle-button:hover {
-      background: var(--card-border);
-    }
-    /* Slot styling for the battlefield */
-    .slots {
-      display: flex;
-      justify-content: space-around;
-      margin-bottom: 1rem;
-    }
-    .slot {
-      width: 60px;
-      height: 85px;
-      border: 2px dashed var(--glow-gradient);
-      border-radius: 8px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: var(--platform-bg);
-      font-size: 0.7rem;
-      color: var(--text-color);
-    }
-    .opponent-slots .slot {
-      opacity: 0.9;
-    }
-    /* Bottom Mobile Navigation (not modified) */
-    .bottom-mobile-nav {
-      display: none;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background-color: #1e1e1e;
-      padding: 0.5rem 0;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      z-index: 1000;
-      box-shadow: 0 -2px 6px rgba(0,0,0,0.3);
-    }
-    .bottom-mobile-nav a {
-      color: white;
-      font-size: 1.5rem;
-      text-decoration: none;
-    }
-    .bottom-mobile-nav a img {
-      width: 55px;
-      height: auto;
-      vertical-align: middle;
-      margin-top: 7px;
-    }
-    .hamburger {
-      display: block;
-      background-color: #1e1e1e;
-      color: white;
-      border: none;
-      font-size: 1.5rem;
-      padding: 0.5rem;
-      cursor: pointer;
-    }
-    .mobile-menu {
-      position: fixed;
-      bottom: 60px;
-      right: 20px;
-      background-color: #1e1e1e;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-      padding: 1rem;
-      display: none;
-      flex-direction: column;
-      gap: 0.5rem;
-      z-index: 1001;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-    }
-    .mobile-menu.show {
-      display: flex;
-    }
-    .mobile-menu button {
-      background-color: var(--platform-bg);
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      cursor: pointer;
-    }
-    .modal {
-      display: none; /* Hidden by default */
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.8);
-      justify-content: center;
-      align-items: center;
-      z-index: 3000;
-    }
-    .modal-content {
-      background-color: var(--platform-bg);
-      padding: 20px;
-      border-radius: 8px;
-      max-width: 90%;
-      color: var(--text-color);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
-    }
-    .close {
-      float: right;
-      cursor: pointer;
-      font-size: 1.5rem;
-    }
-    /* For the player's cards container, override justify-content */
-    #playerCards {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      gap: 10px;
-    }
-    /* For the deck element, force it to the right */
-    #playerCards .deck {
-      margin-left: auto;
+    button:hover {
+      background: var(--glow-color);
     }
   </style>
 </head>
 <body>
-  <div class="battlefield">
-    <!-- Opponent Area -->
-    <div class="zone opponent-area">
-      <div class="header">Opponent's Cards</div>
-      <div class="cards-row" id="opponentCards">
-        <!-- Opponent cards rendered here -->
+  <h1>SuperChargers Skystone Battle Arena</h1>
+  <div class="battle-arena">
+    <!-- Opponent Zone -->
+    <div class="zone" id="opponent-zone">
+      <h2>Opponent's Skystones</h2>
+      <div id="opponent-stones">
+        <!-- Opponent skystones will render here -->
       </div>
     </div>
     <!-- Battle Platform with Slots -->
-    <div class="zone platform" id="battleDropZone">
-      <div class="header">Battle Platform</div>
-      <div class="slots opponent-slots">
-        <div class="slot" id="opponentSlot1">Slot 1</div>
-        <div class="slot" id="opponentSlot2">Slot 2</div>
-        <div class="slot" id="opponentSlot3">Slot 3</div>
+    <div class="zone" id="battle-platform">
+      <h2>Battle Platform</h2>
+      <div id="platform-slots">
+        <div class="slot" id="slot1">Slot 1</div>
+        <div class="slot" id="slot2">Slot 2</div>
+        <div class="slot" id="slot3">Slot 3</div>
       </div>
-      <div class="slots player-slots">
-        <div class="slot player-slot" id="playerSlot1">Slot 1</div>
-        <div class="slot player-slot" id="playerSlot2">Slot 2</div>
-        <div class="slot player-slot" id="playerSlot3">Slot 3</div>
-      </div>
-      <div>Prepare for battle...</div>
-      <button class="battle-button" id="battleButton">Battle!</button>
+      <p>Drag your skystones into the slots!</p>
+      <button id="battleButton">Battle!</button>
     </div>
-    <!-- Player Area -->
-    <div class="zone player-area">
-      <div class="header">Your Cards</div>
-      <div class="cards-row" id="playerCards">
-        <!-- Player cards and deck rendered here -->
+    <!-- Player Zone -->
+    <div class="zone" id="player-zone">
+      <h2>Your Skystones</h2>
+      <div id="player-stones">
+        <!-- Player skystones will render here -->
       </div>
     </div>
   </div>
-
-  <!-- Bottom Mobile Navigation (omitted for brevity) -->
-  <nav id="mobileNav" class="bottom-mobile-nav">
-    <a href="home.html" title="Home">🏠</a>
-    <a href="inventory.html" title="Inventory">
-      <img src="images/inventory.png" alt="Inventory Icon">
-    </a>
-    <a href="battle.html" title="Battle">⚔️</a>
-    <button class="hamburger" onclick="toggleMobileMenu()">☰</button>
-  </nav>
-  <div id="mobileMenu" class="mobile-menu">
-    <button onclick="goToAccount()">Account</button>
-    <button onclick="logout()">Logout</button>
-  </div>
-
-  <!-- Deck Modal -->
-  <div id="deckModal" class="modal">
-    <div class="modal-content">
-      <span id="closeModal" class="close">&times;</span>
-      <h2>Your Deck</h2>
-      <div id="deckContent"></div>
-    </div>
+  <!-- Control buttons for resetting or additional actions -->
+  <div class="controls">
+    <button id="resetBattle">Reset Battle</button>
   </div>
 
   <script>
-    // Demo data for player and opponent cards
-    const demoPlayerCards = [
-      { name: "Pikachu", power: 80 },
-      { name: "Charizard", power: 95 },
-      { name: "Bulbasaur", power: 60 },
-      { name: "Squirtle", power: 65 },
-      { name: "Eevee", power: 70 }
+    /******************************************************************
+     * DATA & ELEMENT CREATION
+     ******************************************************************/
+    // Mock data for player and opponent skystones
+    const playerSkystonesData = [
+      { id: 'ps1', name: 'Stone A', power: 80 },
+      { id: 'ps2', name: 'Stone B', power: 95 },
+      { id: 'ps3', name: 'Stone C', power: 60 },
     ];
-    const demoOpponentCards = [
-      { name: "Mewtwo", power: 100 },
-      { name: "Gengar", power: 90 },
-      { name: "Lapras", power: 75 },
-      { name: "Snorlax", power: 85 },
-      { name: "Jigglypuff", power: 50 }
+    const opponentSkystonesData = [
+      { id: 'os1', name: 'Enemy X', power: 100 },
+      { id: 'os2', name: 'Enemy Y', power: 90 },
+      { id: 'os3', name: 'Enemy Z', power: 75 },
     ];
 
-    function logout(){
-      localStorage.removeItem("sky_user");
-      window.location.href = "login.html";
-    }
-    function toggleMobileMenu() {
-      const menu = document.getElementById("mobileMenu");
-      menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+    // Utility: create a skystone element.
+    function createSkystone(stone, isPlayer = true) {
+      const stoneElem = document.createElement('div');
+      stoneElem.classList.add('skystone');
+      stoneElem.id = stone.id;
+      stoneElem.innerHTML = `<span>${stone.name}<br>(${stone.power})</span>`;
+      // For player skystones, enable drag-and-drop and click toggling.
+      if (isPlayer) {
+        stoneElem.setAttribute('draggable', 'true');
+        stoneElem.addEventListener('dragstart', handleDragStart);
+        stoneElem.addEventListener('dragend', handleDragEnd);
+        stoneElem.addEventListener('click', () => {
+          stoneElem.classList.toggle('active');
+        });
+      }
+      return stoneElem;
     }
 
-    // Render opponent cards
-    function renderCards(cards, containerId, showBack = false) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = "";
-      cards.forEach(card => {
-        const cardElem = document.createElement("div");
-        cardElem.classList.add("card");
-        cardElem.innerHTML = showBack 
-          ? `<span>Card Back</span>` 
-          : `<span>${card.name}<br>(${card.power})</span>`;
-        container.appendChild(cardElem);
+    // Render the player's skystones.
+    const playerContainer = document.getElementById('player-stones');
+    playerSkystonesData.forEach(stone => {
+      playerContainer.appendChild(createSkystone(stone, true));
+    });
+    // Render the opponent's skystones.
+    const opponentContainer = document.getElementById('opponent-stones');
+    opponentSkystonesData.forEach(stone => {
+      // Opponent stones are shown similarly but are not draggable.
+      opponentContainer.appendChild(createSkystone(stone, false));
+    });
+
+    /******************************************************************
+     * DRAG & DROP FUNCTIONALITY
+     ******************************************************************/
+    let draggedStone = null;
+
+    function handleDragStart(e) {
+      draggedStone = this;
+      this.classList.add('dragging');
+      e.dataTransfer.setData('text/plain', this.id);
+    }
+    function handleDragEnd() {
+      this.classList.remove('dragging');
+      draggedStone = null;
+    }
+
+    // Set up drop slots on the battle platform.
+    const slots = document.querySelectorAll('.slot');
+    slots.forEach(slot => {
+      slot.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        slot.classList.add('active');
       });
-    }
-    renderCards(demoOpponentCards, "opponentCards", true);
-    assignOpponentBattleSlots();
+      slot.addEventListener('dragleave', () => {
+        slot.classList.remove('active');
+      });
+      slot.addEventListener('drop', (e) => {
+        e.preventDefault();
+        slot.classList.remove('active');
+        const stoneId = e.dataTransfer.getData('text/plain');
+        const stoneElem = document.getElementById(stoneId);
+        // Drop the stone only if the slot is empty.
+        if (slot.childElementCount === 0) {
+          slot.appendChild(stoneElem);
+          // Reset stone positioning.
+          stoneElem.style.position = 'relative';
+          stoneElem.style.left = '0';
+          stoneElem.style.top = '0';
+        }
+      });
+    });
 
-    // --- Drag-and-Drop using fixed positioning ---
-    function handleTouchStart(e) {
-      e.preventDefault();
-      const touch = e.touches[0];
-      this.origParent = this.parentElement;
-      const rect = this.getBoundingClientRect();
-      this.origX = rect.left;
-      this.origY = rect.top;
-      this.startX = touch.pageX;
-      this.startY = touch.pageY;
-      this.style.position = 'fixed';
-      this.style.left = rect.left + 'px';
-      this.style.top = rect.top + 'px';
-      this.style.zIndex = "2000";
-      document.body.appendChild(this);
-    }
-
-    function handleTouchMove(e) {
-      e.preventDefault();
-      const touch = e.touches[0];
-      const deltaX = touch.pageX - this.startX;
-      const deltaY = touch.pageY - this.startY;
-      this.style.left = (this.origX + deltaX) + 'px';
-      this.style.top = (this.origY + deltaY) + 'px';
-    }
-
-    function handleTouchEnd(e) {
-      e.preventDefault();
-      const slots = document.querySelectorAll(".slot");
-      let placed = false;
-      const cardRect = this.getBoundingClientRect();
-      const cardCenterX = cardRect.left + cardRect.width / 2;
-      const cardCenterY = cardRect.top + cardRect.height / 2;
-      
+    /******************************************************************
+     * BATTLE LOGIC & CONTROLS
+     ******************************************************************/
+    // Compute and display the battle outcome.
+    document.getElementById('battleButton').addEventListener('click', () => {
+      // Sum power of player skystones in slots.
+      let playerPower = 0;
       slots.forEach(slot => {
-        const slotRect = slot.getBoundingClientRect();
-        if (
-          cardCenterX >= slotRect.left && 
-          cardCenterX <= slotRect.right &&
-          cardCenterY >= slotRect.top && 
-          cardCenterY <= slotRect.bottom &&
-          slot.childElementCount === 0
-        ) {
-          slot.textContent = "";
-          slot.appendChild(this);
-          this.style.position = "relative";
-          this.style.left = "0";
-          this.style.top = "0";
-          this.style.zIndex = "initial";
-          placed = true;
-        }
-      });
-      
-      if (!placed) {
-        const elementAtCenter = document.elementFromPoint(cardCenterX, cardCenterY);
-        if (!elementAtCenter || elementAtCenter.closest(".deck")) {
-        } else {
-          const inventory = document.getElementById("playerCards");
-          const invRect = inventory.getBoundingClientRect();
-          if (
-            cardCenterX >= invRect.left &&
-            cardCenterX <= invRect.right &&
-            cardCenterY >= invRect.top &&
-            cardCenterY <= invRect.bottom
-          ) {
-            inventory.appendChild(this);
-            this.style.position = "relative";
-            this.style.left = "0";
-            this.style.top = "0";
-            this.style.zIndex = "initial";
-            placed = true;
-          }
-        }
-      }
-      
-      if (!placed) {
-        this.origParent.appendChild(this);
-        this.style.position = "relative";
-        this.style.left = "0";
-        this.style.top = "0";
-        this.style.zIndex = "initial";
-      }
-    }
-
-    // Render player's cards and deck
-    function renderPlayerCards(cards, containerId) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = "";
-      cards.slice(0, 4).forEach((card, index) => {
-        const cardElem = document.createElement("div");
-        cardElem.classList.add("card");
-        cardElem.id = `playerCard_${index}`;
-        cardElem.setAttribute("draggable", "false");
-        cardElem.innerHTML = `<span>${card.name}<br>(${card.power})</span>`;
-        cardElem.addEventListener("touchstart", handleTouchStart, false);
-        cardElem.addEventListener("touchmove", handleTouchMove, false);
-        cardElem.addEventListener("touchend", handleTouchEnd, false);
-        container.appendChild(cardElem);
-      });
-      const deckElem = document.createElement("div");
-      deckElem.classList.add("deck");
-      deckElem.addEventListener("click", showDeck);
-      deckElem.innerHTML = `<span>Deck</span>`;
-      container.appendChild(deckElem);
-    }
-    renderPlayerCards(demoPlayerCards, "playerCards");
-
-    function showDeck() {
-      const deckContent = document.getElementById("deckContent");
-      deckContent.innerHTML = "";
-      demoPlayerCards.forEach(card => {
-        const cardDiv = document.createElement("div");
-        cardDiv.style.border = "1px solid var(--glow-gradient)";
-        cardDiv.style.padding = "10px";
-        cardDiv.style.marginBottom = "10px";
-        cardDiv.style.borderRadius = "8px";
-        cardDiv.textContent = `${card.name} (${card.power})`;
-        deckContent.appendChild(cardDiv);
-      });
-      document.getElementById("deckModal").style.display = "flex";
-    }
-
-    document.getElementById("closeModal").addEventListener("click", function() {
-      document.getElementById("deckModal").style.display = "none";
-    });
-
-    function assignOpponentBattleSlots() {
-      const slots = [
-        document.getElementById("opponentSlot1"),
-        document.getElementById("opponentSlot2"),
-        document.getElementById("opponentSlot3")
-      ];
-      const selectedCards = demoOpponentCards.slice(0, 3);
-      slots.forEach((slot, index) => {
-        slot.textContent = "";
-        const cardElem = document.createElement("div");
-        cardElem.classList.add("card");
-        cardElem.innerHTML = `<span>${selectedCards[index].name}<br>(${selectedCards[index].power})</span>`;
-        slot.appendChild(cardElem);
-      });
-    }
-
-    document.getElementById("battleButton").addEventListener("click", function() {
-      let opponentTotal = 0;
-      for (let i = 1; i <= 3; i++){
-        const slot = document.getElementById(`opponentSlot${i}`);
-        const cardSpan = slot.querySelector("span");
-        if (cardSpan) {
-          const match = cardSpan.innerText.match(/\((\d+)\)/);
-          if(match){
-            opponentTotal += parseInt(match[1], 10);
-          }
-        }
-      }
-      const playerTotal = getPlayerBattlePower();
-      const outcome = playerTotal === opponentTotal 
-        ? "It's a tie!" 
-        : playerTotal > opponentTotal ? "You win!" : "Opponent wins!";
-      alert(`Your Total Power: ${playerTotal}\nOpponent Total Power: ${opponentTotal}\n${outcome}`);
-    });
-    
-    function getPlayerBattlePower() {
-      let total = 0;
-      const playerSlots = document.querySelectorAll(".player-slot");
-      playerSlots.forEach(slot => {
-        const cardSpan = slot.querySelector("span");
-        if (cardSpan) {
-          const match = cardSpan.innerText.match(/\((\d+)\)/);
+        if (slot.firstElementChild) {
+          const text = slot.firstElementChild.textContent;
+          const match = text.match(/\((\d+)\)/);
           if (match) {
-            total += parseInt(match[1], 10);
+            playerPower += parseInt(match[1], 10);
           }
         }
       });
-      return total;
-    }
+      // Sum power of opponent's stones (from our data).
+      let opponentPower = opponentSkystonesData.reduce((sum, stone) => sum + stone.power, 0);
+      let result = '';
+      if (playerPower > opponentPower) {
+        result = 'You win!';
+      } else if (playerPower < opponentPower) {
+        result = 'Opponent wins!';
+      } else {
+        result = "It's a tie!";
+      }
+      alert(`Battle Result:\nYour Power: ${playerPower}\nOpponent Power: ${opponentPower}\n${result}`);
+    });
+
+    // Reset battle: move player's stones back to the player zone.
+    document.getElementById('resetBattle').addEventListener('click', () => {
+      const playerZone = document.getElementById('player-stones');
+      slots.forEach(slot => {
+        if (slot.firstElementChild && !playerZone.contains(slot.firstElementChild)) {
+          playerZone.appendChild(slot.firstElementChild);
+        }
+      });
+    });
   </script>
 </body>
 </html>
