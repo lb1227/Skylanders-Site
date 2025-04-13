@@ -52,7 +52,7 @@ const characterNames = [
   "Sidekick Gill Grunt",
   "Sidekick Terrabite",
   "Sidekick Trigger Snappy",
-  "Sidekick Whisper Elf (Out of stock)",
+  "Sidekick Whisper Elf",
   "Blue Bash",
   "Chrome Spyro",
   "Flocked Stump Smash",
