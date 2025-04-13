@@ -55,7 +55,7 @@
        LEFT PAGE – PLAYER SIDE
        Layout: Two columns in a row.
          • Left column: Your Cards (stacked vertically)
-         • Right column: Your Arena slots (arranged in a row)
+         • Right column: Your Arena drop zone (vertical stack)
     ------------------------------------------- */
     .player-page {
       background: var(--player-bg);
@@ -71,7 +71,7 @@
       justify-content: space-between;
       align-items: flex-start;
     }
-    /* Both containers now use full width per their column */
+    /* Use 48% width for each column */
     .cards-container,
     .arena-container {
       width: 48%;
@@ -81,7 +81,7 @@
       text-align: center;
       margin-bottom: 0.5rem;
     }
-    /* --- UPDATED: Cards will stack vertically --- */
+    /* --- Player Cards: stacked vertically --- */
     .player-cards {
       display: flex;
       flex-direction: column;
@@ -119,8 +119,18 @@
       right: 0;
       border-top-left-radius: 50%;
     }
-    /* Arena slots remain in a row */
+    /* --- Player Arena: Drop Zone with vertical stacking --- */
+    .arena-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      /* Minimum height to indicate drop area */
+      min-height: 300px;
+      border: 2px dashed var(--highlight);
+      padding: 0.5rem;
+    }
     .arena-slots {
+      /* (if you still want some placeholder slots, you can add them here) */
       display: flex;
       justify-content: center;
       gap: 1rem;
@@ -184,7 +194,7 @@
       font-weight: bold;
       font-size: 0.9rem;
     }
-    /* --- UPDATED: Opponent cards stack vertically --- */
+    /* --- Opponent Cards: stacked vertically --- */
     .opponent-cards {
       display: flex;
       flex-direction: column;
@@ -231,6 +241,11 @@
       font-weight: bold;
       margin-top: 1rem;
     }
+    
+    /* Styling for dragging (optional) */
+    .dragging {
+      opacity: 0.5;
+    }
   </style>
 </head>
 <body>
@@ -242,28 +257,23 @@
         <div class="cards-container">
           <h2>Your Cards</h2>
           <div class="player-cards" id="playerCards">
-            <div class="card">Fire<br>(3)</div>
-            <div class="card">Water<br>(2)</div>
-            <div class="card">Earth<br>(4)</div>
-            <!-- Additional cards as needed -->
+            <div class="card" id="card1" draggable="true">Fire<br>(3)</div>
+            <div class="card" id="card2" draggable="true">Water<br>(2)</div>
+            <div class="card" id="card3" draggable="true">Earth<br>(4)</div>
           </div>
         </div>
-        <!-- Right Column: Your Arena Slots (in a Row) -->
-        <div class="arena-container">
+        <!-- Right Column: Your Arena Drop Zone (vertical stack) -->
+        <div class="arena-container" id="playerArena">
           <h2>Your Arena</h2>
-          <div class="arena-slots" id="playerArena">
-            <div class="slot">P1</div>
-            <div class="slot">P2</div>
-            <div class="slot">P3</div>
-          </div>
+          <!-- The drop zone is empty initially; cards will be dropped here -->
         </div>
       </div>
     </section>
     
-    <!-- RIGHT PAGE: Opponent Side -->
+    <!-- RIGHT PAGE: Opponent Side (Unchanged) -->
     <section class="page opponent-page">
       <div class="opponent-content">
-        <!-- Left Column: Opponent Arena Slots (in a Row) -->
+        <!-- Left Column: Opponent Arena Slots (Row) -->
         <div class="arena-container-opponent">
           <h2>Opponent Arena</h2>
           <div class="arena-slots-opponent" id="opponentArena">
@@ -279,7 +289,6 @@
             <div class="card">Air<br>(3)</div>
             <div class="card">Dark<br>(5)</div>
             <div class="card">Life<br>(2)</div>
-            <!-- Additional cards if desired -->
           </div>
           <div class="health-display" id="opponentHealth">
             <p>Health: <strong>26</strong></p>
@@ -290,13 +299,38 @@
   </div>
   
   <script>
-    /*  
-      This updated layout now uses a two-page horizontal scroll, where:
-      - On the player side (left page): Your cards are in the left column (stacked vertically) and your arena slots are in the right column (arranged in a row).
-      - On the opponent side (right page): The opponent's arena slots are in the left column (arranged in a row) and their cards (stacked vertically) plus health are in the right column.
-      
-      Adjust further as needed, and extend with interactivity such as drag-and-drop if desired.
-    */
+    // Enable drag-and-drop for player's cards into the arena drop zone.
+    const cards = document.querySelectorAll('.player-cards .card');
+    const arenaDropZone = document.getElementById('playerArena');
+    
+    cards.forEach(card => {
+      card.addEventListener('dragstart', handleDragStart);
+      card.addEventListener('dragend', handleDragEnd);
+    });
+    
+    arenaDropZone.addEventListener('dragover', handleDragOver);
+    arenaDropZone.addEventListener('drop', handleDrop);
+    
+    function handleDragStart(e) {
+      e.dataTransfer.setData('text/plain', e.target.id);
+      e.target.classList.add('dragging');
+    }
+    
+    function handleDragEnd(e) {
+      e.target.classList.remove('dragging');
+    }
+    
+    function handleDragOver(e) {
+      e.preventDefault();  // Necessary to allow the drop
+    }
+    
+    function handleDrop(e) {
+      e.preventDefault();
+      const id = e.dataTransfer.getData('text/plain');
+      const card = document.getElementById(id);
+      // Append the dragged card to the drop zone so it stacks vertically.
+      arenaDropZone.appendChild(card);
+    }
   </script>
 </body>
 </html>
