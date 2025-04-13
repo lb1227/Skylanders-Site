@@ -25,7 +25,7 @@ const characterNames = [
   "Sunburn",
   "Terrafin",
   "Trigger Happy",
-  "Vooddood",
+  "Voodood",
   "Warnado",
   "Wham-Shell",
   "Whirlwind",
