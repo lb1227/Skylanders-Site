@@ -3,78 +3,96 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SuperChargers-Style Skystones (Horizontal Layout)</title>
+  <title>Skystone Battle – Two Page Horizontal Layout</title>
   <style>
     /* -------------------------------------------
        CSS VARIABLES & GLOBAL STYLES
     ------------------------------------------- */
     :root {
-      --bg-color: #121212;         /* overall dark background */
-      --wood-bg: #6b3e1e;          /* placeholder "wood" color */
-      --panel-bg: #a0522d;         /* a lighter wood panel */
-      --red-panel: #b33a3a;        /* player's area color */
-      --blue-panel: #334fa3;       /* opponent's area color */
-      --highlight-color: #f6cd2f;  /* gold-like accent */
+      --bg-color: #121212;          /* overall dark background */
+      --wood-bg: #6b3e1e;           /* placeholder wood color */
+      --panel-bg: #a0522d;          /* lighter wood panel */
+      --player-panel: #b33a3a;       /* player's area color */
+      --opponent-panel: #334fa3;     /* opponent's area color */
+      --highlight-color: #f6cd2f;    /* gold-like accent */
       --text-color: #f0f0f0;
       --font-family: 'Arial', sans-serif;
     }
 
-    * {
-      margin: 0; 
+    /* Disable any vertical scrolling */
+    html, body {
+      margin: 0;
       padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
+      overflow-y: hidden;
       background: var(--bg-color);
       font-family: var(--font-family);
       color: var(--text-color);
-      overflow-x: hidden; /* hide any accidental horizontal scrollbars */
     }
 
     /* -------------------------------------------
-       HORIZONTAL LAYOUT CONTAINER
+       HORIZONTAL WRAPPER FOR SIDE-PAGES
     ------------------------------------------- */
     .horizontal-wrapper {
-      display: flex;                     /* Place sections side-by-side */
-      width: 300%;                       /* 3 'pages' wide: Player / Board / Opponent */
-      height: 100vh;                     /* Full viewport height */
-      overflow-x: auto;                  /* Allow horizontal scroll */
-      scroll-snap-type: x mandatory;     /* Snap feature (optional) */
+      display: flex;
+      width: 200vw;               /* Two pages wide */
+      height: 100vh;
+      overflow-x: auto;
+      overflow-y: hidden;         /* Prevent vertical scrolling */
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
     }
-
-    /* Each "page" (left, center, right) is 100% viewport width */
+    /* Hide scrollbars if desired (Webkit only) */
+    .horizontal-wrapper::-webkit-scrollbar {
+      display: none;
+    }
     .page-section {
       flex: 0 0 100vw;
       height: 100vh;
-      scroll-snap-align: center;         /* Snap each page to the center on scroll */
-      position: relative;
+      scroll-snap-align: start;
+      padding: 1rem;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
+      overflow: hidden;
     }
 
     /* -------------------------------------------
        PLAYER SIDE (LEFT PAGE)
     ------------------------------------------- */
     .player-side {
-      background: var(--red-panel);
+      background: var(--player-panel);
+    }
+    .player-side .arena-container,
+    .player-side .cards-container {
+      margin-bottom: 1rem;
     }
     .player-side h2 {
-      margin-bottom: 1rem;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+    .arena-slots {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+    .arena-slots .slot {
+      width: 90px;
+      height: 90px;
+      background: var(--panel-bg);
+      border: 3px dashed var(--highlight-color);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 0.9rem;
     }
     .player-cards {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 1rem;
-      max-width: 90%;
     }
-
-    /* Example Card Style */
-    .card {
+    .player-cards .card {
       width: 80px;
       height: 80px;
       background: var(--panel-bg);
@@ -83,177 +101,137 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      text-align: center;
       font-weight: bold;
-      color: var(--text-color);
+      font-size: 0.8rem;
       position: relative;
     }
-    /* Let’s add corners to mimic “framed” look */
-    .card::before,
-    .card::after {
+    .player-cards .card::before,
+    .player-cards .card::after {
       content: "";
       position: absolute;
       width: 15px;
       height: 15px;
       background: var(--highlight-color);
     }
-    /* Top-left corner */
-    .card::before {
+    .player-cards .card::before {
       top: 0;
       left: 0;
       border-bottom-right-radius: 50%;
     }
-    /* Bottom-right corner */
-    .card::after {
+    .player-cards .card::after {
       bottom: 0;
       right: 0;
       border-top-left-radius: 50%;
     }
 
     /* -------------------------------------------
-       BOARD (CENTER PAGE)
-    ------------------------------------------- */
-    .board-center {
-      background: var(--wood-bg);
-      /* Could use a wood texture image for a more authentic look: 
-         background: url('wood_texture.jpg') center/cover; 
-       */
-      padding: 2rem;
-    }
-    .board-center h2 {
-      margin-bottom: 1rem;
-    }
-
-    /* The center "board" might have 6 total slots (3 for each side) */
-    .board-slots {
-      display: grid;
-      grid-template-columns: repeat(3, 80px);
-      grid-gap: 1rem;
-      margin-bottom: 2rem;
-    }
-    /* Each slot for a Skystone */
-    .slot {
-      width: 80px;
-      height: 80px;
-      background: var(--panel-bg);
-      border: 4px dashed var(--highlight-color);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      font-size: 0.8rem;
-      font-weight: bold;
-    }
-
-    /* Example scoreboard at the bottom of center page */
-    .scoreboard {
-      display: flex;
-      gap: 2rem;
-      align-items: center;
-      font-size: 1.2rem;
-      font-weight: bold;
-    }
-    .scoreboard .score-box {
-      background: var(--highlight-color);
-      color: #000;
-      padding: 0.5rem 1rem;
-      border-radius: 10px;
-    }
-
-    /* -------------------------------------------
        OPPONENT SIDE (RIGHT PAGE)
     ------------------------------------------- */
     .opponent-side {
-      background: var(--blue-panel);
+      background: var(--opponent-panel);
     }
-    .opponent-side h2 {
+    .opponent-side .arena-container,
+    .opponent-side .opponent-container {
       margin-bottom: 1rem;
     }
-    .opponent-area {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
+    .opponent-side h2 {
+      text-align: center;
+      margin-bottom: 0.5rem;
     }
     .opponent-cards {
       display: flex;
       flex-wrap: wrap;
-      gap: 1rem;
       justify-content: center;
+      gap: 1rem;
     }
-
-    /* -------------------------------------------
-       BUTTONS & CONTROLS
-    ------------------------------------------- */
-    button {
-      padding: 0.8rem 1.2rem;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1rem;
-      background: var(--highlight-color);
-      color: #000;
+    .opponent-cards .card {
+      width: 80px;
+      height: 80px;
+      background: var(--panel-bg);
+      border: 4px solid var(--highlight-color);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-weight: bold;
-      margin: 0.5rem;
+      font-size: 0.8rem;
+      position: relative;
     }
-    button:hover {
-      opacity: 0.8;
+    .opponent-cards .card::before,
+    .opponent-cards .card::after {
+      content: "";
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: var(--highlight-color);
     }
-
-    /* Optional: remove scrollbars on WebKit-based browsers for a slick look */
-    .horizontal-wrapper::-webkit-scrollbar {
-      display: none;
+    .opponent-cards .card::before {
+      top: 0;
+      left: 0;
+      border-bottom-right-radius: 50%;
+    }
+    .opponent-cards .card::after {
+      bottom: 0;
+      right: 0;
+      border-top-left-radius: 50%;
+    }
+    .health-display {
+      text-align: center;
+      background: var(--panel-bg);
+      padding: 0.8rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
   <div class="horizontal-wrapper">
-    <!-- LEFT PAGE: Player Side -->
+    <!-- PLAYER SIDE: Left Page -->
     <section class="page-section player-side">
-      <h2>Your Side</h2>
-      <div class="player-cards" id="playerCards">
-        <!-- Example "skystone" cards for the player -->
-        <div class="card">Fire (3)</div>
-        <div class="card">Water (2)</div>
-        <div class="card">Earth (4)</div>
-        <!-- Add more as needed -->
-      </div>
-    </section>
-
-    <!-- CENTER PAGE: Board -->
-    <section class="page-section board-center">
-      <h2>Battle Board</h2>
-      <div class="board-slots" id="boardSlots">
-        <!-- 3 slots for Player side: top row, 3 slots for Opponent side: bottom row, for example -->
-        <div class="slot">P1</div>
-        <div class="slot">P2</div>
-        <div class="slot">P3</div>
-
-        <div class="slot">O1</div>
-        <div class="slot">O2</div>
-        <div class="slot">O3</div>
-      </div>
-      <div class="scoreboard">
-        <div class="score-box" id="playerScoreBox">You: 0</div>
-        <button id="battleBtn">Battle!</button>
-        <div class="score-box" id="opponentScoreBox">Enemy: 0</div>
-      </div>
-    </section>
-
-    <!-- RIGHT PAGE: Opponent Side -->
-    <section class="page-section opponent-side">
-      <h2>Opponent Side</h2>
-      <div class="opponent-area">
-        <div class="opponent-cards" id="opponentCards">
-          <!-- Example "skystone" cards for the opponent -->
-          <div class="card">Air (3)</div>
-          <div class="card">Dark (5)</div>
-          <div class="card">Life (2)</div>
+      <!-- Player Arena: 3 slots for your skystones -->
+      <div class="arena-container">
+        <h2>Your Arena</h2>
+        <div class="arena-slots" id="playerArena">
+          <div class="slot">P1</div>
+          <div class="slot">P2</div>
+          <div class="slot">P3</div>
         </div>
-        <!-- Example placeholder for "health" or special resource -->
-        <div style="background: var(--panel-bg); padding: 1rem; border-radius: 10px;">
-          <p>Opponent Health: <strong>26</strong></p>
+      </div>
+      <!-- Player Cards -->
+      <div class="cards-container">
+        <h2>Your Cards</h2>
+        <div class="player-cards" id="playerCards">
+          <div class="card">Fire<br>(3)</div>
+          <div class="card">Water<br>(2)</div>
+          <div class="card">Earth<br>(4)</div>
+          <!-- Add more cards as needed -->
+        </div>
+      </div>
+    </section>
+
+    <!-- OPPONENT SIDE: Right Page -->
+    <section class="page-section opponent-side">
+      <!-- Opponent Arena: 3 slots for their skystones -->
+      <div class="arena-container">
+        <h2>Opponent Arena</h2>
+        <div class="arena-slots" id="opponentArena">
+          <div class="slot">O1</div>
+          <div class="slot">O2</div>
+          <div class="slot">O3</div>
+        </div>
+      </div>
+      <!-- Opponent Cards & Health -->
+      <div class="opponent-container">
+        <h2>Opponent Cards & Health</h2>
+        <div class="opponent-cards" id="opponentCards">
+          <div class="card">Air<br>(3)</div>
+          <div class="card">Dark<br>(5)</div>
+          <div class="card">Life<br>(2)</div>
+          <!-- Add more opponent cards if desired -->
+        </div>
+        <div class="health-display" id="opponentHealth">
+          <p>Health: <strong>26</strong></p>
         </div>
       </div>
     </section>
