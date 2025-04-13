@@ -25,7 +25,7 @@ const characterNames = [
   "Sunburn",
   "Terrafin",
   "Trigger Happy",
-  "Vooddood",
+  "Voodood",
   "Warnado",
   "Wham-Shell",
   "Whirlwind",
@@ -60,7 +60,7 @@ const characterNames = [
   "Green Gill Grunt",
   "Red Drill Sergeant",
   "Silver Eruptor",
-  "Fruit Punch Camo"
+  "Red Camo"
 ];
 
 // Define an array of the eBay URLs (replace these with your actual URLs in order).
