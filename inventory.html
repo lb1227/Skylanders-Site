@@ -832,24 +832,21 @@
         </p>` : ''}
       `;
     
-      // Insert the eBay link from your mapping (if available)
-      // If no specific URL is available, you can optionally fallback to a generated URL
-      // Attempt to retrieve the eBay URL from your mapping or generate one
+      // Attempt to retrieve the eBay URL from your mapping or generate one.
+      // Note: Make sure generateEbayLink is defined if you use it.
       let ebayUrl = (window.ebayLinks && window.ebayLinks[skylander.name]) || generateEbayLink(skylander.name, skylander.game);
-      
-      // Check if the eBay URL is valid (non-empty)
-      // If it exists, display the "Buy on eBay" link,
-      // otherwise add a button that says "Sell Your Own"
-      if (ebayUrl && ebayUrl.trim().length > 0) {
-          contentHTML += `<p><a href="${ebayUrl}" target="_blank" class="ebay-link">Buy on eBay</a></p>`;
-      } else {
-          contentHTML += `<p><button class="sell-your-own" onclick="sellYourOwn('${skylander.name}', '${skylander.game}')">Sell Your Own</button></p>`;
+    
+      // If no eBay URL is found, throw an exception.
+      if (!ebayUrl || ebayUrl.trim().length === 0) {
+          throw new Error(`No eBay link found for ${skylander.name} from ${skylander.game}`);
       }
+      
+      contentHTML += `<p><a href="${ebayUrl}" target="_blank" class="ebay-link">Buy on eBay</a></p>`;
     
       detailsContainer.innerHTML = contentHTML;
       modal.style.display = "block";
     
-      // Attach change listeners, update magnet buttons, etc.
+      // Attach change listeners for inventory updates
       document.getElementById("ownedSelect").addEventListener("change", function() {
         updateInventoryFromModal(skylander);
       });
@@ -859,6 +856,7 @@
           updateInventoryFromModal(skylander);
         });
       }
+    }
     
       if (skylander.game.toUpperCase() === "SWAP FORCE") {
         const key = `sky_progress_${user}_${skylander.game}`;
