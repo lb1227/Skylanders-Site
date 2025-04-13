@@ -49,7 +49,7 @@ const characterNames = [
   "Legendary Chop Chop",
   "Legendary Spyro",
   "Legendary Trigger Happy",
-  "Sidekick Gill Grunt",
+  "Sidekick Gill Runt",
   "Sidekick Terrabite",
   "Sidekick Trigger Snappy",
   "Sidekick Whisper Elf",
