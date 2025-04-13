@@ -60,7 +60,19 @@ const characterNames = [
   "Green Gill Grunt",
   "Red Drill Sergeant",
   "Silver Eruptor",
-  "Red Camo"
+  "Red Camo",
+  "Empire of Ice",
+  "Silver Dino-Rang",
+  "Silver Boomer",
+  "Pearl Hex",
+  "Metallic Purple Cynder",
+  "Gold Flameslinger",
+  "Gold Drill Sergeant",
+  "Glow In The Dark Zap",
+  "Glow In The Dark Wrecking Ball",
+  "Crystal Clear Whirlwind",
+  "Crystal Clear Stealth Elf",
+  "Crystal Cynder"
 ];
 
 // Define an array of the eBay URLs (replace these with your actual URLs in order).
@@ -124,7 +136,19 @@ const ebayUrls = [
   "https://www.ebay.com/itm/164591605093?var=464147893684&amdata=enc%3AAQAKAAAAoFkggFvd1GGDu0w3yXCmi1fTgMQNcKjfX3zRDq34fYKKmVGX8NJEKmE60reLCkyYExd8UKjLPAMSiQf38J9xqiENEeJswYdxIhPLhnetneHyqow58tPdip8XPV3QXID0OJSJnLW%2B2YkqjzVeKqDtji8nSqzXbkO4E4bQTOL0z2EhIqFqF5BYFfax3fmN5rid7psiL%2BFfYS%2BOBi7oG%2FAVG8s%3D&mkcid=1&mkrid=711-53200-19255-0&toolid=20023&campid=5339107564&customid=Spyros&siteid=0&mkevt=1",
   "https://www.ebay.com/itm/164591605093?var=464147893686&amdata=enc%3AAQAKAAAAoFkggFvd1GGDu0w3yXCmi1fTgMQNcKjfX3zRDq34fYKKmVGX8NJEKmE60reLCkyYExd8UKjLPAMSiQf38J9xqiENEeJswYdxIhPLhnetneHyqow58tPdip8XPV3QXID0OJSJnLW%2B2YkqjzVeKqDtji8nSqzXbkO4E4bQTOL0z2EhIqFqF5BYFfax3fmN5rid7psiL%2BFfYS%2BOBi7oG%2FAVG8s%3D&mkcid=1&mkrid=711-53200-19255-0&toolid=20023&campid=5339107564&customid=Spyros&siteid=0&mkevt=1",
   "https://www.ebay.com/itm/164591605093?var=466694181612&amdata=enc%3AAQAKAAAAoFkggFvd1GGDu0w3yXCmi1fTgMQNcKjfX3zRDq34fYKKmVGX8NJEKmE60reLCkyYExd8UKjLPAMSiQf38J9xqiENEeJswYdxIhPLhnetneHyqow58tPdip8XPV3QXID0OJSJnLW%2B2YkqjzVeKqDtji8nSqzXbkO4E4bQTOL0z2EhIqFqF5BYFfax3fmN5rid7psiL%2BFfYS%2BOBi7oG%2FAVG8s%3D&mkcid=1&mkrid=711-53200-19255-0&toolid=20023&campid=5339107564&customid=Spyros&siteid=0&mkevt=1",
-  "https://www.ebay.com/itm/164591605093?var=465083239063&amdata=enc%3AAQAKAAAAoFkggFvd1GGDu0w3yXCmi1fTgMQNcKjfX3zRDq34fYKKmVGX8NJEKmE60reLCkyYExd8UKjLPAMSiQf38J9xqiENEeJswYdxIhPLhnetneHyqow58tPdip8XPV3QXID0OJSJnLW%2B2YkqjzVeKqDtji8nSqzXbkO4E4bQTOL0z2EhIqFqF5BYFfax3fmN5rid7psiL%2BFfYS%2BOBi7oG%2FAVG8s%3D&mkcid=1&mkrid=711-53200-19255-0&toolid=20023&campid=5339107564&customid=Spyros&siteid=0&mkevt=1"
+  "https://www.ebay.com/itm/164591605093?var=465083239063&amdata=enc%3AAQAKAAAAoFkggFvd1GGDu0w3yXCmi1fTgMQNcKjfX3zRDq34fYKKmVGX8NJEKmE60reLCkyYExd8UKjLPAMSiQf38J9xqiENEeJswYdxIhPLhnetneHyqow58tPdip8XPV3QXID0OJSJnLW%2B2YkqjzVeKqDtji8nSqzXbkO4E4bQTOL0z2EhIqFqF5BYFfax3fmN5rid7psiL%2BFfYS%2BOBi7oG%2FAVG8s%3D&mkcid=1&mkrid=711-53200-19255-0&toolid=20023&campid=5339107564&customid=Spyros&siteid=0&mkevt=1",
+  "https://ebay.us/UdKC4h",
+  "https://ebay.us/UdKC4h",
+  "https://ebay.us/UdKC4h",
+  "https://ebay.us/UdKC4h",
+  "https://ebay.us/UdKC4h",
+  "https://ebay.us/UdKC4h",
+  "https://ebay.us/UdKC4h",
+  "https://ebay.us/UdKC4h",
+  "https://ebay.us/UdKC4h",
+  "https://ebay.us/UdKC4h",
+  "https://ebay.us/UdKC4h",
+  "https://ebay.us/UdKC4h"
 ];
 
 // Now, build the mapping object.
