@@ -10,218 +10,206 @@
   <title>Skylanders Tracker</title>
   <script src="data.js"></script>
   <style>
-    :root {
-      --bg: #121212;
-      --card-bg: #1e1e1e;
-      --text: #ffffff;
-      --accent: #4caf50;
-      --button: #e53935;
-      --button-hover: #d32f2f;
-      --nav-bg: #1a1a1a;
+    :root{
+      --bg:#121212;
+      --card-bg:#1e1e1e;
+      --text:#fff;
+      --accent:#4caf50;
+      --button:#e53935;
+      --button-hover:#d32f2f;
+      --nav-bg:#1a1a1a;
+      --shadow-1:0 0 20px rgba(0,0,0,.4);
+      --shadow-2:0 -2px 6px rgba(0,0,0,.3);
     }
-    *, *::before, *::after {
-      box-sizing: border-box;
+    
+    *,*::before,*::after{ box-sizing:border-box; }
+    
+    /* Avoid fixing html/body; it breaks mobile keyboards & scrolling */
+    html,body{
+      height:100%;
     }
-    html, body {
-      height: 100%;
-      overflow-y: hidden;    /* Prevent vertical scroll */
-      overflow-x: auto;      /* Allow horizontal swipe */
-      touch-action: pan-x;   /* Enable left/right swiping only */
-      position: fixed;
+    
+    body{
+      margin:0;
+      color:var(--text);
+      background:var(--bg);
+      font-family:ui-sans-serif,system-ui,"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;
+      /* lock vertical scroll if you must (prefer wrapper-based approaches) */
+      overflow-y:hidden;
+      overflow-x:auto;
+      touch-action:pan-x;
     }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      background-color: var(--bg);
-      color: var(--text);
+    
+    /* Layout */
+    .container{
+      width:100%;
+      margin:0 auto;
+      background:var(--card-bg);
+      padding:1rem;
+      border-radius:12px;
+      box-shadow:var(--shadow-1);
+      text-align:center;
     }
-    /* Container and wrapper for mobile */
-    .container {
-      width: 100%;
-      margin: 0 auto;
-      background: var(--card-bg);
-      padding: 1rem;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.4);
-      text-align: center;
+    
+    .wrapper{
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      min-height:calc(100vh - 60px);
+      padding:1rem;
     }
-    .wrapper {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      min-height: calc(100vh - 60px);
-      padding: 1rem;
+    
+    /* Form controls */
+    select,button{
+      padding:.6rem 1.2rem;
+      font-size:1rem;
+      border-radius:8px;
+      border:0;
+      margin-top:1rem;
     }
-    select, button {
-      padding: 0.6rem 1.2rem;
-      font-size: 1rem;
-      border-radius: 8px;
-      border: none;
-      margin-top: 1rem;
+    
+    select{
+      background:#2a2a2a;
+      color:var(--text);
     }
-    select {
-      background-color: #2a2a2a;
-      color: white;
+    
+    button{
+      background:var(--button);
+      color:var(--text);
+      transition:background .2s ease, transform .15s ease;
     }
-    button {
-      background-color: var(--button);
-      color: white;
-      transition: background 0.3s ease, transform 0.2s ease;
+    button:hover{ background:var(--button-hover); transform:scale(1.03); }
+    
+    /* Images */
+    img{
+      width:100%;
+      height:auto;
+      border-radius:10px;
+      margin-bottom:.5rem;
     }
-    button:hover {
-      background-color: var(--button-hover);
-      transform: scale(1.03);
+    
+    /* Mobile nav */
+    .hamburger{
+      display:block;
+      background:var(--nav-bg);
+      color:var(--text);
+      border:0;
+      font-size:1.5rem;
+      padding:.5rem;
+      cursor:pointer;
+      position:relative;
+      top:-7px;
     }
-    img {
-      width: 100%;
-      height: auto;
-      border-radius: 10px;
-      margin-bottom: 0.5rem;
+    
+    .bottom-mobile-nav{
+      position:fixed;
+      inset:auto 0 0 0;
+      background:var(--nav-bg);
+      padding:.5rem 0;
+      display:flex;
+      justify-content:space-around;
+      align-items:center;
+      z-index:1000;
+      box-shadow:var(--shadow-2);
     }
-    /* Mobile Navigation Styles */
-    .hamburger {
-      display: block;
-      background-color: var(--nav-bg);
-      color: white;
-      border: none;
-      font-size: 1.5rem;
-      padding: 0.5rem;
-      cursor: pointer;
-      position: relative;
-      top: -7px;
+    .bottom-mobile-nav a{
+      color:var(--text);
+      font-size:1.5rem;
+      text-decoration:none;
     }
-    .bottom-mobile-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background-color: var(--nav-bg);
-      padding: 0.5rem 0;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      z-index: 1000;
-      box-shadow: 0 -2px 6px rgba(0,0,0,0.3);
+    .bottom-mobile-nav a img{
+      width:55px;
+      height:auto;
+      vertical-align:middle;
+      margin-top:7px;
     }
-    .bottom-mobile-nav a {
-      color: white;
-      font-size: 1.5rem;
-      text-decoration: none;
+    
+    /* Mobile menu */
+    .mobile-menu{
+      position:fixed;
+      right:20px;
+      bottom:60px;
+      background:var(--nav-bg);
+      border-radius:12px;
+      box-shadow:var(--shadow-1);
+      padding:1rem;
+      display:none;
+      flex-direction:column;
+      gap:.5rem;
+      z-index:1001;
+      transition:opacity .2s ease, transform .2s ease;
     }
-    .bottom-mobile-nav a img {
-      width: 55px;    /* Adjust the size as needed */
-      height: auto;   /* Maintains aspect ratio */
-      vertical-align: middle; /* Optional: Aligns with text */
-      margin-top: 7px;
+    .mobile-menu.show{ display:flex; }
+    .mobile-menu button{
+      background:var(--card-bg);
+      color:var(--text);
     }
-    /* Mobile menu for additional options */
-    .mobile-menu {
-      position: fixed;
-      bottom: 60px;
-      right: 20px;
-      background-color: var(--nav-bg);
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
-      padding: 1rem;
-      display: none;
-      flex-direction: column;
-      gap: 0.5rem;
-      z-index: 1001;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-    }
-    .mobile-menu.show {
-      display: flex;
-    }
-    .mobile-menu button {
-      background-color: var(--card-bg);
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      cursor: pointer;
-    }
-    .mobile-menu button:hover {
-      background-color: var(--button-hover);
-    }
-    /* Additional page elements */
-    #logoutBtn {
-      padding: 0.3rem 0.6rem;
-      margin: 0;
-    }
-    @media (max-width: 768px) {
-      #collectibleContainer {
-        width: 100%;
-        max-width: none;
-        margin: 0 auto;
-        text-align: center;
+    .mobile-menu button:hover{ background:var(--button-hover); }
+    
+    /* Minor element */
+    #logoutBtn{ padding:.3rem .6rem; margin:0; }
+    
+    /* Responsive tweaks */
+    @media (max-width:768px){
+      #collectibleContainer{
+        width:100%;
+        margin:0 auto;
+        text-align:center;
       }
-      #collectibleImage {
-        width: 100%;
-        max-width: 100%;
-        margin-bottom: 1rem;
+      #collectibleImage{
+        width:100%;
+        margin-bottom:1rem;
       }
-      #collectibleContainer > div {
-        display: flex;
-        justify-content: center;
-        gap: 1rem;
-        margin: 1rem 0;
+      #collectibleContainer > div{
+        display:flex;
+        justify-content:center;
+        gap:1rem;
+        margin:1rem 0;
       }
-      html, body {
-        height: 100%;
-        overflow-y: hidden;
-        overflow-x: auto;
-        touch-action: pan-x;
-      }
+      /* keep horizontal pan only if required on phones */
+      /* body{ overflow-y:hidden; overflow-x:auto; touch-action:pan-x; } */
     }
-    /* Animations and overlay */
-    @keyframes swipeNudge {
-      0% { transform: translateX(0); }
-      50% { transform: translateX(-20px); }
-      100% { transform: translateX(0); }
+    
+    /* Animations & overlays */
+    @keyframes swipeNudge{
+      0%{ transform:translateX(0); }
+      50%{ transform:translateX(-20px); }
+      100%{ transform:translateX(0); }
     }
-    .nudge {
-      animation: swipeNudge 1s ease-in-out infinite;
+    .nudge{ animation:swipeNudge 1s ease-in-out infinite; }
+    
+    #swipeOverlay{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:999;
+      opacity:0;
     }
-    #swipeOverlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 999;
-      opacity: 0;
+    
+    @keyframes swipeLeft{
+      0%{ transform:translateX(0) rotate(0); opacity:1; }
+      50%{ transform:translateX(-50vw) rotate(-10deg); opacity:.5; }
+      100%{ transform:translateX(-100vw) rotate(-20deg); opacity:0; }
     }
-    @keyframes swipeLeft {
-      0% { transform: translateX(0) rotate(0); opacity: 1; }
-      50% { transform: translateX(-50vw) rotate(-10deg); opacity: 0.5; }
-      100% { transform: translateX(-100vw) rotate(-20deg); opacity: 0; }
+    @keyframes swipeRight{
+      0%{ transform:translateX(0) rotate(0); opacity:1; }
+      50%{ transform:translateX(50vw) rotate(10deg); opacity:.5; }
+      100%{ transform:translateX(100vw) rotate(20deg); opacity:0; }
     }
-    @keyframes swipeRight {
-      0% { transform: translateX(0) rotate(0); opacity: 1; }
-      50% { transform: translateX(50vw) rotate(10deg); opacity: 0.5; }
-      100% { transform: translateX(100vw) rotate(20deg); opacity: 0; }
+    .animate-left{ animation:swipeLeft .5s ease forwards; }
+    .animate-right{ animation:swipeRight .5s ease forwards; }
+    
+    .overlay-green{ background:rgba(76,175,80,.3); animation:fadeOverlay .5s ease-out forwards; }
+    .overlay-red{ background:rgba(229,57,53,.3); animation:fadeOverlay .5s ease-out forwards; }
+    
+    @keyframes fadeOverlay{ from{opacity:1} to{opacity:0} }
+    
+    /* Optional: respect user motion prefs */
+    @media (prefers-reduced-motion: reduce){
+      *{ animation:none !important; transition:none !important; }
     }
-    .animate-left {
-      animation: swipeLeft 0.5s ease forwards;
-    }
-    .animate-right {
-      animation: swipeRight 0.5s ease forwards;
-    }
-    .overlay-green {
-      background: rgba(76, 175, 80, 0.3);
-      animation: fadeOverlay 0.5s ease-out forwards;
-    }
-    .overlay-red {
-      background: rgba(229, 57, 53, 0.3);
-      animation: fadeOverlay 0.5s ease-out forwards;
-    }
-    @keyframes fadeOverlay {
-      0% { opacity: 1; }
-      100% { opacity: 0; }
-    }
+
   </style>
 </head>
 <body>
